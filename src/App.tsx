@@ -1,9 +1,12 @@
 import "./App.scss";
+import Counter from "./components/counter/Counter";
+import Lorem from "./components/lorem/Lorem";
 
 function App() {
   return <div className="App">
-    <div className="responsive-test">
-      Hello World
+    <div className="container">
+      <Counter />
+      <Lorem />
     </div>
   </div>;
 }
