@@ -89,9 +89,13 @@ $breakpoints: (
   box-sizing: border-box;
 }
 
-
 .row {
   display: flex;
   flex-flow: row wrap;
+}
+
+.column {
+  display: flex;
+  flex-flow: column wrap;
 }
 
