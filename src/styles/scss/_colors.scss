@@ -1,0 +1,17 @@
+$colors: (
+  "white": #f1f5f9,
+  "gray": #9ca3af,
+  "black": #000000,
+  "red": #dc2626,
+  "orange": #f97316,
+  "yellow": #fbbf24,
+  "green": #16a34a,
+  "blue": #2563eb,
+  "purple": #a855f7,
+  "pink": #ec4899
+);
+
+
+@function getDefaultColor($color) {
+  @return map-get($map: $colors, $key: $color);
+}
