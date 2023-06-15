@@ -2,4 +2,32 @@
 @import "./styles/scss/index";
 
 
+:root {
+  --white: #f1f5f9;
+  --gray: #9ca3af;
+  --black: #000000;
+  --red: #dc2626;
+  --orange: #f97316;
+  --yellow: #fbbf24;
+  --green: #16a34a;
+  --blue: #3b82f6;
+  --purple: #a855f7;
+  --pink: #ec4899;
+
+  --app-background-color: var(--pink);
+  --toggle-theme-btn-bg-color: var(--white);
+  --toggle-theme-btn-border-color: var(--white);
+}
+
+.dark {
+  --app-background-color: var(--blue);
+  --toggle-theme-btn-bg-color: var(--black);
+  --toggle-theme-btn-border-color: var(--black);
+}
+
+.App {
+  background-color: var(--app-background-color);
+}
+
+
 
