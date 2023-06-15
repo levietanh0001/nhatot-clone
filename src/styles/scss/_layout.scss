@@ -80,22 +80,3 @@ $breakpoints: (
 }
 
 
-// base layout
-.container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  box-sizing: border-box;
-}
-
-.row {
-  display: flex;
-  flex-flow: row wrap;
-}
-
-.column {
-  display: flex;
-  flex-flow: column wrap;
-}
-
