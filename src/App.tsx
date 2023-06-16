@@ -1,24 +1,23 @@
-import clsx from 'clsx';
-
 import "./App.scss";
 import Counter from "./components/counter/Counter";
 import Lorem from "./components/lorem/Lorem";
 import ResponsiveTesting from "./components/testing/ResponsiveTesting";
-import ToggleThemeButton from './components/button/ToggleThemeButton';
+import ToggleThemeButton from './components/navbar/ToggleThemeButton';
+import TopNav from "./components/navbar/TopNav";
+import { useState, useEffect } from "react";
 
 
 function App() {
 
-  const classes = clsx(
-    'container'
-  );
-
   return <div className="App">
-    <ResponsiveTesting />
-    <div className={classes}>
+    <ToggleThemeButton />
+    <TopNav />
+    {/* <ResponsiveTesting /> */}
+    <div className='container'>
       <Counter />
       <Lorem />
-      <ToggleThemeButton />
+      
+      <div className="spacer"></div>
     </div>
   </div>;
 }
