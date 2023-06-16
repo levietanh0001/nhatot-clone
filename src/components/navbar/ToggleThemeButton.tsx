@@ -17,17 +17,17 @@ const ToggleThemeButton = () => {
       "(prefers-color-scheme: dark)"
     ).matches;
     if (prefersDarkTheme) {
-      document.body.classList.add("dark");
+      document.documentElement.classList.add("dark");
       setDarkTheme(true);
     }
   }, []);
 
   useEffect(() => {
     if (darkTheme) {
-      document.body.classList.add("dark");
+      document.documentElement.classList.add("dark");
       localStorage.setItem('darkTheme', 'true');
     } else {
-      document.body.classList.remove("dark");
+      document.documentElement.classList.remove("dark");
       localStorage.setItem('darkTheme', 'false');
     }
   }, [darkTheme]);
