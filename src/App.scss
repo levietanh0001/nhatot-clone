@@ -46,9 +46,13 @@
   flex-flow: column wrap;
 }
 
-.spacer {
+.content-spacer {
   display: block;
   height: calc(100vh * 2);
+}
+
+.nav-spacer {
+  height: 200px;
 }
 
 a:hover {
