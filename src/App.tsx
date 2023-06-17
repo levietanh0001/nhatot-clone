@@ -17,7 +17,7 @@ function App() {
       <Counter />
       <Lorem />
       
-      <div className="spacer"></div>
+      <div className="content-spacer"></div>
     </div>
   </div>;
 }
