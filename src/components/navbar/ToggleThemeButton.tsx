@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
-import { IconButton } from "@mui/material";
 import styles from "./ToggleThemeButton.module.scss";
 import clsx from "clsx";
 
