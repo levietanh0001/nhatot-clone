@@ -13,11 +13,13 @@
   --purple: #a855f7;
   --pink: #ec4899;
 
+  --app-background-color: var(--white);
   --toggle-theme-btn-bg-color: var(--white);
   --toggle-theme-btn-border-color: var(--white);
 }
 
 .dark {
+  --app-background-color: var(--grey);
   --toggle-theme-btn-bg-color: var(--black);
   --toggle-theme-btn-border-color: var(--black);
 }
