@@ -1,0 +1,44 @@
+.upper-topnav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.link {
+  
+  & a {
+    text-decoration: none;
+    color: inherit;
+    font-size: 0.85rem;
+    padding: 15px;
+  }
+  
+  &:not(:last-child) span {
+    border-right: 1px solid black;
+  }
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.action a {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  text-decoration: none;
+  color: inherit;
+  
+  font-size: 0.85rem;
+}
