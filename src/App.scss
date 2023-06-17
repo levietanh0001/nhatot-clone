@@ -28,7 +28,7 @@
 
 .container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 992px;
   margin: 0 auto;
   padding: 0 20px;
   box-sizing: border-box;
@@ -42,7 +42,8 @@
 .column {
   display: flex;
   flex-flow: column wrap;
-}}
+}
+
 .spacer {
   display: block;
   height: calc(100vh * 2);
