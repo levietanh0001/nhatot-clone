@@ -8,7 +8,7 @@
 - Typescript
 - Redux Toolkit
 - SASS (SCSS)
-
+- Material Icons
 
 ## Backend
 
