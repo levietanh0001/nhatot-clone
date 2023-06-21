@@ -1,15 +1,17 @@
-import { Person } from "@mui/icons-material";
+import { Menu, Person } from "@mui/icons-material";
 import { ClickAwayListener } from "@mui/material";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
-import styles from "./LowerTopNav.module.scss";
+import styles from "./SecondTopNav.module.scss";
 
-
-const LowerTopNav = () => {
+const SecondTopNav = () => {
   return (
-    <nav aria-label="lower top nav bar">
+    <nav aria-label="second top nav bar">
       <div className="container">
         <div className={styles["wrapper"]}>
+          <div className={styles["toolbar-menu"]}>
+            <Menu />
+          </div>
           <Logo />
           <Toolbar />
         </div>
@@ -17,7 +19,6 @@ const LowerTopNav = () => {
     </nav>
   );
 };
-
 
 const DropdownMenu = () => {
   const [isTaikhoanOpen, setTaikhoanOpen] = useState<boolean>(false);
@@ -202,6 +203,8 @@ const DropdownMenu = () => {
               <a href="#">
                 <img
                   src="https://storage.googleapis.com/static-chotot-com/storage/icons/svg/reward-icon.svg"
+                  width={30}
+                  height={30}
                   alt="Chợ Tốt ưu đãi"
                 />
                 <span>Chợ tốt ưu đãi</span>
@@ -216,6 +219,8 @@ const DropdownMenu = () => {
                 <img
                   src="https://storage.googleapis.com/static-chotot-com/storage/icons/svg/setting.svg"
                   alt="Cài đặt tài khoản"
+                  width={30}
+                  height={30}
                 />
                 <span>Cài đặt tài khoản</span>
               </a>
@@ -225,6 +230,8 @@ const DropdownMenu = () => {
                 <img
                   src="https://storage.googleapis.com/static-chotot-com/storage/icons/svg/help.svg"
                   alt="Trợ giúp"
+                  width={30}
+                  height={30}
                 />
                 <span>Trợ giúp</span>
               </a>
@@ -235,7 +242,6 @@ const DropdownMenu = () => {
     </ClickAwayListener>
   );
 };
-
 
 const Toolbar = () => {
   return (
@@ -259,7 +265,7 @@ const Toolbar = () => {
         </a>
       </div>
 
-      <div className={styles["action"]}>
+      <div className={clsx(styles["action"], styles["chat"])}>
         <a href="#" rel="nofollow">
           <svg
             width="1em"
@@ -304,7 +310,6 @@ const Toolbar = () => {
   );
 };
 
-
 const Logo = () => {
   return (
     <div className={styles["logo"]}>
@@ -317,7 +322,6 @@ const Logo = () => {
           <img
             src="https://static.chotot.com/storage/default_images/pty/nhatot-logo.png"
             alt="Chợ Tốt"
-            style={{ height: "35px", objectFit: "contain" }}
           />
         </picture>
       </a>
@@ -325,5 +329,4 @@ const Logo = () => {
   );
 };
 
-
-export default LowerTopNav;
+export default SecondTopNav;

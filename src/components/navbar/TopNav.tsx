@@ -1,17 +1,17 @@
-import Header from "../../layouts/Header";
-import HeaderBottom from "./HeaderBottom";
-import LowerTopNav from "./LowerTopNav";
-import UpperTopNav from "./UpperTopNav";
-
+import styles from "./TopNav.module.scss";
+import ThirdTopNav from "./ThirdTopNav";
+import SecondTopNav from "./SecondTopNav";
+import ToggleThemeButton from "./ToggleThemeButton";
+import FirstTopNav from "./FirstTopNav";
 
 const TopNav = () => {
-
   return (
-    <Header>
-      <UpperTopNav />
-      <LowerTopNav />
-      <HeaderBottom />
-    </Header>
+    <div className={styles["wrapper"]}>
+      <FirstTopNav />
+      <SecondTopNav />
+      <ThirdTopNav />
+      <ToggleThemeButton />
+    </div>
   );
 };
 

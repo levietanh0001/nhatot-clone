@@ -1,12 +1,16 @@
 .upper-topnav {
+
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  gap: 15px;
+
   padding: 10px 0;
 }
 
 .links {
+  // flex-shrink: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -18,7 +22,7 @@
     text-decoration: none;
     color: inherit;
     font-size: 0.85rem;
-    padding: 15px;
+    padding: 12px 10px;
   }
   
   &:not(:last-child) span {
@@ -27,18 +31,48 @@
 }
 
 .toolbar {
+
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  gap: 7px;
 }
 
-.action a {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  text-decoration: none;
-  color: inherit;
+.action {
+
+  & a {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    text-decoration: none;
+    color: inherit;
+    
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 992px) {
+
   
-  font-size: 0.85rem;
+
+  .link a {
+    padding-inline: 5px;
+  }
+}
+
+@media (max-width: 768px) {
+  .action a span {
+    display: none;
+  }
+
+}
+
+@media (max-width: 420px) {
+  .toolbar {
+    display: none;
+  }
+
+  .links {
+    display: none;
+  }
 }

@@ -27,3 +27,8 @@
   @include top-right;
 }
 
+@media (max-width: 1120px) {
+  .toggle-theme-btn {
+    display: none;
+  }
+}

@@ -31,13 +31,23 @@
   }
 }
 
+.toolbar-menu {
+  display: none;
+}
+
 .logo {
+  text-align: left;
   flex: 0.3 1 auto;
   padding-top: 0;
+
+  & img {
+    height: 30px;
+    object-fit: contain;
+  }
 }
 
 .toolbar {
-  flex: 0.7 0 auto;
+  flex: 0.7 1 auto;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -101,4 +111,35 @@
   padding: 10px;
 }
 
+@media (max-width: 768px) {
+  .logo {
+    flex: 1;
+    text-align: center;
+  }
 
+  .toolbar {
+    flex: 0 1 auto;
+  }
+
+  .toolbar .action:not(.chat) {
+    display: none;
+  }
+
+  .chat span {
+    display: none;
+  }
+
+}
+
+
+@media (max-width: 420px) {
+
+  .toolbar-menu {
+    display: block;
+  }
+
+  .logo {
+    flex-shrink: 1;
+  }
+
+}

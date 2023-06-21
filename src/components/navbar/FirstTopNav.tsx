@@ -1,10 +1,10 @@
-import styles from './UpperTopNav.module.scss';
+import styles from './FirstTopNav.module.scss';
 
 
-const UpperTopNav = () => {
+const FirstTopNav = () => {
 
   return (
-    <nav aria-label="upper top nav bar">
+    <nav aria-label="first top nav bar">
       <div className="container">
         <div className={styles["upper-topnav"]}>
           <div className={styles["links"]}>
@@ -110,11 +110,13 @@ const UpperTopNav = () => {
               </a>
             </div>
           </div>
+
+
         </div>
       </div>
     </nav>
   );
 };
 
-export default UpperTopNav;
+export default FirstTopNav;
 
