@@ -1,0 +1,12 @@
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 7px;
+}
+
+@media (max-width: 992px) {
+  .wrapper {
+    flex-direction: column;
+    gap: 0;
+  }
+}

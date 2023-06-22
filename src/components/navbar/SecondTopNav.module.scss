@@ -55,9 +55,10 @@
 }
 
 .dropdown-menu {
-  &:hover .menu-btn * {
-    opacity: 0.8;
-  }  
+  // &:hover .menu-btn * {
+  //   opacity: 0.8;
+  // }
+  cursor: pointer;
 }
 
 .menu-content {
@@ -109,6 +110,8 @@
 .menu-title {
   background-color: #f5f5f5;
   padding: 10px;
+  text-align: left;
+  font-weight: 600;
 }
 
 @media (max-width: 768px) {
