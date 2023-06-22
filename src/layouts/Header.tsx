@@ -3,20 +3,19 @@ const Header = ({ children }) => {
     <>
       <header
         style={{
-          display: "flex",
-          flexFlow: "column nowrap",
-          position: "sticky",
+          display: 'flex',
+          flexFlow: 'column nowrap',
+          position: 'sticky',
+          marginBottom: '7px',
           top: 0,
           left: 0,
           right: 0,
-          backgroundColor: "white",
+          backgroundColor: 'var(--app-background-color)',
           zIndex: 2,
-          // paddingBottom: '20px',
-          // boxShadow: '0 0 1px 0'
-          // outline: '1px solid red'
         }}
       >
         {children}
+        <div className='header-bottom-spacer'></div>
       </header>
     </>
   );
