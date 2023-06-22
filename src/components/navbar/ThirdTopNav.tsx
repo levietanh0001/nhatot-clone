@@ -117,7 +117,7 @@ const SearchBox = () => {
         </span>
       )}
       <div className={styles["search-btn"]}>
-        <IconButton disableRipple>
+        <IconButton disableRipple sx={{ padding: '5px' }}>
           <Search
             sx={{ stroke: "white", strokeWidth: 1.3, color: "white" }}
             fontSize="small"

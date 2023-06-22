@@ -1,0 +1,173 @@
+
+
+.address {
+  border-top: 3px solid var(--secondary-background-color);
+  padding-top: 15px;
+  padding-bottom: 30px;
+  font-size: 0.875rem;
+
+  & p {
+    margin: 0;
+  }
+
+  & br {
+    display: none;
+  }
+}
+
+
+.details {
+  padding: 15px 7px;
+  display: flex;
+  justify-content: space-between;
+
+  .our-app {
+    flex-basis: 177px;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    
+    text-align: left;
+  
+    & .title {
+      font-weight: 600;
+      font-size: 1.125rem;
+  
+      & p {
+        margin: 0;
+        margin-bottom: 10px;
+      }
+    }
+  
+    & .content {
+      display: flex;
+      justify-content: space-between;
+      gap: 7px;
+    }
+  
+    & .app-stores {
+      margin: 0;
+  
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+  
+    & .app-stores img {
+      max-width: 94px;
+    }
+  
+    & ul {
+      list-style-type: none;
+    }
+  }
+  
+  .about-us {
+    flex-basis: 177px;
+  
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  
+    text-align: left;
+  
+    & .title {
+      font-weight: 600;
+      font-size: 1.125rem;
+      text-align: left;
+  
+      & p {
+        margin: 0;
+      }
+    }
+  
+    & ul {
+      list-style-type: none;
+  
+      & li {
+        margin-bottom: 7px;
+        color: inherit;
+      }
+  
+      & li a {
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+      }
+    }
+  }
+  
+  .recognition {
+    flex-basis: 177px;
+  
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    
+    & .title {
+      font-weight: 600;
+      font-size: 1.125rem;
+      text-align: left;
+  
+      & p {
+        margin: 0;
+        margin-bottom: 10px;
+      }
+    }
+    
+    & .social {
+      display: flex;
+      flex-direction: column;
+  
+      & .icon-btn-list {
+        display: flex;
+        justify-content: flex-start;
+        gap: 15px;
+      }
+    }
+  }
+}  
+
+@media (max-width: 640px) {
+  .details {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0;
+
+    padding-top: 0;
+    
+    & .our-app {
+      justify-content: center;
+
+      & .title {
+        text-align: center;
+      }
+
+      & .content {
+        justify-content: center;
+      }
+    }
+
+    & .about-us {
+      justify-content: center;
+
+      & ul {
+        margin-bottom: 0;
+      }
+
+      & .title, & .content {
+        text-align: center;
+      }
+    }
+
+    & .recognition {
+      justify-content: center;
+
+      & .title, & .content {
+        text-align: center;
+      }
+    }
+  }
+}

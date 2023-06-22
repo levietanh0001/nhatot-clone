@@ -1,30 +1,42 @@
-import "./App.scss";
-import Counter from "./components/counter/Counter";
-import Lorem from "./components/lorem/Lorem";
-import ResponsiveTesting from "./components/testing/ResponsiveTesting";
-import ToggleThemeButton from './components/navbar/ToggleThemeButton';
-import TopNav from "./components/navbar/TopNav";
-import { useState, useEffect } from "react";
-import Header from "./layouts/Header";
+import './App.scss';
+import TopNav from './components/navbar/TopNav';
+import Header from './layouts/Header';
+import Body from './layouts/Body';
+import TopCarousel from './components/carousel/TopCarousel';
+import KhamPhaNhaTot from './components/kham-pha-nha-tot/KhamPhaNhaTot';
+import CongCuDichVu from './components/cong-cu-dich-vu/CongCuDichVu';
+import MuaBanBDS from './components/carousel/MuaBanBDS';
+import ChoThueBDS from './components/carousel/ChoThueBDS';
+import DuAnBDS from './components/carousel/DuAnBDS';
+import Glossary from './components/glossary/Glossary';
+import Keywords from './components/keywords/Keywords';
+import Footer from './layouts/Footer';
+import AboutUs from './components/about-us/AboutUs';
+import LoginModal from './components/modal/LoginModal';
 
 
 function App() {
 
-  return <div className="App">
-    <ToggleThemeButton />
-    <TopNav />
-    {/* <ResponsiveTesting /> */}
-    <div className='container'>
-      <Counter />
-      <Lorem />
-      
+  return <div className='App'>
     <Header>
       <TopNav />
     </Header>
-    <div className="header-bottom-spacer"></div>
-      <div className="content-spacer"></div>
-    </div>
-  </div>;
+    <Body>
+      <LoginModal />
+      <TopCarousel />
+      <KhamPhaNhaTot />
+      <CongCuDichVu />
+      <MuaBanBDS />
+      <ChoThueBDS />
+      <DuAnBDS />
+      <Glossary />
+      <Keywords />
+      {/* <div className='content-spacer'></div> */}
+    </Body>
+    <Footer>
+      <AboutUs />
+    </Footer>
+  </div>
 }
 
 export default App;

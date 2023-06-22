@@ -1,0 +1,120 @@
+.mua-ban-bds-carousel {
+  height: 300px;
+  position: relative;
+
+  & .swiper {
+    background-color: var(--secondary-background-color);
+    width: 100%;
+    height: 100%;
+    padding: 3px;
+  }
+
+  & .swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: var(--app-background-color);
+
+    /* Center slide text vertically */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  & .swiper-slide:hover {
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
+    -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
+    -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
+  }
+
+  & .swiper-pagination-bullet {
+    width: 7px;
+    height: 7px;
+    text-align: center;
+    line-height: 20px;
+    font-size: 12px;
+    color: #000;
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  & .swiper-pagination-bullet-active {
+    color: #fff;
+    background: var(--gray);
+  }
+
+  & .prev-mua-ban {
+    border: 0;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    margin: 0;
+    padding: 0;
+
+    position: absolute;
+    left: -20px;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+    // transform: translateY(-50%);
+    z-index: 1;
+
+    transition-property: all;
+    transition-duration: 100ms;
+    transition-timing-function: ease-out;
+    transition-delay: 0;
+
+    &:hover {
+      opacity: 0.8;
+      scale: 1.2;
+      transform: translate(-5px);
+    }
+  }
+
+  & > button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  & .next-mua-ban {
+    border: 0;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    margin: 0;
+    padding: 0;
+
+    position: absolute;
+    right: -20px;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+    z-index: 1;
+    transition-property: all;
+    transition-duration: 100ms;
+    transition-timing-function: ease-out;
+    transition-delay: 0;
+
+    &:hover {
+      opacity: 0.8;
+      scale: 1.2;
+      transform: translate(5px);
+    }
+  }
+}
+
+
+@media (max-width: 1020px) {
+  .mua-ban-bds-carousel {
+    .prev-mua-ban, .next-mua-ban {
+      display: none;
+    }
+  }
+}

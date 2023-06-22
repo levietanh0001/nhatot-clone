@@ -9,7 +9,7 @@
 
   display: flex;
   gap: 10px;
-  background-color: #f4f4f4;
+  background-color: white;
   position: relative;
 }
 
@@ -20,13 +20,13 @@
   flex: 1 1 auto;
   padding: 3px 5px;
 
-  background-color: #f4f4f4;
+  background-color: white;
   border-radius: 5px;
 }
 
 .search-btn {
   padding: 0 7px;
-  background-color: var(--orange);
+  background-color: var(--orange-800);
   border-radius: 5px;
 
   & button {
@@ -124,7 +124,7 @@
 
     padding: 10px 15px;
     border-radius: 5px;
-    background-color: var(--orange);
+    background-color: var(--orange-800);
     text-decoration: none;
     color: white;
     font-weight: 600;
