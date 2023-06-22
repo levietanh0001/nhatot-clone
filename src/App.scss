@@ -1,0 +1,60 @@
+@import "normalize.css";
+@import "./styles/scss/index";
+
+:root {
+  --white: #f1f5f9;
+  --light-gray: #f3f4f6;
+  --gray: #9ca3af;
+  --black: #000000;
+  --red: #dc2626;
+  --orange: #f97316;
+  --yellow: #fbbf24;
+  --green: #16a34a;
+  --blue: #3b82f6;
+  --purple: #a855f7;
+  --pink: #ec4899;
+  --indigo: #3f51b5;
+
+  --app-background-color: var(--light-gray);
+  --toggle-theme-btn-bg-color: var(--white);
+  --toggle-theme-btn-border-color: var(--white);
+}
+
+.App {
+  background-color: var(--app-background-color);
+  margin-left: 0;
+}
+
+.dark {
+  --app-background-color: var(--orange);
+  --toggle-theme-btn-bg-color: var(--black);
+  --toggle-theme-btn-border-color: var(--black);
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+.container {
+  width: 100%;
+  max-width: 992px;
+  margin: 0 auto;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.header-bottom-spacer {
+  display: block;
+  height: 20px;
+  background-color: white;
+}
+
+.content-spacer {
+  display: block;
+  height: 500px;
+}
+
+.nav-spacer {
+  display: block;
+  height: 200px;
+}
