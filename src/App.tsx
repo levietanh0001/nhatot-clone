@@ -1,3 +1,5 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 import './App.scss';
 import TopNav from './components/navbar/TopNav';
 import Header from './layouts/Header';
@@ -12,30 +14,27 @@ import Glossary from './components/glossary/Glossary';
 import Keywords from './components/keywords/Keywords';
 import Footer from './layouts/Footer';
 import AboutUs from './components/about-us/AboutUs';
-import LoginModal from './components/modal/LoginModal';
+import Home from './pages/Home';
+
 
 
 function App() {
 
   return <div className='App'>
-    <Header>
-      <TopNav />
-    </Header>
-    <Body>
-      <LoginModal />
-      <TopCarousel />
-      <KhamPhaNhaTot />
-      <CongCuDichVu />
-      <MuaBanBDS />
-      <ChoThueBDS />
-      <DuAnBDS />
-      <Glossary />
-      <Keywords />
-      {/* <div className='content-spacer'></div> */}
-    </Body>
-    <Footer>
-      <AboutUs />
-    </Footer>
+    <BrowserRouter>
+      
+      <Header>
+        <TopNav />
+      </Header>
+      <Body>
+        
+        <Home />
+
+      </Body>
+      <Footer>
+        <AboutUs />
+      </Footer>
+    </BrowserRouter>
   </div>
 }
 
