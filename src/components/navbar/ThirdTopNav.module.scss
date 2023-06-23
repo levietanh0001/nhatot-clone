@@ -129,6 +129,10 @@
     color: white;
     font-weight: 600;
   }
+
+  & span {
+    color: white;
+  }
 }
 
 @media (max-width: 768px) {
