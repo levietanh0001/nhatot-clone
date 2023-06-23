@@ -6,7 +6,7 @@ const Footer = ({ children }) => {
       <div style={{
         paddingTop: '15px',
         paddingInline: '10px',
-        backgroundColor: 'var(--app-background-color)'
+        backgroundColor: 'var(--secondary-background-color)'
       }}>
         <div className='container'>
           {children}
