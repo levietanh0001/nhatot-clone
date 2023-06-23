@@ -1,0 +1,41 @@
+.overlay {
+  position: fixed;
+  inset: 0 0 0 0;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.7);
+  cursor: default;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  width: auto;
+  height: auto;
+  z-index: 999;
+}
+
+.close-btn {
+  position: absolute;
+  left: -10px;
+  top: -10px;
+  z-index: 1;
+  padding: 10px 13px;
+  border-radius: 50%;
+  border: 0;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.7);
+  transition-property: all;
+  transition-duration: 500ms;
+
+  &:hover {
+    scale: 1.2;
+  }
+}
+
+@media (max-width: 576px) {
+  .modal {
+    
+  }
+}
