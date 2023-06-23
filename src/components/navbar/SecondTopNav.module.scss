@@ -52,6 +52,10 @@
   flex-direction: row;
   justify-content: flex-end;
   gap: 14px;
+
+  & span {
+    color: black;
+  }
 }
 
 .dropdown-menu {
