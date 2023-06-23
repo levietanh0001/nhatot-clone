@@ -1,0 +1,155 @@
+.inner-wrapper {
+  width: 500px;
+  height: 600px;
+  padding: 40px;
+  margin: 0 auto;
+}
+
+.logo {
+  text-align: center;
+}
+
+.form {
+
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  & h2 {
+    margin: 20px;
+    margin-left: 0;
+  }
+}
+
+.form-control {
+  position: relative;
+
+  margin: 0;
+  
+  & label {
+    display: none;
+  }
+
+  & input {
+    height: 50px;
+    border: 1px solid gray;
+    padding: 15px 0 0 15px;
+    width: 100%;
+
+    font-size: 1.1rem;
+  }
+
+  & input:focus ~ .floating-label {
+    top: 15px;
+    left: 15px;
+    font-size: 0.75rem;
+    opacity: 1;
+  }
+
+  & .floating-label {
+    position: absolute;
+    pointer-events: none;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: 0.2s ease all;
+  }
+
+
+  & .forget-password {
+    text-decoration: none;
+    color: var(--link-color);
+  }
+
+  & .submit-btn {
+    width: 100%;
+    padding: 12px;
+    border: 0;
+    border-radius: 4px;
+
+    background-color: var(--orange);
+    color: var(--app-text-color);
+    font-size: 1.25rem;
+    font-weight: 700;
+    transition: ease 500ms;
+
+    &:hover {
+      scale: 1.01;
+    }
+  }
+}
+
+.login-alternatives {
+  margin-top: 15px;
+  margin-bottom: 15px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  & .left-line, & .right-line {
+    display: block;
+    height: 1px;
+    background-color: gray;
+    flex: 1;
+  }
+
+  & .middle-title {
+    margin-inline: 20px;
+  }
+}
+
+.register {
+  text-align: center;
+  margin-bottom: 15px;
+
+  & a {
+    color: var(--link-color);
+  }
+}
+
+.social {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  gap: 7px;
+
+  & button {
+    padding: 10px 15px;
+    background-color: white;
+    border: 1px solid gray;
+    border-radius: 4px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+
+    cursor: pointer;
+
+    & > * {
+      flex-shrink: 0;
+    }
+  }
+}
+
+
+@media (max-width: 576px) {
+
+  .inner-wrapper {
+    width: 300px;
+  }
+
+  .social {
+    flex-direction: column;
+    align-items: center;
+
+    & button {
+      width: 120px;
+    }
+  }
+
+  .register a {
+    display: block;
+  }
+}
