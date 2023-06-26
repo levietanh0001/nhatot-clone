@@ -1,0 +1,36 @@
+.content-wrapper {  
+  display: flex;
+  gap: 15px;
+}
+
+.content {
+  flex: 0.7;
+  background-color: var(--secondary-background-color);
+}
+
+.sticky-box {
+  flex: 0.3;
+
+  display: flex;
+  // justify-content: center;
+  // align-items: center;
+  // background-color: var(--app-background-color);
+  height: 400px;
+
+  position: sticky;
+  top: 143px;
+
+  // border: 1px solid green;
+}
+
+@media (max-width: 992px) {
+
+  .content {
+    flex: 1;
+  }
+
+  .ads {
+    display: none;
+  }
+
+}

@@ -1,3 +1,5 @@
+import TopNav from "../components/navbar";
+
 const Header = ({ children }) => {
   return (
     <>
@@ -6,7 +8,6 @@ const Header = ({ children }) => {
           display: 'flex',
           flexFlow: 'column nowrap',
           position: 'sticky',
-          marginBottom: '7px',
           top: 0,
           left: 0,
           right: 0,
@@ -15,7 +16,6 @@ const Header = ({ children }) => {
         }}
       >
         {children}
-        <div className='header-bottom-spacer'></div>
       </header>
     </>
   );

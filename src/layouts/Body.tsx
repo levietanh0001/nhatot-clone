@@ -1,4 +1,4 @@
-
+import Home from "../pages/HomePage";
 
 const Body = ({ children }) => {
   return (
@@ -8,4 +8,4 @@ const Body = ({ children }) => {
   );
 };
 
-export default Body;
+// export default Body;
