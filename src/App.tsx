@@ -1,41 +1,24 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import './App.scss';
-import TopNav from './components/navbar/TopNav';
-import Header from './layouts/Header';
-import Body from './layouts/Body';
-import TopCarousel from './components/carousel/TopCarousel';
-import KhamPhaNhaTot from './components/kham-pha-nha-tot/KhamPhaNhaTot';
-import CongCuDichVu from './components/cong-cu-dich-vu/CongCuDichVu';
-import MuaBanBDS from './components/carousel/MuaBanBDS';
-import ChoThueBDS from './components/carousel/ChoThueBDS';
-import DuAnBDS from './components/carousel/DuAnBDS';
-import Glossary from './components/glossary/Glossary';
-import Keywords from './components/keywords/Keywords';
-import Footer from './layouts/Footer';
-import AboutUs from './components/about-us/AboutUs';
-import Home from './pages/Home';
-
-
+import HomePage from './pages/HomePage';
+import ProductListPage from './pages/ProductListPage';
+import PostPage from './pages/PostPage';
+import ProductDetailsPage from './pages/ProductDetailsPage';
 
 function App() {
-
-  return <div className='App'>
-    <BrowserRouter>
-      
-      <Header>
-        <TopNav />
-      </Header>
-      <Body>
-        
-        <Home />
-
-      </Body>
-      <Footer>
-        <AboutUs />
-      </Footer>
-    </BrowserRouter>
-  </div>
+  return (
+    <div className='App'>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<HomePage />}></Route>
+          <Route path='/mua-ban-bds' element={<ProductListPage />}></Route>
+          <Route path='/dang-tin' element={<PostPage />}></Route>
+          <Route path='/product' element={<ProductDetailsPage />}></Route>
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
 }
 
 export default App;
