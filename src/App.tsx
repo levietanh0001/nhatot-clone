@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import ProductListPage from './pages/ProductListPage';
 import PostPage from './pages/PostPage';
 import ProductDetailsPage from './pages/ProductDetailsPage';
+import UserProfilePage from './pages/UserProfilePage';
 
 function App() {
   return (
@@ -12,9 +13,10 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<HomePage />}></Route>
-          <Route path='/mua-ban-bds' element={<ProductListPage />}></Route>
-          <Route path='/dang-tin' element={<PostPage />}></Route>
+          <Route path='/post' element={<PostPage />}></Route>
           <Route path='/product' element={<ProductDetailsPage />}></Route>
+          <Route path='/product-list' element={<ProductListPage />}></Route>
+          <Route path='/user-profile' element={<UserProfilePage />}></Route>
         </Routes>
       </BrowserRouter>
     </div>
