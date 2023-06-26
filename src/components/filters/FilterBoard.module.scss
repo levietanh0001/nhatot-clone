@@ -1,0 +1,35 @@
+.inner-wrapper {
+  background-color: var(--secondary-background-color);
+  padding: 15px;
+}
+
+
+.options {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+
+  font-size: 0.875rem;
+}
+
+.option {
+  flex-basis: 100px;
+
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  gap: 5px;
+
+  cursor: pointer;
+
+  & .icon-wrapper {
+    background-color: var(--app-background-color);
+    padding: 7px 10px;
+    border-radius: 50%;
+  }
+
+  & img {
+    width: 36px;
+    height: 36px;
+  }
+}
