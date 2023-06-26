@@ -26,10 +26,15 @@
     background-color: var(--app-background-color);
     padding: 7px 10px;
     border-radius: 50%;
+    
+    &:hover {
+      background-color: var(--orange);
+    }
   }
 
   & img {
     width: 36px;
     height: 36px;
+
   }
 }
