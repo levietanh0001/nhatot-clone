@@ -2,6 +2,7 @@ import { Clear, Done, Search } from "@mui/icons-material";
 import { ClickAwayListener, IconButton } from "@mui/material";
 import { useEffect, useState } from "react";
 import styles from "./ThirdTopNav.module.scss";
+import { Link } from "react-router-dom";
 
 const ThirdTopNav = () => {
   return (
@@ -131,7 +132,7 @@ const SearchBox = () => {
 const PostButton = () => {
   return (
     <div className={styles["post-btn"]}>
-      <a href="#" onClick={() => console.log("Đăng tin")}>
+      <Link to='/dang-tin' onClick={() => console.log("Đăng tin")}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           data-type="monochrome"
@@ -146,7 +147,7 @@ const PostButton = () => {
           ></path>
         </svg>
         <span>Đăng tin</span>
-      </a>
+      </Link>
     </div>
   );
 };

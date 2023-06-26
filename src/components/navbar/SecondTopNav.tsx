@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import styles from './SecondTopNav.module.scss';
 import LoginModal from '../modal/LoginModal';
+import { Link } from 'react-router-dom';
 
 const SecondTopNav = () => {
   return (
@@ -29,8 +30,12 @@ const DropdownMenu = () => {
     console.log({ isTaikhoanOpen });
   }, [isTaikhoanOpen]);
 
+  useEffect(() => {
+    console.log({ show });
+  }, [show]);
+
   return (
-    <ClickAwayListener onClickAway={() => setTaikhoanOpen(false)}>
+    <ClickAwayListener onClickAway={() => { setTaikhoanOpen(false); setShow(false); }}>
       <div className={clsx(styles['action'], styles['dropdown-menu'])}>
         <div
           className={styles['menu-btn']}
@@ -89,6 +94,7 @@ const DropdownMenu = () => {
               </a>
               <LoginModal show={show} setShow={setShow} />
             </div>
+            
 
             <div className={styles['menu-title']}>
               <span>Quản lý đơn hàng</span>
@@ -317,20 +323,22 @@ const Toolbar = () => {
 
 const Logo = () => {
   return (
-    <div className={styles['logo']}>
-      <a href='#'>
-        <picture>
-          <source
-            type='image/webp'
-            src='https://static.chotot.com/storage/default_images/pty/nhatot-logo.webp'
-          />
-          <img
-            src='https://static.chotot.com/storage/default_images/pty/nhatot-logo.png'
-            alt='Chợ Tốt'
-          />
-        </picture>
-      </a>
-    </div>
+    <Link to='/'>
+      <div className={styles['logo']}>
+        <a href='#'>
+          <picture>
+            <source
+              type='image/webp'
+              src='https://static.chotot.com/storage/default_images/pty/nhatot-logo.webp'
+            />
+            <img
+              src='https://static.chotot.com/storage/default_images/pty/nhatot-logo.png'
+              alt='Chợ Tốt'
+            />
+          </picture>
+        </a>
+      </div>
+    </Link>
   );
 };
 

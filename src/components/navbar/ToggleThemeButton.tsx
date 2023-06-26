@@ -26,9 +26,11 @@ const ToggleThemeButton = () => {
     if (darkTheme) {
       document.documentElement.classList.add("dark");
       localStorage.setItem('darkTheme', 'true');
+      setDarkTheme(true);
     } else {
       document.documentElement.classList.remove("dark");
       localStorage.setItem('darkTheme', 'false');
+      setDarkTheme(false);
     }
   }, [darkTheme]);
 
@@ -42,7 +44,6 @@ const ToggleThemeButton = () => {
     <div>
       <button
         className={classes}
-        // disableRipple
         onClick={handleToggleTheme}
       >
         {darkTheme ? (

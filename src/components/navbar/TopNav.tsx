@@ -10,6 +10,7 @@ const TopNav = () => {
       <FirstTopNav />
       <SecondTopNav />
       <ThirdTopNav />
+      <div className="nav-spacer"></div>
       <ToggleThemeButton />
     </div>
   );
