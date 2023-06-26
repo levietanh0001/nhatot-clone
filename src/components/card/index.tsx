@@ -1,3 +1,3 @@
-import BaseCard from "./BaseCard";
+import Card from "./Card";
 
-export { BaseCard as Card };
+export { Card };
