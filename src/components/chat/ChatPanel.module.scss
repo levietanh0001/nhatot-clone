@@ -1,0 +1,157 @@
+.chat-panel {
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: white;
+
+  padding: 15px 0 15px 0;
+}
+
+
+.header-card {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+
+  border-bottom: 1px solid lightgray;
+  padding: 10px;
+  padding-right: 0;
+}
+
+.card-header {
+  & .avatar img {
+    vertical-align: middle;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+  }
+}
+
+.card-footer {
+  & img {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+.card-body {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+
+  text-align: left;
+
+  & .user-name {
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+
+  & .last-active .status-icon {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    background-color: lightgray;
+    border-radius: 50%;
+    margin-right: 5px;
+  }
+
+  & .last-active {
+    font-size: 0.75rem;
+    color: black;
+  }
+}
+
+.message-box {
+  flex: 1;
+  // background-color: gray;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.messages {
+  // flex: 0 1 100%;
+  flex: 1;
+}
+
+.quick-messages { 
+  padding-inline: 10px;
+  & ul {
+    flex: 0;
+    list-style-type: none;
+
+    display: flex;
+    gap: 7px;
+    overflow-x: scroll;
+    padding: 5px 0 5px 0;
+
+    & li {
+      flex-shrink: 0;
+      padding: 5px 7px;
+      background-color: #f4f4f4;
+      border-radius: 16px;
+      cursor: pointer;
+    }
+  }
+}
+
+.chat-box {
+  max-height: 100px;
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 7px;
+  
+  padding-inline: 10px;
+
+  & .more-actions img, & .send-icon svg {
+    flex: 0;
+    vertical-align: middle;
+    width: 20px;
+    height: 20px;
+  }
+
+  & textarea {
+    flex: 1;
+
+    overflow: hidden;
+    overflow-wrap: break-word;
+
+    height: 35px;
+    max-height: 100px;
+    resize: none;
+
+    border: 0;
+    border-radius: 16px;
+    padding: 10px;
+    
+    background-color: #f4f4f4;
+    position: relative;
+
+    &::placeholder {
+      font-size: 0.875rem;
+      text-align: left;
+
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 10px;
+    }
+
+    &:focus {
+      outline: 0;
+    }
+  }
+}
+
+
