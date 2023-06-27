@@ -1,7 +1,6 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
-import { less, more } from '~/features/lorem/loremSlice';
+import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '~/app/store';
+import { less, more } from '~/features/lorem/loremSlice';
 
 const Lorem = () => {
   const currentLorem = useSelector((state: RootState) => state.lorem.value);
