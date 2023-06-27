@@ -1,7 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-
-
 export interface IAction extends PayloadAction<number> {};
 
 const initialState = {
