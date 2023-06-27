@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import counterReducer from "../features/counter/counterSlice";
-import { loremReducer } from "../features/lorem/loremSlice";
+import counterReducer from "~/features/counter/counterSlice";
+import { loremReducer } from "~/features/lorem/loremSlice";
 import { useDispatch } from "react-redux";
 
 

@@ -1,8 +1,8 @@
 import React from 'react'
 import styles from './Counter.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
-import { decrement, decrementBy, increment, incrementBy, reset } from '../../features/counter/counterSlice'
-import { RootState, useAppDispatch } from '../../app/store';
+import { decrement, decrementBy, increment, incrementBy, reset } from '~/features/counter/counterSlice'
+import { RootState, useAppDispatch } from '~/app/store';
 
 const Counter = () => {
 

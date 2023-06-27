@@ -1,7 +1,6 @@
-import React from 'react'
-import TopNav from '../components/navbar/TopNav'
-import Header from '../layouts/Header'
-import Chat from '../components/chat/Chat'
+import Chat from '~/components/chat/Chat'
+import TopNav from '~/components/navbar/TopNav'
+import Header from '~/layouts/Header'
 
 const ChatPage = () => {
   return (
