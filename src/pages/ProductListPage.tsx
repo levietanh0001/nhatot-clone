@@ -8,7 +8,7 @@ import Breadcrumb from '../components/breadcrumb/Breadcrumb';
 import Ads from '../components/banner/Ads';
 import FilterBoard from '../components/filters/FilterBoard';
 import UserTypeTabs from '../components/tabs/UserTypeTabs';
-import MuaBanBDSCardList from '../components/card/MuaBanBDSCardList';
+import MuaBanBDSCardList from '../components/product-list/MuaBanBDSCardList';
 import ContentWithAdsLayout from '../layouts/ContentWithAdsLayout';
 
 const ProductListPage = () => {
