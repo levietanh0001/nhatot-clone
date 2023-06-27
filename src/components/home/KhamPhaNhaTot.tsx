@@ -65,7 +65,7 @@ const data = [
     imgSrc:
       'https://cdn.chotot.com/admincentre/I93AudxXzRuihZo-pP_GYUQdlDlWmS6ue6nA5Ql89e4/preset:raw/plain/be568cbf2ae0720df2cd3ee09ecf35c4-2818605396260909486.jpg',
     imgAlt: 'Mua bán bất động sản',
-    href: '/mua-ban-bds',
+    href: '/product-list',
     title: 'Mua bán',
     content: `213214 tin đăng mua bán`,
   },
