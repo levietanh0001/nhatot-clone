@@ -1,0 +1,21 @@
+.user-profile-wrapper {
+  width: 650px;
+  background-color: var(--secondary-background-color);
+}
+
+.tab {
+  display: flex;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 7px 15px;
+  border: 0;
+  background-color: var(--secondary-background-color);
+  font-size: 0.875rem;
+}
+
+.active {
+  border-bottom: 3px solid var(--orange);
+  font-weight: 600;
+}
