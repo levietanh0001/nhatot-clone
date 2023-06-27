@@ -1,4 +1,3 @@
-import TopNav from "../components/navbar";
 
 const Header = ({ children }) => {
   return (
