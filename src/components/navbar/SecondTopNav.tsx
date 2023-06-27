@@ -3,7 +3,7 @@ import { ClickAwayListener } from '@mui/material';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import styles from './SecondTopNav.module.scss';
-import LoginModal from '../modal/LoginModal';
+import LoginModal from '../login/LoginModal';
 import { Link } from 'react-router-dom';
 
 const SecondTopNav = () => {

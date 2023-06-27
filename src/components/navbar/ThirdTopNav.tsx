@@ -132,7 +132,7 @@ const SearchBox = () => {
 const PostButton = () => {
   return (
     <div className={styles["post-btn"]}>
-      <Link to='/dang-tin' onClick={() => console.log("Đăng tin")}>
+      <Link to='/post' onClick={() => console.log("Đăng tin")}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           data-type="monochrome"
