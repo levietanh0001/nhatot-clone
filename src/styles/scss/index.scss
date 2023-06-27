@@ -11,28 +11,28 @@
 @import "./default";
 
 
-.responsive-test {
-  @include xs {
-    background-color: getDefaultColor("red");
-  }
+// .responsive-test {
+//   @include xs {
+//     background-color: getDefaultColor("red");
+//   }
 
-  @include sm {
-    background-color: getDefaultColor("blue");
-  }
+//   @include sm {
+//     background-color: getDefaultColor("blue");
+//   }
 
-  @include md {
-    background-color: getDefaultColor("green");
-  }
+//   @include md {
+//     background-color: getDefaultColor("green");
+//   }
 
-  @include lg {
-    background-color: getDefaultColor("purple");
-  }
+//   @include lg {
+//     background-color: getDefaultColor("purple");
+//   }
 
-  @include xl {
-    background-color: getDefaultColor("orange");
-  }
+//   @include xl {
+//     background-color: getDefaultColor("orange");
+//   }
 
-  @include screenMinWidth("xxl") {
-    background-color: getDefaultColor("pink");
-  }
-}
+//   @include screenMinWidth("xxl") {
+//     background-color: getDefaultColor("pink");
+//   }
+// }
