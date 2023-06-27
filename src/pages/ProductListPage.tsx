@@ -1,15 +1,15 @@
 import React from "react";
-import AboutUs from "../components/footer/about-us/AboutUs";
-import Filters from "../components/filters/Filters";
-import TopNav from "../components/navbar";
-import Footer from "../layouts/Footer";
-import Header from "../layouts/Header";
-import Breadcrumb from "../components/breadcrumb/Breadcrumb";
-import Ads from "../components/ads/Ads";
-import FilterBoard from "../components/filters/FilterBoard";
-import UserTypeTabs from "../components/tabs/UserTypeTabs";
-import MuaBanBDSCardList from "../components/product-list/MuaBanBDSCardList";
-import ContentWithAdsLayout from "../layouts/ContentWithAdsLayout";
+import AboutUs from "~/components/footer/about-us/AboutUs";
+import Filters from "~/components/filters/Filters";
+import TopNav from "~/components/navbar";
+import Footer from "~/layouts/Footer";
+import Header from "~/layouts/Header";
+import Breadcrumb from "~/components/breadcrumb/Breadcrumb";
+import Ads from "~/components/ads/Ads";
+import FilterBoard from "~/components/filters/FilterBoard";
+import UserTypeTabs from "~/components/tabs/UserTypeTabs";
+import MuaBanBDSCardList from "~/components/product-list/MuaBanBDSCardList";
+import ContentWithAdsLayout from "~/layouts/ContentWithAdsLayout";
 
 const ProductListPage = () => {
   return (

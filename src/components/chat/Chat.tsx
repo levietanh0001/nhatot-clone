@@ -1,4 +1,4 @@
-import ChatLayout from "../../layouts/ChatLayout"
+import ChatLayout from "~/layouts/ChatLayout"
 import ChatPanel from "./ChatPanel"
 import ContactPanel from "./ContactPanel"
 

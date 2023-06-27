@@ -11,7 +11,7 @@ import "swiper/css/navigation";
 
 import styles from "./CardSlider.module.scss";
 import "./BDSCarousel.scss";
-import ICardProps from "../../../interfaces/card-interface";
+import ICardProps from "~/interfaces/card-interface";
 
 
 const Card: React.FC<ICardProps> = (props) => {

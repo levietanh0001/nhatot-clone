@@ -1,5 +1,3 @@
-import React from "react";
-import AboutUs from "../components/footer/about-us/AboutUs";
 
 const Footer = ({ children }) => {
   return (

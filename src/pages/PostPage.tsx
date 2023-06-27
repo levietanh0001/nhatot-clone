@@ -1,7 +1,7 @@
 import React from 'react'
-import TopNav from '../components/navbar/TopNav'
-import Header from '../layouts/Header'
-import PostProduct from '../components/post-product/PostProduct'
+import TopNav from '~/components/navbar/TopNav'
+import Header from '~/layouts/Header'
+import PostProduct from '~/components/post-product/PostProduct'
 
 const PostPage = () => {
   return (
