@@ -1,7 +1,7 @@
 import React from 'react'
 import TopNav from '../components/navbar/TopNav'
 import Header from '../layouts/Header'
-import Post from '../components/post/Post'
+import PostProduct from '../components/post-product/PostProduct'
 
 const PostPage = () => {
   return (
@@ -11,7 +11,7 @@ const PostPage = () => {
       </Header>
       <body style={{ height: '100vh' }}>
         <main>
-          <Post />
+          <PostProduct />
         </main>
       </body>
     </>

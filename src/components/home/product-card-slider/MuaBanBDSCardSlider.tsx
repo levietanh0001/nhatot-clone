@@ -5,20 +5,20 @@ import {
   Person,
 } from "@mui/icons-material";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
+import { Navigation } from "swiper";
+import { Link } from "react-router-dom";
 
-import styles from "./CardSlider.module.scss";
 import "./BDSCarousel.scss";
-import ICardProps from "../../interfaces/card-interface";
-
+import styles from "./CardSlider.module.scss";
+import ICardProps from "../../../interfaces/card-interface";
 
 const Card: React.FC<ICardProps> = (props) => {
   const { img, title, children } = props;
 
   return (
-    <a href="#" className={styles["card-wrapper"]}>
+    <Link to="/product" className={styles["card-wrapper"]}>
       <div className={styles["card"]}>
         <div className={styles["card-media"]}>
           {img && <img src={img.src} alt={img.alt} />}
@@ -30,7 +30,7 @@ const Card: React.FC<ICardProps> = (props) => {
           <div className={styles["card-details"]}>{children}</div>
         </div>
       </div>
-    </a>
+    </Link>
   );
 };
 
@@ -54,86 +54,88 @@ const slides = srcList.map((src) => {
   };
 });
 
-const DuAnBDSCardSlider = () => {
+const MuaBanBDSCardSlider: React.FC = () => {
   const nextRef = useRef<HTMLButtonElement>(null);
   const prevRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <div>
-      <div className="container">
-        <div className={styles["wrapper"]}>
-          <h2 className={styles["title"]}>Dự án bất động sản</h2>
-          <div className={"du-an-bds-carousel"}>
-            <Swiper
-              slidesPerView={1}
-              spaceBetween={10}
-              navigation={{
-                prevEl: ".prev-du-an",
-                nextEl: ".next-du-an",
-              }}
-              modules={[Navigation]}
-              breakpoints={{
-                420: {
-                  slidesPerView: 2,
-                  spaceBetween: 5,
-                },
-                576: {
-                  slidesPerView: 3,
-                  spaceBetween: 5,
-                },
-                768: {
-                  slidesPerView: 4,
-                  spaceBetween: 5,
-                },
-                992: {
-                  slidesPerView: 5,
-                  spaceBetween: 5,
-                },
-              }}
-            >
-              {slides.map((slide, index) => (
-                <SwiperSlide>
-                  <Card title="Cần bán dự án Vinhomes The Empire" {...slide}>
-                    <span>
-                      200 m<sup>2</sup>
-                    </span>
-                    <span className={styles["price"]}>150 tỷ</span>
-                    <footer>
-                      <Person fontSize="small" />
-                      <span>1 ngày trước</span>
-                      <span>Hà Nội</span>
-                    </footer>
-                  </Card>
-                </SwiperSlide>
-              ))}
-              <button style={{ display: "none" }} ref={prevRef}>
-                <KeyboardArrowLeft fontSize="medium" />
-              </button>
-              <button style={{ display: "none" }} ref={nextRef}>
-                <KeyboardArrowRight fontSize="medium" />
-              </button>
-            </Swiper>
-            <button
-              className="prev-du-an"
-              onClick={() => prevRef.current?.click()}
-            >
+    <div className="container">
+      <div className={styles["wrapper"]}>
+        <h2 className={styles["title"]}>Mua bán bất động sản</h2>
+        <div className={"mua-ban-bds-carousel"}>
+          <Swiper
+            slidesPerView={1}
+            spaceBetween={10}
+            navigation={{
+              prevEl: ".prev-mua-ban",
+              nextEl: ".next-mua-ban",
+            }}
+            modules={[Navigation]}
+            breakpoints={{
+              420: {
+                slidesPerView: 2,
+                spaceBetween: 5,
+              },
+              576: {
+                slidesPerView: 3,
+                spaceBetween: 5,
+              },
+              768: {
+                slidesPerView: 4,
+                spaceBetween: 5,
+              },
+              992: {
+                slidesPerView: 5,
+                spaceBetween: 5,
+              },
+            }}
+            className="mua-ban-bds"
+          >
+            {slides.map((slide, index) => (
+              <SwiperSlide>
+                <Card
+                  title="Cần bán bất động sản nhất cận thị nhị cận sông"
+                  {...slide}
+                >
+                  <span>
+                    65-70 m<sup>2</sup>
+                  </span>
+                  <span className={styles["price"]}>1375 tỷ</span>
+                  <footer>
+                    <Person fontSize="small" />
+                    <span>1 ngày trước</span>
+                    <span>Hà Nội</span>
+                  </footer>
+                </Card>
+              </SwiperSlide>
+            ))}
+            <button style={{ display: "none" }} ref={prevRef}>
               <KeyboardArrowLeft fontSize="medium" />
             </button>
-            <button
-              className="next-du-an"
-              onClick={() => nextRef.current?.click()}
-            >
+            <button style={{ display: "none" }} ref={nextRef}>
               <KeyboardArrowRight fontSize="medium" />
             </button>
-          </div>
-          <a href="#" className={styles["more"]}>
-            <span>Xem thêm 5.754 tin khác</span>
+          </Swiper>
+          <button
+            className="prev-mua-ban"
+            onClick={() => prevRef.current?.click()}
+          >
+            <KeyboardArrowLeft fontSize="medium" />
+          </button>
+          <button
+            className="next-mua-ban"
+            onClick={() => nextRef.current?.click()}
+          >
             <KeyboardArrowRight fontSize="medium" />
-          </a>
+          </button>
         </div>
+        <Link to="/product-list" className={styles["more"]}>
+          <span>Xem thêm 148.654 tin khác</span>
+          <KeyboardArrowRight fontSize="medium" />
+        </Link>
       </div>
     </div>
   );
 };
 
-export default DuAnBDSCardSlider;
+export default MuaBanBDSCardSlider;

@@ -1,5 +1,4 @@
-import React from 'react';
-import styles from './Post.module.scss';
+import styles from './PostProduct.module.scss';
 import { AiFillCaretDown } from 'react-icons/ai';
 
 const Post = () => {

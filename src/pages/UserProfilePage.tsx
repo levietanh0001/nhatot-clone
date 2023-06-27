@@ -1,4 +1,4 @@
-import AboutUs from "../components/about-us/AboutUs";
+import AboutUs from "../components/footer/about-us/AboutUs";
 import Breadcrumb from "../components/breadcrumb/Breadcrumb";
 import TopNav from "../components/navbar";
 import ContactUser from "../components/product/ContactUser";

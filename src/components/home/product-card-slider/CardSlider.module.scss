@@ -49,10 +49,9 @@
 }
 
 .card-media {
-  flex: 0 0 169px;
-  max-height: 169px;
-  width: 100%;
-
+  width: 169px;
+  height: 169px;
+  
   & img {
     object-fit: cover;
     object-position: center;

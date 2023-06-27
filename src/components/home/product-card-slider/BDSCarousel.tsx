@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 
 import "./BDSCarousel.scss";
 import styles from "./CardSlider.module.scss";
-import ICardProps from "../../interfaces/card-interface";
+import ICardProps from "../../../interfaces/card-interface";
 
 const Card: React.FC<ICardProps> = (props) => {
   const { img, title, children } = props;
@@ -134,4 +134,4 @@ const BDSCarousel = ({ carouselClassName, prevBtnClassName, nextBtnClassName, ti
   );
 };
 
-export default BDSCarousel;
+// export default BDSCarousel;
