@@ -7,7 +7,6 @@ const ProductListWithAds = ({ content, stickyBox }) => {
       <div className={styles["content-wrapper"]}>
         <div className={styles["content"]}>
           {content}
-          <div className="content-spacer"></div>
         </div>
         <div className={styles["sticky-box"]}>
           {stickyBox}

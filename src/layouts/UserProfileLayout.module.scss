@@ -1,0 +1,18 @@
+.inner-wrapper {
+  display: flex;
+
+  padding-top: 10px;
+  margin-bottom: 10px;
+}
+
+.user-info {
+  flex: 0.2;
+}
+
+.posts-wrapper {
+  flex: 0.8;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
