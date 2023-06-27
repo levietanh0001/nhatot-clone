@@ -1,6 +1,5 @@
-import { Breadcrumbs, Typography, Link } from '@mui/material';
+import { Breadcrumbs, Link } from '@mui/material';
 import styles from './Breadcrumb.module.scss';
-import { NavigateNext } from '@mui/icons-material';
 
 const Breadcrumb = () => {
   return (
@@ -8,7 +7,8 @@ const Breadcrumb = () => {
       <div className='container'>
         <Breadcrumbs
           aria-label='breadcrumb'
-          separator={<NavigateNext />}
+          separator='>'
+          // separator={<NavigateNext />}
           maxItems={2}
           itemsBeforeCollapse={2}
           sx={{ fontSize: '0.875rem' }}
