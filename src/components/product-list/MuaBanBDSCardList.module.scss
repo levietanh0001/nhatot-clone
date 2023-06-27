@@ -1,0 +1,96 @@
+
+.card-wrapper {
+  text-decoration: none;
+  color: inherit;
+}
+
+.card {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.65);
+  padding: 7px 10px;
+  margin-bottom: 1px;
+  
+  background-color: var(--secondary-background-color);
+
+  &:hover {
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.65);
+  }
+}
+
+.card-media {
+  flex: 0;
+
+  & img {
+    object-fit: cover;
+    object-position: center;
+    width: 128px;
+    height: 128px;
+  }
+}
+
+.card-details {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  text-align: left;
+}
+
+.card-content {
+  flex: 1;
+
+  & .description {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    & .bedroom {
+      vertical-align: middle;
+    }
+  }
+}
+
+.superscript {
+  font-size: 70%;
+  position: relative;
+  bottom: 0.3em;
+}
+
+.card-footer {
+  width: 100%;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  & .card-info {
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  & .favorite-btn {
+    flex-grow: 0;
+
+    border: 0;
+    vertical-align: middle;
+    margin: auto 0;
+
+    color: red;
+    background-color: inherit;
+    font-size: 1.25rem;
+
+    transition: scale 300ms;
+
+    &:hover {
+      scale: 1.5;
+    }
+  }
+}
