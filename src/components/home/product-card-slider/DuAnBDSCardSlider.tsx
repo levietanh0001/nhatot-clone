@@ -65,13 +65,8 @@ const DuAnBDSCardSlider = () => {
           <h2 className={styles["title"]}>Dự án bất động sản</h2>
           <div className={"du-an-bds-carousel"}>
             <Swiper
-              slidesPerView={1}
-              spaceBetween={10}
-              navigation={{
-                prevEl: ".prev-du-an",
-                nextEl: ".next-du-an",
-              }}
-              modules={[Navigation]}
+              slidesPerView={5}
+              spaceBetween={0}
               breakpoints={{
                 420: {
                   slidesPerView: 2,
@@ -90,6 +85,11 @@ const DuAnBDSCardSlider = () => {
                   spaceBetween: 5,
                 },
               }}
+              navigation={{
+                prevEl: ".prev-du-an",
+                nextEl: ".next-du-an",
+              }}
+              modules={[Navigation]}
             >
               {slides.map((slide, index) => (
                 <SwiperSlide>

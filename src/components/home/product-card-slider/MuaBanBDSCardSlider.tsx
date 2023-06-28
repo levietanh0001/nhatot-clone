@@ -64,8 +64,8 @@ const MuaBanBDSCardSlider: React.FC = () => {
         <h2 className={styles["title"]}>Mua bán bất động sản</h2>
         <div className={"mua-ban-bds-carousel"}>
           <Swiper
-            slidesPerView={1}
-            spaceBetween={10}
+            slidesPerView={5}
+            spaceBetween={0}
             navigation={{
               prevEl: ".prev-mua-ban",
               nextEl: ".next-mua-ban",

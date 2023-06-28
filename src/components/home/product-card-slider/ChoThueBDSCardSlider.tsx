@@ -64,8 +64,8 @@ const ChoThueBDSCardSlider: React.FC = () => {
           <h2 className={styles["title"]}>Cho thuê bất động sản</h2>
           <div className={"cho-thue-bds-carousel"}>
             <Swiper
-              slidesPerView={1}
-              spaceBetween={10}
+              slidesPerView={5}
+              spaceBetween={0}
               navigation={{
                 prevEl: ".prev-cho-thue",
                 nextEl: ".next-cho-thue",
