@@ -8,10 +8,12 @@
 - Typescript
 - Redux Toolkit
 - SASS (SCSS)
-- Material Icons
+- Material UI
+- Icons: MUI Icons, React Icons
 
 ## Backend
 
 - NodeJS (ExpressJS) 
 - MySQL
 - Sequelize
+- Firebase
