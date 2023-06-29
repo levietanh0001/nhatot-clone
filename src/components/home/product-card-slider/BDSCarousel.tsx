@@ -10,7 +10,7 @@ import "swiper/css/navigation";
 import { Navigation } from "swiper";
 import { Link } from "react-router-dom";
 
-import "./BDSCarousel.scss";
+import "./SwiperCardSlider.scss";
 import styles from "./CardSlider.module.scss";
 import ICardProps from "~/interfaces/card-interface";
 

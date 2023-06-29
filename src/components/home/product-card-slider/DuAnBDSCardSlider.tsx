@@ -9,8 +9,8 @@ import { Navigation } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 
-import styles from "./CardSlider.module.scss";
-import "./BDSCarousel.scss";
+import styles from "./BDSCardSlider.module.scss";
+import "./SwiperCardSlider.scss";
 import ICardProps from "~/interfaces/card-interface";
 
 
@@ -65,7 +65,7 @@ const DuAnBDSCardSlider = () => {
           <h2 className={styles["title"]}>Dự án bất động sản</h2>
           <div className={"du-an-bds-carousel"}>
             <Swiper
-              slidesPerView={5}
+              slidesPerView={1}
               spaceBetween={0}
               breakpoints={{
                 420: {

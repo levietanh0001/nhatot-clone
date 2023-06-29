@@ -3,7 +3,7 @@ import { ClickAwayListener } from '@mui/material';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import styles from './SecondTopNav.module.scss';
-import LoginModal from '~/components/login/LoginModal';
+import AuthModal from '~/components/auth/AuthModal';
 import { Link } from 'react-router-dom';
 
 const SecondTopNav = () => {
@@ -92,7 +92,7 @@ const DropdownMenu = () => {
                 <Person sx={{ color: '#000' }} />
                 <span>Đăng nhập/ Đăng ký</span>
               </a>
-              <LoginModal show={show} setShow={setShow} />
+              <AuthModal show={show} setShow={setShow} />
             </div>
             
 
