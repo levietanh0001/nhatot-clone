@@ -1,0 +1,106 @@
+.form {
+
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  & .main-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+
+    margin: 20px;
+    margin-left: 0;
+  }
+}
+
+.form-control {
+
+  position: relative;
+
+  margin: 0;
+  
+  & label {
+    display: none;
+  }
+
+  & input {
+    height: 50px;
+    padding: 15px 0 0 15px;
+    width: 100%;
+    border: 1px solid gray;
+    border-radius: 4px;
+
+    font-size: 1.1rem;
+  }
+
+  & input:focus {
+    border: 1px solid var(--orange-500);
+    outline: 1px solid var(--orange-500);
+  }
+
+  & input:focus + .floating-label, & input:valid + .floating-label {
+    top: 15px;
+    left: 15px;
+    font-size: 0.75rem;
+    opacity: 1;
+  }
+
+  & .floating-label {
+    color: gray;
+
+    position: absolute;
+    pointer-events: none;
+    left: 20px;
+    top: 50%;
+
+    transform: translateY(-50%);
+    transition: 0.2s ease all;
+  }
+
+  & input:not(:empty) {
+    background-color: green;
+    & .floating-label {
+      display: none;
+    }
+  }
+
+  & .forget-password {
+    text-decoration: none;
+    color: var(--blue-700);
+  }
+
+  & .submit-btn {
+    width: 100%;
+    padding: 12px;
+    border: 0;
+    border-radius: 4px;
+
+    background-color: var(--orange-800);
+    color: white;
+
+    font-size: 1.25rem;
+    font-weight: 700;
+
+    transition: ease 300ms;
+
+    &:hover {
+      scale: 1.01;
+    }
+
+    &:active {
+      background-color: var(--orange-500);
+      transform: translate(1px, 2px);
+    }
+  }
+}
+
+.error {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: red;
+}
+
+@media (max-width: 768px) {
+  
+}
