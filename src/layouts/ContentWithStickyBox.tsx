@@ -1,4 +1,3 @@
-import React from "react";
 import styles from './ContentWithStickyBox.module.scss';
 
 const ProductListWithAds = ({ content, stickyBox }) => {
