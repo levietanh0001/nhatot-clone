@@ -63,8 +63,9 @@ const AccordionMenuItem = ({ item }) => {
   const numChildren = item?.children?.length ?? 0;
 
   return (
-    <li className={styles['accordion-menu-item']} onClick={() => setExpand(!expand)}>
+    <li className={styles['accordion-menu-item']}>
       <a 
+        onClick={() => setExpand(!expand)}
         href={item.href}
         style={{
           backgroundColor: expand? 'var(--orange-900)': ''
