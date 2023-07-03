@@ -1,10 +1,10 @@
-import Login from "~/components/auth/Login"
+import LoginModalContent from "~/components/auth/LoginModalContent"
 import AuthLayout from "~/layouts/AuthLayout"
 
 const LoginPage = () => {
   return (
     <>
-      <AuthLayout AuthComp={<Login />} />
+      <AuthLayout AuthComp={<LoginModalContent />} />
     </>
   )
 }
