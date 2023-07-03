@@ -31,39 +31,39 @@ const upload = multer();
 // authController.login);
 
 router.post(
-    '/login',
-    authValidator.validate_login(),
-    authController.login
+  '/login',
+  authValidator.validate_login(),
+  authController.login
 );
 router.post(
-    '/register',
-    authValidator.validate_register(),
-    authController.register
+  '/register',
+  authValidator.validate_register(),
+  authController.register
 );
 router.post(
-    '/logout',
-    isAuth.loggedIn,
-    authController.logout
+  '/logout',
+  isAuth.loggedIn,
+  authController.logout
 );
 router.get(
-    '/',
-    isAuth.loggedIn,
-    authController.authDetails
+  '/',
+  isAuth.loggedIn,
+  authController.authDetails
 );
 router.post(
-    '/reset-password-email',
-    authController.resetPasswordEmail
+  '/reset-password-email',
+  authController.resetPasswordEmail
 );
 
 // this route must be implemented on frontend
 router.get(
-    '/reset-password-form',
-    authController.resetPasswordForm
+  '/reset-password-form',
+  authController.resetPasswordForm
 );
 
 router.post(
-    '/reset-password',
-    authController.resetPassword
+  '/reset-password',
+  authController.resetPassword
 );
 
 module.exports = router;
