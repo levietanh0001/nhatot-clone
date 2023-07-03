@@ -1,24 +1,32 @@
-import styles from './Modal.module.scss';
-import { MdClose } from 'react-icons/md';
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+// import styles from "./Modal.module.scss";
+import './Modal.scss';
+import { MdClose } from "react-icons/md";
 
-const Modal = ({ children, show, onModalClose }) => {
-
-  if(!show) {
+const Modal = ({
+  className='',
+  children,
+  show,
+  onModalClose,
+  onClickAway = () => {}
+}) => {
+  if (!show) {
     return null;
   }
 
   return (
-    <>
-      <div className={styles['overlay']}></div>
-      <div className={styles['modal']}>
-        <button className={styles['close-btn']} onClick={onModalClose}>
-          <MdClose />
-        </button>
-        <div className={styles['content']}>{children}</div>
-      </div>
-    </>
+    <div className={className}>
+      <div className="overlay"></div>
+      <ClickAwayListener onClickAway={onClickAway}>
+        <div className="modal">
+          <button className="close-btn" onClick={onModalClose}>
+            <MdClose />
+          </button>
+          <div className="content">{children}</div>
+        </div>
+      </ClickAwayListener>
+    </div>
   );
 };
-
 
 export default Modal;
