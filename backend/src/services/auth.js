@@ -10,7 +10,7 @@ const jwt = require('jsonwebtoken');
 const validationUtils = require('../utils/validation');
 const errorsService = require('../services/errors');
 const { readPrivateKeyFile } = require('../utils/cryptography');
-require('dotenv').config('../.env');
+require('dotenv').config('../../.env');
 
 
 const User = require('../models/user');

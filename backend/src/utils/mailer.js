@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-require('dotenv').config('../.env');
+require('dotenv').config('../../.env');
 
 
 function sendConfimationEmail(recipientEmail, confirmationUrl) {
