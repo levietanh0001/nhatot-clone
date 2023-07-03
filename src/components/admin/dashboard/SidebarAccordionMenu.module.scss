@@ -1,0 +1,42 @@
+.accordion-menu {
+  & ul {
+    list-style-type: none;
+
+    & li:hover {
+      background-color: #181818;
+    }
+  }
+
+  & a {
+    text-decoration: none;
+    color: whitesmoke;
+
+    &:hover {
+      background-color: var(--orange-800);
+    }
+  }
+
+  & span {
+    white-space: nowrap;
+  }
+}
+
+.accordion-menu-item {
+  width: 100%;
+
+  & .children-wrapper {
+    height: 0;
+    overflow: hidden;
+    transition: height 300ms ease;
+  }
+
+  // & .children-wrapper.open {
+  //   height: auto;
+  // }
+
+  & a {
+    display: block;
+    padding: 15px;
+
+  }
+}
