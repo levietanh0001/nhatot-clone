@@ -5,16 +5,12 @@ const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const { graphqlHTTP } = require('express-graphql');
-require('dotenv').config('./.env');
-// const multer = require('multer');
-// const cors = require('cors');
-// const jwt = require('jsonwebtoken');
+require('dotenv').config('../.env');
 
 const { readPublicKeyFile, verifyToken } = require('./utils/cryptography');
 
 const graphqlSchema = require('./graphql/schema');
 const graphqlResolver = require('./graphql/resolvers');
-
 
 // import middlewares
 const uploadData = require('./middlewares/upload_data');
@@ -26,7 +22,6 @@ const productsRouter = require('./routes/products');
 const cartRouter = require('./routes/cart');
 const orderRouter = require('./routes/orders');
 const errorsService = require('./services/errors');
-
 
 // must import models into app (containing sequelize.sync())
 const sequelize = require('./utils/database');
@@ -47,13 +42,11 @@ const store = new MongoDBStore({
   collection: 'session',
 });
 
-
 // 2. add middlewares
 // app.use(cors());
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // parse req.body 
-
 
 // cors
 app.use((req, res, next) => {
@@ -88,7 +81,6 @@ app.use(
 // upload single file (image) middleware
 app.use(uploadData.multerWrapper());
 
-
 app.use(
   // session manages cookies
   session({
@@ -103,7 +95,6 @@ app.use(
   })
 );
 
-
 // send _csrf cookie, only needed when rendering form
 const csrfProtection = { cookie: true }; // httpOnly=true only when _csrf is sent via form in a hidden input field (SSR)
 app.use(csrf()); // csrf protection middleware right after session middleware and after cookieParser
@@ -113,7 +104,6 @@ app.use((req, res, next) => {
   console.log('[app.js]', 'XSRF-Token has been set');
   next();
 })
-
 
 // middleware that always runs first before the rest
 app.use('/', (req, res, next) => {
