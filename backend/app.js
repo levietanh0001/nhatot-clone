@@ -1,14 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const multer = require('multer');
 const cookieParser = require('cookie-parser');
-const cors = require('cors');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const { graphqlHTTP } = require('express-graphql');
-const jwt = require('jsonwebtoken');
 require('dotenv').config('./.env');
+// const multer = require('multer');
+// const cors = require('cors');
+// const jwt = require('jsonwebtoken');
 
 const { readPublicKeyFile, verifyToken } = require('./utils/cryptography');
 
@@ -43,8 +43,8 @@ const app = express();
 
 // settings
 const store = new MongoDBStore({
-    uri: process.env.MONGO_CONNECTION_STRING,
-    collection: 'session',
+  uri: process.env.MONGO_CONNECTION_STRING,
+  collection: 'session',
 });
 
 
@@ -57,31 +57,31 @@ app.use(bodyParser.urlencoded({ extended: true })); // parse req.body
 
 // cors
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    next();
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
 })
 
 // graphql
 app.use(
-    '/graphql', 
-    graphqlHTTP({
-        schema: graphqlSchema,
-        rootValue: graphqlResolver,
-        graphiql: true, // web ide
+  '/graphql',
+  graphqlHTTP({
+    schema: graphqlSchema,
+    rootValue: graphqlResolver,
+    graphiql: true, // web ide
 
-        // // format error for graphql
-        // formatError(error) {
-        //     if(!error.originalError) { // means if not error during runtime
-        //         return error;
-        //     }
-        //     const data = error.originalError.data;
-        //     const message = error.message || 'Something wrong happens';
-        //     const statusCode = error.originalError.code || 500;
-        //     return { message: message, statusCode: statusCode, data: data };
-        // }
-    }),
+    // // format error for graphql
+    // formatError(error) {
+    //     if(!error.originalError) { // means if not error during runtime
+    //         return error;
+    //     }
+    //     const data = error.originalError.data;
+    //     const message = error.message || 'Something wrong happens';
+    //     const statusCode = error.originalError.code || 500;
+    //     return { message: message, statusCode: statusCode, data: data };
+    // }
+  }),
 
 );
 
@@ -90,17 +90,17 @@ app.use(uploadData.multerWrapper());
 
 
 app.use(
-    // session manages cookies
-    session({
-        secret: process.env.SESSION_SECRET,
-        resave: false, // will not rewrite the req.session.cookie object
+  // session manages cookies
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false, // will not rewrite the req.session.cookie object
 
-        // session is only stored into your storage
-        // when any of the property is modified in req.session
-        saveUninitialized: false,
-        cookie: { maxAge: 60 * 60 * 1000 * 24 * 30 },
-        store: store
-    })
+    // session is only stored into your storage
+    // when any of the property is modified in req.session
+    saveUninitialized: false,
+    cookie: { maxAge: 60 * 60 * 1000 * 24 * 30 },
+    store: store
+  })
 );
 
 
@@ -108,63 +108,63 @@ app.use(
 const csrfProtection = { cookie: true }; // httpOnly=true only when _csrf is sent via form in a hidden input field (SSR)
 app.use(csrf()); // csrf protection middleware right after session middleware and after cookieParser
 app.use((req, res, next) => {
-    // should cstf token be included in cookies?
-    res.cookie('XSRF-TOKEN', req.csrfToken()); // csrfToken() comes from csrf middleware right above
-    console.log('[app.js]', 'XSRF-Token has been set');
-    next();
+  // should cstf token be included in cookies?
+  res.cookie('XSRF-TOKEN', req.csrfToken()); // csrfToken() comes from csrf middleware right above
+  console.log('[app.js]', 'XSRF-Token has been set');
+  next();
 })
 
 
 // middleware that always runs first before the rest
 app.use('/', (req, res, next) => {
-    console.log('this always run first before any request');
-    next();
+  console.log('this always run first before any request');
+  next();
 });
 
 
 app.use((req, res, next) => {
 
-    console.log('[app.js]', 'run before every request');
+  console.log('[app.js]', 'run before every request');
 
-    const token = req.headers?.['authorization']?.split(' ')[1];
-    const publicKey = readPublicKeyFile;
-    const payload = verifyToken(token, publicKey);
+  const token = req.headers?.['authorization']?.split(' ')[1];
+  const publicKey = readPublicKeyFile;
+  const payload = verifyToken(token, publicKey);
 
-    if(!payload.id) {
-        return next();
-    }
+  if (!payload.id) {
+    return next();
+  }
 
-    const currentUserId = payload.id;
+  const currentUserId = payload.id;
 
-    // if current user exists, attach user object to every request
-    User
-        // check if current session's user exists in database
-        .findByPk(currentUserId) // req.session.user contains data fields only
-        .then(user => {
-            if (!user) { // if user does not exist
-                errorsService.throwError(404, 'Not found', 'User is not found in current session');
-                // return next();
-            }
+  // if current user exists, attach user object to every request
+  User
+    // check if current session's user exists in database
+    .findByPk(currentUserId) // req.session.user contains data fields only
+    .then(user => {
+      if (!user) { // if user does not exist
+        errorsService.throwError(404, 'Not found', 'User is not found in current session');
+        // return next();
+      }
 
-            req.user = user; // set user instance from user model (sequelize)
+      req.user = user; // set user instance from user model (sequelize)
 
-            return req.user.getCart();
-        })
-        .then(cart => {
+      return req.user.getCart();
+    })
+    .then(cart => {
 
-            if (!cart) {
-                return req.user.createCart();
-            }
+      if (!cart) {
+        return req.user.createCart();
+      }
 
-            return cart;
-        })
-        .then(cart => {
-            console.log('[app.js].cart', cart);
-            return next();
-        })
-        .catch(error => {
-            errorsService.passErrorToHandler(error, error.statusCode, next);
-        });
+      return cart;
+    })
+    .then(cart => {
+      console.log('[app.js].cart', cart);
+      return next();
+    })
+    .catch(error => {
+      errorsService.passErrorToHandler(error, error.statusCode, next);
+    });
 });
 
 
@@ -201,16 +201,16 @@ Product.belongsToMany(Order, { through: OrderItem });
 
 // sync sequelize model with database
 sequelize
-    .sync({ force: process.env.SYNC_MODE === 'force' }) // force overwrite relationships, only in dev mode
-    .then(() => {
-        const server = app.listen(process.env.PORT);
-        const io = require('./utils/socket').init(server);
-        io.on('connection', socket => {
-            console.log('Socket connected');
-        });
-    })
-    .catch(error => {
-        errorsService.throwError(500, 'Internal Server Error', error.message);
+  .sync({ force: process.env.SYNC_MODE === 'force' }) // force overwrite relationships, only in dev mode
+  .then(() => {
+    const server = app.listen(process.env.PORT);
+    const io = require('./utils/socket').init(server);
+    io.on('connection', socket => {
+      console.log('Socket connected');
     });
+  })
+  .catch(error => {
+    errorsService.throwError(500, 'Internal Server Error', error.message);
+  });
 
 
