@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './Filters.module.scss';
 import { CiFilter, CiLocationOn } from 'react-icons/ci';
 import { AiFillCaretDown, AiOutlinePlus } from 'react-icons/ai';
@@ -8,15 +8,11 @@ const Filters = () => {
   const [show, setShow] = useState<boolean>(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
-  // const outerWrapper = document.querySelector(`.${styles['outer-wrapper']}`) as HTMLDivElement;
-
   const toggleFilters = () => {
     if (typeof window !== 'undefined') {
       if (window.scrollY > lastScrollY) {
-        // outerWrapper.style.top = '0';
         setShow(false);
       } else {
-        // outerWrapper.style.top = '-50px';
         setShow(true);
       }
 
