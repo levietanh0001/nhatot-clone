@@ -1,47 +1,33 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../utils/database');
+const { asString } = require('../utils/model-types');
 
 
 const User = sequelize.define('user', {
-    id: {
-        type: Sequelize.INTEGER.UNSIGNED,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true,
-    },
-    name: {
-        type: Sequelize.STRING,
-        allowNull: true,
-        validate: {
-            len: {
-                args: [1, 255],
-                msg: "1 <= String length <= 255"
-            }
-        }
-    },
-    email: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        validate: {
-            len: {
-                args: [1, 255],
-                msg: "1 <= String length <= 255"
-            }
-        }
-    },
-    password: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    resetToken: {
-        type: Sequelize.STRING,
-    },
-    resetTokenExpiryDate: {
-        type: Sequelize.DATE
-    }
-
+  id: {
+    type: Sequelize.INTEGER.UNSIGNED,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true,
+  },
+  name: {
+    ...asString(minChar=0, maxChar=255)
+  },
+  email: {
+    ...asString(minChar=0, maxChar=255, allowNull=false)
+  },
+  password: {
+    ...asString(minChar=6, maxChar=32, allowNull=false)
+  },
+  resetToken: {
+    type: Sequelize.STRING,
+  },
+  resetTokenExpiryDate: {
+    type: Sequelize.DATE
+  },
+  
 }, {
-    freezeTableName: true
+  freezeTableName: true
 });
 
 
