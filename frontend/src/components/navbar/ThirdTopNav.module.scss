@@ -25,7 +25,7 @@
 }
 
 .search-btn {
-  padding: 0 7px;
+  padding: 5px 7px;
   background-color: var(--orange-800);
   border-radius: 5px;
 
@@ -33,6 +33,11 @@
     background-color: inherit;
     border: none;
     cursor: pointer;
+  }
+
+  & svg {
+    vertical-align: middle;
+    fill: white;
   }
 }
 

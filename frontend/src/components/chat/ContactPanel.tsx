@@ -1,4 +1,4 @@
-import { ClickAwayListener } from '@mui/material';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 import styles from './ContactPanel.module.scss';
 import { useState } from 'react';
 
