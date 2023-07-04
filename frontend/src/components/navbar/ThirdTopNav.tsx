@@ -1,8 +1,10 @@
-import { Clear, Done, Search } from '@mui/icons-material';
-import { ClickAwayListener, IconButton } from '@mui/material';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+
+// import IconButton from '@mui/material/IconButton';
 import { useEffect, useState } from 'react';
-import styles from './ThirdTopNav.module.scss';
 import { Link } from 'react-router-dom';
+
+import styles from './ThirdTopNav.module.scss';
 
 const ThirdTopNav = () => {
   return (
@@ -63,35 +65,27 @@ const RealEstateTypeMenu = () => {
               onClick={() => setRealEstateType('muaban')}
             >
               <span>Mua bán</span>
-              <Done
-                sx={{
-                  visibility:
-                    realEstateType === 'muaban' ? 'initial' : 'hidden',
-                }}
-              />
+              <svg style={{
+                visibility: realEstateType === 'muaban' ? 'initial' : 'hidden',
+              }} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">{/*! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. */}<path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z" /></svg>
             </div>
             <div
               className={styles['menu-item']}
               onClick={() => setRealEstateType('chothue')}
             >
               <span>Cho thuê</span>
-              <Done
-                sx={{
-                  visibility:
-                    realEstateType === 'chothue' ? 'initial' : 'hidden',
-                }}
-              />
+              <svg style={{
+                visibility: realEstateType === 'chothue' ? 'initial' : 'hidden',
+              }} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">{/*! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. */}<path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z" /></svg>
             </div>
             <div
               className={styles['menu-item']}
               onClick={() => setRealEstateType('duan')}
             >
               <span>Dự án</span>
-              <Done
-                sx={{
-                  visibility: realEstateType === 'duan' ? 'initial' : 'hidden',
-                }}
-              />
+              <svg style={{
+                visibility: realEstateType === 'duan' ? 'initial' : 'hidden',
+              }} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">{/*! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. */}<path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z" /></svg>
             </div>
           </div>
         )}
@@ -114,16 +108,13 @@ const SearchBox = () => {
       />
       {searchInput && (
         <span onClick={() => setSearchInput('')}>
-          <Clear sx={{ fontSize: '1rem' }} />
+          <svg xmlns="http://www.w3.org/2000/svg" height="0.75em" viewBox="0 0 512 512">{/*! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. */}<path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z" /></svg>
         </span>
       )}
       <div className={styles['search-btn']}>
-        <IconButton disableRipple sx={{ padding: '5px' }}>
-          <Search
-            sx={{ stroke: 'white', strokeWidth: 1.3, color: 'white' }}
-            fontSize='small'
-          />
-        </IconButton>
+        <button>
+          <svg color='white' xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">{/*! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. */}<path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" /></svg>
+        </button>
       </div>
     </div>
   );

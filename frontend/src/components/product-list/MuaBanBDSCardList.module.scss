@@ -74,6 +74,10 @@
     display: flex;
     align-items: center;
     gap: 5px;
+
+    & .person-icon svg {
+      fill: black;
+    }
   }
 
   & .favorite-btn {
@@ -83,7 +87,6 @@
     vertical-align: middle;
     margin: auto 0;
 
-    color: red;
     background-color: inherit;
     font-size: 1.25rem;
 
@@ -91,6 +94,10 @@
 
     &:hover {
       scale: 1.5;
+    }
+
+    & .heart-icon svg {
+      fill: red;
     }
   }
 }

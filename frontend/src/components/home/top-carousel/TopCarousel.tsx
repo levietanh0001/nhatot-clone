@@ -58,7 +58,8 @@ function TopCarousel() {
                 <a href='#'>
                   <img 
                     src={slide.imgSrc} 
-                    alt='Chính sách mới của nhà tốt' 
+                    alt='Chính sách mới của nhà tốt'
+                    loading='lazy'
                   />
                 </a>
               </div>
