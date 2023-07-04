@@ -6,9 +6,7 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const { graphqlHTTP } = require('express-graphql');
 
-
 require('dotenv').config('../.env');
-
 const { readPublicKeyFile, verifyToken } = require('./utils/cryptography');
 
 const graphqlSchema = require('./graphql/schema');
@@ -19,20 +17,27 @@ const uploadData = require('./middlewares/upload_data');
 
 // import routers
 const authRouter = require('./routes/auth');
-const adminRouter = require('./routes/admin');
-const productsRouter = require('./routes/products');
-const cartRouter = require('./routes/cart');
-const orderRouter = require('./routes/orders');
+// const adminRouter = require('./routes/admin');
+// const productsRouter = require('./routes/products');
+// const cartRouter = require('./routes/cart');
+// const orderRouter = require('./routes/orders');
 const errorsService = require('./services/errors');
 
-// must import models into app (containing sequelize.sync())
+// must import models into app (same place as sequelize.sync() for it to work)
 const sequelize = require('./utils/database');
 const Product = require('./models/product');
 const User = require('./models/user');
-const Cart = require('./models/cart');
-const CartItem = require('./models/cart_item');
-const Order = require('./models/order');
-const OrderItem = require('./models/order_item');
+const UserProfile = require('./models/user-profile');
+const FavoriteList = require('./models/favorite-list');
+const FavoriteItem = require('./models/favorite-item');
+const ProductImage = require('./models/product-image');
+const ProductCategory = require('./models/product-category');
+const Category = require('./models/category');
+const MainDoorDirection = require('./models/main-door-direction');
+const Direction = require('./models/direction');
+const BalconDirection = require('./models/balcon-direction');
+// const Order = require('./models/order');
+// const OrderItem = require('./models/order_item');
 
 
 // init express app
@@ -83,29 +88,32 @@ app.use(
 // upload single file (image) middleware
 app.use(uploadData.multerWrapper());
 
-app.use(
-  // session manages cookies
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false, // will not rewrite the req.session.cookie object
 
-    // session is only stored into your storage
-    // when any of the property is modified in req.session
-    saveUninitialized: false,
-    cookie: { maxAge: 60 * 60 * 1000 * 24 * 30 },
-    store: store
-  })
-);
+// // cookies
+// app.use(
+//   // session manages cookies
+//   session({
+//     secret: process.env.SESSION_SECRET,
+//     resave: false, // will not rewrite the req.session.cookie object
 
-// send _csrf cookie, only needed when rendering form
-const csrfProtection = { cookie: true }; // httpOnly=true only when _csrf is sent via form in a hidden input field (SSR)
-app.use(csrf()); // csrf protection middleware right after session middleware and after cookieParser
-app.use((req, res, next) => {
-  // should cstf token be included in cookies?
-  res.cookie('XSRF-TOKEN', req.csrfToken()); // csrfToken() comes from csrf middleware right above
-  console.log('[app.js]', 'XSRF-Token has been set');
-  next();
-})
+//     // session is only stored into your storage
+//     // when any of the property is modified in req.session
+//     saveUninitialized: false,
+//     cookie: { maxAge: 60 * 60 * 1000 * 24 * 30 },
+//     store: store
+//   })
+// );
+
+// // send _csrf cookie, only needed when rendering form
+// const csrfProtection = { cookie: true }; // httpOnly=true only when _csrf is sent via form in a hidden input field (SSR)
+// app.use(csrf()); // csrf protection middleware right after session middleware and after cookieParser
+// app.use((req, res, next) => {
+//   // should cstf token be included in cookies?
+//   res.cookie('XSRF-TOKEN', req.csrfToken()); // csrfToken() comes from csrf middleware right above
+//   console.log('[app.js]', 'XSRF-Token has been set');
+//   next();
+// })
+
 
 // middleware that always runs first before the rest
 app.use('/', (req, res, next) => {
@@ -122,7 +130,7 @@ app.use((req, res, next) => {
   const publicKey = readPublicKeyFile;
   const payload = verifyToken(token, publicKey);
 
-  if (!payload.id) {
+  if (!payload?.id) {
     return next();
   }
 
@@ -134,24 +142,21 @@ app.use((req, res, next) => {
     .findByPk(currentUserId) // req.session.user contains data fields only
     .then(user => {
       if (!user) { // if user does not exist
-        errorsService.throwError(404, 'Not found', 'User is not found in current session');
-        // return next();
+        errorsService.throwError(404, 'Not found', 'User does not exist');
       }
 
       req.user = user; // set user instance from user model (sequelize)
 
-      return req.user.getCart();
+      return req.user.getFavoriteList();
     })
-    .then(cart => {
-
-      if (!cart) {
-        return req.user.createCart();
+    .then(favList => {
+      if (!favList) {
+        return req.user.createFavoriteList();
       }
-
-      return cart;
+      return favList;
     })
-    .then(cart => {
-      console.log('[app.js].cart', cart);
+    .then(favList => {
+      console.log('[app.js].favList', favList);
       return next();
     })
     .catch(error => {
@@ -162,10 +167,10 @@ app.use((req, res, next) => {
 
 // use routers
 app.use('/auth', authRouter);
-app.use('/admin', adminRouter);
-app.use('/products', productsRouter);
-app.use('/cart', cartRouter)
-app.use('/orders', orderRouter);
+// app.use('/admin', adminRouter);
+// app.use('/products', productsRouter);
+// app.use('/cart', cartRouter)
+// app.use('/orders', orderRouter);
 
 
 // error handling
@@ -173,22 +178,36 @@ app.use(errorsService.handle404);
 app.use(errorsService.errorHandler);
 
 
+// associations
+
 // one-to-one relationship, an User created a Product
 Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
 User.hasMany(Product); // one-to-many relationship: getProducts() and createProduct() methods generated
 
-User.hasOne(Cart);
-Cart.belongsTo(User); // generated user.getCart() method
+ProductImage.belongsTo(Product, { constraints: true, onDelete: 'CASCADE' });
+Product.hasMany(ProductImage);
 
-// association: belongsToMany through an intermediate Model
-Cart.belongsToMany(Product, { through: CartItem });
-Product.belongsToMany(Cart, { through: CartItem });
+ProductCategory.belongsTo(Category);
+Category.hasMany(ProductCategory);
 
-Order.belongsTo(User);
-User.hasMany(Order);
+Product.belongsTo(ProductCategory, { constraints: true, onDelete: 'CASCADE' });
+ProductCategory.hasMany(Product);
 
-Order.belongsToMany(Product, { through: OrderItem });
-Product.belongsToMany(Order, { through: OrderItem });
+MainDoorDirection.belongsTo(Direction);
+Direction.hasMany(MainDoorDirection);
+
+BalconDirection.belongsTo(Direction);
+Direction.hasMany(BalconDirection);
+
+FavoriteList.belongsTo(User);
+User.hasOne(FavoriteList);
+
+User.hasOne(UserProfile);
+UserProfile.belongsTo(User);
+
+// belongsToMany through an intermediate Model
+FavoriteList.belongsToMany(Product, { through: FavoriteItem });
+Product.belongsToMany(FavoriteList, { through: FavoriteItem });
 
 
 // sync sequelize model with database
