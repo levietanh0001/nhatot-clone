@@ -1,0 +1,66 @@
+* {
+  box-sizing: border-box;
+  /* 1. compatibility with box model */
+  font-family: system-ui;
+  /* 2. recommended font family */
+  /* 3. for development */
+  /* outline: 1px solid rgba(0 0 0 / 30%); */
+
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  /* reset headings' styles to prevent misuse */
+  font-size: initial;
+}
+
+body {
+  /* 4. remove default body margin=8px */
+  margin: 0;
+
+  /* added */
+  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+ul,
+ol {
+  /* 5. remove padding left from lists */
+  padding-left: 0;
+}
+
+/* 6. inherit font from parent elements */
+input,
+textarea,
+select,
+button {
+  font: inherit;
+}
+
+input {
+  width: 98%;
+  padding: 1%;
+}
+
+/* 7. remove italic text for `address` */
+address {
+  font-style: normal;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+/* no prefer, it's okay to do big transitions */
+@media (prefers-reduced-motion: no-preference) {
+  * {
+    /* transition definition here */
+  }
+}

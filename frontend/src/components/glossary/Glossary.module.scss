@@ -1,0 +1,72 @@
+.outer-wrapper {
+  // padding-top: 15px;
+  background-color: var(--glossary-background-color);
+}
+
+.inner-wrapper {
+  padding-inline: 10px;
+  padding-top: 20px;
+  // margin: 0 10px;
+}
+
+.h2 {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.small-title {
+  text-align: center;
+  font-style: italic;
+  font-size: 0.875rem;
+  margin: 0;
+  padding: 7px 0;
+}
+
+.content-container {
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+}
+
+.content {
+  text-align: justify;
+  margin: 0;
+  margin-top: 7px;
+  padding: 0;
+  
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+}
+
+.fade-out {
+  height: 50px;
+  width: 100%; 
+  
+  position: absolute; 
+  bottom: 0px; 
+  left: 0;
+  right: 0;
+
+  background-image: linear-gradient(to top, var(--app-background-color), transparent);
+}
+
+.read-more {
+  color: white;
+  text-align: center;
+  color: var(--app-text-color);
+  padding: 15px 0;
+  cursor: pointer;
+  width: 100%;
+
+  background-color: inherit;
+  border: 0;
+  outline: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}

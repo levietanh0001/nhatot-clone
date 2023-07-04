@@ -1,0 +1,53 @@
+@import 'normalize.css';
+@import './styles/scss/index';
+
+:root {
+  --app-background-color: #f4f4f4;
+  --secondary-background-color: white;
+  --app-text-color: black;
+  --error: var(--red);
+  --toggle-theme-btn-bg-color: var(--white);
+  --toggle-theme-btn-border-color: var(--white);
+}
+
+.App {
+  background-color: var(--app-background-color);
+  margin-left: 0;
+}
+
+.dark {
+  --app-background-color: var(--brown-400);
+  --secondary-background-color: var(--brown-200);
+  --app-text-color: black;
+  --app-secondary-text-color: black;
+  --error: red;
+  --toggle-theme-btn-bg-color: var(--black);
+  --toggle-theme-btn-border-color: var(--black);
+}
+
+.container {
+  width: 100%;
+  max-width: 992px;
+  margin: 0 auto;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.header-bottom-spacer {
+  display: block;
+  height: 20px;
+  background-color: var(--app-background-color);
+}
+
+.content-spacer {
+  margin-top: 10px;
+  display: block;
+  height: 1000px;
+  background-color: var(--app-background-color);
+}
+
+.nav-spacer {
+  width: 100%;
+  height: 10px;
+  background-color: var(--secondary-background-color);
+}

@@ -1,0 +1,52 @@
+// variables and functions
+
+// layouts
+@import "./layout";
+
+// colors
+@import "./colors";
+
+// utilities
+
+@import "./default";
+
+.sr-only,
+.sr-only-focusable:not(:focus):not(:focus-within) {
+  position: absolute;
+  /* 1. remove element from document flow */
+  /* 2. width, height to 1px then clip to hide element */
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+// .responsive-test {
+//   @include xs {
+//     background-color: getDefaultColor("red");
+//   }
+
+//   @include sm {
+//     background-color: getDefaultColor("blue");
+//   }
+
+//   @include md {
+//     background-color: getDefaultColor("green");
+//   }
+
+//   @include lg {
+//     background-color: getDefaultColor("purple");
+//   }
+
+//   @include xl {
+//     background-color: getDefaultColor("orange");
+//   }
+
+//   @include screenMinWidth("xxl") {
+//     background-color: getDefaultColor("pink");
+//   }
+// }

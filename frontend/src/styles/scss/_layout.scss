@@ -1,0 +1,137 @@
+@use "sass:math";
+
+
+:root {
+  --xs: 0;
+  --sm: 576px;
+  --md: 768px;
+  --lg: 992px;
+  --xl: 1200px;
+  --xxl: 1400px;
+}
+
+// $breakpoints: (
+//   "xs": 0,
+//   "sm": 576px,
+//   "md": 768px,
+//   "lg": 992px,
+//   "xl": 1200px,
+//   "xxl": 1400px,
+// );
+
+// @mixin xs {
+//   @media (min-width: map-get($breakpoints, "xs")) {
+//     @content;
+//   }
+// }
+
+// @mixin sm {
+//   @media (min-width: map-get($breakpoints, "sm")) {
+//     @content;
+//   }
+// }
+
+// @mixin md {
+//   @media (min-width: map-get($breakpoints, "md")) {
+//     @content;
+//   }
+// }
+
+// @mixin lg {
+//   @media (min-width: map-get($breakpoints, "lg")) {
+//     @content;
+//   }
+// }
+
+// @mixin xl {
+//   @media (min-width: map-get($breakpoints, "xl")) {
+//     @content;
+//   }
+// }
+
+// @mixin screenMinWidth($min-width: 0) {
+//   @if (map-has-key($map: $breakpoints, $key: $min-width)) {
+//     @media (min-width: map-get($breakpoints, $min-width)) {
+//       @content;
+//     }
+//   } @else {
+//     @media (min-width: $min-width) {
+//       @content;
+//     }
+//   }
+// }
+
+// @mixin screenMaxWidth($max-width: 0) {
+//   @if (map-has-key($map: $breakpoints, $key: $max-width)) {
+//     @media (max-width: map-get($breakpoints, $max-width)) {
+//       @content;
+//     }
+//   } @else {
+//     @media (max-width: $max-width) {
+//       @content;
+//     }
+//   }
+// }
+
+// @mixin screenWidthRange($min-width: 0, $max-width: 100vw) {
+//   @if (
+//     map-has-key($map: $breakpoints, $key: $max-width) and
+//       map-has-key($map: $breakpoints, $key: $max-width)
+//   ) {
+//     @media (min-width: map-get($breakpoints, $min-width)) and (max-width: map-get($breakpoints, $max-width)) {
+//       @content;
+//     }
+//   } @else {
+//     @media (min-width: $min-width) and (max-width: $max-width) {
+//       @content;
+//     }
+//   }
+// }
+
+// @include xs {
+//   @for $i from 1 through 12 {
+//     // .col-xs-k
+//     .col-xs-#{$i} {
+//       box-sizing: border-box;
+//       width: math.div($i * 100%, 12);
+//     }
+//   }
+// }
+
+// @include sm {
+//   @for $i from 1 through 12 {
+//     // .col-sm-k
+//     .col-sm-#{$i} {
+//       box-sizing: border-box;
+//       width: math.div($i * 100%, 12);
+//     }
+//   }
+// }
+
+// @include md {
+//   @for $i from 1 through 12 {
+//     // .col-md-k
+//     .col-md-#{$i} {
+//       box-sizing: border-box;
+//       width: math.div($i * 100%, 12);
+//     }
+//   }
+// }
+
+// @include lg {
+//   @for $i from 1 through 12 {
+//     .col-lg-#{$i} {
+//       box-sizing: border-box;
+//       width: math.div($i * 100%, 12);
+//     }
+//   }
+// }
+
+// @include xl {
+//   @for $i from 1 through 12 {
+//     .col-xl-#{$i} {
+//       box-sizing: border-box;
+//       width: math.div($i * 100%, 12);
+//     }
+//   }
+// }

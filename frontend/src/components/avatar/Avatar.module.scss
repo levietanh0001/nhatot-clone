@@ -1,0 +1,35 @@
+.avatar-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: var(--orange-800);
+
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+
+  position: relative;
+
+  & .status-icon {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    // border: 3px solid var(--orange-600);
+
+    margin: 5px;
+
+    background-color: green;
+
+    
+    position: absolute;
+    right: -5px;
+    bottom: -5px;
+    z-index: 1;
+  }
+
+  & img {
+
+  }
+}
