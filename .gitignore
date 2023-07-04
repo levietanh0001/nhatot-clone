@@ -62,6 +62,4 @@ yarn-error.log*
 /build
 
 *.pem
-*.env
-backend/.env
 backend/.env
