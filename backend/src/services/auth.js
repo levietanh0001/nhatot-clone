@@ -3,88 +3,134 @@ const mailer = require('../utils/mailer');
 const crypto = require('crypto');
 const path = require('path');
 const { Op } = require("sequelize");
-const { validationResult } = require('express-validator');
-const jwt = require('jsonwebtoken');
-
 
 const validationUtils = require('../utils/validation');
 const errorsService = require('../services/errors');
-const { readPrivateKeyFile } = require('../utils/cryptography');
+const { verifyToken, signToken, accessPrivateKey, accessPublicKey, refreshPrivateKey, refreshPublicKey, createRefreshToken, extractAccessTokenFromRequest, signTokenAsync, createAccessTokenAsync, createAndCacheRefreshTokenAsync, verifyRefreshTokenAsync } = require('../utils/cryptography');
 require('dotenv').config('../../.env');
 
-
 const User = require('../models/user');
+const { constructUrlWithQueryParams } = require('../utils/url');
+const { redisClient } = require('../utils/redis-store');
 
 
-function login(req, res, next) {
+
+async function refresh(req, res, next) {
+
+  const refreshToken = req.body['refreshToken'];
+
+  if (!refreshToken) {
+    errorsService.throwError(422, 'Invalid request', 'No refresh token is provided');
+  }
+
+  try {
+    const payload = await verifyRefreshTokenAsync(refreshToken);
+
+    if (!payload) {
+      errorsService.throwError(401, 'Invalid refresh token', 'Provided refresh token is not valid');
+    }
+
+    const { userId, email } = payload;
+    
+    console.log({ userId });
+
+    // if refresh token is found in whitelist (by decoded userId)
+    const result = await redisClient.get(userId.toString());
+    const allowedToken = JSON.parse(result).refreshToken;
+
+    if(allowedToken !== refreshToken) {
+      errorsService.throwError(422, 'Invalid token', 'Refresh token is not allowed');
+    }
+
+    const data = {
+      userId,
+      isAdmin: email === process.env.ADMIN_EMAIL ? true : false
+    };
+  
+    const accessToken = await createAccessTokenAsync(data);
+    // const refreshToken = await createAndCacheRefreshTokenAsync(userId);
+
+    res
+      .status(200)
+      .json({
+        accessToken,
+        // refreshToken
+      })
+
+  } catch(error) {
+    errorsService.passErrorToHandler(error, 500, next);
+  }
+
+}
+
+async function login(req, res, next) {
 
   const email = req.body['email'];
   const password = req.body['password'];
 
   validationUtils.sendMessage(req, res, 422);
 
-  let user;
-  User
-    .findAll({
-      where: {
-        email: email,
-      },
-      limit: 1,
-      raw: true // data only, not whole instance
-    })
-    .then(data => {
-
-      if (!data.length) {
-        errorsService.throwError(401, 'Unauthenticated', 'Current user is not registered');
-      }
-
-      user = data[0];
-
-      return bcrypt.compare(password, user.password)
-    })
-    .then(matched => {
-
-      if (!matched) {
-        errorsService.throwError(401, 'Unauthenticated', 'Password is incorrect');
-      }
-
-      const payload = {
-        id: user.id,
-        email: user.email,
-        isLoggedIn: true,
-        isAdmin: email === process.env.ADMIN_EMAIL ? true : false
-      };
-
-      const privateKey = readPrivateKeyFile;
-      console.log(privateKey);
-
-      const token = jwt.sign(payload, privateKey, { algorithm: "RS256" });
-
-      res
-        .status(200)
-        .json({
-          token: token,
-          userId: user.id
-        });
-    })
-    .catch(error => {
-      errorsService.passErrorToHandler(error, error.statusCode, next);
+  try {
+    const user = await User.findOne({
+      attributes: ['id', 'email', 'password'],
+      where: { email: email },
+      raw: true
     });
-}
 
-
-function logout(req, res, next) {
-
-  req.session.destroy(error => {
-    if (error) {
-      errorsService.passErrorToHandler(error, error.statusCode, next);
+    if (!user) {
+      errorsService.throwError(401, 'Unauthenticated', 'Current user is not registered');
     }
+
+    const matched = await bcrypt.compare(password, user.password);
+
+    if (!matched) {
+      errorsService.throwError(401, 'Unauthenticated', 'Password is incorrect');
+    }
+
+    const userId = user.id;
+
+    const payload = {
+      userId,
+      isAdmin: email === process.env.ADMIN_EMAIL ? true : false
+    };
+
+    const accessToken = await createAccessTokenAsync(payload);
+    const refreshToken = await createAndCacheRefreshTokenAsync(userId);
+
     res
       .status(200)
       .json({
-        message: 'Successfully logged out'
+        accessToken: accessToken,
+        refreshToken: refreshToken,
       });
-  }); // clear session
+
+  } catch (error) {
+    errorsService.passErrorToHandler(error, 500, next);
+  }
+}
+
+
+async function logout(req, res, next) {
+
+  try {
+    const accessToken = extractAccessTokenFromRequest(req);
+    const { userId } = req.payload; // get from auth middleware after loggedInRequired is checked
+
+    // blacklist access token
+    await redisClient
+      .set('BL_' + userId, accessToken, 'EX', process.env.ACCESS_TOKEN_LIFE_SPAN);
+
+    // remove refresh token from whitelist
+    await redisClient.del(`${userId}`);
+
+    res
+      .status(200)
+      .json({
+        message: 'Successfully logged out',
+      })
+  } catch (error) {
+    errorsService.passErrorToHandler(error, 500, next);
+  }
 
 }
 
@@ -93,7 +139,7 @@ function register(req, res, next) {
 
   const email = req.body['email'];
   const password = req.body['password'];
-  const confirmPassword = req.body['confirm-password'];
+  const confirmPassword = req.body['confirmPassword'];
 
   validationUtils.sendMessage(req, res, 422);
 
@@ -118,51 +164,84 @@ function register(req, res, next) {
       return bcrypt.hash(password, 12);
     })
     .then(hashedPassword => {
+      console.log(hashedPassword);
+
       return User.create({
         email: email,
         password: hashedPassword,
+        isAdmin: email === process.env.ADMIN_EMAIL
       })
     })
     .then(user => {
       const recipientEmail = user['email'];
+      const userId = user['id'];
+
+      const token = signToken({ email: recipientEmail }, accessPrivateKey, {
+        expiresIn: process.env.ACCESS_TOKEN_LIFE_SPAN
+      });
+
+      const verifyRegisterUrl = constructUrlWithQueryParams(
+        '/api/auth/verify-register', { token: token, userId: userId }
+      );
 
       res
         .status(200)
         .json({
-          message: 'Email sent'
+          message: `Email sent to ${recipientEmail}`
         });
 
       return mailer.sendConfimationEmail(
         recipientEmail,
-        'Confirm your email'
-      )
+        confirmationUrl = verifyRegisterUrl
+      );
     })
     .then(info => {
+
       console.log({
-        message: 'Please log in now',
-        info: info
+        message: 'Please confirm registration with your email address',
+        // info: info
       });
     })
     .catch(error => {
       errorsService.passErrorToHandler(error, error.statusCode, next);
     });
-
 }
 
+
+function verifyRegister(req, res, next) {
+
+  const token = req.query['token'];
+  const userId = req.query['userId'];
+  const payload = verifyToken(token, accessPublicKey);
+
+  if (payload) {
+    User
+      .findByPk(userId)
+      .then(user => {
+        user.isVerified = true;
+
+        return user.save();
+      })
+      .catch(error => {
+        return errorsService.throwError(500, 'Error verifying registration', 'Unable to verify user')
+      })
+
+    res
+      .status(200)
+      .json({
+        message: 'Successfully verified email'
+      })
+  } else {
+    errorsService.throwError(422, 'Invalid JWT token', message = 'Unable to verify email')
+  }
+}
 
 function authDetails(req, res, next) {
 
   res
     .status(200)
     .json({
-      data: {
-        sessionId: req.session.id,
-        cookie: req.session.cookie,
-        user: req.session.user,
-        userId: req.session.user.id,
-        isLoggedIn: req.session.isLoggedIn,
-        isAdmin: req.session.isAdmin,
-      },
+      user: req.user,
       message: 'Full auth details'
     });
 }
@@ -200,10 +279,12 @@ function resetPasswordEmail(req, res, next) {
       .then(user => {
 
         const url = new URL(
-          path.join('auth', 'reset-password-form'), // needs to be more dynamic
+          path.join('/api/auth', 'reset-password-form'), // needs to be more dynamic
           process.env.BASE_URL
         );
+
         url.searchParams.set('reset-token', token);
+
         const confirmationUrl = url.toString();
         console.log('[services/auth.js].resetPassword', 'confirmationUrl', confirmationUrl);
 
@@ -213,8 +294,7 @@ function resetPasswordEmail(req, res, next) {
             message: 'Email sent'
           });
 
-        return mailer
-          .sendConfimationEmail(userEmail, confirmationUrl)
+        return mailer.sendConfimationEmail(userEmail, confirmationUrl)
       })
       .then(info => {
         console.log(info);
@@ -304,8 +384,10 @@ module.exports = {
   login,
   logout,
   register,
+  verifyRegister,
   authDetails,
   resetPasswordEmail,
   resetPasswordForm,
-  resetPassword
+  resetPassword,
+  refresh
 }

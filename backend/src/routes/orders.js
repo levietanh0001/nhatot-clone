@@ -2,13 +2,13 @@ const express = require('express');
 
 
 const orderController = require('../services/orders');
-const isAuth = require('../middlewares/is_auth');
+const { loggedInRequired } = require('../middlewares/auth.middleware');
 
 
 const router = express.Router();
-router.post('/', isAuth.loggedIn, orderController.createOrder);
-router.get('/', isAuth.loggedIn, orderController.getOrders);
-router.get('/:orderId', isAuth.loggedIn, orderController.downloadInvoice);
+router.post('/', loggedInRequired, orderController.createOrder);
+router.get('/', loggedInRequired, orderController.getOrders);
+router.get('/:orderId', loggedInRequired, orderController.downloadInvoice);
 
 
 module.exports = router;

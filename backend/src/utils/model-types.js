@@ -1,12 +1,18 @@
 const Sequelize = require('sequelize');
 
-const asString = (minChar = 0, maxChar = 255, allowNull = true) => {
+const asString = (minChar = 0, maxChar = 255, allowNull = true, fieldName='') => {
+  console.log({
+    minChar,
+    maxChar,
+    allowNull, fieldName
+  });
+
   return {
     type: Sequelize.STRING,
     validate: {
       len: {
         args: [minChar, maxChar],
-        msg: `${minChar} <= String length <= ${maxChar}`
+        msg: `${fieldName} length must be between ${minChar} and ${maxChar}`
       }
     },
     allowNull: allowNull

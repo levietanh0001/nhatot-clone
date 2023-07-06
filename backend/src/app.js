@@ -1,4 +1,6 @@
 const express = require('express');
+const helmet = require('helmet');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
@@ -6,14 +8,19 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const { graphqlHTTP } = require('express-graphql');
 
-require('dotenv').config('../.env');
-const { readPublicKeyFile, verifyToken } = require('./utils/cryptography');
+// load environment variables
+const dotenvConfig = require('dotenv').config('../.env');
+const dotenvExpand = require('dotenv-expand')
+dotenvExpand.expand(dotenvConfig);
+// console.log(process.env);
+
+const { verifyToken, accessPublicKey } = require('./utils/cryptography');
 
 const graphqlSchema = require('./graphql/schema');
 const graphqlResolver = require('./graphql/resolvers');
 
 // import middlewares
-const uploadData = require('./middlewares/upload_data');
+const uploadData = require('./middlewares/upload-data');
 
 // import routers
 const authRouter = require('./routes/auth');
@@ -24,7 +31,7 @@ const authRouter = require('./routes/auth');
 const errorsService = require('./services/errors');
 
 // must import models into app (same place as sequelize.sync() for it to work)
-const sequelize = require('./utils/database');
+const { sequelize } = require('./utils/database');
 const Product = require('./models/product');
 const User = require('./models/user');
 const UserProfile = require('./models/user-profile');
@@ -36,32 +43,82 @@ const Category = require('./models/category');
 const MainDoorDirection = require('./models/main-door-direction');
 const Direction = require('./models/direction');
 const BalconDirection = require('./models/balcon-direction');
-// const Order = require('./models/order');
-// const OrderItem = require('./models/order_item');
-
+const { getMagicMethods } = require('./utils/magic-methods');
+// const UserRole = require('./models/user-role');
 
 // init express app
 const app = express();
 
-// settings
-const store = new MongoDBStore({
-  uri: process.env.MONGO_CONNECTION_STRING,
-  collection: 'session',
-});
+app.use(helmet());
+
+// associations
+
+// one-to-one relationship, an User created a Product
+Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
+User.hasMany(Product); // one-to-many relationship: getProducts() and createProduct() methods generated
+
+ProductImage.belongsTo(Product, { constraints: true, onDelete: 'CASCADE' });
+Product.hasMany(ProductImage);
+
+ProductCategory.belongsTo(Category);
+Category.hasMany(ProductCategory);
+
+Product.belongsTo(ProductCategory, { constraints: true, onDelete: 'CASCADE' });
+ProductCategory.hasMany(Product);
+
+MainDoorDirection.belongsTo(Direction);
+Direction.hasMany(MainDoorDirection);
+
+BalconDirection.belongsTo(Direction);
+Direction.hasMany(BalconDirection);
+
+FavoriteList.belongsTo(User);
+User.hasOne(FavoriteList);
+// User.hasOne(FavoriteList);
+
+User.hasOne(UserProfile);
+UserProfile.belongsTo(User);
+
+// User.hasOne(UserRole);
+// UserRole.belongsTo(User);
+
+// belongsToMany through an intermediate Model
+FavoriteList.belongsToMany(Product, { through: FavoriteItem });
+Product.belongsToMany(FavoriteList, { through: FavoriteItem });
+
+
+// // settings
+// const store = new MongoDBStore({
+//   uri: process.env.MONGO_CONNECTION_STRING,
+//   collection: 'session',
+// });
 
 // 2. add middlewares
-// app.use(cors());
+
+// cors
+app.use(
+  cors({
+    origin: ['http://localhost:3000/'],
+  })
+);
+
+// app.use((req, res, next) => {
+//   res.setHeader('Access-Control-Allow-Origin', 'http://google.com');
+//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+//   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+//   next();
+// })
+
+app.get('/', (req, res, next) => {
+  res.status(200).json({
+    message: 'helloworld'
+  })
+})
+
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // parse req.body 
 
-// cors
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
-})
 
 // graphql
 app.use(
@@ -118,45 +175,55 @@ app.use(uploadData.multerWrapper());
 // middleware that always runs first before the rest
 app.use('/', (req, res, next) => {
   console.log('this always run first before any request');
+
+  // console.log(getMagicMethods(User));
+  // console.log(getMagicMethods(Product));
+  // console.log(getMagicMethods(Direction));
   next();
 });
 
 
 app.use((req, res, next) => {
 
-  console.log('[app.js]', 'run before every request');
-
   const token = req.headers?.['authorization']?.split(' ')[1];
-  const publicKey = readPublicKeyFile;
-  const payload = verifyToken(token, publicKey);
 
-  if (!payload?.id) {
+  // no token means user not logged in, next right away
+  if(!token) {
     return next();
   }
 
-  const currentUserId = payload.id;
+  const payload = verifyToken(token, accessPublicKey);
 
-  // if current user exists, attach user object to every request
+  // if token invalid -> user is not logged in, pass control to the remaining routers
+  if (!payload) {
+    return next();
+  }
+
+  const currentUserId = payload.userId;
+
+  // if current user exists, attach user object to every request to access user's data
   User
     // check if current session's user exists in database
-    .findByPk(currentUserId) // req.session.user contains data fields only
+    .findOne({ where: { id: currentUserId } })
     .then(user => {
       if (!user) { // if user does not exist
         errorsService.throwError(404, 'Not found', 'User does not exist');
       }
 
       req.user = user; // set user instance from user model (sequelize)
+      return req.user.getFavorite_list();
+    })
+    .then(favList => {
 
-      return req.user.getFavoriteList();
-    })
-    .then(favList => {
       if (!favList) {
-        return req.user.createFavoriteList();
+        return req.user.createFavorite_list();
       }
-      return favList;
-    })
-    .then(favList => {
-      console.log('[app.js].favList', favList);
+
+    //   return favList;
+    // })
+    // .then(favList => {
+    //   console.log('[app.js].favList', favList);
+
       return next();
     })
     .catch(error => {
@@ -165,49 +232,16 @@ app.use((req, res, next) => {
 });
 
 
-// use routers
-app.use('/auth', authRouter);
-// app.use('/admin', adminRouter);
-// app.use('/products', productsRouter);
-// app.use('/cart', cartRouter)
-// app.use('/orders', orderRouter);
+// add routers
+app.use('/api/auth', authRouter);
+// app.use('/api/admin', adminRouter);
+// app.use('/api/products', productsRouter);
 
 
 // error handling
 app.use(errorsService.handle404);
-app.use(errorsService.errorHandler);
+// app.use(errorsService.errorHandler);
 
-
-// associations
-
-// one-to-one relationship, an User created a Product
-Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
-User.hasMany(Product); // one-to-many relationship: getProducts() and createProduct() methods generated
-
-ProductImage.belongsTo(Product, { constraints: true, onDelete: 'CASCADE' });
-Product.hasMany(ProductImage);
-
-ProductCategory.belongsTo(Category);
-Category.hasMany(ProductCategory);
-
-Product.belongsTo(ProductCategory, { constraints: true, onDelete: 'CASCADE' });
-ProductCategory.hasMany(Product);
-
-MainDoorDirection.belongsTo(Direction);
-Direction.hasMany(MainDoorDirection);
-
-BalconDirection.belongsTo(Direction);
-Direction.hasMany(BalconDirection);
-
-FavoriteList.belongsTo(User);
-User.hasOne(FavoriteList);
-
-User.hasOne(UserProfile);
-UserProfile.belongsTo(User);
-
-// belongsToMany through an intermediate Model
-FavoriteList.belongsToMany(Product, { through: FavoriteItem });
-Product.belongsToMany(FavoriteList, { through: FavoriteItem });
 
 
 // sync sequelize model with database

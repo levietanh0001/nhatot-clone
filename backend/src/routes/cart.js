@@ -2,12 +2,12 @@ const express = require('express');
 
 
 const cartController = require('../services/cart');
-const isAuth = require('../middlewares/is_auth');
+const { loggedInRequired } = require('../middlewares/auth.middleware');
 
 
 const router = express.Router();
-router.get('/', isAuth.loggedIn, cartController.getProductsInCart);
-router.post('/:productId', isAuth.loggedIn, cartController.addProductToCart);
+router.get('/', loggedInRequired, cartController.getProductsInCart);
+router.post('/:productId', loggedInRequired, cartController.addProductToCart);
 
 
 module.exports = router;

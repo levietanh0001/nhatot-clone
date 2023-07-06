@@ -4,7 +4,7 @@ const multer = require('multer');
 const { check } = require('express-validator');
 
 const authController = require('../services/auth');
-const isAuth = require('../middlewares/is_auth');
+const { loggedInRequired, notYetLoggedIn } = require('../middlewares/auth.middleware');
 const authValidator = require('../validators/auth');
 
 
@@ -30,40 +30,18 @@ const upload = multer();
 // upload.none(),
 // authController.login);
 
-router.post(
-  '/login',
-  authValidator.validate_login(),
-  authController.login
-);
-router.post(
-  '/register',
-  authValidator.validate_register(),
-  authController.register
-);
-router.post(
-  '/logout',
-  isAuth.loggedIn,
-  authController.logout
-);
-router.get(
-  '/',
-  isAuth.loggedIn,
-  authController.authDetails
-);
-router.post(
-  '/reset-password-email',
-  authController.resetPasswordEmail
-);
+router.get('/', loggedInRequired, authController.authDetails);
 
+router.post('/login', authValidator.validate_login(), notYetLoggedIn, authController.login);
+router.post('/register', authValidator.validate_register(), authController.register);
+router.get('/verify-register', authController.verifyRegister);
+router.post('/logout', loggedInRequired, authController.logout);
+
+router.post('/refresh', authController.refresh);
+
+router.post('/reset-password-email', authController.resetPasswordEmail);
 // this route must be implemented on frontend
-router.get(
-  '/reset-password-form',
-  authController.resetPasswordForm
-);
-
-router.post(
-  '/reset-password',
-  authController.resetPassword
-);
+router.get('/reset-password-form', authController.resetPasswordForm);
+router.post('/reset-password', authController.resetPassword);
 
 module.exports = router;
