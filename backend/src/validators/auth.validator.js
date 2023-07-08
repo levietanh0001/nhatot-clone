@@ -14,15 +14,15 @@ const emailValidation = body('email')
   .normalizeEmail();
 
 
-function validate_login(req, res, next) {
+function validateLogin(req, res, next) {
   return [
     emailValidation
   ];
 
 }
 
-function validate_register(req, res, next) {
-  
+function validateRegister(req, res, next) {
+
   return [
     emailValidation,
     body('password')
@@ -40,6 +40,6 @@ function validate_register(req, res, next) {
 
 
 module.exports = {
-  validate_login,
-  validate_register
+  validateLogin,
+  validateRegister
 };

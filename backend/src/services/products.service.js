@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const Product = require('../models/product');
+const Product = require('../models/product.model');
 const validationUtils = require('../utils/validation');
 const fileUtils = require('../utils/file');
 const errorsService = require('../services/errors');
@@ -35,7 +35,7 @@ function createProduct(req, res, next) {
         });
     })
     .catch(error => {
-      errorsService.passErrorToHandler(error, error.statusCode, next);
+      errorsService.passErrorToHandler(error, next);
     });
 }
 
@@ -58,7 +58,7 @@ function getProducts(req, res, next) {
         .json(products);
     })
     .catch(error => {
-      errorsService.passErrorToHandler(error, error.statusCode, next);
+      errorsService.passErrorToHandler(error, next);
     });
 }
 
@@ -81,7 +81,7 @@ function getProductById(req, res, next) {
         .json(products[0]);
     })
     .catch(error => {
-      errorsService.passErrorToHandler(error, error.statusCode, next);
+      errorsService.passErrorToHandler(error, next);
     });
 }
 
@@ -122,7 +122,7 @@ function updateProductById(req, res, next) {
         .json(product.dataValues);
     })
     .catch(error => {
-      errorsService.passErrorToHandler(error, error.statusCode, next);
+      errorsService.passErrorToHandler(error, next);
     });
 }
 
@@ -147,7 +147,7 @@ function deleteProductById(req, res, next) {
         .json(product); // return product and message
     })
     .catch(error => {
-      errorsService.passErrorToHandler(error, error.statusCode, next);
+      errorsService.passErrorToHandler(error, next);
     });
 }
 

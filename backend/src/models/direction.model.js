@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
-const { sequelize } = require('../utils/database');
-const { asOneOf } = require('../utils/model-types');
+const { sequelize } = require('../utils/database.util');
+const { asOneOf } = require('../utils/model-types.util');
 
 
 const Direction = sequelize.define('direction', {
@@ -17,7 +17,7 @@ const Direction = sequelize.define('direction', {
       'taynam', 'taybac', ''
     ])
   },
-  
+
 }, {
   freezeTableName: true
 });

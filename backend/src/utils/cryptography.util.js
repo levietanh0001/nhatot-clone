@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
-const { rootDir } = require('../utils/path');
-const { throwError, passErrorToHandler } = require('../services/errors');
-const { redisClient, redisConn } = require('./redis-store');
+const { rootDir } = require('./path.util');
+const { throwError } = require('../services/errors.service');
+const { redisClient, redisConn } = require('./redis-store.util');
 
 const accessPrivateKey = fs.readFileSync(path.join(__dirname, '../..', 'access-private-key.pem'), 'utf-8');
 const accessPublicKey = fs.readFileSync(path.join(__dirname, '../..', 'access-public-key.pem'), 'utf-8');
@@ -131,21 +131,21 @@ function createRefreshTokenAsync(payload) {
 }
 
 
-async function createAndCacheRefreshTokenAsync(userId) {
+async function createAndStoreRefreshTokenAsync(userId) {
 
   const refreshToken = await createRefreshTokenAsync({ userId });
 
   try {
-    const value = await redisClient.get(userId.toString());
+    // const value = await redisClient.get(userId.toString());
 
-    if (!value) {
+    // if (!value) {
       await redisClient.set(
         userId.toString(),
         JSON.stringify({ refreshToken }),
         'EX',
         process.env.REFRESH_TOKEN_LIFE_SPAN
       );
-    }
+    // }
 
   } catch (error) {
     throwError(500, 'Internal Server Error', 'Cannot set refresh token in redis');
@@ -193,5 +193,5 @@ module.exports = {
   refreshPrivateKey,
   refreshPublicKey,
   extractAccessTokenFromRequest,
-  createAndCacheRefreshTokenAsync,
+  createAndStoreRefreshTokenAsync,
 }

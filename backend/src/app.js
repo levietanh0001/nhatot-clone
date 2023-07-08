@@ -14,36 +14,36 @@ const dotenvExpand = require('dotenv-expand')
 dotenvExpand.expand(dotenvConfig);
 // console.log(process.env);
 
-const { verifyToken, accessPublicKey } = require('./utils/cryptography');
+const { verifyToken, accessPublicKey } = require('./utils/cryptography.util');
 
 const graphqlSchema = require('./graphql/schema');
 const graphqlResolver = require('./graphql/resolvers');
 
 // import middlewares
-const uploadData = require('./middlewares/upload-data');
+const uploadData = require('./middlewares/upload-data.middleware');
 
 // import routers
-const authRouter = require('./routes/auth');
+const authRouter = require('./routes/auth.route');
 // const adminRouter = require('./routes/admin');
 // const productsRouter = require('./routes/products');
 // const cartRouter = require('./routes/cart');
 // const orderRouter = require('./routes/orders');
-const errorsService = require('./services/errors');
+const errorsService = require('./services/errors.service');
 
 // must import models into app (same place as sequelize.sync() for it to work)
-const { sequelize } = require('./utils/database');
-const Product = require('./models/product');
-const User = require('./models/user');
-const UserProfile = require('./models/user-profile');
-const FavoriteList = require('./models/favorite-list');
-const FavoriteItem = require('./models/favorite-item');
-const ProductImage = require('./models/product-image');
-const ProductCategory = require('./models/product-category');
-const Category = require('./models/category');
-const MainDoorDirection = require('./models/main-door-direction');
-const Direction = require('./models/direction');
-const BalconDirection = require('./models/balcon-direction');
-const { getMagicMethods } = require('./utils/magic-methods');
+const { sequelize } = require('./utils/database.util');
+const Product = require('./models/product.model');
+const User = require('./models/user.model');
+const UserProfile = require('./models/user-profile.model');
+const FavoriteList = require('./models/favorite-list.model');
+const FavoriteItem = require('./models/favorite-item.model');
+const ProductImage = require('./models/product-image.model');
+const ProductCategory = require('./models/product-category.model');
+const Category = require('./models/category.model');
+const MainDoorDirection = require('./models/main-door-direction.model');
+const Direction = require('./models/direction.model');
+const BalconDirection = require('./models/balcon-direction.model');
+const { getMagicMethods } = require('./utils/magic-methods.util');
 // const UserRole = require('./models/user-role');
 
 // init express app
@@ -89,36 +89,46 @@ Product.belongsToMany(FavoriteList, { through: FavoriteItem });
 
 // // settings
 // const store = new MongoDBStore({
-//   uri: process.env.MONGO_CONNECTION_STRING,
+//   uri: process.env.NODE_ENV === 'prod'? process.env.MONGO_CONNECTION_STRING: 'localhost',
 //   collection: 'session',
 // });
 
 // 2. add middlewares
 
 // cors
-app.use(
-  cors({
-    origin: ['http://localhost:3000/'],
-  })
-);
+
+const corsOptions = {
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'X-Access-Token', 'Authorization'],
+  credentials: true,
+  methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
+  origin: "http://localhost:3000",
+  preflightContinue: false,
+};
+
+// frontend origins
+app.use(cors({ ...corsOptions
+  // origin: ['http://localhost:3000', 'http://localhost:3000/', 'http://127.0.0.1:3000', 'http://127.0.0.1:3000/'], 
+  // credentials: true 
+}));
 
 // app.use((req, res, next) => {
-//   res.setHeader('Access-Control-Allow-Origin', 'http://google.com');
+//   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000/');
 //   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
 //   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 //   next();
 // })
+
+
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); // parse req.body 
+
 
 app.get('/', (req, res, next) => {
   res.status(200).json({
     message: 'helloworld'
   })
 })
-
-app.use(cookieParser());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true })); // parse req.body 
-
 
 // graphql
 app.use(
@@ -162,7 +172,6 @@ app.use(uploadData.multerWrapper());
 // );
 
 // // send _csrf cookie, only needed when rendering form
-// const csrfProtection = { cookie: true }; // httpOnly=true only when _csrf is sent via form in a hidden input field (SSR)
 // app.use(csrf()); // csrf protection middleware right after session middleware and after cookieParser
 // app.use((req, res, next) => {
 //   // should cstf token be included in cookies?
@@ -175,7 +184,7 @@ app.use(uploadData.multerWrapper());
 // middleware that always runs first before the rest
 app.use('/', (req, res, next) => {
   console.log('this always run first before any request');
-
+    
   // console.log(getMagicMethods(User));
   // console.log(getMagicMethods(Product));
   // console.log(getMagicMethods(Direction));
@@ -188,7 +197,7 @@ app.use((req, res, next) => {
   const token = req.headers?.['authorization']?.split(' ')[1];
 
   // no token means user not logged in, next right away
-  if(!token) {
+  if (!token) {
     return next();
   }
 
@@ -219,10 +228,10 @@ app.use((req, res, next) => {
         return req.user.createFavorite_list();
       }
 
-    //   return favList;
-    // })
-    // .then(favList => {
-    //   console.log('[app.js].favList', favList);
+      //   return favList;
+      // })
+      // .then(favList => {
+      //   console.log('[app.js].favList', favList);
 
       return next();
     })
@@ -240,7 +249,7 @@ app.use('/api/auth', authRouter);
 
 // error handling
 app.use(errorsService.handle404);
-// app.use(errorsService.errorHandler);
+app.use(errorsService.errorHandler);
 
 
 
@@ -249,7 +258,7 @@ sequelize
   .sync({ force: process.env.SYNC_MODE === 'force' }) // force overwrite relationships, only in dev mode
   .then(() => {
     const server = app.listen(process.env.PORT);
-    const io = require('./utils/socket').init(server);
+    const io = require('./utils/socket.util').init(server);
     io.on('connection', socket => {
       console.log('Socket connected');
     });

@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
-const { sequelize } = require('../utils/database');
-const { asString, asNonNegativeInt, asNonNegativeFloat, asBoolean } = require('../utils/model-types');
+const { sequelize } = require('../utils/database.util');
+const { asString, asNonNegativeInt, asNonNegativeFloat, asBoolean } = require('../utils/model-types.util');
 
 
 const UserProfile = sequelize.define('user_profile', {
@@ -23,13 +23,13 @@ const UserProfile = sequelize.define('user_profile', {
     ...asNonNegativeFloat()
   },
   is_verified: {
-    ...asBoolean(defaultValue=false)
+    ...asBoolean(defaultValue = false)
   },
   address: {
-    ...asString(minChar=0, maxChar=255)
+    ...asString(minChar = 0, maxChar = 255)
   },
   phone_number: {
-    ...asString(minChar=10, maxChar=15)
+    ...asString(minChar = 10, maxChar = 15)
   },
 
 }, {

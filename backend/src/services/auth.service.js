@@ -1,54 +1,93 @@
 const bcrypt = require('bcryptjs');
-const mailer = require('../utils/mailer');
+const mailer = require('../utils/mailer.util');
 const crypto = require('crypto');
 const path = require('path');
 const { Op } = require("sequelize");
+const fetch = require('node-fetch');
 
-const validationUtils = require('../utils/validation');
-const errorsService = require('../services/errors');
-const { verifyToken, signToken, accessPrivateKey, accessPublicKey, refreshPrivateKey, refreshPublicKey, createRefreshToken, extractAccessTokenFromRequest, signTokenAsync, createAccessTokenAsync, createAndCacheRefreshTokenAsync, verifyRefreshTokenAsync } = require('../utils/cryptography');
-require('dotenv').config('../../.env');
+const validationUtils = require('../utils/validation.util');
+const { passErrorToHandler, throwError } = require('./errors.service');
+const { verifyToken, signToken, accessPrivateKey, accessPublicKey, refreshPrivateKey, refreshPublicKey, createRefreshToken, extractAccessTokenFromRequest, signTokenAsync, createAccessTokenAsync, createAndStoreRefreshTokenAsync, verifyRefreshTokenAsync } = require('../utils/cryptography.util');
+// require('dotenv').config('../../.env');
 
-const User = require('../models/user');
-const { constructUrlWithQueryParams } = require('../utils/url');
-const { redisClient } = require('../utils/redis-store');
+const User = require('../models/user.model');
+const { constructUrlWithQueryParams } = require('../utils/url.util');
+const { redisClient } = require('../utils/redis-store.util');
 
+
+function clearCookie(req, res, next) {
+
+  res.clearCookie('refreshToken');
+  res.end();
+}
+
+
+function getCookie(req, res, next) {
+
+  res.status(200).json({ refreshToken: req.cookies['refreshToken'] })
+}
 
 
 async function refresh(req, res, next) {
 
-  const refreshToken = req.body['refreshToken'];
+  const response = await fetch(
+    new URL('/api/auth/new-access-token', process.env.BASE_URL).href, 
+    {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ refreshToken: req.cookies['refreshToken'] }),
+      credentials: 'include',
+    }
+  )
 
-  if (!refreshToken) {
-    errorsService.throwError(422, 'Invalid request', 'No refresh token is provided');
-  }
+  const data = await response.json();
 
+  res
+    .status(200)
+    .json({
+      data
+    })
+}
+
+async function getNewAccessToken(req, res, next) {
+
+  const refreshToken = req.cookies['refreshToken'] || req.body['refreshToken'];
+  console.log({ finalToken: refreshToken });
+  
   try {
+    if (!refreshToken) {
+      throwError(422, 'Invalid request', 'No refresh token is provided');
+    }
+
     const payload = await verifyRefreshTokenAsync(refreshToken);
 
     if (!payload) {
-      errorsService.throwError(401, 'Invalid refresh token', 'Provided refresh token is not valid');
+      throwError(401, 'Invalid refresh token', 'Provided refresh token is not valid');
     }
 
     const { userId, email } = payload;
-    
+
     console.log({ userId });
 
     // if refresh token is found in whitelist (by decoded userId)
     const result = await redisClient.get(userId.toString());
-    const allowedToken = JSON.parse(result).refreshToken;
+    const allowedToken = JSON.parse(result)?.refreshToken;
 
-    if(allowedToken !== refreshToken) {
-      errorsService.throwError(422, 'Invalid token', 'Refresh token is not allowed');
+    if (allowedToken !== refreshToken) {
+      throwError(401, 'Unauthorized', 'Invalid token: refresh token is blocked');
     }
 
     const data = {
       userId,
       isAdmin: email === process.env.ADMIN_EMAIL ? true : false
     };
-  
+
     const accessToken = await createAccessTokenAsync(data);
-    // const refreshToken = await createAndCacheRefreshTokenAsync(userId);
+
+    // res.header("Access-Control-Allow-Origin", "*");
+    // res.header('Access-Control-Allow-Credentials', 'true');
 
     res
       .status(200)
@@ -57,10 +96,9 @@ async function refresh(req, res, next) {
         // refreshToken
       })
 
-  } catch(error) {
-    errorsService.passErrorToHandler(error, 500, next);
+  } catch (error) {
+    passErrorToHandler(error, next);
   }
-
 }
 
 async function login(req, res, next) {
@@ -78,13 +116,13 @@ async function login(req, res, next) {
     });
 
     if (!user) {
-      errorsService.throwError(401, 'Unauthenticated', 'Current user is not registered');
+      throwError(401, 'Unauthenticated', 'Current user is not registered');
     }
 
     const matched = await bcrypt.compare(password, user.password);
 
     if (!matched) {
-      errorsService.throwError(401, 'Unauthenticated', 'Password is incorrect');
+      throwError(401, 'Unauthenticated', 'Password is incorrect');
     }
 
     const userId = user.id;
@@ -95,18 +133,31 @@ async function login(req, res, next) {
     };
 
     const accessToken = await createAccessTokenAsync(payload);
-    const refreshToken = await createAndCacheRefreshTokenAsync(userId);
+    const refreshToken = await createAndStoreRefreshTokenAsync(userId); // for logout
 
+    res.cookie(
+      'refreshToken',
+      refreshToken, 
+      {
+        httpOnly: true,
+        // secure: true, // must be set in production
+        path: '/',
+        maxAge: 365 * 24 * 60 * 60 * 1000
+      }
+    );
+    
     res
-      .status(200)
-      .json({
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-      });
-
+    .status(200)
+    .json({
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      cookies: req.cookies
+    });
+    
   } catch (error) {
-    errorsService.passErrorToHandler(error, 500, next);
+    passErrorToHandler(error, next);
   }
+  
 }
 
 
@@ -123,13 +174,15 @@ async function logout(req, res, next) {
     // remove refresh token from whitelist
     await redisClient.del(`${userId}`);
 
+    res.clearCookie('refreshToken');
+
     res
       .status(200)
       .json({
         message: 'Successfully logged out',
       })
   } catch (error) {
-    errorsService.passErrorToHandler(error, 500, next);
+    passErrorToHandler(error, next);
   }
 
 }
@@ -152,12 +205,12 @@ function register(req, res, next) {
     .then(data => {
       // if user exists, redirect user to login page
       if (data.length > 0) {
-        errorsService.throwError(100, 'Continue', 'User already exists, please log in');
+        throwError(100, 'Continue', 'User already exists, please log in');
       }
 
       // if user does not exist, first confirm passwords
       if (password !== confirmPassword) {
-        errorsService.throwError(422, 'Invalid Input', 'Both passwords do not match');
+        throwError(422, 'Invalid Input', 'Both passwords do not match');
       }
 
       // if both passwords match, create user
@@ -203,7 +256,7 @@ function register(req, res, next) {
       });
     })
     .catch(error => {
-      errorsService.passErrorToHandler(error, error.statusCode, next);
+      passErrorToHandler(error, next);
     });
 }
 
@@ -223,7 +276,7 @@ function verifyRegister(req, res, next) {
         return user.save();
       })
       .catch(error => {
-        return errorsService.throwError(500, 'Error verifying registration', 'Unable to verify user')
+        return throwError(500, 'Error verifying registration', 'Unable to verify user')
       })
 
     res
@@ -232,7 +285,7 @@ function verifyRegister(req, res, next) {
         message: 'Successfully verified email'
       })
   } else {
-    errorsService.throwError(422, 'Invalid JWT token', message = 'Unable to verify email')
+    throwError(422, 'Invalid JWT token', message = 'Unable to verify email')
   }
 }
 
@@ -268,7 +321,7 @@ function resetPasswordEmail(req, res, next) {
       })
       .then(user => {
         if (!user) {
-          errorsService.throwError(404, 'Not found', 'Email does not exist');
+          throwError(404, 'Not found', 'Email does not exist');
         }
 
         user.resetToken = token;
@@ -300,7 +353,7 @@ function resetPasswordEmail(req, res, next) {
         console.log(info);
       })
       .catch(error => {
-        errorsService.passErrorToHandler(error, error.statusCode, next);
+        passErrorToHandler(error, next);
       });
   });
 
@@ -321,7 +374,7 @@ function resetPasswordForm(req, res, next) {
     .then(user => {
 
       if (!user) {
-        errorsService.throwError(404, 'Not found', 'User does not exist');
+        throwError(404, 'Not found', 'User does not exist');
       }
 
       res
@@ -335,7 +388,7 @@ function resetPasswordForm(req, res, next) {
         });
     })
     .catch(error => {
-      errorsService.passErrorToHandler(error, error.statusCode, next);
+      passErrorToHandler(error, next);
     });
 
 }
@@ -374,7 +427,7 @@ function resetPassword(req, res, next) {
         });
     })
     .catch(error => {
-      errorsService.passErrorToHandler(error, error.statusCode, next);
+      passErrorToHandler(error, next);
     });
 
 }
@@ -389,5 +442,8 @@ module.exports = {
   resetPasswordEmail,
   resetPasswordForm,
   resetPassword,
-  refresh
+  refresh,
+  clearCookie,
+  getCookie,
+  getNewAccessToken
 }

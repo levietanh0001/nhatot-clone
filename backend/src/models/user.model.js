@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
-const { sequelize } = require('../utils/database');
-const { asString } = require('../utils/model-types');
+const { sequelize } = require('../utils/database.util');
+const { asString } = require('../utils/model-types.util');
 
 
 const User = sequelize.define('user', {
@@ -11,10 +11,10 @@ const User = sequelize.define('user', {
     primaryKey: true,
   },
   name: {
-    ...asString(minChar=0, maxChar=255, fieldName='name')
+    ...asString(minChar = 0, maxChar = 255, fieldName = 'name')
   },
   email: {
-    ...asString(minChar=0, maxChar=255, allowNull=false, fieldName='email')
+    ...asString(minChar = 0, maxChar = 255, allowNull = false, fieldName = 'email')
   },
   password: {
     type: Sequelize.STRING,
@@ -46,7 +46,7 @@ const User = sequelize.define('user', {
     type: Sequelize.BOOLEAN,
     defaultValue: false
   }
-  
+
 }, {
   freezeTableName: true
 });

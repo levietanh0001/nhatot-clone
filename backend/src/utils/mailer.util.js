@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-require('dotenv').config('../../.env');
+// require('dotenv').config('../../.env');
 
 
 function sendConfimationEmail(recipientEmail, confirmationUrl) {
@@ -11,7 +11,7 @@ function sendConfimationEmail(recipientEmail, confirmationUrl) {
     service: 'gmail',
     auth: {
       user: process.env.HOST_EMAIL,
-      pass: process.env.APP_PASS
+      pass: process.env.NODEMAILER_PASS
     }
   });
 

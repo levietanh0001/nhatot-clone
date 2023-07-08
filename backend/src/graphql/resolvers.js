@@ -1,8 +1,8 @@
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
 
-const User = require('../models/user');
-const errorsService = require('../services/errors');
+const User = require('../models/user.model');
+const errorsService = require('../services/errors.service');
 
 
 module.exports = {

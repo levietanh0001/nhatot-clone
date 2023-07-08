@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
-const { sequelize } = require('../utils/database');
-const { asString, asNonNegativeInt, asOneOf } = require('../utils/model-types');
+const { sequelize } = require('../utils/database.util');
+const { asString, asNonNegativeInt, asOneOf } = require('../utils/model-types.util');
 
 const Product = sequelize.define('product', {
   id: {

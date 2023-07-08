@@ -1,9 +1,9 @@
 const Sequelize = require('sequelize');
-const { sequelize } = require('../utils/database');
-const { asOneOf } = require('../utils/model-types');
-const Direction = require('./direction');
+const { sequelize } = require('../utils/database.util');
+const { asOneOf } = require('../utils/model-types.util');
+const Direction = require('./direction.model');
 
-const BalconDirection = sequelize.define('balcon_direction', {
+const MainDoorDirection = sequelize.define('main_door_direction', {
   id: {
     type: Sequelize.INTEGER.UNSIGNED,
     autoIncrement: true,
@@ -13,10 +13,10 @@ const BalconDirection = sequelize.define('balcon_direction', {
   direction_name: {
     ...asOneOf('', Direction.rawAttributes.direction_name.values)
   },
-  
+
 }, {
   freezeTableName: true
 });
 
 
-module.exports = BalconDirection;
+module.exports = MainDoorDirection;

@@ -8,27 +8,26 @@ function handle404(req, res, next) {
 function throwError(statusCode, name, message) {
   const error = new Error(message);
   error.name = name;
-  error.statusCode = statusCode;
+  error.code = statusCode;
   throw error;
 }
 
 
-function passErrorToHandler(error, statusCode, next) {
-  error.statusCode = statusCode;
+function passErrorToHandler(error, next) {
   return next(error);
 }
 
 
 function errorHandler(error, req, res, next) {
 
-  const statusCode = error.statusCode || 500; // if no status code, defaults to 500 (server side error)
+  const statusCode = error.code || 500; // if no status code, defaults to 500 (server side error)
 
   res
     .status(statusCode)
     .json({
-      statusCode: statusCode,
+      statusCode: error.code,
       error: error.name,
-      message: error.message
+      message: error.message,
     });
 
   return next(); // continue regardless

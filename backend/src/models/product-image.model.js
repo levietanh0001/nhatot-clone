@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
-const { sequelize } = require('../utils/database');
-const { asString } = require('../utils/model-types');
+const { sequelize } = require('../utils/database.util');
+const { asString } = require('../utils/model-types.util');
 
 
 const ProductImage = sequelize.define('product_image', {

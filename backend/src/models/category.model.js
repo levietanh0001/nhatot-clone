@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
-const { sequelize } = require('../utils/database');
-const { asOneOf } = require('../utils/model-types');
+const { sequelize } = require('../utils/database.util');
+const { asOneOf } = require('../utils/model-types.util');
 
 
 const Category = sequelize.define('category', {
@@ -13,7 +13,7 @@ const Category = sequelize.define('category', {
   category_name: {
     ...asOneOf('', ['muaban', 'chothue', 'duan', ''])
   },
-  
+
 }, {
   freezeTableName: true
 });

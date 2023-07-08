@@ -1,13 +1,13 @@
-const errorsService = require('../services/errors');
-const { verifyToken, accessPublicKey, extractAccessTokenFromRequest, verifyAccessTokenAsync } = require('../utils/cryptography');
-const { redisClient } = require('../utils/redis-store');
+const errorsService = require('../services/errors.service');
+const { verifyToken, accessPublicKey, extractAccessTokenFromRequest, verifyAccessTokenAsync } = require('../utils/cryptography.util');
+const { redisClient } = require('../utils/redis-store.util');
 
 
 function adminOnly(req, res, next) {
 
   // const token = req.headers?.['authorization']?.split(' ')[1];
   const token = extractAccessTokenFromRequest(req);
-  
+
   const payload = verifyToken(token, accessPublicKey);
 
   if (!payload) {
@@ -27,7 +27,7 @@ async function loggedInRequired(req, res, next) {
   try {
 
     const accessToken = extractAccessTokenFromRequest(req);
-  
+
     if (!accessToken) {
       errorsService.throwError(422, 'Invalid request', 'No refresh token is provided');
     }
@@ -41,18 +41,18 @@ async function loggedInRequired(req, res, next) {
     const { userId } = payload;
     const blockedToken = await redisClient.get(`BL_${userId}`);
 
-    if(blockedToken === accessToken) {
+    if (blockedToken === accessToken) {
       errorsService.throwError(403, 'Unauthorized', 'Access token is blacklisted');
     }
-    
+
     req.payload = payload;
-    
+
     next(); // pass control to controller after
 
-  } catch(error) {
-    errorsService.passErrorToHandler(error, 500, next);
+  } catch (error) {
+    errorsService.passErrorToHandler(error, next);
   }
-    
+
 
 }
 
@@ -60,7 +60,7 @@ async function loggedInRequired(req, res, next) {
 function notYetLoggedIn(req, res, next) {
   const token = extractAccessTokenFromRequest(req);
   const payload = verifyToken(token, accessPublicKey);
-  if(payload) {
+  if (payload) {
     errorsService.throwError(403, 'Already logged in', 'Current user is already logged in');
   }
   next();

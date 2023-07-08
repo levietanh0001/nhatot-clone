@@ -4,7 +4,7 @@ const sequelize = new Sequelize(
   'nhatot', 'root', '123321',
   {
     dialect: 'mysql',
-    host: 'localhost',
+    host: process.env.NODE_ENV === 'prod'? process.env.MYSQL_HOST: 'localhost',
     sync: true,
     dialectOptions: {
       // useUTC: false, //for reading from database

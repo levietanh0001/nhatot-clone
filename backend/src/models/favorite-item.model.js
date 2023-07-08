@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
-const { sequelize } = require('../utils/database');
-const { asNonNegativeInt } = require('../utils/model-types');
+const { sequelize } = require('../utils/database.util');
+const { asNonNegativeInt } = require('../utils/model-types.util');
 
 
 const FavoriteItem = sequelize.define('favorite_item', {
@@ -11,7 +11,7 @@ const FavoriteItem = sequelize.define('favorite_item', {
     primaryKey: true,
   },
   quantity: {
-    ...asNonNegativeInt(allowNull=false)
+    ...asNonNegativeInt(allowNull = false)
   }
 }, {
   freezeTableName: true

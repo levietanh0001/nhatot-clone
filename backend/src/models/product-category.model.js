@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
-const { sequelize } = require('../utils/database');
-const { asOneOf } = require('../utils/model-types');
-const Category = require('./category');
+const { sequelize } = require('../utils/database.util');
+const { asOneOf } = require('../utils/model-types.util');
+const Category = require('./category.model');
 
 
 const ProductCategory = sequelize.define('product_category', {
