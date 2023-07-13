@@ -1,0 +1,31 @@
+@import './PostProduct.module.scss';
+
+.product-category-wrapper {
+  text-align: left;
+
+  & .product-category {
+    position: relative;
+
+    & .dropdown-icon {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 10px;
+
+      & svg {
+        vertical-align: middle;
+      }
+    }
+  }
+
+  & .title {
+    font-size: 1.125rem;
+    margin-bottom: 10px;
+  }
+
+  & select {
+    @extend .select-input;
+
+    padding: 15px;
+  }
+}

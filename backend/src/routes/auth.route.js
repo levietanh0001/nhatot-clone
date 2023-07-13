@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { authDetails, login, logout, register, verifyRegister, refresh, resetPassword, resetPasswordEmail, resetPasswordForm, clearCookie, getNewAccessToken, getCookie } = require('../services/auth.service');
+const { authDetails, login, logout, register, verifyRegister, refresh, resetPassword, resetPasswordEmail, resetPasswordForm, clearCookie, getNewAccessToken, getCookie } = require('../controllers/auth.controller');
 const { loggedInRequired, notYetLoggedIn } = require('../middlewares/auth.middleware');
 const { validateLogin, validateRegister } = require('../validators/auth.validator');
 

@@ -1,4 +1,4 @@
-const errorsService = require('../services/errors.service');
+const errorsService = require('../controllers/errors.controller');
 const { verifyToken, accessPublicKey, extractAccessTokenFromRequest, verifyAccessTokenAsync } = require('../utils/cryptography.util');
 const { redisClient } = require('../utils/redis-store.util');
 

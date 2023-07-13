@@ -54,17 +54,19 @@ const MessageBox = () => {
 const ChatBox = () => {
   return (
     <div className={styles["chat-box"]}>
-      <span className={styles["more-actions"]}>
+      <div className={styles["more-actions"]}>
         <img src="https://chat.chotot.com/icons/plusCircle.svg" alt="open" />
-      </span>
-      <textarea contentEditable={true} onKeyUp={(e) => { 
-        const element = e.currentTarget;
-        element.style.height = `35px`;
-        element.style.height = `${element.scrollHeight}px`;
-      }} placeholder="Nhập tin nhắn"></textarea>
-      <span className={styles["send-icon"]}>
+      </div>
+      <div className={styles["chat-input"]}>
+        <textarea contentEditable={true} onKeyUp={(e) => { 
+          const element = e.currentTarget;
+          element.style.height = `35px`;
+          element.style.height = `${element.scrollHeight}px`;
+        }} placeholder="Nhập tin nhắn"></textarea>
+      </div>
+      <div className={styles["send-icon"]}>
         <AiOutlineSend />
-      </span>
+      </div>
     </div>
   );
 };

@@ -10,6 +10,13 @@ const UserProfile = sequelize.define('user_profile', {
     allowNull: false,
     primaryKey: true,
   },
+  username: {
+    ...asString(minChar = 0, maxChar = 255, fieldName = 'name')
+  },
+  gender: {
+    type: Sequelize.ENUM(['male', 'female', '']),
+    defaultValue: ''
+  },
   rating: {
     ...asNonNegativeFloat()
   },
@@ -22,13 +29,13 @@ const UserProfile = sequelize.define('user_profile', {
   respondToChat: {
     ...asNonNegativeFloat()
   },
-  is_verified: {
+  isVerified: {
     ...asBoolean(defaultValue = false)
   },
   address: {
     ...asString(minChar = 0, maxChar = 255)
   },
-  phone_number: {
+  phoneNumber: {
     ...asString(minChar = 10, maxChar = 15)
   },
 

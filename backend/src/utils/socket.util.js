@@ -1,4 +1,4 @@
-const errorsService = require('../services/errors.service');
+const errorsService = require('../controllers/errors.controller');
 let io;
 
 module.exports = {

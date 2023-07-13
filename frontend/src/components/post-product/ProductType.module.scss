@@ -1,0 +1,31 @@
+.product-type-wrapper {
+  
+  position: relative;
+
+  & .title {
+    font-size: 1.125rem;
+    margin-bottom: 10px;
+  }
+}
+
+.product-type ul {
+  list-style-type: none;
+
+  display: flex;
+  gap: 7px;
+  margin: 0;
+
+  & li button {
+    flex-shrink: 0;
+    padding: 7px 10px;
+    border: 0;
+    background-color: #f4f4f4;
+    border-radius: 16px;
+    cursor: pointer;
+  }
+}
+
+.active {
+  background-color: var(--yellow-300) !important;
+  color: var(--red-300) !important;
+}

@@ -10,9 +10,6 @@ const User = sequelize.define('user', {
     allowNull: false,
     primaryKey: true,
   },
-  name: {
-    ...asString(minChar = 0, maxChar = 255, fieldName = 'name')
-  },
   email: {
     ...asString(minChar = 0, maxChar = 255, allowNull = false, fieldName = 'email')
   },
@@ -20,7 +17,6 @@ const User = sequelize.define('user', {
     type: Sequelize.STRING,
     validate: {
       len: {
-        // args: [6, 32],
         min: 6,
         msg: `password length must be between 6 and 32`
       }

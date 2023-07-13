@@ -1,7 +1,6 @@
 .carousel {
   height: 300px;
   position: relative;
-  // overflow: hidden;
   
   & .swiper {
     // width: calc(100% + 25px);
@@ -44,9 +43,16 @@
   }
 
   & .swiper-slide:hover {
-    box-shadow: inset 0 0 5px 0 rgba(0, 0, 0, 0.7);
-    -webkit-box-shadow: inset 0 0 5px 0 rgba(0, 0, 0, 0.7);
-    -moz-box-shadow: inset 0 0 5px 0 rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.7);
+    -webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.7);
+    -moz-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.7);
+  }
+
+  @for $i from 1 to 10 {
+    & .swiper-slide:nth-child(#{$i}):hover {
+      z-index: $i;
+      position: relative;
+    }
   }
 
   & .swiper-pagination-bullet {
@@ -85,7 +91,6 @@
   top: 0;
   bottom: 0;
   margin: auto 0;
-  // transform: translateY(-50%);
   z-index: 1;
 
   transition-property: all;
@@ -94,7 +99,6 @@
   transition-delay: 0;
 
   &:hover {
-    opacity: 0.8;
     scale: 1.2;
     transform: translate(-5px);
   }
@@ -108,19 +112,21 @@
   margin: 0;
   padding: 0;
 
+  background-color: #fff;
+  
   position: absolute;
   right: -20px;
   top: 0;
   bottom: 0;
   margin: auto 0;
   z-index: 1;
+
   transition-property: all;
   transition-duration: 100ms;
   transition-timing-function: ease-out;
   transition-delay: 0;
 
   &:hover {
-    opacity: 0.8;
     scale: 1.2;
     transform: translate(5px);
   }

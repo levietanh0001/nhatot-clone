@@ -1,57 +1,18 @@
-
 .outer-wrapper {
-  margin-top: 30px;
+  margin-top: 0;
 }
 
 .inner-wrapper {
-  background-color: var(--secondary-background-color);
-  padding: 15px;
-  
   display: flex;
   justify-content: space-between;
   gap: 30px;
-}
+  
+  padding: 15px;
 
-.media {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-
-  text-align: left;
-
-  & .file-upload {
-    height: 250px;
-    width: 100%;
-    padding: 15px;
-    
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 7px;
-
-    background-color: var(--app-background-color);
-    border: 1px solid var(--orange-800);
-  }
-
-  & .upload-icons {
-    position: relative;
-  }
-
-  & .plus-icon {
-    position: absolute;
-    right: -10px;
-    top: -10px;
-  }
-
-  & .upload-requirements {
-    font-size: 0.75rem;
-    color: grey;
-  }
+  background-color: var(--secondary-background-color);
 }
 
 .title {
-
   margin: 0;
 
   font-size: 1rem;
@@ -66,60 +27,60 @@
 .help {
   font-size: 0.875rem;
   color: gray;
+  margin-bottom: 0;
 }
 
 .details {
   flex: 1;
-
-  display: flex;
-  flex-direction: column;
-
   
-  & .dropdown-icon {
-    
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 10px;
-    
-    & svg {
-      vertical-align: middle;
-    }
-  }
+  & form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   
-}
-
-.product-type {
-  position: relative;
-
-  & select {
-  
-    width: 100%;
-    padding: 14px;
-  
-    border: 3px solid #f4f4f4;
-    background-color: var(--secondary-background-color);
-    
-    -moz-appearance:none; /* Firefox */
-    -webkit-appearance:none; /* Safari and Chrome */
-    appearance:none;
-  
-    &:focus {
-      outline: 0;
-    }
+    text-align: left;
   }
 }
 
+.select-input {
+  width: 100%;
+  padding: 10px;
 
-.image {
-  padding: 15px;
+  // border: 3px solid #f4f4f4;
+  border: 1px solid gray;
+  border-radius: 4px;
+  background-color: var(--secondary-background-color);
+  color: black;
 
-  & .caption-title {
-    font-size: 1.25rem;
-    text-transform: uppercase;
+  // remove default dropdown icon
+  -moz-appearance: none; /* Firefox */
+  -webkit-appearance: none; /* Safari and Chrome */
+  appearance: none;
+
+  &:focus {
+    outline: 0;
   }
+}
 
-  & .caption p {
+.product-location {
+
+  & .title {
+    font-size: 1.125rem;
     margin: 0;
+    margin-bottom: 10px;
+  }
+
+  & .project-name {
+    margin-bottom: 10px;
+  }
+
+  & .product-address input {
+    // @extend .select-input;
+  }
+}
+
+@media (max-width: 768px) {
+  .inner-wrapper {
+    flex-direction: column;
   }
 }

@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const validator = require('validator');
 
 const User = require('../models/user.model');
-const errorsService = require('../services/errors.service');
+const errorsService = require('../controllers/errors.controller');
 
 
 module.exports = {

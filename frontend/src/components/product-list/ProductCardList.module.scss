@@ -1,7 +1,25 @@
+.product-card-list {
 
-.card-wrapper {
+  // @for $i from 1 to 20 {
+    
+  //   & .card:hover {
+  //     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.65);
+  //   }
+
+  //   & .card:nth-child(#{$i}):hover {
+  //     z-index: $i;
+  //     position: relative;
+  //   }
+  // }
+}
+
+.link-wrapper {
   text-decoration: none;
   color: inherit;
+}
+
+.card-wrapper {
+  
 }
 
 .card {
@@ -10,14 +28,24 @@
   gap: 10px;
   
   box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.65);
+  // outline: 1px solid rgba(0 0 0 / 65%);
   padding: 7px 10px;
   margin-bottom: 1px;
   
   background-color: var(--secondary-background-color);
+  
+  @for $i from 1 to 20 {
+    
+    &:hover {
+      box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.65);
+    }
 
-  &:hover {
-    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.65);
+    &:nth-child(#{$i}):hover {
+      z-index: $i;
+      position: relative;
+    }
   }
+  
 }
 
 .card-media {

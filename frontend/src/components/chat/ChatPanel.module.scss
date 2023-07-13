@@ -121,13 +121,18 @@
     height: 20px;
   }
 
-  & textarea {
+  & .chat-input {
     flex: 1;
+    // padding: 10px 0;
+  }
+
+  & textarea {
+    width: 100%;
 
     overflow: hidden;
     overflow-wrap: break-word;
 
-    height: 35px;
+    height: 40px;
     max-height: 100px;
     resize: none;
 

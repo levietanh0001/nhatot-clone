@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
 const { rootDir } = require('./path.util');
-const { throwError } = require('../services/errors.service');
+const { throwError } = require('../controllers/errors.controller');
 const { redisClient, redisConn } = require('./redis-store.util');
 
 const accessPrivateKey = fs.readFileSync(path.join(__dirname, '../..', 'access-private-key.pem'), 'utf-8');
@@ -139,12 +139,12 @@ async function createAndStoreRefreshTokenAsync(userId) {
     // const value = await redisClient.get(userId.toString());
 
     // if (!value) {
-      await redisClient.set(
-        userId.toString(),
-        JSON.stringify({ refreshToken }),
-        'EX',
-        process.env.REFRESH_TOKEN_LIFE_SPAN
-      );
+    await redisClient.set(
+      userId.toString(),
+      JSON.stringify({ refreshToken }),
+      'EX',
+      process.env.REFRESH_TOKEN_LIFE_SPAN
+    );
     // }
 
   } catch (error) {

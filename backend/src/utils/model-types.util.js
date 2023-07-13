@@ -28,7 +28,7 @@ const asBoolean = (defaultValue = false) => {
 
 const asNonNegativeInt = (allowNull = true) => {
   return {
-    type: Sequelize.INTEGER.UNSIGNED,
+    type: Sequelize.BIGINT.UNSIGNED,
     allowNull: allowNull
   }
 }

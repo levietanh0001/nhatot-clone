@@ -22,13 +22,11 @@ const graphqlResolver = require('./graphql/resolvers');
 // import middlewares
 const uploadData = require('./middlewares/upload-data.middleware');
 
-// import routers
+// add routers
 const authRouter = require('./routes/auth.route');
 // const adminRouter = require('./routes/admin');
 // const productsRouter = require('./routes/products');
-// const cartRouter = require('./routes/cart');
-// const orderRouter = require('./routes/orders');
-const errorsService = require('./services/errors.service');
+const errorsService = require('./controllers/errors.controller');
 
 // must import models into app (same place as sequelize.sync() for it to work)
 const { sequelize } = require('./utils/database.util');
@@ -37,14 +35,7 @@ const User = require('./models/user.model');
 const UserProfile = require('./models/user-profile.model');
 const FavoriteList = require('./models/favorite-list.model');
 const FavoriteItem = require('./models/favorite-item.model');
-const ProductImage = require('./models/product-image.model');
-const ProductCategory = require('./models/product-category.model');
-const Category = require('./models/category.model');
-const MainDoorDirection = require('./models/main-door-direction.model');
-const Direction = require('./models/direction.model');
-const BalconDirection = require('./models/balcon-direction.model');
 const { getMagicMethods } = require('./utils/magic-methods.util');
-// const UserRole = require('./models/user-role');
 
 // init express app
 const app = express();
@@ -57,30 +48,11 @@ app.use(helmet());
 Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
 User.hasMany(Product); // one-to-many relationship: getProducts() and createProduct() methods generated
 
-ProductImage.belongsTo(Product, { constraints: true, onDelete: 'CASCADE' });
-Product.hasMany(ProductImage);
-
-ProductCategory.belongsTo(Category);
-Category.hasMany(ProductCategory);
-
-Product.belongsTo(ProductCategory, { constraints: true, onDelete: 'CASCADE' });
-ProductCategory.hasMany(Product);
-
-MainDoorDirection.belongsTo(Direction);
-Direction.hasMany(MainDoorDirection);
-
-BalconDirection.belongsTo(Direction);
-Direction.hasMany(BalconDirection);
-
-FavoriteList.belongsTo(User);
-User.hasOne(FavoriteList);
-// User.hasOne(FavoriteList);
-
 User.hasOne(UserProfile);
 UserProfile.belongsTo(User);
 
-// User.hasOne(UserRole);
-// UserRole.belongsTo(User);
+FavoriteList.belongsTo(User);
+User.hasOne(FavoriteList);
 
 // belongsToMany through an intermediate Model
 FavoriteList.belongsToMany(Product, { through: FavoriteItem });
@@ -106,7 +78,8 @@ const corsOptions = {
 };
 
 // frontend origins
-app.use(cors({ ...corsOptions
+app.use(cors({
+  ...corsOptions
   // origin: ['http://localhost:3000', 'http://localhost:3000/', 'http://127.0.0.1:3000', 'http://127.0.0.1:3000/'], 
   // credentials: true 
 }));
@@ -184,7 +157,7 @@ app.use(uploadData.multerWrapper());
 // middleware that always runs first before the rest
 app.use('/', (req, res, next) => {
   console.log('this always run first before any request');
-    
+
   // console.log(getMagicMethods(User));
   // console.log(getMagicMethods(Product));
   // console.log(getMagicMethods(Direction));

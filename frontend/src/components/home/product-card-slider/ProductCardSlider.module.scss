@@ -17,12 +17,17 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 5px;
 
   // color: var(--app-secondary-text-color);
   color: var(--blue-900);
   font-weight: 600;
   padding: 15px 0;
   cursor: pointer;
+
+  & svg {
+    vertical-align: middle;
+  }
 }
 
 .card-wrapper {

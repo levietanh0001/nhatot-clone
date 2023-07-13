@@ -27,4 +27,4 @@ const loremSlice = createSlice({
 const loremReducer = loremSlice.reducer;
 
 export const { more, less } = loremSlice.actions;
-export { loremReducer };
+export default loremReducer;

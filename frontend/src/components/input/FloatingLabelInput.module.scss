@@ -1,0 +1,98 @@
+@mixin floating($is-important: false) {
+  @if($is-important) {
+    top: 14px !important;
+    left: 12px !important;
+    font-size: 0.75rem !important;
+    opacity: 1 !important;  
+  } @else {
+    top: 14px;
+    left: 12px;
+    font-size: 0.75rem;
+    opacity: 1;  
+  }
+}
+
+.float-up {
+  @include floating(!important);
+}
+
+// .form-control {
+  
+//   margin: 0;
+
+  .field-content {
+    margin: 0;
+    position: relative;
+  }
+
+  .field-input {
+    height: 50px;
+    padding: 14px 12px 0 12px;
+    width: 100%;
+    border: 1px solid gray;
+    border-radius: 4px;
+
+    font-size: 1.1rem;
+  }
+
+  .field-input:focus {
+    border: 1px solid var(--orange-500);
+    outline: 1px solid var(--orange-500);
+  }
+
+  .field-input:focus + .floating-label {
+    @include floating;
+  }
+
+  .floating-label {
+    color: gray;
+
+    position: absolute;
+    pointer-events: none;
+    left: 15px;
+    top: 50%;
+
+    transform: translateY(-50%);
+    transition: 0.1s ease all;
+  }
+
+  .forget-password {
+    text-decoration: none;
+    color: var(--blue-700);
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 12px;
+    border: 0;
+    border-radius: 4px;
+
+    background-color: var(--orange-800);
+    color: white;
+
+    font-size: 1.25rem;
+    font-weight: 700;
+
+    transition: ease 300ms;
+
+    &:hover {
+      scale: 1.01;
+    }
+
+    &:active {
+      background-color: var(--orange-500);
+      transform: translate(1px, 2px);
+    }
+
+    &:disabled {
+      opacity: 0.8;
+    }
+  }
+// }
+
+.error {
+  margin: 7px 0 0 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: red;
+}

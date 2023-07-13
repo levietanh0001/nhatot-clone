@@ -1,6 +1,9 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+
 import "./App.scss";
+import Counter from "./components/counter";
 const HomePage = lazy(() => import("./pages/HomePage"));
 const ProductListPage = lazy(() => import("./pages/ProductListPage"));
 const PostPage = lazy(() => import("./pages/PostPage"));
@@ -14,7 +17,7 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 
 export const SuspenseComponent = ({
   children, 
-  fallback=<p style={{ margin: 0, backgroundColor: 'white' }}>Loading...</p>
+  fallback=<></>
 }) => {
   return (
     <Suspense fallback={fallback}>
@@ -25,41 +28,31 @@ export const SuspenseComponent = ({
 
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <SuspenseComponent>
-          <Routes>
-            {/* <Route path="/" element={<HomePage />}></Route>
-            <Route path="/post" element={<PostPage />}></Route>
-            <Route path="/product" element={<ProductPage />}></Route>
-            <Route path="/product-list" element={<ProductListPage />}></Route>
-            <Route path="/user-profile" element={<UserProfilePage />}></Route>
+    <>
+      <div className="App">
+        <BrowserRouter>
+          <SuspenseComponent>
+            <Routes>
+            
+              <Route path="/" element={<SuspenseComponent><HomePage /></SuspenseComponent>}></Route>
+              <Route path="/post-product" element={<SuspenseComponent><PostPage /></SuspenseComponent>}></Route>
+              <Route path="/product" element={<SuspenseComponent><ProductPage /></SuspenseComponent>}></Route>
+              <Route path="/product-list" element={<SuspenseComponent><ProductListPage /></SuspenseComponent>}></Route>
+              <Route path="/user-profile" element={<SuspenseComponent><UserProfilePage /></SuspenseComponent>}></Route>
 
-            <Route path="/chat" element={<ChatPage />}></Route>
-            <Route path="/login" element={<LoginPage />}></Route>
-            <Route path="/admin" element={<AdminPage />}>
-              <Route path="dashboard" element={<Dashboard />}></Route>
-            </Route>
-            <Route path="*" element={<NotFound />}></Route> */}
-          
-            <Route path="/" element={<SuspenseComponent><HomePage /></SuspenseComponent>}></Route>
-            <Route path="/post" element={<SuspenseComponent><PostPage /></SuspenseComponent>}></Route>
-            <Route path="/product" element={<SuspenseComponent><ProductPage /></SuspenseComponent>}></Route>
-            <Route path="/product-list" element={<SuspenseComponent><ProductListPage /></SuspenseComponent>}></Route>
-            <Route path="/user-profile" element={<SuspenseComponent><UserProfilePage /></SuspenseComponent>}></Route>
+              <Route path="/chat" element={<SuspenseComponent><ChatPage /></SuspenseComponent>}></Route>
+              <Route path="/login" element={<SuspenseComponent><LoginPage /></SuspenseComponent>}></Route>
+              <Route path="/admin" element={<SuspenseComponent><AdminPage /></SuspenseComponent>}>
+                <Route path="dashboard" element={<SuspenseComponent><Dashboard /></SuspenseComponent>}></Route>
+              </Route>
+              <Route path="*" element={<SuspenseComponent><NotFound /></SuspenseComponent>}></Route>
 
-            <Route path="/chat" element={<SuspenseComponent><ChatPage /></SuspenseComponent>}></Route>
-            <Route path="/login" element={<SuspenseComponent><LoginPage /></SuspenseComponent>}></Route>
-            <Route path="/admin" element={<SuspenseComponent><AdminPage /></SuspenseComponent>}>
-              <Route path="dashboard" element={<SuspenseComponent><Dashboard /></SuspenseComponent>}></Route>
-            </Route>
-            <Route path="*" element={<SuspenseComponent><NotFound /></SuspenseComponent>}></Route>
+            </Routes>
+          </SuspenseComponent>
 
-          </Routes>
-        </SuspenseComponent>
-
-      </BrowserRouter>
-    </div>
+        </BrowserRouter>
+      </div>
+    </>
   );
 }
 

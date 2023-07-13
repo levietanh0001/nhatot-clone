@@ -13,6 +13,7 @@
 .App {
   background-color: var(--app-background-color);
   margin-left: 0;
+
 }
 
 .dark {
@@ -23,6 +24,10 @@
   --error: red;
   --toggle-theme-btn-bg-color: var(--black);
   --toggle-theme-btn-border-color: var(--black);
+}
+
+body {
+  
 }
 
 .container {
@@ -51,3 +56,38 @@
   height: 10px;
   background-color: var(--secondary-background-color);
 }
+
+.required {
+  &::after {
+    content: "*";
+    color: var(--red-600);
+    margin-left: 5px;
+  }
+}
+
+.field-error {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: red;
+}
+
+.no-appearance {
+  // remove default icons in some elements
+  -moz-appearance: none; /* Firefox */
+  -webkit-appearance: none; /* Safari and Chrome */
+  appearance: none;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+

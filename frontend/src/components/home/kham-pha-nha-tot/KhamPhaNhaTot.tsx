@@ -22,7 +22,7 @@ const Card = ({ imgSrc, imgAlt, title, content, href }) => {
 const KhamPhaNhaTot = () => {
   return (
     <div className='container' style={{ backgroundColor: 'var(--secondary-background-color)' }}>
-      <h1 className={styles['h2']}>Khám phá Nhà tốt</h1>
+      <h1 className={styles['title']}>Khám phá Nhà tốt</h1>
       <div className={styles['cards']}>
         <Card
           imgSrc={data[0].imgSrc}

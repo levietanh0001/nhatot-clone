@@ -6,7 +6,7 @@ const { Op } = require("sequelize");
 const fetch = require('node-fetch');
 
 const validationUtils = require('../utils/validation.util');
-const { passErrorToHandler, throwError } = require('./errors.service');
+const { passErrorToHandler, throwError } = require('./errors.controller');
 const { verifyToken, signToken, accessPrivateKey, accessPublicKey, refreshPrivateKey, refreshPublicKey, createRefreshToken, extractAccessTokenFromRequest, signTokenAsync, createAccessTokenAsync, createAndStoreRefreshTokenAsync, verifyRefreshTokenAsync } = require('../utils/cryptography.util');
 // require('dotenv').config('../../.env');
 
@@ -31,7 +31,7 @@ function getCookie(req, res, next) {
 async function refresh(req, res, next) {
 
   const response = await fetch(
-    new URL('/api/auth/new-access-token', process.env.BASE_URL).href, 
+    new URL('/api/auth/new-access-token', process.env.BASE_URL).href,
     {
       method: 'POST',
       headers: {
@@ -55,7 +55,7 @@ async function getNewAccessToken(req, res, next) {
 
   const refreshToken = req.cookies['refreshToken'] || req.body['refreshToken'];
   console.log({ finalToken: refreshToken });
-  
+
   try {
     if (!refreshToken) {
       throwError(422, 'Invalid request', 'No refresh token is provided');
@@ -137,7 +137,7 @@ async function login(req, res, next) {
 
     res.cookie(
       'refreshToken',
-      refreshToken, 
+      refreshToken,
       {
         httpOnly: true,
         // secure: true, // must be set in production
@@ -145,19 +145,19 @@ async function login(req, res, next) {
         maxAge: 365 * 24 * 60 * 60 * 1000
       }
     );
-    
+
     res
-    .status(200)
-    .json({
-      accessToken: accessToken,
-      refreshToken: refreshToken,
-      cookies: req.cookies
-    });
-    
+      .status(200)
+      .json({
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        cookies: req.cookies
+      });
+
   } catch (error) {
     passErrorToHandler(error, next);
   }
-  
+
 }
 
 

@@ -1,5 +1,5 @@
+import LoginContent from '~/components/auth/LoginContent';
 import styles from './SearchModal.module.scss';
-// import './SearchModal.scss';
 import Modal from '~/components/modal/Modal';
 
 
@@ -9,11 +9,9 @@ const SearchModal = ({ show, onModalClose, onClickAway }) => {
       show={show}
       onModalClose={onModalClose}
       onClickAway={onClickAway}
-      className={styles['search-modal']}
+      // className={styles['search-modal']}
     >
-      <div className={styles['inner-wrapper']}>
-        
-      </div>
+      
     </Modal>
   );
 };
