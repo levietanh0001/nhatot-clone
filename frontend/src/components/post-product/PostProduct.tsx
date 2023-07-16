@@ -16,115 +16,259 @@ import PostDetails from './PostDetails';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import postProductFormSchema from '~/schemas/post-product/post-product-form-schema';
-import FloatingLabelInput from '../input/FloatingLabelInput';
-import clsx from 'clsx';
+import {
+  commaSeparatedStringToNumber,
+  sanitizeBigIntString,
+  sanitizeNumberString,
+} from '~/utils/number.util';
+import useId from '@mui/material/utils/useId';
+import { extractUploadedFiles, validateFileSize, validateFilesSize } from '~/utils/file.util';
+import useFetch from '~/hooks/useFetch';
 
+let renderCount = 0;
 
 const PostProduct = () => {
-
-  // const [productState, setProductState] = useState<any>();
+  const formId = useId();
   const product = useSelector((state: RootState) => state.postProduct.product);
-  const formStep = useSelector((state: RootState) => state.postProduct.formStep);
   const dispatch = useAppDispatch();
+  const { post, loading } = useFetch(process.env.REACT_APP_BASE_URL);
 
-  // useEffect(() => {
-  //   setProductState(product);
-  // }, [product]);
+  const [imageErrors, setImageErrors] = useState<string | null>(null);
+  const [videoErrors, setVideoErrors] = useState<string | null>(null);
+  const [imageUrls, setImageUrls] = useState<string[] | null>(null);
 
   useEffect(() => {
-    console.log({ formStep, ...product });
-  }, [product, formStep]);
+    console.log({ ...product });
+  }, [product]);
 
   const form = useForm({
-    mode: 'onBlur',
+    mode: 'all',
     resolver: yupResolver(postProductFormSchema),
   });
-  const { handleSubmit, formState } = form;
-  const { errors } = formState;
+  const { handleSubmit } = form;
+
   const onSubmit = async (data, e) => {
     e.preventDefault();
-    console.log({ data });
+
+    const numBedrooms = product.numBedrooms? parseInt(product.numBedrooms): null;
+    const numBathrooms = product.numBathrooms? parseInt(product.numBathrooms): null;
+    const price = product.price? commaSeparatedStringToNumber(product.price): null;
+    const deposit = product.deposit? commaSeparatedStringToNumber(product.deposit): null;
+    const area = product.area ? parseFloat(product.area) : null;
+
+    const result = { ...product, numBedrooms, numBathrooms, price, deposit, area };
+
+    console.log({ result });
   };
 
   const handleProductCategoryChange = (value) => {
     dispatch(postProductActions.setProductCategory(value));
-    dispatch(postProductActions.incrementFormStep());
-  }
+  };
 
   const handleProductTypeSelect = (value) => {
     dispatch(postProductActions.setProductType(value));
-    dispatch(postProductActions.incrementFormStep());
-  }
+  };
 
   const handleProjectNameChange = (e) => {
     dispatch(postProductActions.setProjectName(e.target.value));
-  }
+  };
 
   const handleAddressChange = (e) => {
     dispatch(postProductActions.setAddress(e.target.value));
-    dispatch(postProductActions.incrementFormStep());
-  }
+  };
 
   const handleNumBedRoomsChange = (e) => {
-    dispatch(postProductActions.setNumBedrooms(e.target.value));
-  }
+    dispatch(
+      postProductActions.setNumBedrooms(sanitizeBigIntString(e.target.value))
+    );
+  };
 
   const handleNumBathroomsChange = (e) => {
-    dispatch(postProductActions.setNumBathrooms(e.target.value));
-  }
+    dispatch(
+      postProductActions.setNumBathrooms(sanitizeBigIntString(e.target.value))
+    );
+  };
 
   const handleBalconDirectionChange = (e) => {
     dispatch(postProductActions.setBalconDirection(e.target.value));
-  }
+  };
 
   const handleMainDirectionChange = (e) => {
     dispatch(postProductActions.setMainDoorDirection(e.target.value));
-  }
+  };
 
   const handleHasLegalDocsChange = (e) => {
     dispatch(postProductActions.setHasLegalDocs(e.target.value));
-  }
+  };
 
   const handleFurnitureStatusChange = (e) => {
     dispatch(postProductActions.setFurnitureStatus(e.target.value));
-  }
+  };
 
   const handleAreaChange = (e) => {
     dispatch(postProductActions.setArea(e.target.value));
-  }
+  };
 
   const handlePriceChange = (e) => {
-    dispatch(postProductActions.setPrice(e.target.value));
-    dispatch(postProductActions.incrementFormStep());
-  }
-
+    dispatch(postProductActions.setPrice(sanitizeBigIntString(e.target.value)));
+  };
   const handleDepositChange = (e) => {
-    dispatch(postProductActions.setDeposit(e.target.value));
-  }
+    dispatch(
+      postProductActions.setDeposit(sanitizeBigIntString(e.target.value))
+    );
+  };
+
+  const handleProductTitleChange = (e) => {
+    dispatch(postProductActions.setPostTitle(e.target.value));
+  };
+
+  const handleProductDescriptionChange = (e) => {
+    dispatch(postProductActions.setDescription(e.target.value));
+  };
 
   const handleUserTypeSelect = (value) => {
     dispatch(postProductActions.setUserType(value));
-    dispatch(postProductActions.incrementFormStep());
   };
+
+  const handleImageChange = (event) => {
+    const imageArr = extractUploadedFiles(event.target.files);
+    const imageSizeLimit = 5; // MB
+    if (validateFilesSize(imageArr, imageSizeLimit)) {
+      setImageErrors('');
+      dispatch(postProductActions.appendImages(imageArr));
+
+      // const imageUrlList = imageArr.map(image => {
+      //   return URL.createObjectURL(image);
+      // });
+      // setImageUrls(imageUrlList);
+    } else {
+      setImageErrors(`Mỗi ảnh cho phép kích thước tối đa là ${imageSizeLimit}`);
+    }
+  };
+
+  const handleVideoChange = (event) => {
+
+    const video = event.target.files[0];
+    const videoSizeLimit = 25;
+
+    if(validateFileSize(video, videoSizeLimit)) {
+      setVideoErrors('');
+      dispatch(postProductActions.setVideo(video));
+    } else {
+      setVideoErrors(
+        `Video cho phép kích thước tối đa là ${videoSizeLimit}`
+      );
+    }
+  };
+
+  const handleImageRemove = (index) => {
+    dispatch(postProductActions.removeImageByIndex(index));
+  }
+
+  const handleVideoRemove = () => {
+    dispatch(postProductActions.clearVideo());
+  }
+
+  renderCount++;
+  const postProductFormId = formId;
+  const isAddressValid = !form.formState.errors?.['address'];
+  const isProductDetailsValid =
+    !form.formState.errors?.['numBedrooms'] &&
+    !form.formState.errors?.['numBathrooms'] &&
+    !form.formState.errors?.['area'] &&
+    !form.formState.errors?.['price'];
+  const isPostDetailsValid =
+    !form.formState.errors['postTitle'] &&
+    !form.formState.errors['description'];
 
   return (
     <Wrapper>
-      <UploadMedia />
+      <FormProvider {...form}>
+        <UploadMedia
+          formId={postProductFormId}
+          images={product.images}
+          video={product.video}
+          onImageChange={handleImageChange}
+          onImageRemove={handleImageRemove}
+          onVideoChange={handleVideoChange}
+          onVideoRemove={handleVideoRemove}
+          imageErrors={imageErrors}
+          videoErrors={videoErrors}
+        />
 
-      <div className={styles['details']}>
-        <FormProvider {...form}>
-          <form aria-label='product details form' onSubmit={handleSubmit(onSubmit)} noValidate>
-            <ProductCategory product={product} onProductCategoryChange={handleProductCategoryChange} />
-            {formStep > 0 && <ProductType product={product} onProductTypeSelect={handleProductTypeSelect} />}
-            {formStep > 1 && <ProductLocation product={product} onAddressChange={handleAddressChange} onProjectNameChange={handleProjectNameChange} />}
-            {formStep > 2 && <ProductDetails product={product} onNumBedRoomsChange={handleNumBedRoomsChange} onNumBathroomsChange={handleNumBathroomsChange} onBalconDirectionChange={handleBalconDirectionChange} onMainDirectionChange={handleMainDirectionChange} onHasLegalDocsChange={handleHasLegalDocsChange} onFurnitureStatusChange={handleFurnitureStatusChange} onAreaChange={handleAreaChange} onPriceChange={handlePriceChange} onDepositChange={handleDepositChange} />}
-            {formStep > 3 && <UserType product={product} onUserTypeSelect={handleUserTypeSelect} />}
-            {formStep > 3 && <ActionButtons />}
-            {formStep === 0 && !product.productCategory && <EmptyState />} 
+        <div className={styles['details']}>
+          <form
+            id={postProductFormId}
+            aria-label='product details form'
+            onSubmit={handleSubmit(onSubmit)}
+            noValidate
+          >
+            {/* {renderCount} */}
+            <ProductCategory
+              product={product}
+              onProductCategoryChange={handleProductCategoryChange}
+              name='productCategory'
+            />
+            {product.productCategory && (
+              <ProductType
+                product={product}
+                onProductTypeSelect={handleProductTypeSelect}
+              />
+            )}
+            {product.productType && (
+              <ProductLocation
+                product={product}
+                onAddressChange={handleAddressChange}
+                onProjectNameChange={handleProjectNameChange}
+              />
+            )}
+            {product.address && isAddressValid && (
+              <ProductDetails
+                product={product}
+                onNumBedRoomsChange={handleNumBedRoomsChange}
+                onNumBathroomsChange={handleNumBathroomsChange}
+                onBalconDirectionChange={handleBalconDirectionChange}
+                onMainDirectionChange={handleMainDirectionChange}
+                onHasLegalDocsChange={handleHasLegalDocsChange}
+                onFurnitureStatusChange={handleFurnitureStatusChange}
+                onAreaChange={handleAreaChange}
+                onPriceChange={handlePriceChange}
+                onDepositChange={handleDepositChange}
+              />
+            )}
+            {product.numBedrooms &&
+              product.numBathrooms &&
+              product.area &&
+              product.price &&
+              isProductDetailsValid && (
+                <PostDetails
+                  product={product}
+                  onPostTitleChange={handleProductTitleChange}
+                  onPostDescriptionChange={handleProductDescriptionChange}
+                />
+              )}
+            {product.postTitle && product.description && isPostDetailsValid && (
+              <UserType
+                product={product}
+                onUserTypeSelect={handleUserTypeSelect}
+              />
+            )}
+            {product.userType && <ActionButtons formId={postProductFormId} />}
+
+            {/* 
+            {JSON.stringify({ errors: form.formState.errors })}
+            {JSON.stringify({
+              isAddressValid,
+              isProductDetailsValid,
+              isPostDetailsValid,
+            })}
+             */}
+            {/* {JSON.stringify({ values: form.getValues() })} */}
+
+            {!product.productCategory && <EmptyState />}
           </form>
-        </FormProvider>
-      </div>
-
+        </div>
+      </FormProvider>
     </Wrapper>
   );
 };
@@ -137,6 +281,6 @@ const Wrapper = ({ children }) => {
       </div>
     </div>
   );
-}
+};
 
 export default PostProduct;

@@ -2,26 +2,52 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 export interface IAction extends PayloadAction<number> {}
 
-const initialState = {
+interface IInitialState {
   product: {
-    productType: null,
-    productCategory: null,
-    projectName: null,
-    address: null,
-    numBedrooms: null,
-    numBathrooms: null,
-    balconDirection: null,
-    mainDoorDirection: null,
-    hasLegalDocs: null,
-    furnitureStatus: null,
-    area: null,
-    price: null,
-    deposit: null,
-    postTile: null,
-    description: null,
-    userType: null,
+    productType: string;
+    productCategory: string;
+    projectName: string;
+    address: string;
+    numBedrooms: string;
+    numBathrooms: string;
+    balconDirection: string;
+    mainDoorDirection: string;
+    hasLegalDocs: string;
+    furnitureStatus: string;
+    area: string;
+    price: string;
+    deposit: string;
+    postTitle: string;
+    description: string;
+    userType: string;
+    images: File[];
+    video: File | null;
+  };
+  formStep: number;
+}
+
+const initialState: IInitialState = {
+  product: {
+    productType: '',
+    productCategory: '',
+    projectName: '',
+    address: '',
+    numBedrooms: '',
+    numBathrooms: '',
+    balconDirection: '',
+    mainDoorDirection: '',
+    hasLegalDocs: '',
+    furnitureStatus: '',
+    area: '',
+    price: '',
+    deposit: '',
+    postTitle: '',
+    description: '',
+    userType: '',
+    images: [],
+    video: null,
   },
-  formStep: 0
+  formStep: 0,
 };
 
 const postProductSlice = createSlice({
@@ -73,24 +99,31 @@ const postProductSlice = createSlice({
     setDeposit: (state, action) => {
       state.product.deposit = action.payload;
     },
-    setPostTile: (state, action) => {
-      state.product.postTile = action.payload;
+    setPostTitle: (state, action) => {
+      state.product.postTitle = action.payload;
     },
     setDescription: (state, action) => {
       state.product.description = action.payload;
     },
-    
+    appendImages: (state, action) => {
+      state.product.images = [...state.product.images, ...action.payload];
+    },
+    removeImageByIndex: (state, action) => {
+      state.product.images.splice(action.payload, 1);
+    },
+    clearImage: (state) => {
+      state.product.images.length = 0;
+    },
+    setVideo: (state, action) => {
+      state.product.video = action.payload;
+    },
+    clearVideo: (state) => {
+      state.product.video = null;
+    },
   },
 });
 
 const postProductReducer = postProductSlice.reducer;
-
-// export const {
-//   setProductCategory,
-//   setProductType,
-//   setUserType,
-//   incrementFormStep,
-// } = postProductSlice.actions;
 
 export const postProductActions = postProductSlice.actions;
 

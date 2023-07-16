@@ -26,10 +26,15 @@
       background-color: #f4f4f4;
       border-radius: 16px;
       cursor: pointer;
+
+      &:focus {
+        outline: 2px solid var(--orange-500);
+      }
     }
   }
 }
 .active {
   background-color: var(--yellow-300) !important;
   color: var(--red-300) !important;
+  border: 1px solid var(--yellow-300) !important;
 }

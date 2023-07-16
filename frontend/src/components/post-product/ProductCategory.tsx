@@ -1,38 +1,61 @@
 import clsx from 'clsx';
 import styles from './ProductCategory.module.scss';
+import { SelectInput, SelectOption } from '../input/SelectInput';
+import { useController, useFormContext } from 'react-hook-form';
 
 
-const ProductCategory = ({ 
-  product, 
-  onProductCategoryChange,
-}) => {
+const ProductCategory = (props) => {
+
+  const { product, onProductCategoryChange } = props;
+  // const { control, formState } = useFormContext();
+  // const { errors } = formState;
+  // const { field } = useController({ name, control });
+  
   return (
-    <div className={styles['product-category-wrapper']}>
-      <h2 className={clsx('required', styles['title'])}>
-        Phân loại bất động sản
-      </h2>
-      <div className={styles['product-category']}>
-        <select
-          name='productCategory'
-          // value={product.productCategory}
-          onChange={(e) => onProductCategoryChange(e.currentTarget.value)}
-        >
-          <option value=''>Chọn loại bất động sản</option>
-          <option value='canhochungcu'>Căn hộ/Chung cư</option>
-          <option value='nhao'>Nhà ở</option>
-          <option value='khac'>Khác</option>
-          {/* <option value='dat'>Đất</option>
-          <option value='vanphong'>Văn phòng</option>
-          <option value='matbangkinhdoanh'>Mặt bằng kinh doanh</option>
-          <option value='phongtro'>Phòng trọ</option> */}
-        </select>
-        <span className={styles['dropdown-icon']}>
-          <svg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 320 512'><path d='M137.4 374.6c12.5 12.5 32.8 12.5 45.3 0l128-128c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8L32 192c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l128 128z' /></svg>
-        </span>
-      </div>
-    </div>
+    // phai spread ...field vao select input
+    // bo sung field.onChange
+    <SelectInput
+      name='productCategory'
+      label='Chọn loại bất động sản'
+      required
+
+      inputValue={product.productCategory}
+      onInputValueChange={(e) => onProductCategoryChange(e.currentTarget.value)}
+
+      wrapperClass={styles['product-category-wrapper']}
+      labelClass={clsx('required', styles['title'])}
+      inputWrapperClass={styles['product-category']}
+    >
+      {
+        selectOptions.map((item, index) => (
+          <SelectOption key={index} {...item} />
+        ))
+      }
+    </SelectInput>
   );
 };
 
+const selectOptions = [
+  {
+    value: '',
+    label: 'Chọn loại bất động sản',
+    inputOptionClass: '',
+  },
+  {
+    value: 'canhochungcu',
+    label: 'Căn hộ/Chung cư',
+    inputOptionClass: '',
+  },
+  {
+    value: 'nhao',
+    label: 'Nhà ở',
+    inputOptionClass: '',
+  },
+  {
+    value: 'khac',
+    label: 'Khác',
+    inputOptionClass: '',
+  },
+]
 
 export default ProductCategory;
