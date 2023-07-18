@@ -24,6 +24,9 @@ import {
 import useId from '@mui/material/utils/useId';
 import { extractUploadedFiles, validateFileSize, validateFilesSize } from '~/utils/file.util';
 import useFetch from '~/hooks/useFetch';
+import { backendBaseUrl } from '~/utils/variables.util';
+import { buildFormData, logFormData } from '~/utils/form.util';
+import { useNavigate } from 'react-router-dom';
 
 let renderCount = 0;
 
@@ -31,14 +34,16 @@ const PostProduct = () => {
   const formId = useId();
   const product = useSelector((state: RootState) => state.postProduct.product);
   const dispatch = useAppDispatch();
-  const { post, loading } = useFetch(process.env.REACT_APP_BASE_URL);
+  const navigate = useNavigate();
 
   const [imageErrors, setImageErrors] = useState<string | null>(null);
   const [videoErrors, setVideoErrors] = useState<string | null>(null);
   const [imageUrls, setImageUrls] = useState<string[] | null>(null);
 
   useEffect(() => {
+
     console.log({ ...product });
+
   }, [product]);
 
   const form = useForm({
@@ -48,6 +53,7 @@ const PostProduct = () => {
   const { handleSubmit } = form;
 
   const onSubmit = async (data, e) => {
+
     e.preventDefault();
 
     const numBedrooms = product.numBedrooms? parseInt(product.numBedrooms): null;
@@ -55,10 +61,54 @@ const PostProduct = () => {
     const price = product.price? commaSeparatedStringToNumber(product.price): null;
     const deposit = product.deposit? commaSeparatedStringToNumber(product.deposit): null;
     const area = product.area ? parseFloat(product.area) : null;
+    const productData = { ...product, numBedrooms, numBathrooms, price, deposit, area };
+    delete productData['images'];
+    delete productData['video'];
+    // console.log({ productData });
+    // console.log({ product });
 
-    const result = { ...product, numBedrooms, numBathrooms, price, deposit, area };
+    const productFormData = new FormData();
+    const videoFormData = new FormData();
 
-    console.log({ result });
+    // add media files to form data
+    if(product.images) {
+      product.images.forEach(image => productFormData.append('images', image));
+    }
+
+    for(let [key, value] of Object.entries(productData)) {
+      productFormData.set(key, value as string);
+    }
+    
+    // inspect productFormData
+    logFormData(productFormData);
+
+    try {
+      
+      const createProductUrl = new URL('api/products', backendBaseUrl);
+      const createProductResponse = await fetch(createProductUrl, {
+        method: 'POST',
+        body: productFormData
+      });
+      const createdProductData = await createProductResponse.json();
+      console.log(createdProductData);
+
+      videoFormData.set('video', product.video as Blob);
+      const uploadVideoUrl = new URL('api/products/video', backendBaseUrl);
+      const uploadVideoResponse = await fetch(uploadVideoUrl, {
+        method: 'POST',
+        body: videoFormData
+      });
+      console.log(uploadVideoResponse);
+
+      // navigate('/');
+
+    } catch (error) {
+      console.error(error);
+    } finally {
+
+      // navigate('/');
+    }
+
   };
 
   const handleProductCategoryChange = (value) => {
@@ -136,11 +186,6 @@ const PostProduct = () => {
     if (validateFilesSize(imageArr, imageSizeLimit)) {
       setImageErrors('');
       dispatch(postProductActions.appendImages(imageArr));
-
-      // const imageUrlList = imageArr.map(image => {
-      //   return URL.createObjectURL(image);
-      // });
-      // setImageUrls(imageUrlList);
     } else {
       setImageErrors(`Mỗi ảnh cho phép kích thước tối đa là ${imageSizeLimit}`);
     }
@@ -169,7 +214,7 @@ const PostProduct = () => {
     dispatch(postProductActions.clearVideo());
   }
 
-  renderCount++;
+  // renderCount++;
   const postProductFormId = formId;
   const isAddressValid = !form.formState.errors?.['address'];
   const isProductDetailsValid =
@@ -253,6 +298,7 @@ const PostProduct = () => {
                 onUserTypeSelect={handleUserTypeSelect}
               />
             )}
+
             {product.userType && <ActionButtons formId={postProductFormId} />}
 
             {/* 

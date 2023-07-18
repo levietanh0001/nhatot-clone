@@ -41,6 +41,7 @@ function App() {
               <Route path="/user-profile" element={<SuspenseComponent><UserProfilePage /></SuspenseComponent>}></Route>
 
               <Route path="/chat" element={<SuspenseComponent><ChatPage /></SuspenseComponent>}></Route>
+
               <Route path="/login" element={<SuspenseComponent><LoginPage /></SuspenseComponent>}></Route>
               <Route path="/admin" element={<SuspenseComponent><AdminPage /></SuspenseComponent>}>
                 <Route path="dashboard" element={<SuspenseComponent><Dashboard /></SuspenseComponent>}></Route>

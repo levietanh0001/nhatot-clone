@@ -57,25 +57,28 @@ const UploadImage = (props) => {
 
   return (
     <>
+      <p className='required' style={{ width: '100%', fontSize: '1.125rem', fontWeight: 600, marginBottom: 0 }}>Thêm ảnh</p>
+      <p style={{ width: '100%', fontSize: '1rem', margin: '5px 0 0 0', color: 'red' }}>* Ảnh đầu tiên là ảnh bìa</p>
+
       {images.length > 0 && (
-        <div className={styles['image-list']}>
-          <p style={{ width: '100%', fontSize: '1.125rem', fontWeight: 600, marginBottom: 0 }}>Thêm ảnh</p>
-          <p style={{ width: '100%', fontSize: '1rem', marginTop: '5px', color: 'red' }}>* Ảnh đầu tiên là ảnh bìa</p>
-          <label htmlFor='add-image'>
-            <input id='add-image' onChange={(event) => onImageChange(event)} type='file' accept='image/*' hidden />
-            <AddMedia />
-          </label>
-          <ul>
-            {
-              images.map((image, index) => (
-                <li key={index}>
-                  <img src={URL.createObjectURL(image)} alt={image?.name}/>
-                  <button className={styles['clear-btn']} onClick={() => onImageRemove(index)}>x</button>
-                </li>
-              ))
-            }
-          </ul>
-        </div>
+        <>
+          <div className={styles['image-list']}>
+            <label htmlFor='add-image'>
+              <input id='add-image' onChange={(event) => onImageChange(event)} type='file' accept='image/*' hidden />
+              <AddMedia />
+            </label>
+            <ul>
+              {
+                images.map((image, index) => (
+                  <li key={index}>
+                    <img src={URL?.createObjectURL(image) ?? ''} alt={image?.name}/>
+                    <button className={styles['clear-btn']} onClick={() => onImageRemove(index)}>x</button>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </>
       )}
 
       {images.length === 0 && (
@@ -113,9 +116,9 @@ const UploadVideo = (props) => {
 
   return (
     <>
+      <p style={{ width: '100%', margin: '15px 0 0 0', fontSize: '1.125rem', fontWeight: 600 }}>Thêm video</p>
       {video && (
         <div className={styles['video-list']}>
-          <p style={{ width: '100%', fontSize: '1rem', fontWeight: 600 }}>Thêm video</p>
           <label htmlFor='add-video'>
             <input id='add-video' onChange={(event) => onVideoChange(event)} type='file' accept='video/*' hidden disabled />
             <AddMedia mediaType='video' style={{ cursor: 'not-allowed' }} />

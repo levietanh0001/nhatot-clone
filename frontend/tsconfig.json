@@ -6,7 +6,8 @@
     },
     "outDir": "build/dist",
     "module": "commonjs",
-    "target": "es5",
+    "target": "ES5",
+    "downlevelIteration": true,
 
     "lib": ["dom", "dom.iterable", "es6"],
 

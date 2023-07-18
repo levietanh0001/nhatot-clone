@@ -39,4 +39,5 @@ const loginWithEmailAndPassword = (email, password, onSuccess, onError) => {
     });
 };
 
+export default app;
 export { auth, loginWithEmailAndPassword };

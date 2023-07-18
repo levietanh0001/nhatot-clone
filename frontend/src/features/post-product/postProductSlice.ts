@@ -4,24 +4,24 @@ export interface IAction extends PayloadAction<number> {}
 
 interface IInitialState {
   product: {
-    productType: string;
-    productCategory: string;
-    projectName: string;
-    address: string;
-    numBedrooms: string;
-    numBathrooms: string;
-    balconDirection: string;
-    mainDoorDirection: string;
-    hasLegalDocs: string;
-    furnitureStatus: string;
-    area: string;
-    price: string;
-    deposit: string;
-    postTitle: string;
-    description: string;
-    userType: string;
-    images: File[];
-    video: File | null;
+    productType?: string;
+    productCategory?: string;
+    projectName?: string;
+    address?: string;
+    numBedrooms?: string;
+    numBathrooms?: string;
+    balconDirection?: string;
+    mainDoorDirection?: string;
+    hasLegalDocs?: string;
+    furnitureStatus?: string;
+    area?: string;
+    price?: string;
+    deposit?: string;
+    postTitle?: string;
+    description?: string;
+    userType?: string;
+    images?: File[];
+    video?: File | null;
   };
   formStep: number;
 }
@@ -106,13 +106,19 @@ const postProductSlice = createSlice({
       state.product.description = action.payload;
     },
     appendImages: (state, action) => {
-      state.product.images = [...state.product.images, ...action.payload];
+      if(state.product.images) {
+        state.product.images = [...state.product.images, ...action.payload];
+      }
     },
     removeImageByIndex: (state, action) => {
-      state.product.images.splice(action.payload, 1);
+      if(state.product.images) {
+        state.product.images.splice(action.payload, 1);
+      }
     },
     clearImage: (state) => {
-      state.product.images.length = 0;
+      if(state.product.images) {
+        state.product.images.length = 0;
+      }
     },
     setVideo: (state, action) => {
       state.product.video = action.payload;

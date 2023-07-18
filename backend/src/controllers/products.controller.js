@@ -1,43 +1,59 @@
 const { Op } = require('sequelize');
 const Product = require('../models/product.model');
-const validationUtils = require('../utils/validation');
-const fileUtils = require('../utils/file');
-const errorsService = require('../services/errors');
+const validationUtils = require('../utils/validation.util');
+const fileUtils = require('../utils/file.util');
+const errorsService = require('../controllers/errors.controller');
 
 
 function createProduct(req, res, next) {
-
-  const productTitle = req.body['title'];
-  const productPrice = req.body['price'];
-  const productDescription = req.body['description'];
-  const image = req.file;
-  const productImageURL = image?.path;
-
-  console.log(req.file);
-
-  validationUtils.sendMessage(req, res, 422);
-
-  req.user
-    .createProduct({
-      title: productTitle,
-      price: productPrice,
-      description: productDescription,
-      imageURL: productImageURL,
-    })
-    .then(product => {
-      const statusCode = 201;
-      return res
-        .status(statusCode)
-        .json({
-          statusCode: statusCode,
-          data: product.dataValues,
-          message: 'Product created successfully'
-        });
-    })
-    .catch(error => {
-      errorsService.passErrorToHandler(error, next);
-    });
+  res.status(200).json({
+    body: req.body,
+    file: req.file,
+    files: req.files
+  })
 }
+
+function uploadProductVideo(req, res, next) {
+  res.status(200).json({
+    body: req.body,
+    file: req.file,
+    files: req.files
+  })
+}
+
+// function createProduct(req, res, next) {
+
+//   const productTitle = req.body['title'];
+//   const productPrice = req.body['price'];
+//   const productDescription = req.body['description'];
+//   const image = req.file;
+//   const productImageURL = image?.path;
+
+//   console.log(req.file);
+
+//   validationUtils.sendMessage(req, res, 422);
+
+//   req.user
+//     .createProduct({
+//       title: productTitle,
+//       price: productPrice,
+//       description: productDescription,
+//       imageURL: productImageURL,
+//     })
+//     .then(product => {
+//       const statusCode = 201;
+//       return res
+//         .status(statusCode)
+//         .json({
+//           statusCode: statusCode,
+//           data: product.dataValues,
+//           message: 'Product created successfully'
+//         });
+//     })
+//     .catch(error => {
+//       errorsService.passErrorToHandler(error, next);
+//     });
+// }
 
 
 function getProducts(req, res, next) {
@@ -154,6 +170,7 @@ function deleteProductById(req, res, next) {
 
 module.exports = {
   createProduct,
+  uploadProductVideo,
   getProducts,
   getProductById,
   updateProductById,

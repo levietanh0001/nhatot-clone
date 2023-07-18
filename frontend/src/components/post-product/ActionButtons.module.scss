@@ -23,6 +23,10 @@
       background-color: var(--orange-300);
       color: white;
     }
+
+    &:active {
+      translate: 1px 1px;
+    }
   }
 }
 
@@ -44,6 +48,14 @@
     &:hover {
       background-color: var(--orange-300);
       color: white;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:active {
+      translate: 1px 1px;
     }
   }
 }

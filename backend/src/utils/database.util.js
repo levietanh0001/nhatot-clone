@@ -1,5 +1,16 @@
 const Sequelize = require('sequelize');
 
+
+function getMagicMethods(model) {
+  
+  for (let assoc of Object.keys(model.associations)) {
+    for (let accessor of Object.keys(model.associations[assoc].accessors)) {
+      console.log(model.name + '.' + model.associations[assoc].accessors[accessor]+'()');
+    }
+  }
+}
+
+
 const sequelize = new Sequelize(
   'nhatot', 'root', '123321',
   {
@@ -23,4 +34,4 @@ sequelize.authenticate().then(() => {
 });
 
 
-module.exports = { sequelize };
+module.exports = { sequelize, getMagicMethods };

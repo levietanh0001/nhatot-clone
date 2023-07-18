@@ -8,6 +8,13 @@ function deleteFileByPath(filePath) {
   });
 }
 
+function mkDirIfNotExists(dir) {
+  if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+  }
+}
+
 module.exports = {
   deleteFileByPath,
+  mkDirIfNotExists
 };

@@ -20,14 +20,16 @@ function passErrorToHandler(error, next) {
 
 function errorHandler(error, req, res, next) {
 
+  // console.log('error handler reached');
+  // console.log(error);
+
   const statusCode = error.code || 500; // if no status code, defaults to 500 (server side error)
 
   res
     .status(statusCode)
     .json({
+      ...error,
       statusCode: error.code,
-      error: error.name,
-      message: error.message,
     });
 
   return next(); // continue regardless

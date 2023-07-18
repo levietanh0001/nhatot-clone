@@ -32,8 +32,8 @@ export default function useFetch(baseUrl) {
     return new Promise((resolve, reject) => {
 
       setLoading(true);
-      console.log({ url: url, baseUrl: baseUrl });
-      console.log(new URL(url, baseUrl).href);
+      // console.log({ url: url, baseUrl: baseUrl });
+      // console.log(new URL(url, baseUrl).href);
       
       fetch(new URL(url, baseUrl).href, {
         method: "post",
