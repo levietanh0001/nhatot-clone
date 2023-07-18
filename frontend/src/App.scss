@@ -10,11 +10,15 @@
   --toggle-theme-btn-border-color: var(--white);
 }
 
-.App {
+html {
   background-color: var(--app-background-color);
   margin-left: 0;
-
 }
+
+// .App {
+//   background-color: var(--app-background-color);
+//   margin-left: 0;
+// }
 
 .dark {
   --app-background-color: var(--brown-400);

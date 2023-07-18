@@ -3,7 +3,7 @@ import { number, object, ref, string } from 'yup';
 // const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 const passwordMinChar = 6;
 
-const schema = object({
+const loginFormSchema = object({
   email: 
     string()
     .required('Email không thể trống')
@@ -30,4 +30,4 @@ const schema = object({
   //   .required('Channel is required'),
 });
 
-export default schema;
+export default loginFormSchema;

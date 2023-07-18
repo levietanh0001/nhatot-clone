@@ -1,14 +1,8 @@
-import { PageLoginContent } from "~/components/auth/LoginContent"
-import AuthLayout from "~/layouts/AuthLayout"
+import { PageLoginContent } from '~/components/auth';
+import AuthLayout from '~/layouts/AuthLayout';
 
 const LoginPage = () => {
-  return (
-    <>
-      <AuthLayout AuthComp={
-        <PageLoginContent />
-      } />
-    </>
-  )
-}
+  return <AuthLayout AuthComp={<PageLoginContent />} />;
+};
 
-export default LoginPage
+export default LoginPage;

@@ -1,4 +1,3 @@
-import LoginContent from '~/components/auth/LoginContent';
 import styles from './SearchModal.module.scss';
 import Modal from '~/components/modal/Modal';
 
