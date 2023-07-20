@@ -1,5 +1,5 @@
 import Modal from '~/components/modal';
-import { LoginContent } from './Auth';
+import { LoginContent } from '~/components/auth';
 
 
 const LoginModal = ({ show, setShow }) => {

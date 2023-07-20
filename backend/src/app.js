@@ -39,6 +39,7 @@ const { graphqlMiddleware } = require('./middlewares/graphql.middleware');
 const { authenticateUser } = require('./middlewares/auth.middleware');
 const { rootDir } = require('./utils/path.util');
 const { check } = require('express-validator');
+const firebaseRouter = require('./routes/firebase-auth.route');
 
 
 // define associations
@@ -114,7 +115,8 @@ app.use('/graphql', graphqlMiddleware);
 
 
 // add routers
-app.use('/api/auth', authRouter);
+// app.use('/api/auth', authRouter);
+app.use('/api/firebase-auth', firebaseRouter);
 // app.use('/api/admin', adminRouter);
 app.use('/api/products', productsRouter);
 

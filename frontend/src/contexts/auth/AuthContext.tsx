@@ -1,4 +1,4 @@
-import { User, UserCredential, createUserWithEmailAndPassword, fetchSignInMethodsForEmail, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateEmail, updatePassword } from 'firebase/auth';
+import { User, UserCredential, createUserWithEmailAndPassword, fetchSignInMethodsForEmail, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateEmail, updatePassword } from 'firebase/auth';
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { auth } from '~/firebase';
 
@@ -28,16 +28,20 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     // on mount, set current user
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+
       setUser(currentUser);
       setLoading(false);
+    
     })
 
     // on component unmount, unsubscribe user
     return () => unsubscribe();
   }, []);
 
-  const registerUser = (email, password) => {  
-    return createUserWithEmailAndPassword(auth, email, password);
+  const registerUser = async (email, password) => {  
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    await sendEmailVerification(userCredential.user)
+    return userCredential;
   }
 
   const checkIfUserExists = async (email) => {

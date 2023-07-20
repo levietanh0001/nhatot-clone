@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import styles from './Auth.module.scss';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
+import ForgetPasswordForm from './ForgetPasswordForm';
 
 
 export const RegisterContent = () => {
@@ -24,6 +25,29 @@ export const LoginContent = () => {
       <LoginAlts />
       <SocialLogin />
       <RegisterNew />
+    </>
+  );
+};
+
+
+export const ForgetPasswordContent = () => {
+  return (
+    <>
+      <Logo />
+      <ForgetPasswordForm />
+      <LoginAlts />
+      <SocialLogin />
+      <RegisterNew />
+    </>
+  );
+};
+
+export const PageForgetPasswordContent = () => {
+  return (
+    <>
+      <div className={styles['inner-wrapper']}>
+        <ForgetPasswordContent />
+      </div>
     </>
   );
 };

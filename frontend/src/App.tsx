@@ -6,6 +6,9 @@ import "./App.scss";
 import Counter from "./components/counter";
 import RegisterPage from "./pages/RegisterPage";
 import { AuthProvider } from "./contexts/auth/AuthContext";
+import AuthRequired from "./components/auth/AuthRequired";
+import ForgetPasswordPage from "./pages/ForgetPassword";
+import AsBroker from "./components/auth/AsBroker";
 const HomePage = lazy(() => import("./pages/HomePage"));
 const ProductListPage = lazy(() => import("./pages/ProductListPage"));
 const PostPage = lazy(() => import("./pages/PostPage"));
@@ -34,17 +37,25 @@ function App() {
           <Routes>
 
             <Route path="/" element={<SuspenseComponent><HomePage /></SuspenseComponent>}></Route>
-            <Route path="/post-product" element={<SuspenseComponent><PostPage /></SuspenseComponent>}></Route>
+            <Route path="/post-product" element={<AuthRequired><SuspenseComponent><PostPage /></SuspenseComponent></AuthRequired>}></Route>
             <Route path="/product" element={<SuspenseComponent><ProductPage /></SuspenseComponent>}></Route>
             <Route path="/product-list" element={<SuspenseComponent><ProductListPage /></SuspenseComponent>}></Route>
-            <Route path="/user-profile" element={<SuspenseComponent><UserProfilePage /></SuspenseComponent>}></Route>
-
             <Route path="/chat" element={<SuspenseComponent><ChatPage /></SuspenseComponent>}></Route>
+
             <Route path="/login" element={<SuspenseComponent><LoginPage /></SuspenseComponent>}></Route>
             <Route path="/register" element={<SuspenseComponent><RegisterPage /></SuspenseComponent>}></Route>
-            <Route path="/admin" element={<SuspenseComponent><AdminPage /></SuspenseComponent>}>
-              <Route path="dashboard" element={<SuspenseComponent><Dashboard /></SuspenseComponent>}></Route>
-            </Route>
+            <Route path="/forget-password" element={<SuspenseComponent><ForgetPasswordPage /></SuspenseComponent>}></Route>
+            <Route path="/user-profile" element={<SuspenseComponent><UserProfilePage /></SuspenseComponent>}></Route>
+
+            {/* in need of a page that set role as broker */}
+            <Route path="/dashboard" element={
+              <AuthRequired>
+                <AsBroker>
+                  <SuspenseComponent><Dashboard /></SuspenseComponent>
+                </AsBroker>
+              </AuthRequired>
+            }></Route>
+
             <Route path="*" element={<SuspenseComponent><NotFound /></SuspenseComponent>}></Route>
 
           </Routes>

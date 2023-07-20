@@ -12,7 +12,8 @@ interface IDropdownMenuItem {
   iconClass?: string;
   labelClass?: string;
 
-  onClick?: React.MouseEventHandler<HTMLDivElement>
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
+  show?: boolean;
 }
 
 const DropdownMenuItem: React.FC<IDropdownMenuItem> = (props) => {
@@ -28,9 +29,15 @@ const DropdownMenuItem: React.FC<IDropdownMenuItem> = (props) => {
 
     isTitle = false,
     onClick,
+
+    show = true,
     ...rest
   } = props;
 
+  if(!show) {
+    return null;
+  }
+  
   return (
     <div 
       className={clsx({ 

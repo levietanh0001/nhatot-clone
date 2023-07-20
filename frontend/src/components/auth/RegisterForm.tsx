@@ -9,6 +9,8 @@ import { registerFormSchema } from '~/schemas/auth';
 import { useNavigate } from 'react-router-dom';
 import FloatingLabelInput from '../input/FloatingLabelInput';
 import { AuthContext } from '~/contexts/auth/AuthContext';
+import { promiseWrapper } from '~/utils/function.util';
+import { FirebaseError } from 'firebase/app';
 
 type FormFieldValues = {
   email: string;
@@ -24,7 +26,6 @@ const RegisterForm = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
-  const [error, setError] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   const navigate = useNavigate();
@@ -39,61 +40,39 @@ const RegisterForm = () => {
     e.preventDefault();
     console.log({ data });
 
-    try {
-      // setError(null);
-      setLoading(true);
-
-      await authContext?.registerUser(email, password);
-
-      toast('Đăng ký tài khoản thành công', {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: true,
-        closeOnClick: false,
-        pauseOnHover: false,
-        draggable: false,
-        progress: undefined,
-        theme: "light",
-      });
-
-      setTimeout(() => {
-        navigate('/');
-      }, 2000);
-
-      // throw new Error();
-
-    } catch(e) {
-
-      console.error(e);
-      setError(e);
-      toast('Lỗi khi đăng ký tài khoản, vui lòng thử lại sau', {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: false,
-        pauseOnHover: false,
-        draggable: false,
-        progress: undefined,
-        theme: "light",
-      });
-    } finally {
+    setLoading(true);
+    toast.promise(promiseWrapper(authContext?.registerUser(email, password)), {
+      pending: 'Đang thực hiện yêu cầu...',
+      success: 'Gửi email xác nhận thành công',
+      error: {
+        render({ data }) {
+          if(data instanceof FirebaseError && data.code === 'auth/email-already-in-use') {
+            return `Lỗi: Email đã tồn tại`;
+          } else {
+            console.log(data);
+            return `Lỗi: ${JSON.stringify((data))}`;
+          }
+        }
+      },
+    }).then(() => {
       setLoading(false);
-    }
+      navigate('/login');
+    }).catch(e => {
+      console.error(e);
+    }).finally(() => {
+      setLoading(false);
+    });
 
   };
 
   return (
     <>
       {/* {JSON.stringify(error)} */}
-      {!error && <ToastContainer className={styles['success-toast-container']} bodyClassName={styles['success-toast-body']} toastClassName={styles['success-toast-wrapper']} />}
-      {error && <ToastContainer className={styles['error-toast-container']} bodyClassName={styles['error-toast-body']} toastClassName={styles['error-toast-wrapper']} />}
+      <ToastContainer position='top-center' hideProgressBar theme='colored' autoClose={5000} />
       
       <FormProvider {...form}>
-        <form
-          className={styles['form']}
-          onSubmit={handleSubmit(onSubmit)}
-          noValidate
-        >
+        <form className={styles['form']} onSubmit={handleSubmit(onSubmit)} noValidate>
+          
           <h1 className={styles['main-title']}>Đăng Ký</h1>
           <FloatingLabelInput
             label='Email'
@@ -119,10 +98,6 @@ const RegisterForm = () => {
             inputValue={confirmPassword}
             onInputValueChange={(event) => setConfirmPassword(event.target.value)}
           />
-
-          <div className={styles['form-control']}>
-            <a href='#' className={styles['forget-password']}>Quên mật khẩu?</a>
-          </div>
 
           <div className={styles['form-control']}>
             <button className={styles['submit-btn']} type='submit' disabled={loading}>Đăng ký</button>

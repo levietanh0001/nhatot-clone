@@ -1,11 +1,12 @@
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import styles from './SecondTopNav.module.scss';
 import DropdownMenu from '../dropdown-menu/DropdownMenu';
 import DropdownMenuItem from '../dropdown-menu/DropdownMenuItem';
+import { AuthContext } from '~/contexts/auth/AuthContext';
 
 const SecondTopNav = () => {
   return (
@@ -23,128 +24,182 @@ const SecondTopNav = () => {
   );
 };
 
+
 const Dropdown = () => {
+
+  const authContext = useContext(AuthContext);
+  const user = authContext?.user;
+  const photoUrl = user?.providerData[0]['photoURL'] ?? '';
+  const userName = user?.providerData[0]['displayName'] ?? user?.providerData[0]['email'];
 
   const [show, setShow] = useState<boolean>(false);
 
+  const options = [
+    {
+      href: '/login',
+      label: 'Đăng nhập/ Đăng ký',
+      Icon: <svg xmlns='http://www.w3.org/2000/svg' height='30px' width='30px' viewBox='0 0 512 512'><path d='M406.5 399.6C387.4 352.9 341.5 320 288 320H224c-53.5 0-99.4 32.9-118.5 79.6C69.9 362.2 48 311.7 48 256C48 141.1 141.1 48 256 48s208 93.1 208 208c0 55.7-21.9 106.2-57.5 143.6zm-40.1 32.7C334.4 452.4 296.6 464 256 464s-78.4-11.6-110.5-31.7c7.3-36.7 39.7-64.3 78.5-64.3h64c38.8 0 71.2 27.6 78.5 64.3zM256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-272a40 40 0 1 1 0-80 40 40 0 1 1 0 80zm-88-40a88 88 0 1 0 176 0 88 88 0 1 0 -176 0z' /></svg>,
+      show: !Boolean(authContext?.user),
+    },
+    {
+      href: '#',
+      label: 'Đăng xuất',
+      Icon: <img height='32px' width='32px' src="https://static.chotot.com/storage/icons/svg/logout.svg" alt="Đăng xuất" />,
+      show: Boolean(authContext?.user),
+      onClick: function(event) {
+        authContext?.logoutUser();
+      }
+    },
+    ...dropDownOptions
+  ];
+
   return (
-    <DropdownMenu 
-      show={show} 
-      setShow={setShow}
-      menuBtn={<>
-        <svg width='27px' height='27px' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path fillRule='evenodd' clipRule='evenodd' d='M9.99935 3.08366C6.17938 3.08366 3.08268 6.18036 3.08268 10.0003C3.08268 13.8203 6.17938 16.917 9.99935 16.917C13.8193 16.917 16.916 13.8203 16.916 10.0003C16.916 6.18036 13.8193 3.08366 9.99935 3.08366ZM1.91602 10.0003C1.91602 5.53602 5.53505 1.91699 9.99935 1.91699C14.4637 1.91699 18.0827 5.53602 18.0827 10.0003C18.0827 14.4646 14.4637 18.0837 9.99935 18.0837C5.53505 18.0837 1.91602 14.4646 1.91602 10.0003Z' fill='#222222'></path><path fillRule='evenodd' clipRule='evenodd' d='M9.99935 6.83366C8.59562 6.83366 7.45768 7.9716 7.45768 9.37533C7.45768 10.779 8.59562 11.917 9.99935 11.917C11.4031 11.917 12.541 10.779 12.541 9.37533C12.541 7.9716 11.4031 6.83366 9.99935 6.83366ZM6.29102 9.37533C6.29102 7.32727 7.95129 5.66699 9.99935 5.66699C12.0474 5.66699 13.7077 7.32727 13.7077 9.37533C13.7077 11.4234 12.0474 13.0837 9.99935 13.0837C7.95129 13.0837 6.29102 11.4234 6.29102 9.37533Z' fill='#222222'></path><path fillRule='evenodd' clipRule='evenodd' d='M10.0005 13.0837C9.06941 13.0837 8.15655 13.3415 7.36306 13.8285C6.56957 14.3156 5.92644 15.0128 5.50496 15.843C5.35912 16.1303 5.00802 16.2449 4.72075 16.0991C4.43349 15.9532 4.31884 15.6021 4.46469 15.3149C4.98369 14.2926 5.77564 13.434 6.75275 12.8342C7.72986 12.2345 8.85396 11.917 10.0005 11.917C11.1469 11.917 12.271 12.2345 13.2481 12.8342C14.2253 13.434 15.0172 14.2926 15.5362 15.3149C15.6821 15.6021 15.5674 15.9532 15.2801 16.0991C14.9929 16.2449 14.6418 16.1303 14.4959 15.843C14.0745 15.0128 13.4313 14.3156 12.6378 13.8285C11.8444 13.3415 10.9315 13.0837 10.0005 13.0837Z' fill='#222222'></path></svg>
-        <span style={{ display: 'flex', alignItems: 'center' }}>Tài khoản</span>
-        <svg data-type='monochrome' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='10px' height='10px' fill='none' id='arrowDownB'><path d='M7.9 156.8l2.8 3.3 214.8 247.2c7.3 8.4 18.2 13.6 30.3 13.6 12.2 0 23.1-5.4 30.3-13.6l214.7-246.7 3.6-4.1c2.7-3.9 4.3-8.7 4.3-13.7 0-13.7-11.7-25-26.2-25h-453c-14.5 0-26.2 11.2-26.2 25 0 5.2 1.7 10.1 4.6 14z' fill='currentColor'></path></svg>
-      </>}
+    <DropdownMenu
+      show={show} setShow={setShow}
+      menuBtn={
+        <>
+          {!user && (
+            <>
+              <svg width='27px' height='27px' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path fillRule='evenodd' clipRule='evenodd' d='M9.99935 3.08366C6.17938 3.08366 3.08268 6.18036 3.08268 10.0003C3.08268 13.8203 6.17938 16.917 9.99935 16.917C13.8193 16.917 16.916 13.8203 16.916 10.0003C16.916 6.18036 13.8193 3.08366 9.99935 3.08366ZM1.91602 10.0003C1.91602 5.53602 5.53505 1.91699 9.99935 1.91699C14.4637 1.91699 18.0827 5.53602 18.0827 10.0003C18.0827 14.4646 14.4637 18.0837 9.99935 18.0837C5.53505 18.0837 1.91602 14.4646 1.91602 10.0003Z' fill='#222222'></path><path fillRule='evenodd' clipRule='evenodd' d='M9.99935 6.83366C8.59562 6.83366 7.45768 7.9716 7.45768 9.37533C7.45768 10.779 8.59562 11.917 9.99935 11.917C11.4031 11.917 12.541 10.779 12.541 9.37533C12.541 7.9716 11.4031 6.83366 9.99935 6.83366ZM6.29102 9.37533C6.29102 7.32727 7.95129 5.66699 9.99935 5.66699C12.0474 5.66699 13.7077 7.32727 13.7077 9.37533C13.7077 11.4234 12.0474 13.0837 9.99935 13.0837C7.95129 13.0837 6.29102 11.4234 6.29102 9.37533Z' fill='#222222'></path><path fillRule='evenodd' clipRule='evenodd' d='M10.0005 13.0837C9.06941 13.0837 8.15655 13.3415 7.36306 13.8285C6.56957 14.3156 5.92644 15.0128 5.50496 15.843C5.35912 16.1303 5.00802 16.2449 4.72075 16.0991C4.43349 15.9532 4.31884 15.6021 4.46469 15.3149C4.98369 14.2926 5.77564 13.434 6.75275 12.8342C7.72986 12.2345 8.85396 11.917 10.0005 11.917C11.1469 11.917 12.271 12.2345 13.2481 12.8342C14.2253 13.434 15.0172 14.2926 15.5362 15.3149C15.6821 15.6021 15.5674 15.9532 15.2801 16.0991C14.9929 16.2449 14.6418 16.1303 14.4959 15.843C14.0745 15.0128 13.4313 14.3156 12.6378 13.8285C11.8444 13.3415 10.9315 13.0837 10.0005 13.0837Z' fill='#222222'></path></svg>
+              <span style={{ display: 'flex', alignItems: 'center' }}>Tài khoản</span>
+              <svg data-type='monochrome' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='10px' height='10px' fill='none' id='arrowDownB'><path d='M7.9 156.8l2.8 3.3 214.8 247.2c7.3 8.4 18.2 13.6 30.3 13.6 12.2 0 23.1-5.4 30.3-13.6l214.7-246.7 3.6-4.1c2.7-3.9 4.3-8.7 4.3-13.7 0-13.7-11.7-25-26.2-25h-453c-14.5 0-26.2 11.2-26.2 25 0 5.2 1.7 10.1 4.6 14z' fill='currentColor'></path></svg>
+            </>
+          )}
+          {user && (
+            <>
+              {/* {JSON.stringify(user.providerData[0])} */}
+              {photoUrl && <img src={photoUrl} alt='Ảnh đại diện'/>}
+              <span style={{ display: 'flex', alignItems: 'center' }}>{userName}</span>
+              <svg data-type='monochrome' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='10px' height='10px' fill='none' id='arrowDownB'><path d='M7.9 156.8l2.8 3.3 214.8 247.2c7.3 8.4 18.2 13.6 30.3 13.6 12.2 0 23.1-5.4 30.3-13.6l214.7-246.7 3.6-4.1c2.7-3.9 4.3-8.7 4.3-13.7 0-13.7-11.7-25-26.2-25h-453c-14.5 0-26.2 11.2-26.2 25 0 5.2 1.7 10.1 4.6 14z' fill='currentColor'></path></svg>
+            </>
+          )}
+        </>
+      }
     >
       {
-        dropDownOptions.map((item, index) => (
-          <DropdownMenuItem key={index} {...item} />
-        ))
+        options.map((item, index) => {
+          return <DropdownMenuItem key={index} {...item} />
+        })
       }
     </DropdownMenu>
   );
 };
 
+
 const dropDownOptions = [
-  {
-    href: '/login',
-    label: 'Đăng nhập/ Đăng ký',
-    Icon: <svg xmlns='http://www.w3.org/2000/svg' height='30px' width='30px' viewBox='0 0 512 512'><path d='M406.5 399.6C387.4 352.9 341.5 320 288 320H224c-53.5 0-99.4 32.9-118.5 79.6C69.9 362.2 48 311.7 48 256C48 141.1 141.1 48 256 48s208 93.1 208 208c0 55.7-21.9 106.2-57.5 143.6zm-40.1 32.7C334.4 452.4 296.6 464 256 464s-78.4-11.6-110.5-31.7c7.3-36.7 39.7-64.3 78.5-64.3h64c38.8 0 71.2 27.6 78.5 64.3zM256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-272a40 40 0 1 1 0-80 40 40 0 1 1 0 80zm-88-40a88 88 0 1 0 176 0 88 88 0 1 0 -176 0z' /></svg>,
-  },
   {
     href: '#',
     label: 'Quản lý đơn hàng',
-    isTitle: true
+    isTitle: true,
+    show: true,
   },
   {
     href: '#',
     label: 'Đơn mua',
     Icon: <img src='https://static.chotot.com/storage/chotot-icons/svg/escrow_buy_orders.svg' alt='Đơn mua'/>,
+    show: true,
   },
   {
     href: '#',
     Icon: <img src='https://static.chotot.com/storage/chotot-icons/svg/escrow-orders.svg' alt='Đơn bán'/>,
     label: 'Đơn bán',
+    show: true,
   },
   {
     href: '#',
     Icon: <img src='https://static.chotot.com/storage/chotot-icons/svg/escrow.svg' alt='Đơn bán'/>,
     label: 'Ví bán hàng',
+    show: true,
   },
   {
     href: '#',
     label: 'Tiện ích',
-    isTitle: true
+    isTitle: true,
+    show: true,
   },
   {
     href: '#',
     Icon: <img src='https://static.chotot.com/storage/chotot-icons/svg/menu-saved-search.svg' alt='Tin đăng đã lưu'/>,
     label: 'Tin đăng đã lưu',
+    show: true,
   },
   {
     href: '#',
     Icon: <img src='https://static.chotot.com/storage/chotot-icons/svg/menu-saved-search.svg' alt='Tìm kiếm đã lưu'/>,
     label: 'Tìm kiếm đã lưu',
+    show: true,
   },
   {
     href: '#',
     Icon: <img src='https://static.chotot.com/storage/chotot-icons/svg/menu-rating-management.svg' alt='Đánh giá từ tôi'/>,
     label: 'Đánh giá từ tôi',
+    show: true,
   },
   {
     href: '#',
     label: 'Dịch vụ trả phí',
-    isTitle: true
+    isTitle: true,
+    show: true,
   },
   {
     href: '#',
     Icon: <img width='30' height='30' src='https://st.chotot.com/storage/chotot-icons/svg/ct-coin.svg' alt='Đồng Tốt' />,
-    label: 'Đồng tốt'
+    label: 'Đồng tốt',
+    show: true,
   },
   {
     href: '#',
     Icon: <img width='30' height='30' src='https://st.chotot.com/storage/chotot-icons/svg/sub-pro.svg' alt='Gói PRO' />,
-    label: 'Gói Pro'
+    label: 'Gói Pro',
+    show: true,
   },
   {
     href: '#',
     Icon: <img width='30' height='30' src='https://st.chotot.com/storage/chotot-icons/svg/circle-list.svg' alt='Lịch sử giao dịch' />,
-    label: 'Lịch sử giao dịch'
+    label: 'Lịch sử giao dịch',
+    show: true,
   },
   {
     href: '#',
     Icon: <img width='30' height='30' src='https://st.chotot.com/storage/chotot-icons/svg/circle-plus.svg' alt='Tạo Cửa hàng/Chuyên trang' />,
-    label: 'Tạo cửa hàng/Chuyên trang'
+    label: 'Tạo cửa hàng/Chuyên trang',
+    show: true,
   },
   {
     href: '#',
     label: 'Ưu đãi, Khuyến mãi',
-    isTitle: true
+    isTitle: true,
+    show: true,
   },
   {
     href: '#',
     Icon: <img src='https://storage.googleapis.com/static-chotot-com/storage/icons/svg/reward-icon.svg' width={30} height={30} alt='Chợ Tốt ưu đãi' />,
-    label: 'Chợ tốt ưu đãi'
+    label: 'Chợ tốt ưu đãi',
+    show: true,
   },
   {
     href: '#',
     label: 'Khác',
-    isTitle: true
+    isTitle: true,
+    show: true,
   },
   {
     href: '#',
     Icon: <img src='https://storage.googleapis.com/static-chotot-com/storage/icons/svg/setting.svg' alt='Cài đặt tài khoản' width={30} height={30} />,
-    label: 'Cài đặt tài khoản'
+    label: 'Cài đặt tài khoản',
+    show: true,
   },
   {
     href: '#',
     Icon: <img src='https://storage.googleapis.com/static-chotot-com/storage/icons/svg/help.svg' alt='Trợ giúp' width={30} height={30} />,
-    label: 'Trợ giúp'
+    label: 'Trợ giúp',
+    show: true,
   },
 ];
 
+
 const Toolbar = () => {
+
   return (
     <div className={styles['toolbar']}>
 

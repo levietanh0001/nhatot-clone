@@ -8,24 +8,14 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import styles from './LoginForm.module.scss';
 import { loginFormSchema } from '~/schemas/auth';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import FloatingLabelInput from '../input/FloatingLabelInput';
+import { promiseWrapper } from '~/utils/function.util';
 
 
 type FormFieldValues = {
   email: string;
   password: string;
-};
-
-const toastOptions: ToastOptions = {
-  position: "top-right",
-  autoClose: false,
-  hideProgressBar: true,
-  closeOnClick: false,
-  pauseOnHover: false,
-  draggable: false,
-  progress: undefined,
-  theme: "light",
 };
 
 const LoginForm = () => {
@@ -51,37 +41,41 @@ const LoginForm = () => {
     e.preventDefault();
     console.log({ data });
 
-    try {
-      setLoading(true);
-      
-      await authContext?.loginUser(email, password);
-      navigate('/');
-      console.log('no error occured');
-      // throw new Error();
-
-    } catch (e) {
-      console.log('error occured');
-
-      if(e instanceof FirebaseError && e.code === 'auth/user-not-found') {
-        console.error(e);
-        toast('Tài khoản người dùng không tồn tại, vui lòng đăng ký', toastOptions);
-        console.log('user does not exist');
-      } else {
-        console.error(e);
-        toast('Lỗi khi đăng nhập, vui lòng thử lại sau', toastOptions);
-        console.log('general error');
-      }
-      
-    } finally {
+    setLoading(true);
+    toast.promise(promiseWrapper(authContext?.loginUser(email, password)), {
+      pending: 'Đang thực hiện yêu cầu...',
+      success: 'Đăng nhập thành công',
+      error: {
+        render({ data }) {
+          if(data instanceof FirebaseError && data.code === 'auth/invalid-email') {
+            return `Lỗi: Email không hợp lệ`;
+          } else if(data instanceof FirebaseError && data.code === 'auth/invalid-email-verified') {
+            return `Lỗi: Email chưa được xác nhận`;
+          } else if(data instanceof FirebaseError && data.code === 'auth/user-not-found') {
+            return `Lỗi: Tài khoản này không tồn tại, vui lòng đăng ký mới`;
+          } else if(data instanceof FirebaseError && data.code === 'auth/wrong-password') {
+            return `Lỗi: Mật khẩu sai`;
+          } else {
+            console.log(data);
+            return `Lỗi: ${JSON.stringify((data))}`;
+          }
+        }
+      },
+    }).then(() => {
       setLoading(false);
-    }
+      navigate('/');
+    }).catch(e => {
+      console.error(e);
+    }).finally(() => {
+      setLoading(false);
+    });
 
   };
 
   return (
     <>
       {/* {JSON.stringify(error)} */}
-      <ToastContainer className={styles['error-toast-container']} bodyClassName={styles['error-toast-body']} toastClassName={styles['error-toast-wrapper']} />
+      <ToastContainer position='top-center' hideProgressBar theme='colored' autoClose={false} />
 
       <FormProvider {...form}>
         <form
@@ -108,7 +102,7 @@ const LoginForm = () => {
           />
 
           <div className={styles['form-control']}>
-            <a href='#' className={styles['forget-password']}>Quên mật khẩu?</a>
+            <Link to='/forget-password' className={styles['forget-password']}>Quên mật khẩu?</Link>
           </div>
 
           <div className={styles['form-control']}>

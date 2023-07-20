@@ -80,3 +80,10 @@
   text-align: left;
   font-weight: 600;
 }
+
+@media (max-width: 420px) {
+  .menu-btn {
+    display: none;
+  }
+
+}

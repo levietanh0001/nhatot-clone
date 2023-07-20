@@ -145,15 +145,30 @@
 
 }
 
+@media (max-width: 576px) {
+  .toolbar {
+    flex: 1;
+  }
+}
 
 @media (max-width: 420px) {
 
+  .wrapper {
+    gap: 10px;
+    justify-content: space-between;
+  }
+
   .toolbar-menu {
-    display: block;
+    display: initial;
+    flex: 1;
+    text-align: left;
   }
 
   .logo {
-    flex-shrink: 1;
+    flex: 1;
   }
 
+  .toolbar {
+    gap: 0;
+  }
 }
