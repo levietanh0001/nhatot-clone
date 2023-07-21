@@ -44,15 +44,15 @@ const directionOptions = [
 const legalDocsStatus = [
   {
     label: 'Đã có sổ',
-    value: 1,
+    value: 'dacoso',
   },
   {
     label: 'Đang chờ sổ',
-    value: 0,
+    value: 'dangchoso',
   },
   {
     label: 'Giấy tờ khác',
-    value: -1,
+    value: 'giaytokhac',
   },
 ];
 

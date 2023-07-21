@@ -3,22 +3,93 @@ const Product = require('../models/product.model');
 const validationUtils = require('../utils/validation.util');
 const fileUtils = require('../utils/file.util');
 const errorsService = require('../controllers/errors.controller');
+const ProductImage = require('../models/product-image.model');
 
 
 function createProduct(req, res, next) {
-  res.status(200).json({
-    body: req.body,
-    file: req.file,
-    files: req.files
-  })
+
+  const imageUrls = req.files.map(file => {
+    return `${req.protocol}://${req.get('host')}/uploads/images/${file.filename}`
+  });
+
+  // const imageList = imageUrls.map(imageUrl => (
+  //   {
+  //     imageUrl: imageUrl
+  //   }
+  // ))
+
+  // res
+  //   .status(200)
+  //   .json({
+  //     // url: `${req.protocol}://${req.get('host')}/uploads/images/${req.imageName}`,
+  //     imageUrls: imageUrls,
+  //     // result,
+  //     body: req.body,
+  //     files: req.files,
+  //     uid: req.uid
+  //   })
+
+  Product
+    .create({...req.body, userId: req.uid})
+    .then(result => {
+
+      imageUrls.forEach(url => {
+        result.createProduct_image({
+          imageUrl: url
+        })
+      });
+
+      res
+        .status(200)
+        .json({
+          result,
+          body: req.body,
+          files: req.files,
+          uid: req.uid,
+          productId: result.id
+        })
+    })
+    .catch(error => {
+
+      console.error(error);
+      res.status(403).json({
+        message: 'Cannot create product',
+        error
+      })
+    })
+
 }
 
+
 function uploadProductVideo(req, res, next) {
-  res.status(200).json({
-    body: req.body,
-    file: req.file,
-    files: req.files
-  })
+
+  const productId = req.query['productId'];
+  const videoUrl = `${req.protocol}://${req.get('host')}/uploads/videos/${req.file.filename}`
+
+  Product
+    .findByPk(productId)
+    .then(result => {
+      result.createProduct_video({
+        videoUrl
+      });
+
+      res.status(200).json({
+        videoUrl,
+        body: req.body,
+        file: req.file,
+        uid: req.uid
+      })
+
+    })
+    .catch(error => {
+
+      console.error(error);
+      res.status(403).json({
+        message: 'Cannot create video',
+        error
+      })
+    })
+
 }
 
 // function createProduct(req, res, next) {

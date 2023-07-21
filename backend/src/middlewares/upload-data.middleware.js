@@ -47,10 +47,13 @@ function uploadMultipleImages(req, res, next) {
 
         const dest = path.join(uploadDir, 'images');
         mkDirIfNotExists(dest);
+        
         cb(null, dest); // error = null, destination = 'uploads'
       },
       filename: (req, file, cb) => {
-        cb(null, new Date().toISOString() + '-' + file.fieldname + '-' + file.originalname)
+        req.imageName = new Date().toISOString() + file.originalname;
+        cb(null, new Date().toISOString() + file.originalname);
+        // cb(null, new Date().toISOString() + '-' + file.fieldname + '-' + file.originalname)
       }
     }),
     fileFilter: function(req, file, cb) {
@@ -91,7 +94,9 @@ function uploadVideo(req, res, next) {
         cb(null, dest); // error = null, destination = 'uploads'
       },
       filename: (req, file, cb) => {
-        cb(null, new Date().toISOString() + '-' + file.fieldname + '-' + file.originalname)
+        req.videoName = new Date().toISOString() + file.originalname;
+        cb(null, req.videoName)
+        // cb(null, new Date().toISOString() + '-' + file.fieldname + '-' + file.originalname)
       }
     }),
     fileFilter: function(req, file, cb) {

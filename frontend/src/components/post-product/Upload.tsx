@@ -109,10 +109,12 @@ const UploadVideo = (props) => {
 
   useEffect(() => {
 
-    generateVideoThumbnail(video)
-      .then(url => setThumbnailUrl(url))
-      .catch(error => console.error(error));
-  });
+    if(video) {
+      generateVideoThumbnail(video)
+        .then(url => setThumbnailUrl(url))
+        .catch(error => console.error(error));
+    }
+  }, [video]);
 
   return (
     <>

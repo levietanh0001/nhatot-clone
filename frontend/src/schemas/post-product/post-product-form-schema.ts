@@ -66,7 +66,7 @@ const postProductSchema = object({
   postTitle:
     string().typeError('').required('Tiêu đề không thể trống').min(10, 'Tiêu đề cần ít nhất 10 ký tự').max(100, 'Chỉ cho phép tối đa 100 ký tự'),
   description:
-    string().typeError('').required('Miêu tả không thể trống').min(10, 'Miêu tả cần ít nhất 6 ký tự').max(100, 'Chỉ cho phép tối đa 100 ký tự'),
+    string().typeError('').required('Miêu tả không thể trống').min(10, 'Miêu tả cần ít nhất 6 ký tự').max(200, 'Chỉ cho phép tối đa 200 ký tự'),
   // userType:
   //   mixed().oneOf(['canhan', 'moigioi']).required('Xin hãy chọn tư cách thành viên'),
 

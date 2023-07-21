@@ -16,7 +16,9 @@
   & textarea {
     padding-top: 20px !important;
   }
+}
 
+.expand {
   & textarea:focus {
     height: 250px;
   }

@@ -40,10 +40,10 @@ const asNonNegativeFloat = (allowNull = true) => {
   }
 }
 
-const asOneOf = (defaultValue, ...options) => {
+const asOneOf = (...options) => {
   return {
     type: Sequelize.ENUM(...options),
-    defaultValue: defaultValue
+    defaultValue: [...options][0][0]
   }
 }
 

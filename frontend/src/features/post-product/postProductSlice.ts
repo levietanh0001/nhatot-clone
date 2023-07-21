@@ -36,7 +36,7 @@ const initialState: IInitialState = {
     numBathrooms: '',
     balconDirection: '',
     mainDoorDirection: '',
-    hasLegalDocs: '',
+    hasLegalDocs: 'dangchoso',
     furnitureStatus: '',
     area: '',
     price: '',
@@ -126,6 +126,9 @@ const postProductSlice = createSlice({
     clearVideo: (state) => {
       state.product.video = null;
     },
+    resetStates: () => {
+      return initialState;
+    }
   },
 });
 

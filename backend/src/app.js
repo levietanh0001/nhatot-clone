@@ -29,7 +29,7 @@ const errorsService = require('./controllers/errors.controller');
 
 
 // import models: into app.js, same place as sequelize.sync() for it to work
-const { sequelize } = require('./utils/database.util');
+const { sequelize, getMagicMethods } = require('./utils/database.util');
 const Product = require('./models/product.model');
 const User = require('./models/user.model');
 const UserProfile = require('./models/user-profile.model');
@@ -40,6 +40,9 @@ const { authenticateUser } = require('./middlewares/auth.middleware');
 const { rootDir } = require('./utils/path.util');
 const { check } = require('express-validator');
 const firebaseRouter = require('./routes/firebase-auth.route');
+const { returnError } = require('./utils/error.util');
+const ProductImage = require('./models/product-image.model');
+const ProductVideo = require('./models/product-video.model');
 
 
 // define associations
@@ -51,7 +54,10 @@ FavoriteList.belongsTo(User);
 User.hasOne(FavoriteList);
 FavoriteList.belongsToMany(Product, { through: FavoriteItem });
 Product.belongsToMany(FavoriteList, { through: FavoriteItem });
-
+Product.hasMany(ProductImage);
+ProductImage.belongsTo(Product);
+Product.hasMany(ProductVideo);
+ProductVideo.belongsTo(Product);
 
 // init express app
 const app = express();
@@ -81,7 +87,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 // middleware that always runs first before the rest
 app.use('/', (req, res, next) => {
   console.log('this always run first before any request');
-  // console.log(getMagicMethods(User));
+  console.log(getMagicMethods(Product));
   // console.log(rootDir);
   next();
 });
@@ -95,7 +101,7 @@ app.get('/', (req, res, next) => {
 
 
 // authenticate user for subsequent requests to resources (attach user object to req object)
-app.use(authenticateUser);
+// app.use(authenticateUser);
 
 
 // graphql
@@ -138,7 +144,8 @@ sequelize
     });
   })
   .catch(error => {
-    errorsService.throwError(500, 'Internal Server Error', error.message);
+    console.error(error);
+    throw new Error(error);
   });
 
 

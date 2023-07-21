@@ -2,6 +2,8 @@ import styles from './Product.module.scss';
 import ProductThumbGallery from './ProductThumbGallery';
 
 const Product = () => {
+  
+
   return (
     <>
       <ProductThumbGallery />

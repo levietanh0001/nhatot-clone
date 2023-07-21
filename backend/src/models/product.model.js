@@ -17,10 +17,10 @@ const Product = sequelize.define('product', {
     ...asString(1, 255)
   },
   category: {
-    ...asOneOf('canhochungcu', ['canhochungcu', 'nhao', 'dat', 'vanphong', 'matbangkinhdoanh', 'phongtro'])
+    ...asOneOf(['', 'canhochungcu', 'nhao', 'khac'])
   },
   type: {
-    ...asOneOf('muaban', ['muaban', 'chothue', 'duan'])
+    ...asOneOf(['', 'muaban', 'chothue', 'duan'])
   },
   price: {
     type: Sequelize.DOUBLE.UNSIGNED,
@@ -31,9 +31,6 @@ const Product = sequelize.define('product', {
   },
   title: {
     ...asString(0, 255)
-  },
-  imageUrl: {
-    ...asString(0, 2048, false)
   },
   description: {
     ...asString(0, 255)
@@ -51,14 +48,13 @@ const Product = sequelize.define('product', {
     ...asNonNegativeInt()
   },
   mainDoorDirection: {
-    ...asOneOf('', directions)
+    ...asOneOf(directions)
   },
   balconDirection: {
-    ...asOneOf('', directions)
+    ...asOneOf(directions)
   },
   hasLegalDocs: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: false
+    ...asOneOf(['dangchoso', 'dacoso', 'giaytokhac'])
   },
   deposit: {
     ...asNonNegativeInt()

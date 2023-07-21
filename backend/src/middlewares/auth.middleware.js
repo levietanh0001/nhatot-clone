@@ -1,5 +1,7 @@
 const errorsService = require('../controllers/errors.controller');
 const { verifyToken, accessPublicKey, extractAccessTokenFromRequest, verifyAccessTokenAsync } = require('../utils/cryptography.util');
+const { returnError } = require('../utils/error.util');
+const { auth } = require('../utils/firebase.util');
 const { redisClient } = require('../utils/redis-store.util');
 
 
@@ -115,10 +117,35 @@ function authenticateUser(req, res, next) {
     });
 };
 
+function authRequired(req, res, next) {
+  const token = req.headers?.['authorization']?.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({
+      error: 'Unauthenticated',
+      message: 'User must login'
+    })
+  }
+
+  auth
+    .verifyIdToken(token)
+    .then((decodedToken) => {
+      const uid = decodedToken.uid;
+      req.uid = uid;
+      return next();
+    })
+    .catch(error => {
+      console.error(error);
+      returnError(res, 500, error);
+    })
+
+}
+
 
 module.exports = {
   loggedInRequired,
   adminOnly,
   notYetLoggedIn,
-  authenticateUser
+  authenticateUser,
+  authRequired
 };
