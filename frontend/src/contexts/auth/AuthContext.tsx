@@ -46,17 +46,6 @@ export const AuthProvider = ({ children }) => {
       setUser(currentUser);
       // setEmail(currentUser?.email as string);
       setLoading(false);
-
-      
-      // if (currentUser?.emailVerified) {
-      //   // email is verified.
-      //   setUser(currentUser);
-      //   setLoading(false);
-      // } else {
-      //   // email is not verified.
-      //   setUser(null);
-      //   setLoading(false);
-      // }
     
     })
 

@@ -66,7 +66,7 @@ const data = [
       'https://cdn.chotot.com/admincentre/I93AudxXzRuihZo-pP_GYUQdlDlWmS6ue6nA5Ql89e4/preset:raw/plain/be568cbf2ae0720df2cd3ee09ecf35c4-2818605396260909486.jpg',
     imgAlt: 'Mua bán bất động sản',
     href: '/product-list',
-    title: 'Mua bán',
+    title: 'Cần bán',
     content: `213214 tin đăng mua bán`,
   },
   {
@@ -82,8 +82,8 @@ const data = [
       'https://cdn.chotot.com/admincentre/e4OAdVx0dKh5BE-rE99uclbZ4wL3TzmkdmXUmtlUrCw/preset:raw/plain/db20d2a83102192e7e5e1cdb0719b25d-2818605604419105198.jpg',
     imgAlt: 'Dự án bất động sản',
     href: 'du-an-bds',
-    title: 'Dự án',
-    content: `432 dự án`,
+    title: 'Khác',
+    content: `432 sản phẩm`,
   },
   {
     imgSrc:

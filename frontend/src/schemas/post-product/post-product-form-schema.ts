@@ -24,7 +24,7 @@ const postProductSchema = object({
     string(),
   mainDoorDirection:
     string(),
-  hasLegalDocs:
+  legalDocsStatus:
     string(),
   furnitureStatus:
     string(),

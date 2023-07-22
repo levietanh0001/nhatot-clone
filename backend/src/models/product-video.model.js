@@ -11,7 +11,7 @@ const ProductVideo = sequelize.define('product_video', {
     primaryKey: true,
   },
   videoUrl: {
-    ...asString(0, 255, false, 'videoUrl')
+    ...asString(0, 255, true, 'videoUrl')
   }
 
 }, {

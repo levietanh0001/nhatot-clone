@@ -1,34 +1,39 @@
 'use strict';
 
 const { faker } = require('@faker-js/faker/locale/vi');
-const { randomBetween0And1, randomInRange, randomOption } = require('../src/utils/random.util');
+const { randomInRange, randomOption } = require('../src/utils/random.util');
 const { directions } = require('../src/utils/variables.util');
 
 
+const products = [...Array(10000)].map((item) => {
 
-
-const products = [...Array(10000)].map((product) => {
-
-  const randomCategory = randomOption(['muaban', 'chothue', 'duan']);
-  const randomPrice = randomCategory === 'muaban'? randomInRange(1*10**9, 100*10**9, 0.5*10**9):
-                      randomCategory === 'chothue'? randomInRange(5*10**6, 30*10**6, 0.5*10**6):
+  const randomCategory = randomOption(['canhochungcu', 'nhao', 'khac']);
+  const randomType = randomOption(['canban', 'chothue']);
+  const randomPrice = randomType === 'canban'? randomInRange(0.5*10**9, 100*10**9, 0.5*10**9):
+                      randomType === 'chothue'? randomInRange(5*10**6, 30*10**6, 0.5*10**6):
                       randomInRange(1*10**9, 100*10**9, 0.5*10**9);
+  const randomDeposit = randomType === 'canban'? randomInRange(50*10**6, 100*10**9, 10*10**6):
+                      randomType === 'chothue'? randomInRange(1*10**6, 30*10**6, 0.5*10**6):
+                      randomInRange(1*10**6, 100*10**9, 0.5*10**6);
 
   return {
-    title: faker.title,
+    type: randomType,
     category: randomCategory,
-    price: randomPrice,
-    address: faker.location.address,
-    imageUrl: faker.image.url(),
-    description: faker.lorem.lines({ min: 1, max: 5 }),
-    isVerified: randomBetween0And1(),
-    area: randomInRange(25, 150),
+    projectName: faker.lorem.lines(1),
+    address: faker.location.streetAddress(true),
     numBedrooms: randomInRange(1, 5, 1),
     numBathrooms: randomInRange(1, 5, 1),
     mainDoorDirection: randomOption(directions),
     balconDirection: randomOption(directions),
-    hasLegalDocs: randomBetween0And1(),
-    deposit: randomInRange(0, 1*10**9, 0.5*10**6),
+    legalDocsStatus: randomOption(['dacoso', 'dangchoso', 'giaytokhac']),
+    furnitureStatus: randomOption(['caocap', 'daydu', 'coban', 'khong']),
+    area: randomInRange(25, 150),
+    price: randomPrice,
+    deposit: randomDeposit,
+    postTitle: faker.lorem.lines(1),
+    description: faker.lorem.lines({ min: 1, max: 5 }),
+    userType: randomOption(['canhan', 'moigioi']),
+    userId: faker.string.uuid(),
     createdAt: new Date(),
     updatedAt: new Date(),
   }

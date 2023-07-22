@@ -81,7 +81,7 @@ const ProductDetails = ({
   onNumBathroomsChange,
   onBalconDirectionChange,
   onMainDirectionChange,
-  onHasLegalDocsChange,
+  onLegalDocsStatusChange,
   onFurnitureStatusChange,
   onAreaChange,
   onPriceChange,
@@ -129,17 +129,17 @@ const ProductDetails = ({
           </SelectInput>
           {/* <FloatingLabelInput inputValue={product.mainDoorDirection} onInputValueChange={onMainDirectionChange} name='mainDoorDirection' label='Hướng cửa chính' /> */}
           <SelectInput
-            name='hasLegalDocs'
-            onInputValueChange={onHasLegalDocsChange}
+            name='legalDocsStatus'
+            onInputValueChange={onLegalDocsStatusChange}
           >
             <SelectOption label='Giấy tờ pháp lý' value='' />
             {legalDocsStatus.map((item, index) => (
               <SelectOption key={index} {...item} />
             ))}
           </SelectInput>
-          {/* <FloatingLabelInput inputValue={product.hasLegalDocs} onInputValueChange={onHasLegalDocsChange} name='hasLegalDocs' label='Giấy tờ pháp lý' /> */}
+          {/* <FloatingLabelInput inputValue={product.legalDocsStatus} onInputValueChange={onlegalDocsStatusChange} name='legalDocsStatus' label='Giấy tờ pháp lý' /> */}
           <SelectInput
-            name='hasLegalDocs'
+            name='legalDocsStatus'
             onInputValueChange={onFurnitureStatusChange}
           >
             <SelectOption label='Tình trạng nội thất' value='' />

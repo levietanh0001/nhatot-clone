@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const { sequelize } = require('../utils/database.util');
+const { asString } = require('../utils/model-types.util');
 
 
 const FavoriteList = sequelize.define('favorite_list', {
@@ -9,6 +10,9 @@ const FavoriteList = sequelize.define('favorite_list', {
     allowNull: false,
     primaryKey: true,
   },
+  userId: {
+    ...asString(0, 255, false, 'userId')
+  }
 
 }, {
   freezeTableName: true

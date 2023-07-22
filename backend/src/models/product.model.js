@@ -14,7 +14,7 @@ const Product = sequelize.define('product', {
     primaryKey: true,
   },
   type: {
-    ...asOneOf(['', 'canban', 'chothue', 'duan'])
+    ...asOneOf(['', 'canban', 'chothue'])
   },
   category: {
     ...asOneOf(['', 'canhochungcu', 'nhao', 'khac'])
@@ -37,7 +37,7 @@ const Product = sequelize.define('product', {
   mainDoorDirection: {
     ...asOneOf(directions)
   },
-  hasLegalDocs: {
+  legalDocsStatus: {
     ...asOneOf(['', 'dangchoso', 'dacoso', 'giaytokhac'])
   },
   furnitureStatus: {

@@ -1,9 +1,10 @@
 import { useContext } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { AuthContext } from '~/contexts/auth/AuthContext';
+import { backendBaseUrl } from '~/utils/variables.util';
 
 
-const AuthRequired = ({ children, redirectPath='/login' }) => {
+const UpdateUserProfile = ({ children, redirectPath='/login' }) => {
 
   const authContext = useContext(AuthContext);
 
@@ -31,7 +32,20 @@ const AuthRequired = ({ children, redirectPath='/login' }) => {
     return <Navigate to='/' replace />;
   }
 
-  return children ? children : <Outlet />;
+  fetch(new URL('api/user', backendBaseUrl), {
+    method: 'POST'
+  })
+    .then(response => response.json())
+    .then(data => {
+
+      return children ? children : <Outlet />;
+    })
+    .catch(error => {
+      console.error(error);
+      alert('Có lỗi xảy ra, vui lòng thử lại');
+      return <Navigate to='/' replace />;
+    })
+
 }
 
-export default AuthRequired
+export default UpdateUserProfile

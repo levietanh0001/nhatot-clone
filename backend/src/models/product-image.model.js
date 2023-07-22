@@ -11,7 +11,7 @@ const ProductImage = sequelize.define('product_image', {
     primaryKey: true,
   },
   imageUrl: {
-    ...asString(0, 255, false, 'imageUrl')
+    ...asString(0, 255, true, 'imageUrl')
   }
 
 }, {

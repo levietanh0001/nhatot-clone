@@ -12,7 +12,7 @@ interface IInitialState {
     numBathrooms?: string;
     balconDirection?: string;
     mainDoorDirection?: string;
-    hasLegalDocs?: string;
+    legalDocsStatus?: string;
     furnitureStatus?: string;
     area?: string;
     price?: string;
@@ -36,7 +36,7 @@ const initialState: IInitialState = {
     numBathrooms: '',
     balconDirection: '',
     mainDoorDirection: '',
-    hasLegalDocs: 'dangchoso',
+    legalDocsStatus: 'dangchoso',
     furnitureStatus: '',
     area: '',
     price: '',
@@ -84,8 +84,8 @@ const postProductSlice = createSlice({
     setMainDoorDirection: (state, action) => {
       state.product.mainDoorDirection = action.payload;
     },
-    setHasLegalDocs: (state, action) => {
-      state.product.hasLegalDocs = action.payload;
+    setLegalDocsStatus: (state, action) => {
+      state.product.legalDocsStatus = action.payload;
     },
     setFurnitureStatus: (state, action) => {
       state.product.furnitureStatus = action.payload;
@@ -106,17 +106,17 @@ const postProductSlice = createSlice({
       state.product.description = action.payload;
     },
     appendImages: (state, action) => {
-      if(state.product.images) {
+      if (state.product.images) {
         state.product.images = [...state.product.images, ...action.payload];
       }
     },
     removeImageByIndex: (state, action) => {
-      if(state.product.images) {
+      if (state.product.images) {
         state.product.images.splice(action.payload, 1);
       }
     },
     clearImage: (state) => {
-      if(state.product.images) {
+      if (state.product.images) {
         state.product.images.length = 0;
       }
     },
@@ -128,7 +128,7 @@ const postProductSlice = createSlice({
     },
     resetStates: () => {
       return initialState;
-    }
+    },
   },
 });
 
