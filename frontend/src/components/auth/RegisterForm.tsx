@@ -41,7 +41,24 @@ const RegisterForm = () => {
     console.log({ data });
 
     setLoading(true);
-    toast.promise(promiseWrapper(authContext?.registerUser(email, password)), {
+    toast.promise(promiseWrapper(authContext?.registerUser(email, password)
+      .then(result => {
+
+        toast.success('Vui lòng kiểm tra email để xác minh tài khoản của bạn');
+        console.log({ loginResult: result });
+        
+        // return fetch(new URL('api/user', backendBaseUrl), {
+        //   method: 'POST',
+        //   body: JSON.stringify({
+        //     email,
+        //     password
+        //   })
+        // });
+      })
+      .then(data => {
+        console.log({ userData: data })
+      })
+    ), {
       pending: 'Đang thực hiện yêu cầu...',
       success: 'Gửi email xác nhận thành công',
       error: {

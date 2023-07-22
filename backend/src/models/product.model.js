@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const { sequelize } = require('../utils/database.util');
-const { asString, asNonNegativeInt, asOneOf } = require('../utils/model-types.util');
+const { asString, asNonNegativeInt, asOneOf, asNonNegativeDouble } = require('../utils/model-types.util');
 const { directions } = require('../utils/variables.util');
 
 
@@ -13,52 +13,58 @@ const Product = sequelize.define('product', {
     allowNull: false,
     primaryKey: true,
   },
-  title: {
-    ...asString(1, 255)
+  type: {
+    ...asOneOf(['', 'canban', 'chothue', 'duan'])
   },
   category: {
     ...asOneOf(['', 'canhochungcu', 'nhao', 'khac'])
   },
-  type: {
-    ...asOneOf(['', 'muaban', 'chothue', 'duan'])
-  },
-  price: {
-    type: Sequelize.DOUBLE.UNSIGNED,
-    allowNull: false
+  projectName: {
+    ...asString(0, 255)
   },
   address: {
     ...asString(0, 255)
   },
-  title: {
-    ...asString(0, 255)
-  },
-  description: {
-    ...asString(0, 255)
-  },
-  isVerified: {
-    type: Sequelize.BOOLEAN
-  },
-  area: {
-    ...asNonNegativeInt()
-  },
   numBedrooms: {
-    ...asNonNegativeInt()
+    ...asNonNegativeInt(allowNull=false),
   },
   numBathrooms: {
-    ...asNonNegativeInt()
-  },
-  mainDoorDirection: {
-    ...asOneOf(directions)
+    ...asNonNegativeInt(allowNull=false),
   },
   balconDirection: {
     ...asOneOf(directions)
   },
+  mainDoorDirection: {
+    ...asOneOf(directions)
+  },
   hasLegalDocs: {
-    ...asOneOf(['dangchoso', 'dacoso', 'giaytokhac'])
+    ...asOneOf(['', 'dangchoso', 'dacoso', 'giaytokhac'])
+  },
+  furnitureStatus: {
+    ...asOneOf(['', 'khong', 'caocap', 'daydu', 'coban'])
+  },
+  area: {
+    ...asNonNegativeInt(allowNull=false)
+  },
+  price: {
+    ...asNonNegativeDouble(allowNull=false)
   },
   deposit: {
     ...asNonNegativeInt()
   },
+  postTitle: {
+    ...asString(10, 255, allowNull=false, 'postTitle')
+  },
+  description: {
+    ...asString(0, 255)
+  },
+  userType: {
+    ...asOneOf(['canhan', 'moigioi'])
+  },
+  userId: {
+    ...asString(0, 255, allowNull=false, 'userId')
+  },
+  
 
 }, {
   freezeTableName: true

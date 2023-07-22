@@ -59,19 +59,19 @@ const legalDocsStatus = [
 const furnitureStatus = [
   {
     label: 'Cao cấp',
-    value: 'highquality',
+    value: 'caocap',
   },
   {
     label: 'Đầy đủ',
-    value: 'full',
+    value: 'daydu',
   },
   {
     label: 'Cơ bản',
-    value: 'basic',
+    value: 'coban',
   },
   {
     label: 'Không',
-    value: 'none',
+    value: 'khong',
   },
 ];
 

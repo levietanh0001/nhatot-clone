@@ -1,6 +1,7 @@
 import { User, UserCredential, createUserWithEmailAndPassword, fetchSignInMethodsForEmail, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateEmail, updatePassword } from 'firebase/auth';
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { auth } from '~/firebase';
+import { backendBaseUrl } from '~/utils/variables.util';
 
 
 interface IAuthContext {
@@ -24,13 +25,38 @@ export const AuthProvider = ({ children }) => {
 
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [email, setEmail] = useState<string | null>(null);
+
+
+  // // useeffect whenever currentUser.emailVerified changes, fetch request to create new user
+  // useEffect(() => {
+    
+  //   fetch(new URL('api/user', backendBaseUrl), {
+  //     method: 'POST',
+  //     body: JSON.stringify({
+  //       email: email,
+  //     })
+  //   });
+  // }, [user]);
 
   useEffect(() => {
     // on mount, set current user
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
 
       setUser(currentUser);
+      // setEmail(currentUser?.email as string);
       setLoading(false);
+
+      
+      // if (currentUser?.emailVerified) {
+      //   // email is verified.
+      //   setUser(currentUser);
+      //   setLoading(false);
+      // } else {
+      //   // email is not verified.
+      //   setUser(null);
+      //   setLoading(false);
+      // }
     
     })
 

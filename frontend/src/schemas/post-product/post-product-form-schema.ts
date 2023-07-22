@@ -5,14 +5,14 @@ import { commaSeparatedStringToNumber, isNumeric } from '~/utils/number.util';
 
 const postProductSchema = object({
   productCategory:
-    string().required('Xin hãy chọn loại bất động sản').oneOf(['canhochungcu', 'nhao', 'khac']),
+    string().required('Xin hãy chọn loại bất động sản'),
   // productType:
   //   string().required('Xin hãy chọn danh mục bất động sản').oneOf(['canban', 'chothue']),
   // projectName:
   //   // string().test('projectName', 'Cần ít nhất 6 ký tự', val => { if(val) { return val.toString().length >= 6 } }),
   //   string(),
   address:
-    string().required('Địa chỉ không thể trống'),
+    string().typeError('').required('Địa chỉ không thể trống'),
   numBedrooms:
     // number().required('Số phòng ngủ không thể trống').positive('Số phòng cần lớn hơn 0'),
     // number().required().min(0, 'Số phòng ngủ cần lớn hơn 0'),

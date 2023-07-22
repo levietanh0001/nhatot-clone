@@ -11,6 +11,7 @@ import { loginFormSchema } from '~/schemas/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import FloatingLabelInput from '../input/FloatingLabelInput';
 import { promiseWrapper } from '~/utils/function.util';
+import { backendBaseUrl } from '~/utils/variables.util';
 
 
 type FormFieldValues = {
@@ -42,7 +43,8 @@ const LoginForm = () => {
     console.log({ data });
 
     setLoading(true);
-    toast.promise(promiseWrapper(authContext?.loginUser(email, password)), {
+    toast.promise(promiseWrapper(authContext?.loginUser(email, password)), 
+    {
       pending: 'Đang thực hiện yêu cầu...',
       success: 'Đăng nhập thành công',
       error: {
@@ -62,6 +64,7 @@ const LoginForm = () => {
         }
       },
     }).then(() => {
+
       setLoading(false);
       navigate('/');
     }).catch(e => {
@@ -75,7 +78,7 @@ const LoginForm = () => {
   return (
     <>
       {/* {JSON.stringify(error)} */}
-      <ToastContainer position='top-center' hideProgressBar theme='colored' autoClose={false} />
+      <ToastContainer position='top-center' hideProgressBar theme='colored' autoClose={5000} />
 
       <FormProvider {...form}>
         <form

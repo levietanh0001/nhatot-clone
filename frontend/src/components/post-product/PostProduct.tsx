@@ -41,7 +41,6 @@ const PostProduct = () => {
 
   const [imageErrors, setImageErrors] = useState<string | null>(null);
   const [videoErrors, setVideoErrors] = useState<string | null>(null);
-  const [submitError, setSubmitError] = useState<boolean>(false);
   const [token, setToken] = useState<string | null>(null);
 
 
@@ -56,6 +55,7 @@ const PostProduct = () => {
   useEffect(() => {
 
     console.log({ ...product });
+    console.log({ imageCount: product.images?.length });
 
   }, [product]);
 
@@ -65,77 +65,112 @@ const PostProduct = () => {
   });
   const { handleSubmit } = form;
 
-  const onSubmit = (data, e) => {
+  const onSubmit = async (data, e) => {
 
     e.preventDefault();
 
-    const numBedrooms = product.numBedrooms? parseInt(product.numBedrooms): null;
-    const numBathrooms = product.numBathrooms? parseInt(product.numBathrooms): null;
-    const price = product.price? commaSeparatedStringToNumber(product.price): null;
-    const deposit = product.deposit? commaSeparatedStringToNumber(product.deposit): null;
-    const area = product.area ? parseFloat(product.area) : null;
-    const productData = { ...product, numBedrooms, numBathrooms, price, deposit, area };
-    delete productData['images'];
-    delete productData['video'];
+    try {
 
-    const productFormData = new FormData();
-    const videoFormData = new FormData();
+      const numBedrooms = product.numBedrooms? parseInt(product.numBedrooms): null;
+      const numBathrooms = product.numBathrooms? parseInt(product.numBathrooms): null;
+      const price = product.price? commaSeparatedStringToNumber(product.price): null;
+      const deposit = product.deposit? commaSeparatedStringToNumber(product.deposit): null;
+      const area = product.area ? parseFloat(product.area) : null;
+      const productData = { 
+        type: product.productType,
+        category: product.productCategory,
+        projectName: product.projectName,
+        address: product.address,
+        numBedrooms,
+        numBathrooms,
+        balconDirection: product.balconDirection,
+        mainDoorDirection: product.mainDoorDirection,
+        hasLegalDocs: product.hasLegalDocs,
+        furnitureStatus: product.furnitureStatus,
+        area,
+        price,
+        deposit,
+        postTitle: product.postTitle,
+        description: product.description,
+        userType: product.userType,
+      };
+      delete productData['images'];
+      delete productData['video'];
+  
+      const productFormData = new FormData();
+      const videoFormData = new FormData();
 
-    // add media files to form data
-    if(product.images?.length === 0) {
-      setSubmitError(true);
-      setImageErrors('Cần có ảnh minh họa cho sản phẩm');
-      window.scrollTo(0, 0);
-    } else if(product.images) {
-      setSubmitError(false);
+      if(!product.images) {
+        throw new Error('No product images found');
+      }
+
+      // add media files to form data
+      if(product.images?.length === 0) {
+        setImageErrors('Cần có ảnh minh họa cho sản phẩm');
+        window.scrollTo(0, 0);
+        throw new Error('Images are required');
+      }
+
       product.images.forEach(image => productFormData.append('images', image));
-    }
+  
+      // inspect productFormData
+      // logFormData(productFormData);
+  
+      if(!authContext) {
+        throw new Error('No auth context');
+      }
+  
+      if(!authContext.user) {
+        throw new Error('No user found');
+      }
 
-    // inspect productFormData
-    // logFormData(productFormData);
+      const idToken = await authContext.user.getIdToken();
 
-    if(!submitError && authContext?.user) {
+      if(!authContext.user.uid) {
+        throw new Error('No user UID found');
+      }
+
+      setToken(idToken);
       
-      authContext?.user.getIdToken()
-        .then(idToken => {
+      for(let [key, value] of Object.entries(productData)) {
+        productFormData.set(key, value as string);
+      }
 
-          setToken(idToken);
-
-          for(let [key, value] of Object.entries(productData)) {
-            productFormData.set(key, value as string);
+      productFormData.set('userId', authContext.user.uid);
+      
+      const createProductUrl = new URL('api/products', backendBaseUrl);
+      const createdProductResponse = await fetch(
+        createProductUrl, 
+        {
+          method: 'POST',
+          body: productFormData,
+          headers: {
+            'Authorization': `Bearer ${idToken}`
           }
-          
-          const createProductUrl = new URL('api/products', backendBaseUrl);
-          return fetch(createProductUrl, 
-            {
-              method: 'POST',
-              body: productFormData,
-              headers: {
-                'Authorization': `Bearer ${idToken}`
-              }
-            }
-          )
-        })
-        .then(response => response.json())
-        .then(data => {
+        }
+      )
+      
+      const createdProductData = await createdProductResponse.json();
 
-          console.log({ createdProductData: data })
+      console.log({ createdProductData })
 
-          const productId = data['productId'];
-          videoFormData.set('video', product.video as Blob);
-          const uploadVideoUrl = new URL('api/products/video', backendBaseUrl);
-          return fetch(uploadVideoUrl + '?' + new URLSearchParams({ productId }), {
-            method: 'POST',
-            body: videoFormData,
-            headers: {
-              'Authorization': `Bearer ${token}`
-            },
-          })
-        })
-        .then(response => response.json())
-        .then(data => console.log({ uploadedVideoData: data }))
-        .catch(error => console.error(error));
+      const productId = createdProductData['productId'];
+      videoFormData.set('video', product.video as Blob);
+      const uploadVideoUrl = new URL('api/products/video', backendBaseUrl);
+      const uploadedVideoResponse = await fetch(uploadVideoUrl + '?' + new URLSearchParams({ productId }), {
+        method: 'POST',
+        body: videoFormData,
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      })
 
+      const uploadedVideoData = await uploadedVideoResponse.json();
+
+      console.log({ uploadedVideoData })
+        
+    } catch (error) {
+      console.error(error);
     }
 
   };
@@ -208,7 +243,11 @@ const PostProduct = () => {
     const imageSizeLimit = 5; // MB
     if (!validateFilesSize(imageArr, imageSizeLimit)) {
       setImageErrors(`Mỗi ảnh cho phép kích thước tối đa là ${imageSizeLimit}`);
-    } else {
+    }
+    else if(imageArr.length > 6) {
+      setImageErrors(`Chỉ có thể tải lên tối đa 6 ảnh`);
+    } 
+    else {
       setImageErrors('');
       dispatch(postProductActions.appendImages(imageArr));
     }

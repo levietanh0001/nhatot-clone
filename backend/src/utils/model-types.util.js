@@ -40,6 +40,13 @@ const asNonNegativeFloat = (allowNull = true) => {
   }
 }
 
+const asNonNegativeDouble = (allowNull = true) => {
+  return {
+    type: Sequelize.DOUBLE.UNSIGNED,
+    allowNull: allowNull
+  }
+}
+
 const asOneOf = (...options) => {
   return {
     type: Sequelize.ENUM(...options),
@@ -47,5 +54,5 @@ const asOneOf = (...options) => {
   }
 }
 
-module.exports = { asString, asBoolean, asNonNegativeInt, asNonNegativeFloat, asOneOf }
+module.exports = { asString, asBoolean, asNonNegativeInt, asNonNegativeFloat, asOneOf, asNonNegativeDouble }
 

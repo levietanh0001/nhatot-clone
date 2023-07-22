@@ -10,12 +10,18 @@ const router = express.Router();
 
 // router.get('/', productsController.getProducts);
 // router.get('/:productId', productsController.getProductById);
-router.post('/', uploadMultipleImages, 
-// authRequired, 
-productsController.createProduct);
-router.post('/video', uploadVideo, 
-// authRequired, 
-productsController.uploadProductVideo);
+router.post(
+  '/', 
+  uploadMultipleImages, 
+  authRequired, 
+  productsController.createProduct
+);
+router.post(
+  '/video', 
+  uploadVideo, 
+  authRequired, 
+  productsController.uploadProductVideo
+);
 
 
 

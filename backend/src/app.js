@@ -23,15 +23,15 @@ const { uploadSingleFile, uploadMultipleImages, uploadVideo } = require('./middl
 
 
 // import routers
-const authRouter = require('./routes/auth.route');
-const productsRouter = require('./routes/products.route');
+// const authRouter = require('./routes/auth.route');
+const productsRouter = require('./routes/product.route');
 const errorsService = require('./controllers/errors.controller');
 
 
 // import models: into app.js, same place as sequelize.sync() for it to work
 const { sequelize, getMagicMethods } = require('./utils/database.util');
 const Product = require('./models/product.model');
-const User = require('./models/user.model');
+// const User = require('./models/user.model');
 const UserProfile = require('./models/user-profile.model');
 const FavoriteList = require('./models/favorite-list.model');
 const FavoriteItem = require('./models/favorite-item.model');
@@ -43,15 +43,17 @@ const firebaseRouter = require('./routes/firebase-auth.route');
 const { returnError } = require('./utils/error.util');
 const ProductImage = require('./models/product-image.model');
 const ProductVideo = require('./models/product-video.model');
+const userRouter = require('./routes/user.route');
 
 
 // define associations
-Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
-User.hasMany(Product); // one-to-many relationship: getProducts() and createProduct() methods generated
-User.hasOne(UserProfile);
-UserProfile.belongsTo(User);
-FavoriteList.belongsTo(User);
-User.hasOne(FavoriteList);
+// Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
+// User.hasMany(Product); // one-to-many relationship: getProducts() and createProduct() methods generated
+// User.hasOne(UserProfile);
+// UserProfile.belongsTo(User);
+// FavoriteList.belongsTo(User);
+// User.hasOne(FavoriteList);
+
 FavoriteList.belongsToMany(Product, { through: FavoriteItem });
 Product.belongsToMany(FavoriteList, { through: FavoriteItem });
 Product.hasMany(ProductImage);
@@ -90,6 +92,7 @@ app.use('/', (req, res, next) => {
   console.log(getMagicMethods(Product));
   // console.log(rootDir);
   next();
+
 });
 
 
@@ -125,6 +128,7 @@ app.use('/graphql', graphqlMiddleware);
 app.use('/api/firebase-auth', firebaseRouter);
 // app.use('/api/admin', adminRouter);
 app.use('/api/products', productsRouter);
+app.use('/api/user', userRouter);
 
 
 // error handling
