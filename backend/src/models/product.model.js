@@ -61,9 +61,13 @@ const Product = sequelize.define('product', {
   userType: {
     ...asOneOf(['canhan', 'moigioi'])
   },
-  userId: {
-    ...asString(0, 255, allowNull=false, 'userId')
-  },
+  // userId: {
+  //   ...asNonNegativeInt()
+  // },
+  
+  // userId: {
+  //   ...asString(0, 255, allowNull=false, 'userId')
+  // },
   
 
 }, {

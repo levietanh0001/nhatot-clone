@@ -1,6 +1,6 @@
 const { body } = require("express-validator");
 
-const emailValidation = body('email')
+const validateAndNormalizeEmail = body('email')
   .notEmpty()
   .withMessage('Email address must not be empty')
   .isEmail()
@@ -16,7 +16,7 @@ const emailValidation = body('email')
 
 function validateLogin(req, res, next) {
   return [
-    emailValidation
+    validateAndNormalizeEmail
   ];
 
 }
@@ -24,11 +24,15 @@ function validateLogin(req, res, next) {
 function validateRegister(req, res, next) {
 
   return [
-    emailValidation,
+    validateAndNormalizeEmail,
     body('password')
+      .notEmpty()
+      .withMessage('Password must not be empty')
       .isLength({ min: 6, max: 32 })
       .withMessage('Password should have at least 6 characters'),
     body('confirmPassword')
+      .notEmpty()
+      .withMessage('Confirm password must not be empty')
       .custom((value, { req, res }) => {
         if (value !== req.body['password']) {
           throw new Error('Both passwords must match');

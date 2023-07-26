@@ -5,24 +5,39 @@ const { auth } = require('../utils/firebase.util');
 const { redisClient } = require('../utils/redis-store.util');
 
 
-function adminOnly(req, res, next) {
+// function adminOnly(req, res, next) {
 
-  // const token = req.headers?.['authorization']?.split(' ')[1];
+//   // const token = req.headers?.['authorization']?.split(' ')[1];
+//   const token = extractAccessTokenFromRequest(req);
+
+//   const payload = verifyToken(token, accessPublicKey);
+
+//   if (!payload) {
+//     errorsService.throwError(403, 'Unauthorized', 'Current user is not logged in');
+//   }
+
+//   if (!payload.isAdmin) {
+//     errorsService.throwError(403, 'Unauthorized', 'Current user is not admin');
+//   }
+
+//   next();
+// }
+
+async function adminOnly(req, res, next) {
+
   const token = extractAccessTokenFromRequest(req);
-
-  const payload = verifyToken(token, accessPublicKey);
+  const payload = await verifyAccessTokenAsync(token);
 
   if (!payload) {
-    errorsService.throwError(403, 'Unauthorized', 'Current user is not logged in');
+    errorsService.throwError(403, 'Unauthorized', 'Invalid access token');
   }
 
-  if (!payload.isAdmin) {
+  if (payload.role !== 'admin') {
     errorsService.throwError(403, 'Unauthorized', 'Current user is not admin');
   }
 
   next();
 }
-
 
 async function loggedInRequired(req, res, next) {
 
@@ -31,30 +46,47 @@ async function loggedInRequired(req, res, next) {
     const accessToken = extractAccessTokenFromRequest(req);
 
     if (!accessToken) {
-      errorsService.throwError(422, 'Invalid request', 'No refresh token is provided');
+
+      return res.status(401).json({
+        code: 'ACCESS_TOKEN_MISSING',
+        message: 'No access token is provided'
+      })
     }
 
     const payload = await verifyAccessTokenAsync(accessToken);
 
     if (!payload) {
-      errorsService.throwError(403, 'Unauthorized', 'Current user is not logged in');
+
+      return res.status(401).json({
+        code: 'ACCESS_TOKEN_EXPIRED',
+        message: 'Access token has expired'
+      })
     }
 
-    const { userId } = payload;
-    const blockedToken = await redisClient.get(`BL_${userId}`);
+    const blockedToken = await redisClient.get(`BL_${payload.userId}`);
 
     if (blockedToken === accessToken) {
-      errorsService.throwError(403, 'Unauthorized', 'Access token is blacklisted');
+
+      return res.status(401).json({
+        code: 'ACCESS_TOKEN_BLOCKED',
+        message: 'Access token is blocked'
+      })
     }
 
+    // attach decoded payload to req to next handler
     req.payload = payload;
 
-    next(); // pass control to controller after
+    return next(); // pass control to controller after
 
   } catch (error) {
-    errorsService.passErrorToHandler(error, next);
+    const e = new Error();
+    e.status = 401;
+    if(error.name === 'TokenExpiredError') {
+      e.code = 'ACCESS_TOKEN_EXPIRED'
+    }
+    e.message = 'Provided token has expired';
+    return next(e);
   }
-
 
 }
 

@@ -16,7 +16,7 @@ module.exports = {
     const productIdList = productIds.map(item => item.id);
     console.log(productIdList);
 
-    const productImageUrls = [...Array(60000)].map(() => {
+    const productImageUrls = [...Array(100000)].map(() => {
       return {
         imageUrl: faker.image.urlLoremFlickr(),
         productId: randomOption(productIdList),
@@ -29,11 +29,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
+    await queryInterface.bulkDelete('product_image', null, {});
   }
 };

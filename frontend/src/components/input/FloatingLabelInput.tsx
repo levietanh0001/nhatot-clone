@@ -45,6 +45,7 @@ const FloatingLabelInput = (props) => {
           placeholder=' '
           
           {...field}
+          ref={null}
           
           value={inputValue}
           onChange={handleChange} // send value to hook form 

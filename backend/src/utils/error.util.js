@@ -1,7 +1,5 @@
 function returnError(res, statusCode, error) {
-  return res.status(statusCode || 500).json({
-    error: error
-  });
+  return res.status(statusCode || 500).json({ ...error });
 }
 
 module.exports = {

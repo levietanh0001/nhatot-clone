@@ -46,18 +46,19 @@ function verifyRefreshTokenAsync(token) {
   })
 }
 
-function verifyAccessTokenAsync(token) {
+function verifyAccessTokenAsync(token, ignoreExpiration = false) {
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
 
-    const payload = jwt.verify(token, accessPublicKey, { algorithm: 'RS256' });
+    const payload = jwt.verify(token, accessPublicKey, { algorithm: 'RS256', ignoreExpiration });
 
     if (payload) {
       resolve(payload);
-
-    } else {
-      resolve(null);
     }
+    
+    resolve(null);
+    
+    // reject('invalid token');
 
   })
 }
@@ -65,6 +66,7 @@ function verifyAccessTokenAsync(token) {
 
 
 function signToken(payload, privateKey, options) {
+  
   const token = jwt.sign(payload, privateKey, { algorithm: 'RS256', ...options });
   return token;
 }
@@ -114,7 +116,7 @@ function createRefreshTokenAsync(payload) {
 
   return new Promise((resolve, reject) => {
     jwt.sign(
-      payload,
+      payload, 
       refreshPrivateKey,
       { algorithm: 'RS256', expiresIn: process.env.REFRESH_TOKEN_LIFE_SPAN },
       (error, data) => {

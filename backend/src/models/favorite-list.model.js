@@ -10,9 +10,9 @@ const FavoriteList = sequelize.define('favorite_list', {
     allowNull: false,
     primaryKey: true,
   },
-  userId: {
-    ...asString(0, 255, false, 'userId')
-  }
+  // userId: {
+  //   ...asString(0, 255, false, 'userId')
+  // }
 
 }, {
   freezeTableName: true

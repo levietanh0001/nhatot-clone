@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const { sequelize } = require('../utils/database.util');
-const { asString } = require('../utils/model-types.util');
+const { asString, asNonNegativeInt } = require('../utils/model-types.util');
 
 
 const ProductImage = sequelize.define('product_image', {
@@ -12,7 +12,10 @@ const ProductImage = sequelize.define('product_image', {
   },
   imageUrl: {
     ...asString(0, 255, true, 'imageUrl')
-  }
+  },
+  // productId: {
+  //   ...asNonNegativeInt()
+  // }
 
 }, {
   freezeTableName: true

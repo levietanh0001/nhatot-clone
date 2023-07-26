@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const { sequelize } = require('../utils/database.util');
-const { asString } = require('../utils/model-types.util');
+const { asString, asNonNegativeInt } = require('../utils/model-types.util');
 
 
 const ProductVideo = sequelize.define('product_video', {
@@ -12,7 +12,10 @@ const ProductVideo = sequelize.define('product_video', {
   },
   videoUrl: {
     ...asString(0, 255, true, 'videoUrl')
-  }
+  },
+  // productId: {
+  //   ...asNonNegativeInt()
+  // }
 
 }, {
   freezeTableName: true

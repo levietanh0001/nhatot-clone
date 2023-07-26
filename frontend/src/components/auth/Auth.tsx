@@ -3,6 +3,7 @@ import styles from './Auth.module.scss';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 import ForgetPasswordForm from './ForgetPasswordForm';
+import ResetPasswordForm from './ResetPasswordForm';
 
 
 export const RegisterContent = () => {
@@ -42,11 +43,34 @@ export const ForgetPasswordContent = () => {
   );
 };
 
+
+export const ResetPasswordContent = () => {
+  return (
+    <>
+      <Logo />
+      <ResetPasswordForm />
+      <LoginAlts />
+      <SocialLogin />
+      <RegisterNew />
+    </>
+  );
+};
+
 export const PageForgetPasswordContent = () => {
   return (
     <>
       <div className={styles['inner-wrapper']}>
         <ForgetPasswordContent />
+      </div>
+    </>
+  );
+};
+
+export const PageResetPasswordContent = () => {
+  return (
+    <>
+      <div className={styles['inner-wrapper']}>
+        <ResetPasswordContent />
       </div>
     </>
   );

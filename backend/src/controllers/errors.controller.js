@@ -6,9 +6,10 @@ function handle404(req, res, next) {
 
 
 function throwError(statusCode, name, message) {
-  const error = new Error(message);
+  const error = new Error();
+  error.message = message;
   error.name = name;
-  error.code = statusCode;
+  error.status = statusCode;
   throw error;
 }
 
@@ -20,19 +21,11 @@ function passErrorToHandler(error, next) {
 
 function errorHandler(error, req, res, next) {
 
-  // console.log('error handler reached');
-  // console.log(error);
+  console.log({ ...error });
 
-  const statusCode = error.code || 500; // if no status code, defaults to 500 (server side error)
-
-  res
-    .status(statusCode)
-    .json({
-      ...error,
-      statusCode: error.code,
-    });
-
-  return next(); // continue regardless
+  const statusCode = error.status || 500; // if no status code, defaults to 500 (server side error)
+  res.status(statusCode).json({ ...error });
+  return next(); // continue to next handler
 }
 
 

@@ -41,51 +41,61 @@ const RegisterForm = () => {
     console.log({ data });
 
     setLoading(true);
-    toast.promise(promiseWrapper(authContext?.registerUser(email, password)
-      .then(result => {
-
-        toast.success('Vui lòng kiểm tra email để xác minh tài khoản của bạn');
-        console.log({ loginResult: result });
-        
-        // return fetch(new URL('api/user', backendBaseUrl), {
-        //   method: 'POST',
-        //   body: JSON.stringify({
-        //     email,
-        //     password
-        //   })
-        // });
-      })
+    authContext?.registerUser(email, password, confirmPassword)
       .then(data => {
-        console.log({ userData: data })
-      })
-    ), {
-      pending: 'Đang thực hiện yêu cầu...',
-      success: 'Gửi email xác nhận thành công',
-      error: {
-        render({ data }) {
-          if(data instanceof FirebaseError && data.code === 'auth/email-already-in-use') {
-            return `Lỗi: Email đã tồn tại`;
-          } else {
-            console.log(data);
-            return `Lỗi: ${JSON.stringify((data))}`;
-          }
+
+        if(data.code === 'USER_ALREADY_EXISTS') {
+          toast.error('Tài khoản đã tồn tại, vui lòng đăng nhập');
         }
-      },
-    }).then(() => {
-      setLoading(false);
-      navigate('/login');
-    }).catch(e => {
-      console.error(e);
-    }).finally(() => {
-      setLoading(false);
-    });
+
+        if(data.code === 'SUCCESS') {
+          toast.success('Vui lòng kiểm tra email để xác minh tài khoản của bạn');
+        }
+
+      })
+      .catch(error => {
+        toast.error(JSON.stringify(error));
+      })
+      .finally(() => setLoading(false));
+
+
+    // setLoading(true);
+    // toast.promise(promiseWrapper(authContext?.registerUser(email, password)
+    //   .then(() => {
+
+    //     toast.success('Vui lòng kiểm tra email để xác minh tài khoản của bạn');
+    //   })
+    //   .then(data => {
+    //     console.log({ userData: data })
+    //   })
+    // ), {
+    //   pending: 'Đang thực hiện yêu cầu...',
+    //   success: 'Gửi email xác nhận thành công',
+    //   error: {
+    //     render({ data }) {
+    //       if(data instanceof FirebaseError && data.code === 'auth/email-already-in-use') {
+    //         return `Lỗi: Email đã tồn tại`;
+    //       } else {
+    //         console.log(data);
+    //         return `Lỗi: ${JSON.stringify((data))}`;
+    //       }
+    //     }
+    //   },
+    // }).then(() => {
+    //   setLoading(false);
+    //   navigate('/login');
+    // }).catch(e => {
+    //   console.error(e);
+    // }).finally(() => {
+    //   setLoading(false);
+    // });
 
   };
 
   return (
     <>
       {/* {JSON.stringify(error)} */}
-      <ToastContainer position='top-center' hideProgressBar theme='colored' autoClose={5000} />
+      <ToastContainer position='top-right' hideProgressBar theme='colored' autoClose={5000} />
       
       <FormProvider {...form}>
         <form className={styles['form']} onSubmit={handleSubmit(onSubmit)} noValidate>

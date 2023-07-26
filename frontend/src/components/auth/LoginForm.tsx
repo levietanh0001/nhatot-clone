@@ -12,6 +12,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import FloatingLabelInput from '../input/FloatingLabelInput';
 import { promiseWrapper } from '~/utils/function.util';
 import { backendBaseUrl } from '~/utils/variables.util';
+import jwtDecode from 'jwt-decode';
 
 
 type FormFieldValues = {
@@ -43,42 +44,44 @@ const LoginForm = () => {
     console.log({ data });
 
     setLoading(true);
-    toast.promise(promiseWrapper(authContext?.loginUser(email, password)), 
-    {
-      pending: 'Đang thực hiện yêu cầu...',
-      success: 'Đăng nhập thành công',
-      error: {
-        render({ data }) {
-          if(data instanceof FirebaseError && data.code === 'auth/invalid-email') {
-            return `Lỗi: Email không hợp lệ`;
-          } else if(data instanceof FirebaseError && data.code === 'auth/invalid-email-verified') {
-            return `Lỗi: Email chưa được xác nhận`;
-          } else if(data instanceof FirebaseError && data.code === 'auth/user-not-found') {
-            return `Lỗi: Tài khoản này không tồn tại, vui lòng đăng ký mới`;
-          } else if(data instanceof FirebaseError && data.code === 'auth/wrong-password') {
-            return `Lỗi: Mật khẩu sai`;
-          } else {
-            console.log(data);
-            return `Lỗi: ${JSON.stringify((data))}`;
-          }
-        }
-      },
-    }).then(() => {
 
-      setLoading(false);
-      navigate('/');
-    }).catch(e => {
-      console.error(e);
-    }).finally(() => {
-      setLoading(false);
-    });
+    authContext?.loginUser(email, password)
+      .then((data) => {
+
+        console.log({ loginData: data });
+
+        if(data.code === 'USER_NOT_VERIFIED') {
+          toast.error('Vui lòng kiểm tra xác nhận tài khoản trong email trước khi đăng nhập');
+        }
+    
+        if(data.accessToken) {
+    
+          const payload = jwtDecode(data.accessToken);
+          authContext.setUser(payload);
+      
+        
+          localStorage.setItem('accessToken', data.accessToken);
+          localStorage.setItem('refreshToken', data.refreshToken);
+      
+          console.log({ accessToken: localStorage.getItem('accessToken'), refreshToken: localStorage.getItem('refreshToken') })
+
+          setLoading(false);
+          navigate('/');
+        }
+        
+      })
+      .catch(error => {
+        console.error(error);
+        toast.error('Lỗi khi đăng nhập, vui lòng thử lại');
+      })
+      .finally(() => setLoading(false));
 
   };
 
   return (
     <>
       {/* {JSON.stringify(error)} */}
-      <ToastContainer position='top-center' hideProgressBar theme='colored' autoClose={5000} />
+      <ToastContainer position='top-right' hideProgressBar theme='colored' autoClose={5000} />
 
       <FormProvider {...form}>
         <form

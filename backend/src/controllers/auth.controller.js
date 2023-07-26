@@ -7,116 +7,117 @@ const fetch = require('node-fetch');
 
 const validationUtils = require('../utils/validation.util');
 const { passErrorToHandler, throwError } = require('./errors.controller');
-const { verifyToken, signToken, accessPrivateKey, accessPublicKey, refreshPrivateKey, refreshPublicKey, createRefreshToken, extractAccessTokenFromRequest, signTokenAsync, createAccessTokenAsync, createAndStoreRefreshTokenAsync, verifyRefreshTokenAsync } = require('../utils/cryptography.util');
-// require('dotenv').config('../../.env');
+const { verifyToken, signToken, accessPrivateKey, accessPublicKey, refreshPrivateKey, refreshPublicKey, createRefreshToken, extractAccessTokenFromRequest, signTokenAsync, createAccessTokenAsync, createAndStoreRefreshTokenAsync, verifyRefreshTokenAsync, verifyAccessTokenAsync, createRefreshTokenAsync } = require('../utils/cryptography.util');
 
 const User = require('../models/user.model');
-const { constructUrlWithQueryParams } = require('../utils/url.util');
+const { constructUrlWithQueryParams, constructUrlWithQueryParamsAsync } = require('../utils/url.util');
 const { redisClient } = require('../utils/redis-store.util');
 
 
-function clearCookie(req, res, next) {
 
-  res.clearCookie('refreshToken');
-  res.end();
-}
-
-
-function getCookie(req, res, next) {
-
-  res.status(200).json({ refreshToken: req.cookies['refreshToken'] })
-}
-
-
-async function refresh(req, res, next) {
-
-  const response = await fetch(
-    new URL('/api/auth/new-access-token', process.env.BASE_URL).href,
-    {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ refreshToken: req.cookies['refreshToken'] }),
-      credentials: 'include',
-    }
-  )
-
-  const data = await response.json();
-
-  res
-    .status(200)
-    .json({
-      data
-    })
-}
-
-async function getNewAccessToken(req, res, next) {
-
-  const refreshToken = req.cookies['refreshToken'] || req.body['refreshToken'];
-  console.log({ finalToken: refreshToken });
+async function register(req, res, next) {
 
   try {
-    if (!refreshToken) {
-      throwError(422, 'Invalid request', 'No refresh token is provided');
+
+    const email = req.body['email'];
+    const password = req.body['password'];
+
+    validationUtils.sendMessage(req, res, 422);
+
+    const currentUser = await User.findOne({ where: { email: email } });
+
+    console.log({ email, currentUser });
+
+    if(currentUser) {
+
+      return res.status(403).json({
+        code: 'USER_ALREADY_EXISTS', 
+        message: 'User already exists, please log in'
+      })
     }
 
-    const payload = await verifyRefreshTokenAsync(refreshToken);
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const createdUser = await User.create({
+      email: email,
+      password: hashedPassword,
+      role: email === process.env.ADMIN_EMAIL? 'admin': 'canhan'
+    });
 
-    if (!payload) {
-      throwError(401, 'Invalid refresh token', 'Provided refresh token is not valid');
-    }
+    const createdUserEmail = createdUser['email'];
+    const createdUserId = createdUser['id'];
 
-    const { userId, email } = payload;
+    const token = await createAccessTokenAsync({ createdUserEmail });
 
-    console.log({ userId });
-
-    // if refresh token is found in whitelist (by decoded userId)
-    const result = await redisClient.get(userId.toString());
-    const allowedToken = JSON.parse(result)?.refreshToken;
-
-    if (allowedToken !== refreshToken) {
-      throwError(401, 'Unauthorized', 'Invalid token: refresh token is blocked');
-    }
-
-    const data = {
-      userId,
-      isAdmin: email === process.env.ADMIN_EMAIL ? true : false
-    };
-
-    const accessToken = await createAccessTokenAsync(data);
-
-    // res.header("Access-Control-Allow-Origin", "*");
-    // res.header('Access-Control-Allow-Credentials', 'true');
+    const verifyRegisterUrl = await constructUrlWithQueryParamsAsync(
+      '/auth/verify-register', { token, userId: createdUserId }
+    );
 
     res
       .status(200)
       .json({
-        accessToken,
-        // refreshToken
-      })
+        code: 'SUCCESS',
+        message: `Đã gửi email xác nhận tới ${createdUserEmail}`
+      });
+
+    return mailer.sendConfimationEmail(recipientEmail = createdUserEmail, confirmationUrl = verifyRegisterUrl);
 
   } catch (error) {
-    passErrorToHandler(error, next);
+    return next(error);
   }
+
 }
+
+
+async function verifyRegister(req, res, next) {
+
+  try {
+
+    const token = req.query['token'];
+    const userId = req.query['userId'];
+    const payload = await verifyAccessTokenAsync(token);
+
+    if(!payload) {
+      throwError(401, 'Unauthorized', 'User access token is invalid');
+    }
+  
+    const currentUser = await User.findByPk(userId);
+
+    if(!currentUser) {
+      throwError(404, 'Not found', 'Can not find user with provided id');
+    }
+
+    currentUser.isVerified = true;
+    currentUser.save();      
+    res.send('Xác nhận email thành công, vui lòng đăng nhập');
+
+  } catch(error) {
+    return next(error);
+  }
+
+}
+
 
 async function login(req, res, next) {
 
-  const email = req.body['email'];
-  const password = req.body['password'];
-
-  validationUtils.sendMessage(req, res, 422);
+  // add refresh token to database
 
   try {
-    const user = await User.findOne({
-      attributes: ['id', 'email', 'password'],
-      where: { email: email },
-      raw: true
-    });
+
+    const email = req.body['email'];
+    const password = req.body['password'];
+    const broker = req.body['broker'];
+
+    validationUtils.sendMessage(req, res, 422);
+
+    const user = await User.findOne({ where: { email: email } });
 
     if (!user) {
       throwError(401, 'Unauthenticated', 'Current user is not registered');
+    }
+
+    if(user && !user['isVerified']) {
+      
+      await mailer.resendConfirmationEmail(res, user.email, user.id);
     }
 
     const matched = await bcrypt.compare(password, user.password);
@@ -129,174 +130,108 @@ async function login(req, res, next) {
 
     const payload = {
       userId,
-      isAdmin: email === process.env.ADMIN_EMAIL ? true : false
+      email: user.email,
+      role: email === process.env.ADMIN_EMAIL ? 'admin': broker? 'broker': 'canhan'
     };
-
+    
     const accessToken = await createAccessTokenAsync(payload);
-    const refreshToken = await createAndStoreRefreshTokenAsync(userId); // for logout
+    const refreshToken = await createRefreshTokenAsync(payload);
 
-    res.cookie(
-      'refreshToken',
-      refreshToken,
-      {
-        httpOnly: true,
-        // secure: true, // must be set in production
-        path: '/',
-        maxAge: 365 * 24 * 60 * 60 * 1000
-      }
-    );
+    user.refreshToken = refreshToken;
+    await user.save();
 
     res
       .status(200)
-      .json({
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-        cookies: req.cookies
-      });
+      .json({ accessToken, refreshToken });
 
   } catch (error) {
-    passErrorToHandler(error, next);
+    return next(error);
   }
 
+}
+
+
+async function refresh(req, res, next) {
+
+  try {
+
+    const refreshToken = req.body['refreshToken'];
+
+    if (!refreshToken) {
+      throwError(422, 'Invalid request', 'No refresh token is provided');
+    }
+
+    const payload = await verifyRefreshTokenAsync(refreshToken);
+
+    if (!payload) {
+      return res.status(401).json({
+        code: 'REFRESH_TOKEN_INVALID',
+        message: 'Provided refresh token is not valid'
+      })
+    }
+
+    const { userId, email, role } = payload;
+
+    // if refresh token is found in whitelist (by decoded userId)
+    const currentUser = await User.findByPk(userId);
+
+    if(refreshToken !== currentUser.refreshToken) {
+      return res.status(401).json({
+        code: 'REFRESH_TOKEN_NOT_ALLOWED',
+        message: 'Provided refresh token is not allowed'
+      })
+    }
+
+    const newAccessToken = await createAccessTokenAsync({ userId, email, role });
+    const newRefreshToken = await createRefreshTokenAsync({ userId, email, role });
+
+    currentUser.refreshToken = newRefreshToken;
+    await currentUser.save();
+
+    res
+      .status(200)
+      .json({ accessToken: newAccessToken, refreshToken: newRefreshToken });
+
+  } catch (error) {
+
+    return next(error);
+  }
 }
 
 
 async function logout(req, res, next) {
 
+  // blacklist access token and remove refresh token from database
+
   try {
+
     const accessToken = extractAccessTokenFromRequest(req);
-    const { userId } = req.payload; // get from auth middleware after loggedInRequired is checked
+    const payload = req.payload; // get from auth middleware after loggedInRequired is checked
 
     // blacklist access token
-    await redisClient
-      .set('BL_' + userId, accessToken, 'EX', process.env.ACCESS_TOKEN_LIFE_SPAN);
+    await redisClient.set(`BL_${payload.userId}`, accessToken, 'EX', process.env.ACCESS_TOKEN_LIFE_SPAN);
 
     // remove refresh token from whitelist
-    await redisClient.del(`${userId}`);
-
-    res.clearCookie('refreshToken');
+    const currentUser = await User.findByPk(payload.userId);
+    currentUser.refreshToken = '';
+    await currentUser.save();
 
     res
       .status(200)
-      .json({
-        message: 'Successfully logged out',
-      })
+      .json({ message: 'Successfully logged out' });
+
   } catch (error) {
-    passErrorToHandler(error, next);
+    return next(error);
   }
 
 }
 
-
-function register(req, res, next) {
-
-  const email = req.body['email'];
-  const password = req.body['password'];
-  const confirmPassword = req.body['confirmPassword'];
-
-  validationUtils.sendMessage(req, res, 422);
-
-  // check if user already exists
-  User
-    .findAll({
-      where: { email: email },
-      limit: 1
-    })
-    .then(data => {
-      // if user exists, redirect user to login page
-      if (data.length > 0) {
-        throwError(100, 'Continue', 'User already exists, please log in');
-      }
-
-      // if user does not exist, first confirm passwords
-      if (password !== confirmPassword) {
-        throwError(422, 'Invalid Input', 'Both passwords do not match');
-      }
-
-      // if both passwords match, create user
-      return bcrypt.hash(password, 12);
-    })
-    .then(hashedPassword => {
-      console.log(hashedPassword);
-
-      return User.create({
-        email: email,
-        password: hashedPassword,
-        isAdmin: email === process.env.ADMIN_EMAIL
-      })
-    })
-    .then(user => {
-      const recipientEmail = user['email'];
-      const userId = user['id'];
-
-      const token = signToken({ email: recipientEmail }, accessPrivateKey, {
-        expiresIn: process.env.ACCESS_TOKEN_LIFE_SPAN
-      });
-
-      const verifyRegisterUrl = constructUrlWithQueryParams(
-        '/api/auth/verify-register', { token: token, userId: userId }
-      );
-
-      res
-        .status(200)
-        .json({
-          message: `Email sent to ${recipientEmail}`
-        });
-
-      return mailer.sendConfimationEmail(
-        recipientEmail,
-        confirmationUrl = verifyRegisterUrl
-      );
-    })
-    .then(info => {
-
-      console.log({
-        message: 'Please confirm registration with your email address',
-        // info: info
-      });
-    })
-    .catch(error => {
-      passErrorToHandler(error, next);
-    });
-}
-
-
-function verifyRegister(req, res, next) {
-
-  const token = req.query['token'];
-  const userId = req.query['userId'];
-  const payload = verifyToken(token, accessPublicKey);
-
-  if (payload) {
-    User
-      .findByPk(userId)
-      .then(user => {
-        user.isVerified = true;
-
-        return user.save();
-      })
-      .catch(error => {
-        return throwError(500, 'Error verifying registration', 'Unable to verify user')
-      })
-
-    res
-      .status(200)
-      .json({
-        message: 'Successfully verified email'
-      })
-  } else {
-    throwError(422, 'Invalid JWT token', message = 'Unable to verify email')
-  }
-}
 
 function authDetails(req, res, next) {
 
   res
     .status(200)
-    .json({
-      user: req.user,
-      message: 'Full auth details'
-    });
+    .json({ user: req.user });
 }
 
 
@@ -304,56 +239,61 @@ function resetPasswordEmail(req, res, next) {
 
   const userEmail = req.body['email'];
 
-  console.log('[services/auth.js].resetPassword', 'userEmail', userEmail);
-
   crypto.randomBytes(32, (error, buffer) => {
 
     if (error) {
-      return console.error(error);
+      // return console.error(error);
+      return res.status(500).json({
+        code: 'RESET_TOKEN_ERROR',
+        message: 'Error while creating reset token'
+      })
     }
 
     const token = buffer.toString('hex');
-    console.log('[services/auth.js].resetPassword', 'token', token);
 
     User
-      .findOne({
-        where: { email: userEmail },
-      })
+      .findOne({ where: { email: userEmail } })
       .then(user => {
+
         if (!user) {
-          throwError(404, 'Not found', 'Email does not exist');
+
+          return res.status(404).json({
+            code: 'EMAIL_NOT_FOUND',
+            message: 'Provided email does not exist'
+          })
         }
 
         user.resetToken = token;
         user.resetTokenExpiryDate = Date.now() + 60 * 60 * 1000; // + 1 hour
-        console.log('[services/auth.js].resetPassword', 'user', user);
         return user.save();
       })
       .then(user => {
 
-        const url = new URL(
-          path.join('/api/auth', 'reset-password-form'), // needs to be more dynamic
-          process.env.BASE_URL
-        );
+        // const url = new URL(
+        //   path.join('/auth', 'reset-password-form'), // needs to be more dynamic
+        //   process.env.BASE_URL
+        // );
 
-        url.searchParams.set('reset-token', token);
+        const url = new URL('reset-password', process.env.FRONTEND_ORIGIN);
+
+        url.searchParams.set('resetToken', token);
+        url.searchParams.set('userId', user.id);
 
         const confirmationUrl = url.toString();
-        console.log('[services/auth.js].resetPassword', 'confirmationUrl', confirmationUrl);
 
         res
           .status(200)
           .json({
-            message: 'Email sent'
+            message: `Email sent to ${user.email}`
           });
 
-        return mailer.sendConfimationEmail(userEmail, confirmationUrl)
+        return mailer.sendConfimationEmail(userEmail, confirmationUrl, 'để thay đổi mật khẩu');
       })
       .then(info => {
         console.log(info);
       })
       .catch(error => {
-        passErrorToHandler(error, next);
+        return next(error);
       });
   });
 
@@ -377,58 +317,130 @@ function resetPasswordForm(req, res, next) {
         throwError(404, 'Not found', 'User does not exist');
       }
 
+      // res.set('Content-Type', 'text/html');
+
+      // res.send(`
+      // <html>
+      //   <body>
+      //     <h1>Thay đổi mật khẩu</h1>
+      //     <form id="forget-password-form" method="POST">
+      //       <input type="password" name="newPassword" placeholder="Mật khẩu mới">
+      //       <input type="hidden" name="resetToken" value="${resetToken}">
+      //       <input type="hidden" name="userId" value="${user.id}">
+      //       <button type="submit">Xác nhận</button>
+      //     </form>
+      //     <script>
+      //       const form = document.querySelector("#forget-password-form");
+      //       form.addEventListener("click", function(event) {
+
+      //         event.preventDefault();
+      //       })
+      //     </script>
+      //   </body>
+      // </html>`);
+
       res
         .status(200)
         .json({
-          data: {
-            userId: user.id,
-            resetToken: resetToken
-          },
-          message: 'User is found'
+          userId: user.id,
+          resetToken: resetToken,
         });
     })
     .catch(error => {
-      passErrorToHandler(error, next);
+      return next(error);
     });
 
 }
 
 
-function resetPassword(req, res, next) {
+async function resetPassword(req, res, next) {
 
-  const resetToken = req.body['reset-token'];
-  const newPassword = req.body['new-password'];
-  const userId = req.body['user-id'];
+  try {
+    const resetToken = req.body['resetToken'];
+    const newPassword = req.body['newPassword'];
+    const userId = req.body['userId'];
+  
+    console.log({ newPassword, resetToken, userId });
+  
+    const currentUser = await User.findOne({ where: { id: userId } });
 
-  User
-    .findOne({
-      where: {
-        id: userId,
-        resetToken: resetToken,
-        resetTokenExpiryDate: { [Op.gt]: new Date() } // limit time left for changing password
-      }
-    })
-    .then(user => {
-      updatedUser = user;
-      return bcrypt.hash(newPassword, 12);
-    })
-    .then(hashedPassword => {
-      updatedUser.password = hashedPassword;
-      updatedUser.resetToken = null;
-      updatedUser.resetTokenExpiryDate = null;
-      return updatedUser.save()
-    })
-    .then(currentUser => {
-      res
-        .status(205)
-        .json({
-          data: { user: currentUser },
-          message: 'Password is reset'
-        });
-    })
-    .catch(error => {
-      passErrorToHandler(error, next);
-    });
+    console.log({ currentUser: currentUser.dataValues });
+    
+    if(parseInt(currentUser.dataValues.id) !== parseInt(userId)) {
+      return res.status(422).json({
+        code: 'USER_ID_INVALID',
+        message: 'Invalid user id'
+      })
+    }
+
+    if(currentUser.dataValues.resetToken !== resetToken) {
+      return res.status(422).json({
+        code: 'RESET_TOKEN_INVALID',
+        message: 'Invalid reset token'
+      })
+    }
+
+    if(currentUser.dataValues.resetTokenExpiryDate < new Date()) {
+      return res.status(403).json({
+        code: 'RESET_TOKEN_EXPIRED',
+        message: 'Reset token is expired'
+      })
+    }
+
+    // handle errors here: reset token expires, no user found
+
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+      
+    console.log({ hashedPassword, currentUser });
+  
+    currentUser.password = hashedPassword;
+    currentUser.resetToken = null;
+    currentUser.resetTokenExpiryDate = null;
+    await currentUser.save()
+      
+    return res
+      .status(200)
+      .json({
+        user: currentUser,
+        message: 'Password is reset',
+        code: 'SUCCESS'
+      });
+
+  } catch(error) {
+
+    return next(error);
+  }
+
+  // User
+  //   .findOne({
+  //     where: {
+  //       id: userId,
+  //       resetToken: resetToken,
+  //       resetTokenExpiryDate: { [Op.gt]: new Date() } // limit time left for changing password
+  //     }
+  //   })
+  //   .then(user => {
+  //     return { hashedPassword: bcrypt.hash(newPassword, 12), user };
+  //   })
+  //   .then(result => {
+  //     console.log({ hashedPassword: result.hashedPassword, user: result.user });
+  //     result.user.password = result.hashedPassword;
+  //     result.user.resetToken = null;
+  //     result.user.resetTokenExpiryDate = null;
+  //     return result.user.save()
+  //   })
+  //   .then(currentUser => {
+  //     return res
+  //       .status(200)
+  //       .json({
+  //         user: currentUser,
+  //         message: 'Password is reset',
+  //         code: 'SUCCESS'
+  //       });
+  //   })
+  //   .catch(error => {
+  //     return next(error);
+  //   });
 
 }
 
@@ -438,12 +450,9 @@ module.exports = {
   logout,
   register,
   verifyRegister,
+  refresh,
   authDetails,
   resetPasswordEmail,
   resetPasswordForm,
   resetPassword,
-  refresh,
-  clearCookie,
-  getCookie,
-  getNewAccessToken
 }

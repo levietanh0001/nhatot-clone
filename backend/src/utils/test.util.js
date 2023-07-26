@@ -1,5 +1,20 @@
-const { accessPublicKey, verifyToken } = require("./cryptography");
-const { redisClient } = require("./redis-store");
+// const { accessPublicKey, verifyToken } = require("./cryptography");
+// const { redisClient } = require("./redis-store");
+
+// function testAsync(error=false) {
+//   return new Promise((resolve, reject) => {
+//     if(error) {
+//       reject('error');
+//     }
+//     resolve('result');
+//   })
+// }
+
+// testAsync(result => {
+//   console.log(result);
+// }).catch(error => console.error(error))
+
+
 // const { redisClient, redisConn } = require("./redis-store");
 
 

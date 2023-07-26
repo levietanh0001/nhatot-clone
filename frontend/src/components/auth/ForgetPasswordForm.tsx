@@ -32,37 +32,33 @@ const ForgetPasswordForm = () => {
 
   const { handleSubmit } = form;
   const onSubmit = async (data: FormFieldValues, e) => {
+
     e.preventDefault();
-    console.log({ data });
     
     setLoading(true);
-    toast.promise(promiseWrapper(authContext?.resetUserPassword(email)), {
-      pending: 'Đang thực hiện yêu cầu...',
-      success: 'Gửi email thành công',
-      error: {
-        render({ data }) {
-          if(data instanceof FirebaseError && data.code === 'auth/user-not-found') {
-            return `Lỗi: Tài khoản người dùng không tồn tại`;  
-          } else {
-            console.log(data);
-            return `Lỗi: ${JSON.stringify((data))}`;
-          }
+    authContext?.resetUserPassword(email)
+      .then(response => response.json())
+      .then(data => {
+
+        if(data.code === 'EMAIL_NOT_FOUND') {
+          return toast.error('Tài khoản với email không tồn tại');
         }
-      },
-    }).then(() => {
-      setLoading(false);
-    }).catch(e => {
-      console.error(e);
-    }).finally(() => {
-      setLoading(false);
-    });
+
+        return toast.success('Đã gửi email xác nhận thay đổi mật khẩu')
+      })
+      .catch(error => {
+        console.error(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      })
 
   };
 
   return (
     <>
       {/* {JSON.stringify(error)} */}
-      <ToastContainer position='top-center' hideProgressBar theme='colored' autoClose={false} />
+      <ToastContainer position='top-right' hideProgressBar theme='colored' autoClose={5000} />
 
       <FormProvider {...form}>
         <form

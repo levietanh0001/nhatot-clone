@@ -27,9 +27,9 @@ const ProductTypeMenu = () => {
   const [show, setShow] = useState<boolean>(false);
   const [productType, setProductType] = useState<'muaban' | 'chothue' | 'duan'>('muaban');
 
-  useEffect(() => {
-    console.log({ productType });
-  }, [productType]);
+  // useEffect(() => {
+  //   console.log({ productType });
+  // }, [productType]);
 
   return (
     <>
@@ -98,7 +98,7 @@ const SearchBox = () => {
 const PostButton = () => {
   return (
     <div className={styles['post-btn']}>
-      <Link to='/post-product' onClick={() => console.log('Đăng tin')}>
+      <Link to='/post-product'>
         <svg xmlns='http://www.w3.org/2000/svg' data-type='monochrome' viewBox='0 0 23.228 23.227' width='1em' height='1em' fill='none'><path d='M13.288 0a.759.759 0 110 1.518H3.396a1.88 1.88 0 00-1.877 1.877v16.438a1.88 1.88 0 001.877 1.877h16.437a1.88 1.88 0 001.877-1.877V9.488a.76.76 0 011.518 0v10.344a3.399 3.399 0 01-3.395 3.395H3.396A3.4 3.4 0 010 19.832V3.395A3.4 3.4 0 013.396 0zm6.022.21c.273-.1.564-.078.835-.038.276.042.57.205.83.461l.54.54 1.117 1.117c.24.24.394.497.46.766a1.68 1.68 0 01-.4 1.545l-.058.062c-.344.352-.7.707-1.048 1.05l-.631.63-6.33 6.328-.488.493-.038.04c-.307.31-.621.628-.939.932-.153.148-.339.219-.619.236l-3.014.184h-.03a.719.719 0 01-.484-.218c-.158-.156-.249-.358-.24-.543l.135-3.097c.016-.253.095-.443.248-.598l.157-.16.003-.002.082-.081 5.416-5.415a719.16 719.16 0 011.747-1.745l1.68-1.682c.144-.146.27-.275.397-.396a1.8 1.8 0 01.672-.408zm.493 1.428l-.221.219c-.153.151-.306.305-.457.456l-.536.537-8.151 8.152-.086 1.957 1.906-.115.312-.312.226-.224.05-.049.385-.38 8.401-8.403-1.211-1.209a8.233 8.233 0 01-.172-.175l-.027-.029c-.065-.068-.13-.137-.2-.206l-.22-.219z' fill='currentColor'></path></svg>
         <span>Đăng tin</span>
       </Link>

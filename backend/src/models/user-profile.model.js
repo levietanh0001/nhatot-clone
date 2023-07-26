@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const { sequelize } = require('../utils/database.util');
-const { asString, asNonNegativeInt, asNonNegativeFloat, asBoolean } = require('../utils/model-types.util');
+const { asString, asNonNegativeInt, asNonNegativeFloat, asBoolean, asOneOf } = require('../utils/model-types.util');
 
 
 const UserProfile = sequelize.define('user_profile', {
@@ -14,8 +14,7 @@ const UserProfile = sequelize.define('user_profile', {
     ...asString(minChar = 0, maxChar = 255, fieldName = 'name')
   },
   gender: {
-    type: Sequelize.ENUM(['male', 'female', '']),
-    defaultValue: ''
+    ...asOneOf(['', 'male', 'female'])
   },
   rating: {
     ...asNonNegativeFloat()
@@ -29,9 +28,9 @@ const UserProfile = sequelize.define('user_profile', {
   respondToChat: {
     ...asNonNegativeFloat()
   },
-  isVerified: {
-    ...asBoolean(defaultValue = false)
-  },
+  // isVerified: {
+  //   ...asBoolean(defaultValue = false)
+  // },
   address: {
     ...asString(minChar = 0, maxChar = 255)
   },

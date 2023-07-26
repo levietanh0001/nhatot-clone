@@ -2,6 +2,17 @@
 
 const baseUrl = process.env.BASE_URL;
 
+function constructUrlWithQueryParamsAsync(route, data) {
+
+  return new Promise((resolve, reject) => {
+
+    const url = new URL(route, baseUrl);
+    url.search = new URLSearchParams(data);
+    resolve(url);
+  })
+}
+
+
 function constructUrlWithQueryParams(route, data) {
 
   const url = new URL(
@@ -23,5 +34,6 @@ function constructUrlWithQueryParams(route, data) {
 }
 
 module.exports = {
-  constructUrlWithQueryParams
+  constructUrlWithQueryParams,
+  constructUrlWithQueryParamsAsync
 }
