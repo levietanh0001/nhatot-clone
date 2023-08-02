@@ -18,7 +18,7 @@ module.exports = {
 
     const productImageUrls = [...Array(100000)].map(() => {
       return {
-        imageUrl: faker.image.urlLoremFlickr(),
+        imageUrl: faker.image.urlLoremFlickr({ category: 'city' }),
         productId: randomOption(productIdList),
         createdAt: new Date(),
         updatedAt: new Date(),

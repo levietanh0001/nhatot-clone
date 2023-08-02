@@ -31,6 +31,7 @@ const { authenticateUser } = require('./middlewares/auth.middleware');
 // import routers
 const authRouter = require('./routes/auth.route');
 const productRouter = require('./routes/product.route');
+const favoriteListRouter = require('./routes/favorite-list.route');
 // const firebaseRouter = require('./routes/firebase-auth.route');
 const errorsService = require('./controllers/errors.controller');
 
@@ -45,20 +46,21 @@ const FavoriteItem = require('./models/favorite-item.model');
 const ProductImage = require('./models/product-image.model');
 const ProductVideo = require('./models/product-video.model');
 const userRouter = require('./routes/user.route');
+const { extractAccessTokenFromRequest, verifyAccessTokenAsync } = require('./utils/cryptography.util');
 
 
 // define associations
-Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
-User.hasMany(Product); // one-to-many relationship: getProducts() and createProduct() methods generated
+Product.belongsTo(User);
+User.hasMany(Product, { onDelete: 'CASCADE' }); // one-to-many relationship: getProducts() and createProduct() methods generated
 User.hasOne(UserProfile);
 UserProfile.belongsTo(User);
 FavoriteList.belongsTo(User);
-User.hasOne(FavoriteList);
+User.hasOne(FavoriteList, { onDelete: 'CASCADE' });
 FavoriteList.belongsToMany(Product, { through: FavoriteItem });
 Product.belongsToMany(FavoriteList, { through: FavoriteItem });
 Product.hasMany(ProductImage);
 ProductImage.belongsTo(Product);
-Product.hasMany(ProductVideo);
+Product.hasMany(ProductVideo, { onDelete: 'CASCADE' });
 ProductVideo.belongsTo(Product);
 
 
@@ -94,8 +96,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 // middleware that always runs first before the rest
 app.use('/', (req, res, next) => {
   console.log('running first request');
-  // console.log({ magicMethods: getMagicMethods(Product) });
-  next();
+  // console.log({ magicMethods: getMagicMethods(FavoriteList) });
+  return next();
 });
 
 
@@ -120,7 +122,7 @@ app.use('/graphql', graphqlMiddleware);
 app.use('/auth', authRouter);
 app.use('/products', productRouter);
 app.use('/user', userRouter);
-
+app.use('/favorite-list', favoriteListRouter);
 
 // error handling
 app.use(errorsService.handle404);

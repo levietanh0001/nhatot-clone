@@ -1,16 +1,17 @@
 const { validationResult } = require('express-validator');
 
 
-function sendMessage(req, res, status_code) {
+function sendMessage(req, res, status) {
 
   const errors = validationResult(req);
   console.log({ errors });
   
   if (!errors.isEmpty()) {
     return res
-      .status(status_code)
+      .status(status)
       .json({
-        statusCode: 422,
+        status,
+        code: 'INVALID_REQUEST',
         error: 'Invalid Request',
         message: errors.array()[0].msg
       });

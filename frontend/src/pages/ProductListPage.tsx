@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Profiler } from 'react';
 import AboutUs from '~/components/footer/about-us/AboutUs';
 import Filters from '~/components/filters/Filters';
 import TopNav from '~/components/navbar';
@@ -10,8 +10,15 @@ import FilterBoard from '~/components/filters/FilterBoard';
 import UserTypeTabs from '~/components/tabs/UserTypeTabs';
 import ProductCardList from '~/components/product-list/ProductCardList';
 import ContentWithAdsLayout from '~/layouts/ContentWithAdsLayout';
+import ProductList from '~/components/product-list/ProductList';
 
 const ProductListPage = () => {
+
+  // function onRender(id, phase, actualDuration, baseDuration, startTime, commitTime) {
+    
+    
+  // }
+
   return (
     <>
       <Header>
@@ -24,9 +31,14 @@ const ProductListPage = () => {
         <PageTitle />
         <main>
           <ContentWithAdsLayout>
+            <ProductList />
+            {/* <Profiler id='ProductList' onRender={onRender}>
+            </Profiler> */}
+            {/* 
             <FilterBoard />
             <UserTypeTabs />
-            <ProductCardList />
+            <ProductCardList /> 
+            */}
           </ContentWithAdsLayout>
         </main>
       </body>

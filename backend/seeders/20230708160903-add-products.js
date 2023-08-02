@@ -1,6 +1,7 @@
 'use strict';
 
 const { faker } = require('@faker-js/faker/locale/vi');
+const { faker: fakerEn } = require('@faker-js/faker/locale/en');
 const { randomInRange, randomOption } = require('../src/utils/random.util');
 const { directions } = require('../src/utils/variables.util');
 const { QueryTypes } = require('sequelize');
@@ -30,7 +31,7 @@ module.exports = {
       return {
         type: randomType,
         category: randomCategory,
-        projectName: faker.lorem.lines(1),
+        projectName: fakerEn.lorem.lines(1),
         address: faker.location.streetAddress(true),
         numBedrooms: randomInRange(1, 5, 1),
         numBathrooms: randomInRange(1, 5, 1),
@@ -41,8 +42,8 @@ module.exports = {
         area: randomInRange(25, 150),
         price: randomPrice,
         deposit: randomDeposit,
-        postTitle: faker.lorem.lines(1),
-        description: faker.lorem.lines({ min: 1, max: 5 }),
+        postTitle: fakerEn.lorem.lines(1),
+        description: fakerEn.lorem.lines({ min: 1, max: 2 }),
         userType: randomOption(['canhan', 'moigioi']),
         userId: randomOption(userIds).id,
         createdAt: new Date(),

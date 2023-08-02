@@ -229,9 +229,9 @@ async function logout(req, res, next) {
 
 function authDetails(req, res, next) {
 
-  res
+  return res
     .status(200)
-    .json({ user: req.user });
+    .json({ user: req.payload, favoriteList: req.favoriteList });
 }
 
 

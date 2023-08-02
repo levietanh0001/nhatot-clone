@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Profiler, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 
@@ -40,7 +40,9 @@ function App() {
             <Route path="/" element={<SuspenseComponent><HomePage /></SuspenseComponent>}></Route>
             <Route path="/post-product" element={<LoggedInRequired><SuspenseComponent><PostPage /></SuspenseComponent></LoggedInRequired>}></Route>
             <Route path="/product" element={<SuspenseComponent><ProductPage /></SuspenseComponent>}></Route>
-            <Route path="/product-list" element={<SuspenseComponent><ProductListPage /></SuspenseComponent>}></Route>
+            
+            <Route path="/product-list/:type" element={<SuspenseComponent><ProductListPage /></SuspenseComponent>}></Route>
+            
             <Route path="/chat" element={<SuspenseComponent><ChatPage /></SuspenseComponent>}></Route>
 
             <Route path="/login" element={<SuspenseComponent><LoginPage /></SuspenseComponent>}></Route>

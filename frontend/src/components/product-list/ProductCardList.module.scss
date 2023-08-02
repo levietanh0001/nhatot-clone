@@ -1,16 +1,38 @@
 .product-card-list {
+  list-style-type: none;
+}
 
-  // @for $i from 1 to 20 {
-    
-  //   & .card:hover {
-  //     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.65);
-  //   }
+.product-card-list.grid-view {
 
-  //   & .card:nth-child(#{$i}):hover {
-  //     z-index: $i;
-  //     position: relative;
-  //   }
-  // }
+  display: flex;
+  flex-wrap: wrap;
+  
+  & > li {
+    width: 33.33%;
+    height: 320px;
+  }
+
+}
+
+@media (max-width: 576px) {
+
+  .product-card-list.grid-view {
+    & > li {
+      width: 50%;
+    }
+  
+  }
+}
+
+@media (max-width: 420px) {
+
+  .product-card-list.grid-view {
+    & > li {
+      width: 100%;
+      height: auto;
+    }
+  
+  }
 }
 
 .link-wrapper {
@@ -18,8 +40,12 @@
   color: inherit;
 }
 
-.card-wrapper {
-  
+.link-wrapper.grid-view {
+  height: 100%;
+}
+
+.card-wrapper.grid-view {
+  height: 100%;
 }
 
 .card {
@@ -46,6 +72,15 @@
     }
   }
   
+  position: relative;
+}
+
+.card.grid-view {
+  height: 100%; // added
+
+  flex-direction: column;
+  
+  // position: relative; // added
 }
 
 .card-media {
@@ -59,6 +94,26 @@
   }
 }
 
+.card-media.grid-view {
+  
+  & > img  {
+    width: 100%; // added
+    height: 100%; // added
+  }
+
+}
+
+.card-title.grid-view {
+  flex: 0 1 auto;
+  font-size: 1rem;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+
 .card-details {
   flex: 1;
 
@@ -69,7 +124,15 @@
   text-align: left;
 }
 
+.card-details.grid-view {
+  
+  font-size: 0.875rem;
+}
+
+
 .card-content {
+
+  color: gray;
   flex: 1;
 
   & .description {
@@ -81,6 +144,20 @@
       vertical-align: middle;
     }
   }
+
+  & .price {
+    color: var(--red);
+    font-weight: bold;
+  }
+
+  & .address {
+    font-size: 0.875rem; // added
+  }
+}
+
+.card-content.grid-view {
+
+
 }
 
 .superscript {
@@ -103,29 +180,133 @@
     align-items: center;
     gap: 5px;
 
-    & .person-icon svg {
-      fill: black;
+    & .person-icon > svg {
+      fill: gray;
+      vertical-align: middle;
+    }
+
+    & .person-icon img {
+      vertical-align: middle;
     }
   }
 
-  & .favorite-btn {
-    flex-grow: 0;
+}
 
-    border: 0;
-    vertical-align: middle;
-    margin: auto 0;
 
-    background-color: inherit;
-    font-size: 1.25rem;
+.card-footer.grid-view {
 
-    transition: scale 300ms;
+  flex: 0;
+
+  & .card-info {
+    
+    height: 100%;
+    width: auto;
+    flex: 1 1 auto;
+
+    display: flex;
+    align-items: center;
+
+    color: gray;
+
+    & > .text {
+
+      font-size: 0.875rem;
+
+      height: 100%;
+      display: flex;
+      align-items: center;
+
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      
+    }
+
+  }
+
+}
+
+.favorite-btn {
+
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+
+  flex-grow: 0;
+
+  border: 0;
+  vertical-align: middle;
+  margin: auto 0;
+
+  background-color: transparent;
+  font-size: 1.25rem;
+
+  transition: scale 300ms;
+
+  &:hover {
+    scale: 1.2;
+  }
+
+  & .heart-icon > svg {
+    fill: red;
+  }
+}
+
+.favorite-btn.grid-view {
+
+  width: 30px;
+  height: 30px;
+
+  position: absolute;
+  right: 15px;
+  top: -5px;
+
+}
+
+.pagination {
+
+  margin: 10px 0;
+  
+  & > ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  & > ul > li > button {
+    width: 40px;
+    height: 40px;
+    padding: 7px 12px;
+    background-color: white;
+    border: 1px solid lightgray;
+    border-radius: 4px;
 
     &:hover {
-      scale: 1.5;
+      background-color: #f4f4f4;
+      // border: 1px solid var(--orange-700);
+      color: black;
+      cursor: pointer;
     }
 
-    & .heart-icon svg {
-      fill: red;
+    &:active {
+      background-color: lightgray;
+      // border: 1px solid var(--orange-800);
+      // color: white;
     }
+  }
+}
+
+.pagination .active-button {
+  background-color: var(--orange-800);
+  border: 1px solid var(--orange-800);
+  color: white;
+}
+
+.pagination {
+
+  & .next-btn > svg, & .prev-btn > svg {
+    vertical-align: middle;
   }
 }

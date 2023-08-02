@@ -17,9 +17,29 @@ export const formatNumberWithCommas = (value) => {
 };
 
 export const commaSeparatedStringToNumber = (str) => {
-  return parseFloat(str.replace(/,/g, ''));
+  return parseInt(str.replace(/,/g, ''));
+  // return parseFloat(str.replace(/,/g, ''));
 };
 
 export function isNumeric(num){
   return !isNaN(num);
+}
+
+export function convertToInternationalCurrencySystem(labelValue) {
+
+  // Nine Zeroes for Billions
+  return Math.abs(Number(labelValue)) >= 1.0e+9
+
+  ? (Math.abs(Number(labelValue)) / 1.0e+9).toFixed(2) + " tỷ"
+  // Six Zeroes for Millions 
+  : Math.abs(Number(labelValue)) >= 1.0e+6
+
+  ? (Math.abs(Number(labelValue)) / 1.0e+6).toFixed(2) + " triệu"
+  // Three Zeroes for Thousands
+  : Math.abs(Number(labelValue)) >= 1.0e+3
+
+  ? (Math.abs(Number(labelValue)) / 1.0e+3).toFixed(2) + " nghìn"
+
+  : Math.abs(Number(labelValue));
+
 }

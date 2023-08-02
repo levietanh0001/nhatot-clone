@@ -1,4 +1,5 @@
 const errorsService = require('../controllers/errors.controller');
+const User = require('../models/user.model');
 const { verifyToken, accessPublicKey, extractAccessTokenFromRequest, verifyAccessTokenAsync } = require('../utils/cryptography.util');
 const { returnError } = require('../utils/error.util');
 const { auth } = require('../utils/firebase.util');
@@ -76,16 +77,43 @@ async function loggedInRequired(req, res, next) {
     // attach decoded payload to req to next handler
     req.payload = payload;
 
+    const currentUser = await User.findByPk(payload.userId);
+
+    if(!currentUser) {
+      return res.status(404).json({
+        code: 'USER_NOT_FOUND',
+        message: 'User does not exist'
+      });
+    }
+
+    req.user = currentUser;
+
+    // const currentFavoriteList = await currentUser.getFavorite_list();
+    // console.log({ currentFavoriteList });
+    // req.favoriteList = currentFavoriteList;
+
+    // if(!currentFavoriteList) {
+    //   const favoriteList = await currentUser.createFavorite_list();
+    //   console.log({ favoriteList });
+    //   req.favoriteList = favoriteList;
+    // }
+
     return next(); // pass control to controller after
 
   } catch (error) {
+
+    console.error(error);
     const e = new Error();
-    e.status = 401;
+    
     if(error.name === 'TokenExpiredError') {
+      e.status = 401;
       e.code = 'ACCESS_TOKEN_EXPIRED'
+      e.message = 'Provided token has expired';
+      return next(e);
     }
-    e.message = 'Provided token has expired';
-    return next(e);
+
+    return next(error);
+
   }
 
 }

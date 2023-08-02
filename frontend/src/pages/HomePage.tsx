@@ -33,15 +33,15 @@ const HomePage = () => {
           </SuspenseComponent>
 
           <SuspenseComponent>
-            <ProductCardSlider title="Mua bán bất động sản" className="mua-ban-bds-carousel" prevEl="prev-mua-ban" nextEl="next-mua-ban" />
+            <ProductCardSlider type='mua-ban' title="Mua bán bất động sản" className="mua-ban-bds-carousel" prevEl="prev-mua-ban" nextEl="next-mua-ban" />
           </SuspenseComponent>
           
           <SuspenseComponent>
-            <ProductCardSlider title="Cho thuê bất động sản" className="cho-thue-bds-carousel" prevEl="prev-cho-thue" nextEl="next-cho-thue" />
+            <ProductCardSlider type='cho-thue' title="Cho thuê bất động sản" className="cho-thue-bds-carousel" prevEl="prev-cho-thue" nextEl="next-cho-thue" />
           </SuspenseComponent>
 
           <SuspenseComponent>
-            <ProductCardSlider title="Dự án bất động sản" className="du-an-bds-carousel" prevEl="prev-du-an" nextEl="next-du-an" />
+            <ProductCardSlider type='du-an' title="Dự án bất động sản" className="du-an-bds-carousel" prevEl="prev-du-an" nextEl="next-du-an" />
           </SuspenseComponent>
 
           <SuspenseComponent>

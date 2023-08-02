@@ -4,6 +4,7 @@ const multer = require('multer');
 const productsController = require('../services/products');
 const { adminOnly } = require('../middlewares/auth.middleware');
 const productsValidator = require('../validators/products');
+const { validateCreateProduct, validateUpdateProduct } = require('../validators/products.validator');
 
 
 const router = express.Router();
@@ -19,14 +20,14 @@ router.post(
   // upload.array('image', 3), 
   // upload.single('image'), 
   // upload.none(), 
-  productsValidator.validate_create_product(),
+  validateCreateProduct,
   productsController.createProduct
 ); // product form-data in body
 router.put(
   '/products/:productId',
   adminOnly,
   // upload.none(),
-  productsValidator.validate_update_product(),
+  validateUpdateProduct,
   productsController.updateProductById
 );
 router.delete(

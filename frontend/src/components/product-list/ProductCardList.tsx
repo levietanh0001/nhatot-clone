@@ -1,93 +1,116 @@
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import styles from './ProductCardList.module.scss';
 
-const ProductCardList = () => {
+import styles from './ProductCardList.module.scss';
+import { useDebugValue, useEffect, useState } from 'react';
+import { axiosClient } from '~/utils/axios.util';
+import { IProductData } from '~/interfaces/product.interface';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { Pagination } from '@mui/material';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { convertToInternationalCurrencySystem } from '~/utils/number.util';
+import clsx from 'clsx';
+dayjs.extend(relativeTime);
+
+let render = 0;
+
+const ProductCardList = (props) => {
+
+  const {
+    isGridView,
+    currentPage,
+    setCurrentPage,
+    numPages,
+    setNumPages,
+    onPageChange,
+    products,
+    onFavoriteButtonClick,
+    favoriteProductIds
+  } = props;
+
+  useEffect(() => {
+    console.log({ render });
+  }, [render]);
+
+  render++;
+  
   return (
-    <div className={styles['product-card-list']}>
-      {data.map((item, index) => (
-        <Link key={index} to={item.href} className={styles['link-wrapper']}>
-          <div className={styles['card-wrapper']}>
-            <div className={styles['card']}>
-              <div className={styles['card-media']}>
-                <img src={item.img.src} alt={item.img.alt} />
-              </div>
-              <div className={styles['card-details']}>
-                <div className={styles['card-title']}>{item.title}</div>
-                <div className={styles['card-content']}>
-                  <div className={styles['description']}>
-                    <span className={styles['area']}>
-                      {item.area.squareMeter} m
-                      <sup className={styles['superscript']}>2</sup>
-                    </span>
-                    <span>-</span>
-                    <span>{item.bedroom} PN</span>
+    <>
+      <ul className={clsx(styles['product-card-list'], { [styles['grid-view']]: isGridView })}>
+        {products && products.map((product, index) => (
+          <li key={index}>
+            <Link key={index} to='#' className={clsx(styles['link-wrapper'], { [styles['grid-view']]: isGridView })}>
+              <div className={clsx(styles['card-wrapper'], { [styles['grid-view']]: isGridView })}>
+                <div className={clsx(styles['card'], { [styles['grid-view']]: isGridView })}>
+                  <div className={clsx(styles['card-media'], { [styles['grid-view']]: isGridView })}>
+                    {/* add image skeleton */}
+                    {!product.images?.[0] && <img style={{display: 'block', margin: 'auto', backgroundColor: 'hsl(0, 0%, 90%)', transition: 'background-color 300ms'}} src="https://placehold.co/210x163/orange/white/png?text=Nh%C3%A0%20T%E1%BB%91t" />}
+                    {product.images?.[0] && product.images?.[0].imageUrl && <img src={product.images?.[0].imageUrl} alt={product.details.postTitle} loading='lazy' />}
                   </div>
-                  <span className={styles['price']}>
-                    {item.price.amount} {item.price.unit}
-                  </span>
-                </div>
-                <div className={styles['card-footer']}>
-                  <div className={styles['card-info']}>
-                    <span className={styles['person-icon']}>
-                      <svg
-                        fill='black'
-                        xmlns='http://www.w3.org/2000/svg'
-                        height='1em'
-                        viewBox='0 0 512 512'
-                      >
-                        {/*! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. */}
-                        <path d='M406.5 399.6C387.4 352.9 341.5 320 288 320H224c-53.5 0-99.4 32.9-118.5 79.6C69.9 362.2 48 311.7 48 256C48 141.1 141.1 48 256 48s208 93.1 208 208c0 55.7-21.9 106.2-57.5 143.6zm-40.1 32.7C334.4 452.4 296.6 464 256 464s-78.4-11.6-110.5-31.7c7.3-36.7 39.7-64.3 78.5-64.3h64c38.8 0 71.2 27.6 78.5 64.3zM256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-272a40 40 0 1 1 0-80 40 40 0 1 1 0 80zm-88-40a88 88 0 1 0 176 0 88 88 0 1 0 -176 0z' />
-                      </svg>
-                      {/* <Person fontSize='small' /> */}
-                    </span>
-                    <span>1 ngày trước</span>
-                    <span>{item.location}</span>
+                  <div className={clsx(styles['card-details'], { [styles['grid-view']]: isGridView })}>
+                    <div className={clsx(styles['card-title'], { [styles['grid-view']]: isGridView })}>
+                      {product.details.postTitle}
+                    </div>
+                    <div className={clsx(styles['card-content'], { [styles['grid-view']]: isGridView })}>
+                      <div className={styles['description']}>
+                        <span className={styles['area']}>{product.details.area} m<sup className={styles['superscript']}>2</sup></span>
+                        <span>-</span>
+                        <span>{product.details.numBedrooms} PN</span>
+                      </div>
+                      <div className={styles['price']}>{String(convertToInternationalCurrencySystem(product.details.price)).replace('.', ',').replace(',00', '')}</div>
+                      <div className={styles['address']}>{product.details.address}</div>
+                    </div>
+                    <div className={clsx(styles['card-footer'], { [styles['grid-view']]: isGridView })}>
+                      <div className={clsx(styles['card-info'], { [styles['grid-view']]: isGridView })}>
+                        <div className={styles['text']}>
+                          <span className={styles['person-icon']}>
+                            {
+                              product.details.userType === 'moigioi'
+                              ? <img src="https://static.chotot.com/storage/icons/owner/pro.svg" alt="Môi giới" height={16} width={16} loading="eager" />
+                              : <svg fill='gray' xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 512 512'><path d='M406.5 399.6C387.4 352.9 341.5 320 288 320H224c-53.5 0-99.4 32.9-118.5 79.6C69.9 362.2 48 311.7 48 256C48 141.1 141.1 48 256 48s208 93.1 208 208c0 55.7-21.9 106.2-57.5 143.6zm-40.1 32.7C334.4 452.4 296.6 464 256 464s-78.4-11.6-110.5-31.7c7.3-36.7 39.7-64.3 78.5-64.3h64c38.8 0 71.2 27.6 78.5 64.3zM256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-272a40 40 0 1 1 0-80 40 40 0 1 1 0 80zm-88-40a88 88 0 1 0 176 0 88 88 0 1 0 -176 0z' /></svg>
+                            }
+                          </span>
+                          &nbsp;&sdot;&nbsp;
+                          <span>{product.details.userType}</span>
+                          &nbsp;&sdot;&nbsp;
+                          <span>{dayjs(product.details.updatedAt).fromNow().replace('minutes ago', 'phút trước').replace('minute ago', 'phút trước').replace('hours ago', 'giờ trước').replace('hour ago', 'giờ trước').replace('days ago', 'ngày trước').replace('a day ago', '1 ngày trước').replace('months ago', 'ngày trước').replace('month ago', 'ngày trước').replace('years ago', 'năm trước').replace('year ago', 'năm trước')}</span> 
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <button className={styles['favorite-btn']}>
+                  <button onClick={() => onFavoriteButtonClick(product.details.id)} className={clsx(styles['favorite-btn'], { [styles['grid-view']]: isGridView })}>
                     <span className={styles['heart-icon']}>
-                      <svg
-                        xmlns='http://www.w3.org/2000/svg'
-                        height='1em'
-                        viewBox='0 0 512 512'
-                      >
-                        {/*! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. */}
-                        <path d='M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8v-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5v3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20c0 0-.1-.1-.1-.1c0 0 0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5v3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2v-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z' />
-                      </svg>
+                      {!favoriteProductIds && <svg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 512 512'><path d='M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8v-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5v3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20c0 0-.1-.1-.1-.1c0 0 0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5v3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2v-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z' /></svg>}
+                      {favoriteProductIds && !favoriteProductIds.includes(product.details.id) && <svg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 512 512'><path d='M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8v-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5v3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20c0 0-.1-.1-.1-.1c0 0 0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5v3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2v-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z' /></svg>}
+                      {favoriteProductIds && favoriteProductIds.includes(product.details.id) && <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z" /></svg>}
+                      {/* {JSON.stringify(favoriteProductIds)} */}
+                      {/* {JSON.stringify(favoriteProductIds && favoriteProductIds.includes(product.id))}
+                      {JSON.stringify({id: product.details.id})} */}
                     </span>
-                    {/* <AiOutlineHeart /> */}
                   </button>
                 </div>
               </div>
-            </div>
-          </div>
-        </Link>
-      ))}
-    </div>
+            </Link>
+          </li>
+        ))}
+      </ul>
+
+      <Pagination className={styles['pagination']} page={currentPage} count={Number(numPages)} boundaryCount={0} siblingCount={2} defaultPage={currentPage} shape='rounded' variant='outlined' onChange={onPageChange} showFirstButton />
+    </>
   );
 };
 
-const srcList = [
-  'https://cdn.chotot.com/YiW5G3t-XPqvOmy4_dwktTnpfcUDx1F5i7ZGRKPgn10/preset:listing/plain/fe8c3c1720749469fc518bc17ff6dcaf-2828836700652840477.jpg',
-  'https://cdn.chotot.com/9lbxj-EKh1KXVOJb_5I5f4d44WgTDjB5gYiO1WnTuss/preset:listing/plain/765da8c83777256683311c681e39c390-2819732954924348631.jpg',
-  'https://cdn.chotot.com/z5wMimw_gLHA93GF9D3zjYsrBfXM9fbjJ5fGaNaIyWw/preset:listing/plain/2c65368a27b9d7df05a3f97b3880bb6c-2828991746408773885.jpg',
-  'https://cdn.chotot.com/rF68XKEgwEsekc9xXD-lHzXCpnZPUQXb1BAzGanx6u4/preset:listing/plain/8c0637277b08f171e2dd04f5dc28c406-2830984849783579334.jpg',
-  'https://cdn.chotot.com/6BHLaw-fe8sx3P4GpB3HDfXmXKeRyXXmo0mBkAifyXc/preset:listing/plain/ce354c8585a87565315f3b173174619b-2823934818590421101.jpg',
-  'https://cdn.chotot.com/Mt5CA46No541mBP9gGaGb5d72UM_u_sB997J52IQ5kM/preset:listing/plain/832173c5773e6c6a0381c9d654a577b2-2824457488492683656.jpg',
-  'https://cdn.chotot.com/0AQZ0aBviO6LoMlsUFEQ1M1639CeeeilIXyFB9YLinI/preset:listing/plain/7650c53c67a0319388e9cb2f9c38571c-2824458832462501098.jpg',
-  'https://cdn.chotot.com/pAtlrCEj7MEB8IcBUJyFnfx1Rj8k7eCDsqgBn10Ffig/preset:listing/plain/88096984dc2b20ce3b94ee52161fe431-2830984665748857542.jpg',
-  'https://cdn.chotot.com/7L6VWe71_tvp7yeSmyBNQsjZm1wC1YHaERhJN1xL8ng/preset:listing/plain/a65b14520bc775d4ecf57e5cb0dfe0f4-2804924532258773338.jpg',
-];
-
-const data = srcList.map((src) => {
-  return {
-    img: { src, alt: '' },
-    title: 'Cần bán bất động sản nhất cận thị nhị cận sông',
-    href: '/product',
-    price: { amount: 20, unit: 'tỷ' },
-    location: 'Hà Nội',
-    area: { squareMeter: 65 },
-    bedroom: 2,
-  };
-});
+ProductCardList.propTypes = {
+  isGridView: PropTypes.bool,
+  currentPage: PropTypes.number,
+  setCurrentPage: PropTypes.func,
+  numPages: PropTypes.number,
+  setNumPages: PropTypes.func,
+  onPageChange: PropTypes.func,
+  products: PropTypes.array,
+  onFavoriteButtonClick: PropTypes.func,
+  favoriteProductIds: PropTypes.array,
+}
 
 export default ProductCardList;

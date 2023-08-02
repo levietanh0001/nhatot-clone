@@ -1,12 +1,12 @@
 
 .common-styles {
-  border: 1px solid lightgray;
+  border: 1px solid whitesmoke;
+  // border-right: 0;
   background-color: var(--secondary-background-color);
-
 }
 
-button.underlined {
-  border-bottom: 3px solid var(--orange-800);
+.filter-btn.active {
+  box-shadow: 0 3px 0 0 var(--orange-900);
   font-weight: 600;
 }
 
@@ -22,7 +22,7 @@ button.underlined {
   }
 
   & button:hover {
-    @extend .underlined;
+    box-shadow: 0 3px 0px 0 var(--orange-900);
   }
 }
 
@@ -32,12 +32,17 @@ button.underlined {
   display: flex;
   justify-content: flex-start;
 
-  & > * {
+  & .filter-btn {
+    min-width: 160px;
+  }
+
+  & > button {
     flex: 1;
   }
 }
 
 .sort-by-menu {
+  min-width: 160px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -62,3 +67,10 @@ button.underlined {
   }
 }
 
+@media (max-width: 768px) {
+  .wrapper {
+    // flex-direction: column;
+    // overflow: hidden;
+    display: none;
+  }
+}

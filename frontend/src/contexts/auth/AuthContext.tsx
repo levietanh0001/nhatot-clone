@@ -19,6 +19,11 @@ interface IAuthContext {
   // checkLoggedIn: () => Promise<boolean>;
 }
 
+interface IDecodedToken {
+  iat: number;
+
+}
+
 export const AuthContext = createContext<IAuthContext | null>(null);
 
 
@@ -28,6 +33,8 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [email, setEmail] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  // refresh token on mount and on access token expires
 
   useEffect(() => {
 
@@ -73,7 +80,6 @@ export const AuthProvider = ({ children }) => {
     }
 
   }, []);
-
 
   const registerUser = async (email, password, confirmPassword) => {  
 

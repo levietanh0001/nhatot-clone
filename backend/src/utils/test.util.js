@@ -1,6 +1,14 @@
 // const { accessPublicKey, verifyToken } = require("./cryptography");
 // const { redisClient } = require("./redis-store");
 
+const { randomInRange, randomNumber } = require("./random.util");
+
+function formatNumberWithCommas(value) {
+  return parseInt(String(value).replace(/\D/g, "")).toLocaleString()
+}
+
+console.log(randomInRange(0.5*10**9, 100*10**9, 0.5*10**9) / 10**9);
+
 // function testAsync(error=false) {
 //   return new Promise((resolve, reject) => {
 //     if(error) {

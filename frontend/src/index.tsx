@@ -5,6 +5,7 @@ import App from "./App";
 import MUIStyledEngineProvider from "./providers/MUIStyledEngineProvider";
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from "./app/store";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 
 // disable logging in production
@@ -14,16 +15,18 @@ if (process.env.NODE_ENV?.includes('prod')) {
   console.debug = () => {}
 }
 
+const queryClient = new QueryClient();
+
 ReactDOM.render(
   <MUIStyledEngineProvider>
-    
     <ReactReduxProvider store={store}>
 
       {/* delay the rendering of our app’s UI until the persisted data is available in the Redux store */}
       {/* <PersistGate loading={null} persistor={persistor}></PersistGate> */}
-      <App />
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
     </ReactReduxProvider>
-
   </MUIStyledEngineProvider>,
 
   document.getElementById("root")

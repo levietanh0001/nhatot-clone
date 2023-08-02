@@ -30,11 +30,28 @@
     &:hover {
       background-color: var(--orange-800);
     }
+
+    & > .image-placeholder {
+      display: inline-block;
+      width: 36px;
+      height: 36px;
+    }
+
+    & > .image-placeholder > svg {
+      vertical-align: middle;
+      height: 100%;
+      width: 100%;
+      fill: black;
+    }
   }
 
-  & img {
+  & > img {
     width: 36px;
     height: 36px;
-
   }
+
+}
+
+.icon-wrapper.active {
+  background-color: var(--orange-800);
 }

@@ -59,13 +59,16 @@ const slides = srcList.map((src) => {
 });
 
 interface IProductCardSliderProps {
+  type: string;
   title: string;
   className: string;
   prevEl: string;
   nextEl: string;
 }
 
-const ProductCardSlider: React.FC<IProductCardSliderProps> = ({ title, className, prevEl, nextEl }) => {
+const ProductCardSlider: React.FC<IProductCardSliderProps> = (props) => {
+
+  const { type, title, className, prevEl, nextEl } = props;
   const nextRef = useRef<HTMLButtonElement>(null);
   const prevRef = useRef<HTMLButtonElement>(null);
 
@@ -142,7 +145,7 @@ const ProductCardSlider: React.FC<IProductCardSliderProps> = ({ title, className
           />
         </div>
 
-        <Link to='/product-list' className={styles['more']}>
+        <Link to={`/product-list/${type}`} className={styles['more']}>
           <div>
             <span>Xem thêm 148.654 tin khác</span>
           </div>

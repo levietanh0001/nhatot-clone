@@ -38,14 +38,6 @@ const User = sequelize.define('user', {
   role: {
     ...asOneOf(['canhan', 'moigioi', 'admin'])
   },
-  // isAdmin: {
-  //   type: Sequelize.BOOLEAN,
-  //   defaultValue: false
-  // },
-  // isBroker: {
-  //   type: Sequelize.BOOLEAN,
-  //   defaultValue: false
-  // }
 
 }, {
   freezeTableName: true

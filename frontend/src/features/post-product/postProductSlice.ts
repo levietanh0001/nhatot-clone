@@ -23,7 +23,6 @@ interface IInitialState {
     images?: File[];
     video?: File | null;
   };
-  formStep: number;
 }
 
 const initialState: IInitialState = {
@@ -47,7 +46,6 @@ const initialState: IInitialState = {
     images: [],
     video: null,
   },
-  formStep: 0,
 };
 
 const postProductSlice = createSlice({
@@ -62,9 +60,6 @@ const postProductSlice = createSlice({
     },
     setUserType: (state, action) => {
       state.product.userType = action.payload;
-    },
-    incrementFormStep: (state) => {
-      state.formStep += 1;
     },
     setProjectName: (state, action) => {
       state.product.projectName = action.payload;

@@ -22,7 +22,8 @@ router.post('/reset-password-email', resetPasswordEmail);
 router.get('/reset-password-form', resetPasswordForm); // this route must be implemented on frontend
 router.post('/reset-password', resetPassword);
 
-// router.get('/', loggedInRequired, authDetails);
+router.get('/', loggedInRequired, authDetails);
+
 // router.post('/refresh', refresh);
 // router.post('/new-access-token', getNewAccessToken);
 // router.get('/cookie', getCookie);
