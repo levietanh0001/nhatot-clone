@@ -33,8 +33,22 @@ async function adminOnly(req, res, next) {
     errorsService.throwError(403, 'Unauthorized', 'Invalid access token');
   }
 
-  if (payload.role !== 'admin') {
-    errorsService.throwError(403, 'Unauthorized', 'Current user is not admin');
+  const currentUser = await User.findByPk(payload.userId);
+
+  if(!currentUser) {
+
+    return res.status(403).json({
+      code: 'USER_NOT_FOUND',
+      message: 'Current user is not found'
+    });
+  }
+
+  if (currentUser.role !== 'admin') {
+
+    return res.status(403).json({
+      code: 'USER_NOT_ADMIN',
+      message: 'Current user is not admin'
+    });
   }
 
   next();
@@ -59,8 +73,8 @@ async function loggedInRequired(req, res, next) {
     if (!payload) {
 
       return res.status(401).json({
-        code: 'ACCESS_TOKEN_EXPIRED',
-        message: 'Access token has expired'
+        code: 'ACCESS_TOKEN_INVALID',
+        message: 'Access token is invalid'
       })
     }
 

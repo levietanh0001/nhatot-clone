@@ -140,7 +140,9 @@ async function getProducts(req, res, next) {
 
     console.log({ where });
 
-    const cachedProducts = await redisClient.get(`getProducts:${JSON.stringify(where)}`);
+    const criteria = { ...where, limit, offset };
+
+    const cachedProducts = await redisClient.get(`getProducts:${Object.values(criteria)}`);
     if(cachedProducts) {
       return res.status(200).json(JSON.parse(cachedProducts));
     }
@@ -164,7 +166,7 @@ async function getProducts(req, res, next) {
       }
     });
 
-    await redisClient.setEx(`getProducts:${JSON.stringify(where)}`, 10, JSON.stringify(productInfo));    
+    await redisClient.setEx(`getProducts:${Object.values(criteria)}`, 10, JSON.stringify(productInfo));    
 
     return res.status(200).json(productInfo);
 

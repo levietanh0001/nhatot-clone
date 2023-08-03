@@ -41,6 +41,7 @@ const ProductCardList = (props) => {
         {products && products.map((product, index) => (
           <li key={index}>
             <Link key={index} to='#' className={clsx(styles['link-wrapper'], { [styles['grid-view']]: isGridView })}>
+              {/* {product.details.id} */}
               <div className={clsx(styles['card-wrapper'], { [styles['grid-view']]: isGridView })}>
                 <div className={clsx(styles['card'], { [styles['grid-view']]: isGridView })}>
                   <div className={clsx(styles['card-media'], { [styles['grid-view']]: isGridView })}>

@@ -3,11 +3,13 @@ import { useUpdateEffect } from 'usehooks-ts';
 import FilterBoard from "~/components/filters/FilterBoard"
 import UserTypeTabs from "~/components/tabs/UserTypeTabs"
 import ProductCardList from "./ProductCardList"
-import { useCallback, useDebugValue, useEffect, useState } from "react";
+import { useCallback, useContext, useDebugValue, useEffect, useState } from "react";
 import { axiosClient } from "~/utils/axios.util";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { backendBaseUrl } from "~/utils/variables.util";
+import { AuthContext } from '~/contexts/auth/AuthContext';
+import useAxiosAuth from '~/hooks/useAxiosAuth';
 
 
 const pageSize = 9;
@@ -27,28 +29,21 @@ async function getFavoriteList(accessToken, signal) {
 
 }
 
-function addProductToFavoriteList(accessToken, favoriteProductId) {
-  return fetch(new URL(`favorite-list/${String(favoriteProductId)}`, backendBaseUrl), {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${accessToken}`
-    }
-  });
+function addProductToFavoriteList(favoriteProductId) {
+  
+  return axiosClient.post(`favorite-list/${String(favoriteProductId)}`);
 }
 
-function removeProductFromFavoriteList(accessToken, favoriteProductId) {
-  return fetch(new URL(`favorite-list/${String(favoriteProductId)}`, backendBaseUrl), {
-    method: 'DELETE',
-    headers: {
-      'Authorization': `Bearer ${accessToken}`
-    }
-  });
+function removeProductFromFavoriteList(favoriteProductId) {
+
+  return axiosClient.delete(`favorite-list/${String(favoriteProductId)}`);
 }
 
 const ProductList = () => {
 
   const params = useParams();
   const type = params.type;
+  const authContext = useContext(AuthContext);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [numPages, setNumPages] = useState<number | null>(null);
   const [userType, setUserType] = useState<string>('');
@@ -56,6 +51,8 @@ const ProductList = () => {
   const [gridView, setGridView] = useState<boolean>(false);
   const [accessToken, setAccessToken] = useState<string | null>(() => localStorage.getItem('accessToken'));
   const [favoriteProductIds, setFavoriteProductIds] = useState<any[]>([]);
+
+  const { axiosAuth } = useAxiosAuth();
 
   useEffect(() => {
 
@@ -96,14 +93,21 @@ const ProductList = () => {
       }
 
       const params = new URLSearchParams({
+        // limit: '20',
+        // offset: '0',
         limit: `${productPerPage}`,
-        offset: `${productPerPage * currentPage}`,
+        offset: `${productPerPage * (currentPage - 1)}`,
         ...filters
       });
 
+      console.log({ limit: `${productPerPage}`,
+      offset: `${productPerPage * (currentPage - 1)}`,
+      ...filters });
+
       return axiosClient.get('/products', { params, signal });
     },
-    keepPreviousData: true
+    // keepPreviousData: true,
+    refetchOnWindowFocus: false
   });
 
   const products = data?.data;
@@ -134,7 +138,7 @@ const ProductList = () => {
   const handlePageChange = (event, page) => {
 
     setCurrentPage(page);
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 10, behavior: 'smooth' });
     sessionStorage.setItem('currentPage', JSON.stringify(page));
   }
 
@@ -145,48 +149,81 @@ const ProductList = () => {
   const handleFavoriteButtonClick = async (id) => {
 
     const productId = id;
+    
+    console.log({ favoriteProductIds });
 
     if(favoriteProductIds && !favoriteProductIds.includes(productId)) {
       
-      addProductToFavoriteList(accessToken, productId)
+      addProductToFavoriteList(productId)
+      // axiosAuth.post(`favorite-list/${String(productId)}`)
         .then(() => {
           console.log('adding product to favorite list');
-          return fetch(new URL('favorite-list', backendBaseUrl), {
-            headers: {
-              'Authorization': `Bearer ${accessToken}`
-            }
-          });
+          return axiosClient.get('favorite-list');
         })
         .then(response => {
-          return response.json();
-        })
-        .then(data => {
+
+          const data = response.data;
+          // console.log({ data });
+
           if(data) {
-            setFavoriteProductIds(data.productIds);
+
+            if(!data.productIds) {
+              setFavoriteProductIds([]);
+            }
+
+            if(data.productIds) {
+              // if unauthorized, will be undefined, requires refreshing token before sending request
+              setFavoriteProductIds(data.productIds);
+            }
+
           }
         })
-        .catch(error => console.error(error));
+        .catch(error => {
+          
+          console.error(error);
+
+          if(error.name === 'USER_NOT_FOUND') {
+            authContext?.redirectToRegisterPage();
+          } else {
+            authContext?.redirectToLoginPage();
+          }
+
+        });
 
     } else if(favoriteProductIds && favoriteProductIds.includes(productId)) {
       
-      removeProductFromFavoriteList(accessToken, productId)
+      removeProductFromFavoriteList(productId)
+      // axiosAuth.delete(`favorite-list/${String(productId)}`)
         .then(() => {
           console.log('removing product from favorite list');
-          return fetch(new URL('favorite-list', backendBaseUrl), {
-            headers: {
-              'Authorization': `Bearer ${accessToken}`
-            }
-          });
+          return axiosClient.get('favorite-list');
         })
         .then(response => {
-          return response.json();
-        })
-        .then(data => {
+          
+          const data = response.data;
+          // console.log({ data });
+
           if(data) {
-            setFavoriteProductIds(data.productIds);
+            if(!data.productIds) {
+              setFavoriteProductIds([]);
+            }
+
+            if(data.productIds) {
+              setFavoriteProductIds(data.productIds);
+            }
           }
         })
-        .catch(error => console.error(error));
+        .catch(error => {
+
+          console.error(error);
+
+          if(error.name === 'USER_NOT_FOUND') {
+            authContext?.redirectToRegisterPage();
+          } else {
+            authContext?.redirectToLoginPage();
+          }
+
+        });
 
     }
 

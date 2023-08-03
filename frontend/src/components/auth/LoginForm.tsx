@@ -58,7 +58,7 @@ const LoginForm = () => {
     
           const payload = jwtDecode(data.accessToken);
           authContext.setUser(payload);
-      
+          authContext.setAuthenticated(true);
         
           localStorage.setItem('accessToken', data.accessToken);
           localStorage.setItem('refreshToken', data.refreshToken);

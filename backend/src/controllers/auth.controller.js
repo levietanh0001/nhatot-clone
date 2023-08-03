@@ -175,6 +175,13 @@ async function refresh(req, res, next) {
     // if refresh token is found in whitelist (by decoded userId)
     const currentUser = await User.findByPk(userId);
 
+    if(!currentUser) {
+      return res.status(401).json({
+        code: 'USER_NOT_FOUND',
+        message: 'User does not exist, please log in'
+      })
+    }
+
     if(refreshToken !== currentUser.refreshToken) {
       return res.status(401).json({
         code: 'REFRESH_TOKEN_NOT_ALLOWED',
@@ -194,6 +201,7 @@ async function refresh(req, res, next) {
 
   } catch (error) {
 
+    console.error(error);
     return next(error);
   }
 }

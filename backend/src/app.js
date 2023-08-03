@@ -50,17 +50,17 @@ const { extractAccessTokenFromRequest, verifyAccessTokenAsync } = require('./uti
 
 
 // define associations
-Product.belongsTo(User);
-User.hasMany(Product, { onDelete: 'CASCADE' }); // one-to-many relationship: getProducts() and createProduct() methods generated
+Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' }); // on delete Product, remove children referencing Product
+User.hasMany(Product); // one-to-many relationship: getProducts() and createProduct() methods generated
 User.hasOne(UserProfile);
 UserProfile.belongsTo(User);
 FavoriteList.belongsTo(User);
-User.hasOne(FavoriteList, { onDelete: 'CASCADE' });
+User.hasOne(FavoriteList);
 FavoriteList.belongsToMany(Product, { through: FavoriteItem });
 Product.belongsToMany(FavoriteList, { through: FavoriteItem });
 Product.hasMany(ProductImage);
 ProductImage.belongsTo(Product);
-Product.hasMany(ProductVideo, { onDelete: 'CASCADE' });
+Product.hasMany(ProductVideo);
 ProductVideo.belongsTo(Product);
 
 

@@ -5,24 +5,28 @@ import { auth } from '~/firebase';
 import { getNewTokens, verifyAccessToken } from '~/utils/cryptography';
 import { backendBaseUrl } from '~/utils/variables.util';
 import { useNavigate } from 'react-router-dom';
-
+import { IDecodedToken } from '~/interfaces/jwt.interface';
+import dayjs from 'dayjs';
 
 interface IAuthContext {
   user: any | null;
   setUser: SetStateAction<any | null>;
+  userData?: any | null;
+  setUserData?: SetStateAction<any | null>;
+  authenticated: boolean;
+  setAuthenticated: React.Dispatch<SetStateAction<boolean>>;
   registerUser: (email: string, password: string, confirmPassword: string) => Promise<any>;
   loginUser: (email: string, password: string) => Promise<any>;
   logoutUser: () => Promise<any>;
   resetUserPassword: (email: string) => Promise<any>;
   // updateUserEmail: (email: string) => Promise<any>;
   updateUserPassword: (newPassword: string, userId: string, resetToken: string,) => Promise<any>;
-  // checkLoggedIn: () => Promise<boolean>;
+  checkLoggedIn: () => Promise<boolean>;
+  redirectToLoginPage: (loginUrl?: string) => void;
+  redirectToRegisterPage: (registerUrl?: string) => void;
 }
 
-interface IDecodedToken {
-  iat: number;
 
-}
 
 export const AuthContext = createContext<IAuthContext | null>(null);
 
@@ -30,11 +34,15 @@ export const AuthContext = createContext<IAuthContext | null>(null);
 export const AuthProvider = ({ children }) => {
 
   const [user, setUser] = useState<any | null>(null);
+  const [userData, setUserData] = useState<any | null>(null);
+  const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [email, setEmail] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  // refresh token on mount and on access token expires
+  useEffect(() => {
+    console.log({ authenticated });
+  }, [authenticated]);
 
   useEffect(() => {
 
@@ -44,12 +52,10 @@ export const AuthProvider = ({ children }) => {
 
       try {
 
-        // const accessToken = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoibGV3aWxsaWFtMDAwMUBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2OTAxOTYzMDMsImV4cCI6MTY5MDE5NzIwM30.mz5lzM8wvwzNieK1LRtfL-2_Ex0ZkQMIPQ5aCPXR_jxRUzo5rhoQwxxJYlGC2IJOh7Vq5Hcmkr1CehKdGR49AkKQZLPVCsKaSQ0C-2i_KwyKjR_5qZACPespUcSCigdNxLq0nM_zEtx_2tOQS-5vYb--njLEhsGWOQHIy6igMxIaCi9a6uopQFIgF5ICK2AvPx30av7dEu3ICO-IHmkMuCTLUGPn7M2ROCChRvDd38cgmxcrBqGq_DvmqpzIa7c6hVol9BzDQ9AChucxShdcBF-f76hYctnW5hOBvC3zsx3j76lLJ2vhTr7WyssnNiYJZjpqypYuDjHFM6Vq3CcMeA';
-        // const accessToken = '';
-
         const accessToken = localStorage.getItem('accessToken');
     
         if(!accessToken) {
+          setAuthenticated(false);
           setUser(null);
           setLoading(false);
         }
@@ -59,10 +65,29 @@ export const AuthProvider = ({ children }) => {
         console.log({ payload });
         
         if(!payload) {
-          setUser(null);
-          setLoading(false);  
+
+          const refreshToken = localStorage.getItem('refreshToken');
+          const newTokens = await getNewTokens(refreshToken, abortController.signal);
+
+          if(!newTokens) {
+            setAuthenticated(false);
+            setUser(null);
+            setLoading(false);
+          }
+
+          if(newTokens) {
+            localStorage.setItem('accessToken', newTokens.accessToken);
+            localStorage.setItem('refreshToken', newTokens.refreshToken);
+            const payload = jwtDecode(newTokens.accessToken);
+            setAuthenticated(true);
+            setUser(payload);
+            setLoading(false);
+          }
+
         } else {
+          setAuthenticated(true);
           setUser(payload);
+          localStorage.setItem('user', JSON.stringify(user));
           setLoading(false);
         }
 
@@ -80,6 +105,17 @@ export const AuthProvider = ({ children }) => {
     }
 
   }, []);
+
+  const getUserData = () => {
+    return JSON.parse(String(localStorage.getItem('user')));
+  }
+
+  const checkLoggedIn = async () => {
+
+    const accessToken = localStorage.getItem('accessToken');
+    const payload = jwtDecode(String(accessToken)) as IDecodedToken;
+    return !Boolean(dayjs.unix(Number(payload.exp)).diff(dayjs()) < 1);
+  }
 
   const registerUser = async (email, password, confirmPassword) => {  
 
@@ -123,6 +159,9 @@ export const AuthProvider = ({ children }) => {
   const logoutUser = () => {
 
     const accessToken = localStorage.getItem('accessToken');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    setUser(null);
 
     return fetch(new URL('auth/logout', backendBaseUrl), {
       method: 'POST',
@@ -170,15 +209,29 @@ export const AuthProvider = ({ children }) => {
     // }
   }
 
+  const redirectToLoginPage = (loginUrl='/login') => {
+    navigate(loginUrl);
+  }
+
+  const redirectToRegisterPage = (registerUrl='/register') => {
+    navigate(registerUrl);
+  }
+
   const value = {
     user,
     setUser,
+    authenticated,
+    setAuthenticated,
     registerUser,
     loginUser,
     logoutUser,
     resetUserPassword,
     updateUserEmail,
     updateUserPassword,
+    redirectToLoginPage,
+    redirectToRegisterPage,
+    checkLoggedIn,
+    getUserData
   }
 
   return (
