@@ -1,4 +1,4 @@
-import FloatingLabelInput from '~/components/input/FloatingLabelInput';
+import FloatingLabelInput from '~/components/common/input/FloatingLabelInput';
 import styles from './PostDetails.module.scss';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
@@ -8,15 +8,14 @@ const PostDetails = ({
   onPostTitleChange,
   onPostDescriptionChange,
 }) => {
-
   const [focus, setFocus] = useState<boolean>(false);
 
   useEffect(() => {
     console.log({
-      height: product.description? '250px': focus? '250px': '50px',
+      height: product.description ? '250px' : focus ? '250px' : '50px',
       description: product.description,
-      focus: focus
-    })
+      focus: focus,
+    });
   }, [product.description, focus]);
 
   return (
@@ -42,7 +41,9 @@ const PostDetails = ({
           required
           onFocus={() => setFocus(true)}
           onBlur={() => setFocus(false)}
-          style={{ height: product.description? '250px': focus? '250px': '50px' }}
+          style={{
+            height: product.description ? '250px' : focus ? '250px' : '50px',
+          }}
         />
       </div>
     </>

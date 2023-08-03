@@ -4,7 +4,7 @@ import { AiOutlineMenu, AiOutlineSearch, AiOutlineBell } from "react-icons/ai";
 
 import styles from "./Dashboard.module.scss";
 import ToggleThemeButton from "~/components/navbar/ToggleThemeButton";
-import Avatar from "~/components/avatar/Avatar";
+import Avatar from "~/components/common/avatar/Avatar";
 import SidebarAccordionMenu from "./SidebarAccordionMenu";
 import SearchModal from './SearchModal';
 

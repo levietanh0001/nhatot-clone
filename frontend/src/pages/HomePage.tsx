@@ -41,7 +41,7 @@ const HomePage = () => {
           </SuspenseComponent>
 
           <SuspenseComponent>
-            <ProductCardSlider type='du-an' title="Dự án bất động sản" className="du-an-bds-carousel" prevEl="prev-du-an" nextEl="next-du-an" />
+            <ProductCardSlider type='khac' title="Các loại hình bất động sản khác" className="du-an-bds-carousel" prevEl="prev-du-an" nextEl="next-du-an" />
           </SuspenseComponent>
 
           <SuspenseComponent>

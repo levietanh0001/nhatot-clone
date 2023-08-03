@@ -9,11 +9,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import styles from './LoginForm.module.scss';
 import { loginFormSchema } from '~/schemas/auth';
 import { Link, useNavigate } from 'react-router-dom';
-import FloatingLabelInput from '../input/FloatingLabelInput';
+import FloatingLabelInput from '../common/input/FloatingLabelInput';
 import { promiseWrapper } from '~/utils/function.util';
 import { backendBaseUrl } from '~/utils/variables.util';
 import jwtDecode from 'jwt-decode';
-
 
 type FormFieldValues = {
   email: string;
@@ -21,7 +20,6 @@ type FormFieldValues = {
 };
 
 const LoginForm = () => {
-
   const authContext = useContext(AuthContext);
 
   const [email, setEmail] = useState<string>('');
@@ -45,43 +43,50 @@ const LoginForm = () => {
 
     setLoading(true);
 
-    authContext?.loginUser(email, password)
+    authContext
+      ?.loginUser(email, password)
       .then((data) => {
-
         console.log({ loginData: data });
 
-        if(data.code === 'USER_NOT_VERIFIED') {
-          toast.error('Vui lòng kiểm tra xác nhận tài khoản trong email trước khi đăng nhập');
+        if (data.code === 'USER_NOT_VERIFIED') {
+          toast.error(
+            'Vui lòng kiểm tra xác nhận tài khoản trong email trước khi đăng nhập'
+          );
         }
-    
-        if(data.accessToken) {
-    
+
+        if (data.accessToken) {
           const payload = jwtDecode(data.accessToken);
           authContext.setUser(payload);
           authContext.setAuthenticated(true);
-        
+
           localStorage.setItem('accessToken', data.accessToken);
           localStorage.setItem('refreshToken', data.refreshToken);
-      
-          console.log({ accessToken: localStorage.getItem('accessToken'), refreshToken: localStorage.getItem('refreshToken') })
+
+          console.log({
+            accessToken: localStorage.getItem('accessToken'),
+            refreshToken: localStorage.getItem('refreshToken'),
+          });
 
           setLoading(false);
           navigate('/');
         }
-        
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
         toast.error('Lỗi khi đăng nhập, vui lòng thử lại');
       })
       .finally(() => setLoading(false));
-
   };
 
   return (
     <>
       {/* {JSON.stringify(error)} */}
-      <ToastContainer position='top-right' hideProgressBar theme='colored' autoClose={5000} />
+      <ToastContainer
+        position='top-right'
+        hideProgressBar
+        theme='colored'
+        autoClose={5000}
+      />
 
       <FormProvider {...form}>
         <form
@@ -108,13 +113,20 @@ const LoginForm = () => {
           />
 
           <div className={styles['form-control']}>
-            <Link to='/forget-password' className={styles['forget-password']}>Quên mật khẩu?</Link>
+            <Link to='/forget-password' className={styles['forget-password']}>
+              Quên mật khẩu?
+            </Link>
           </div>
 
           <div className={styles['form-control']}>
-            <button className={styles['submit-btn']} type='submit' disabled={loading}>Đăng nhập</button>
+            <button
+              className={styles['submit-btn']}
+              type='submit'
+              disabled={loading}
+            >
+              Đăng nhập
+            </button>
           </div>
-
         </form>
       </FormProvider>
     </>

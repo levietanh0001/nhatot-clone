@@ -4,8 +4,8 @@ import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import styles from './SecondTopNav.module.scss';
-import DropdownMenu from '../dropdown-menu/DropdownMenu';
-import DropdownMenuItem from '../dropdown-menu/DropdownMenuItem';
+import DropdownMenu from '../common/dropdown-menu/DropdownMenu';
+import DropdownMenuItem from '../common/dropdown-menu/DropdownMenuItem';
 import { AuthContext } from '~/contexts/auth/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 

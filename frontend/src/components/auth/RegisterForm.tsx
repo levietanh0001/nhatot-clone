@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import styles from './RegisterForm.module.scss';
 import { registerFormSchema } from '~/schemas/auth';
 import { useNavigate } from 'react-router-dom';
-import FloatingLabelInput from '../input/FloatingLabelInput';
+import FloatingLabelInput from '../common/input/FloatingLabelInput';
 import { AuthContext } from '~/contexts/auth/AuthContext';
 import { promiseWrapper } from '~/utils/function.util';
 import { FirebaseError } from 'firebase/app';
@@ -18,9 +18,7 @@ type FormFieldValues = {
   confirmPassword: string;
 };
 
-
 const RegisterForm = () => {
-
   const authContext = useContext(AuthContext);
 
   const [email, setEmail] = useState<string>('');
@@ -41,23 +39,23 @@ const RegisterForm = () => {
     console.log({ data });
 
     setLoading(true);
-    authContext?.registerUser(email, password, confirmPassword)
-      .then(data => {
-
-        if(data.code === 'USER_ALREADY_EXISTS') {
+    authContext
+      ?.registerUser(email, password, confirmPassword)
+      .then((data) => {
+        if (data.code === 'USER_ALREADY_EXISTS') {
           toast.error('Tài khoản đã tồn tại, vui lòng đăng nhập');
         }
 
-        if(data.code === 'SUCCESS') {
-          toast.success('Vui lòng kiểm tra email để xác minh tài khoản của bạn');
+        if (data.code === 'SUCCESS') {
+          toast.success(
+            'Vui lòng kiểm tra email để xác minh tài khoản của bạn'
+          );
         }
-
       })
-      .catch(error => {
+      .catch((error) => {
         toast.error(JSON.stringify(error));
       })
       .finally(() => setLoading(false));
-
 
     // setLoading(true);
     // toast.promise(promiseWrapper(authContext?.registerUser(email, password)
@@ -89,17 +87,24 @@ const RegisterForm = () => {
     // }).finally(() => {
     //   setLoading(false);
     // });
-
   };
 
   return (
     <>
       {/* {JSON.stringify(error)} */}
-      <ToastContainer position='top-right' hideProgressBar theme='colored' autoClose={5000} />
-      
+      <ToastContainer
+        position='top-right'
+        hideProgressBar
+        theme='colored'
+        autoClose={5000}
+      />
+
       <FormProvider {...form}>
-        <form className={styles['form']} onSubmit={handleSubmit(onSubmit)} noValidate>
-          
+        <form
+          className={styles['form']}
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
+        >
           <h1 className={styles['main-title']}>Đăng Ký</h1>
           <FloatingLabelInput
             label='Email'
@@ -123,13 +128,20 @@ const RegisterForm = () => {
             name='confirmPassword'
             type='password'
             inputValue={confirmPassword}
-            onInputValueChange={(event) => setConfirmPassword(event.target.value)}
+            onInputValueChange={(event) =>
+              setConfirmPassword(event.target.value)
+            }
           />
 
           <div className={styles['form-control']}>
-            <button className={styles['submit-btn']} type='submit' disabled={loading}>Đăng ký</button>
+            <button
+              className={styles['submit-btn']}
+              type='submit'
+              disabled={loading}
+            >
+              Đăng ký
+            </button>
           </div>
-
         </form>
       </FormProvider>
     </>

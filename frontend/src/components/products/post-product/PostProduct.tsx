@@ -16,24 +16,16 @@ import PostDetails from './PostDetails';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import postProductFormSchema from '~/schemas/post-product/post-product-form-schema';
-import {
-  commaSeparatedStringToNumber,
-  sanitizeBigIntString,
-  sanitizeNumberString,
-} from '~/utils/number.util';
+import { commaSeparatedStringToNumber, sanitizeBigIntString, sanitizeNumberString } from '~/utils/number.util';
 import useId from '@mui/material/utils/useId';
-import {
-  extractUploadedFiles,
-  validateFileSize,
-  validateFilesSize,
-} from '~/utils/file.util';
-import useFetch from '~/hooks/useFetch';
+import { extractUploadedFiles, validateFileSize, validateFilesSize } from '~/utils/file.util';
 import { backendBaseUrl } from '~/utils/variables.util';
-import { buildFormData, logFormData } from '~/utils/form.util';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '~/contexts/auth/AuthContext';
 
 let renderCount = 0;
+
+
 
 const PostProduct = () => {
   const authContext = useContext(AuthContext);
@@ -372,7 +364,7 @@ const PostProduct = () => {
 
             {product.userType && <ActionButtons formId={postProductFormId} />}
 
-            {JSON.stringify({ errors: form.formState.errors })}
+            {/* {JSON.stringify({ errors: form.formState.errors })} */}
             {/* 
             {JSON.stringify({
               isAddressValid,

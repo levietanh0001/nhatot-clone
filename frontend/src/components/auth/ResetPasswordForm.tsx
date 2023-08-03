@@ -6,34 +6,32 @@ import 'react-toastify/dist/ReactToastify.css';
 import { AuthContext } from '~/contexts/auth/AuthContext';
 
 import forgetPasswordFormSchema from '~/schemas/auth/forget-password-form.schema';
-import FloatingLabelInput from '../input/FloatingLabelInput';
+import FloatingLabelInput from '../common/input/FloatingLabelInput';
 import styles from './LoginForm.module.scss';
 import { useSearchParams } from 'react-router-dom';
 import resetPasswordFormSchema from '~/schemas/auth/reset-password-form.schema';
-
 
 type FormFieldValues = {
   password: string;
 };
 
 const ResetPasswordForm = () => {
-
   const authContext = useContext(AuthContext);
   const [password, setPassword] = useState<string>('');
   const [resetToken, setResetToken] = useState<string>('');
   const [userId, setUserId] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-  
 
   useEffect(() => {
-
     let search = window.location.search;
     let params = new URLSearchParams(search);
-    console.log({ userId: params.get('userId'), resetToken: params.get('resetToken') });
+    console.log({
+      userId: params.get('userId'),
+      resetToken: params.get('resetToken'),
+    });
 
     setUserId(params.get('userId') ?? '');
     setResetToken(params.get('resetToken') ?? '');
-
   }, []);
 
   const form = useForm<FormFieldValues>({
@@ -46,32 +44,36 @@ const ResetPasswordForm = () => {
 
   const { handleSubmit } = form;
   const onSubmit = async (data: FormFieldValues, e) => {
-
     e.preventDefault();
-    
-    setLoading(true);
-    authContext?.updateUserPassword(password, userId, resetToken)
-      .then(response => response.json())
-      .then(data => {
 
+    setLoading(true);
+    authContext
+      ?.updateUserPassword(password, userId, resetToken)
+      .then((response) => response.json())
+      .then((data) => {
         console.log({ data });
 
-        if(data.code === 'SUCCESS') {
+        if (data.code === 'SUCCESS') {
           return toast.success('Đã thay đổi mật khẩu thành công');
         }
 
-        if(data.code === 'RESET_TOKEN_EXPIRED' || data.code === 'RESET_TOKEN_INVALID') {
-          return toast.error('Hết hạn thay đổi mật khẩu, vui lòng gửi lại email xác nhận');
+        if (
+          data.code === 'RESET_TOKEN_EXPIRED' ||
+          data.code === 'RESET_TOKEN_INVALID'
+        ) {
+          return toast.error(
+            'Hết hạn thay đổi mật khẩu, vui lòng gửi lại email xác nhận'
+          );
         }
-        
+
         return toast.error('Có lỗi xảy ra, vui lòng thử lại');
       })
-      .catch(error => {
+      .catch((error) => {
         toast.error('Có lỗi xảy ra, vui lòng thử lại');
       })
       .finally(() => {
         setLoading(false);
-      })
+      });
 
     // authContext?.resetUserPassword(email)
     //   .then(response => response.json())
@@ -89,7 +91,6 @@ const ResetPasswordForm = () => {
     //   .finally(() => {
     //     setLoading(false);
     //   })
-
   };
 
   return (
@@ -114,9 +115,14 @@ const ResetPasswordForm = () => {
           />
 
           <div className={styles['form-control']}>
-            <button className={styles['submit-btn']} type='submit' disabled={loading}>Xác nhận thay đổi mật khẩu</button>
+            <button
+              className={styles['submit-btn']}
+              type='submit'
+              disabled={loading}
+            >
+              Xác nhận thay đổi mật khẩu
+            </button>
           </div>
-
         </form>
       </FormProvider>
     </>

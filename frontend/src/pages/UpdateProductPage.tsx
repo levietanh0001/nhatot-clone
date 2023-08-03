@@ -1,6 +1,4 @@
-
 import TopNav from '~/components/navbar'
-import PostProduct from '~/components/post-product'
 import Header from '~/layouts/Header'
 
 
@@ -12,7 +10,7 @@ const PostPage = () => {
       </Header>
       <body style={{ height: 'auto' }}>
         <main>
-          <PostProduct />
+          
         </main>
       </body>
     </>

@@ -1,5 +1,5 @@
 import styles from './SearchModal.module.scss';
-import Modal from '~/components/modal/Modal';
+import Modal from '~/components/common/modal/Modal';
 
 
 const SearchModal = ({ show, onModalClose, onClickAway }) => {

@@ -2,8 +2,8 @@ import {
   formatNumberWithCommas,
   sanitizeNumberString,
 } from '~/utils/number.util';
-import FloatingLabelInput from '../input/FloatingLabelInput';
-import { SelectInput, SelectOption } from '../input/SelectInput';
+import FloatingLabelInput from '~/components/common/input/FloatingLabelInput';
+import { SelectInput, SelectOption } from '~/components/common/input/SelectInput';
 import styles from './ProductDetails.module.scss';
 
 const directionOptions = [
