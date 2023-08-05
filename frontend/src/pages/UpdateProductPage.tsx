@@ -2,7 +2,7 @@ import TopNav from '~/components/navbar'
 import Header from '~/layouts/Header'
 
 
-const PostPage = () => {
+const UpdateProductPage = () => {
   return (
     <>
       <Header>
@@ -17,4 +17,4 @@ const PostPage = () => {
   )
 }
 
-export default PostPage
+export default UpdateProductPage

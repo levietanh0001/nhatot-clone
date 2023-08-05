@@ -4,95 +4,117 @@ const validationUtils = require('../utils/validation.util');
 const fileUtils = require('../utils/file.util');
 const errorsService = require('../controllers/errors.controller');
 const ProductImage = require('../models/product-image.model');
-const { sequelize } = require('../utils/database.util');
+const { sequelize, getMagicMethods } = require('../utils/database.util');
 const { redisClient } = require('../utils/redis-store.util');
+const User = require('../models/user.model');
 
 
-function createProduct(req, res, next) {
+async function createProduct(req, res, next) {
 
-  const imageUrls = req.files.map(file => {
-    return `${req.protocol}://${req.get('host')}/uploads/images/${file.filename}`
-  });
+  try {
 
-  const type = req.body['type'];
-  const category = req.body['category'];
-  const projectName = req.body['projectName'];
-  const address = req.body['address'];
-  const numBedrooms = req.body['numBedrooms'];
-  const numBathrooms = req.body['numBathrooms'];
-  const balconDirection = req.body['balconDirection'];
-  const mainDoorDirection = req.body['mainDoorDirection'];
-  const legalDocsStatus = req.body['legalDocsStatus'];
-  const furnitureStatus = req.body['furnitureStatus'];
-  const area = req.body['area'];
-  const price = req.body['price'];
-  const deposit = req.body['deposit'];
-  const postTitle = req.body['postTitle'];
-  const description = req.body['description'];
-  const userType = req.body['userType'];
-
-  validationUtils.sendMessage(req, res, 422);
-  
-  Product
-    .create({ type, category, projectName, address, numBedrooms, numBathrooms, balconDirection, mainDoorDirection, legalDocsStatus, furnitureStatus, area, price, deposit, postTitle, description, userType })
-    .then(result => {
-
-      imageUrls.forEach(url => {
-        result.createProduct_image({
-          imageUrl: url
-        })
-      });
-
-      res
-        .status(200)
-        .json({
-          result,
-          body: req.body,
-          files: req.files,
-          uid: req.uid,
-          productId: result.id
-        })
-    })
-    .catch(error => {
-
-      console.error(error);
-      res.status(403).json({
-        message: 'Cannot create product',
-        error
+    if(!req.files) {
+      return res.status(422).json({
+        code: 'IMAGES_MISSING',
+        message: 'Images are missing'
       })
-    })
+    }
+
+    const imageUrls = req.files.map(file => {
+      return `${req.protocol}://${req.get('host')}/uploads/images/${file.filename}`
+    });
+  
+    const type = req.body['type'];
+    const category = req.body['category'];
+    const projectName = req.body['projectName'];
+    const address = req.body['address'];
+    const numBedrooms = req.body['numBedrooms'];
+    const numBathrooms = req.body['numBathrooms'];
+    const balconDirection = req.body['balconDirection'];
+    const mainDoorDirection = req.body['mainDoorDirection'];
+    const legalDocsStatus = req.body['legalDocsStatus'];
+    const furnitureStatus = req.body['furnitureStatus'];
+    const area = req.body['area'];
+    const price = req.body['price'];
+    const deposit = req.body['deposit'];
+    const postTitle = req.body['postTitle'];
+    const description = req.body['description'];
+    const userType = req.body['userType'];
+  
+    validationUtils.sendMessage(req, res, 422);
+  
+    const product = await req.user.createProduct({ type, category, projectName, address, numBedrooms, numBathrooms, balconDirection, mainDoorDirection, legalDocsStatus, furnitureStatus, area, price, deposit, postTitle, description, userType });
+
+    if(!product) {
+      return res.status(500).json({
+        message: 'Cannot create product'
+      })
+    }
+
+    imageUrls.forEach(url => {
+      product.createProduct_image({
+        imageUrl: url
+      })
+    });
+
+    return res
+      .status(200)
+      .json(product)
+
+  } catch(error) {
+    console.error(error);
+    return next(error);
+  }
 
 }
 
 
-function uploadProductVideo(req, res, next) {
+async function uploadProductVideo(req, res, next) {
 
   const productId = req.query['productId'];
+
+  if(!productId) {
+    return res.status(422).json({
+      code: 'NO_PRODUCT_ID',
+      message: 'No product id is specified'
+    })
+  }
+
+  if(!req.file) {
+    return res.status(422).json({
+      code: 'VIDEO_MISSING',
+      message: 'No video is uploaded'
+    })
+  }
+
   const videoUrl = `${req.protocol}://${req.get('host')}/uploads/videos/${req.file.filename}`
 
-  Product
-    .findByPk(productId)
-    .then(result => {
-      result.createProduct_video({
-        videoUrl
-      });
+  // const product = await req.user.getProducts({ where: { id: productId } });
 
-      res.status(200).json({
-        videoUrl,
-        body: req.body,
-        file: req.file,
-        uid: req.uid
-      })
+  const productArray = await Product.findAll({ where: { id: productId }, include: User });
 
-    })
-    .catch(error => {
+  if(productArray.length === 0) {
+    return res.status(404).json({
+      code: 'PRODUCT_NOT_FOUND',
+      message: 'User does not have specified product'
+    });
+  }
 
-      console.error(error);
-      res.status(403).json({
-        message: 'Cannot create video',
-        error
-      })
-    })
+  const product = productArray[0];
+
+  const currentUser = await product.getUser({ id: req.user.id });
+
+  if(!currentUser) {
+    return res.status(403).json({
+      code: 'Unauthorized',
+      message: 'User is not allowed to create video for this product'
+    });
+  }
+
+  // return res.status(200).json(currentUser);
+  
+  const video = await product.createProduct_video({ videoUrl });
+  return res.status(200).json(video);
 
 }
 

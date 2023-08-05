@@ -205,8 +205,8 @@ function authRequired(req, res, next) {
   auth
     .verifyIdToken(token)
     .then((decodedToken) => {
-      const uid = decodedToken.uid;
-      req.uid = uid;
+      // const uid = decodedToken.uid;
+      // req.uid = uid;
       return next();
     })
     .catch(error => {

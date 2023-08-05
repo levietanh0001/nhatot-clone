@@ -4,7 +4,7 @@ import PostProduct from '~/components/products/post-product'
 import Header from '~/layouts/Header'
 
 
-const PostPage = () => {
+const PostProductPage = () => {
   return (
     <>
       <Header>
@@ -19,4 +19,4 @@ const PostPage = () => {
   )
 }
 
-export default PostPage
+export default PostProductPage

@@ -5,12 +5,8 @@ import dayjs from 'dayjs';
 import { IDecodedToken } from '~/interfaces/jwt.interface';
 import { backendBaseUrl } from '~/utils/variables.util';
 
-
-// const accessToken = localStorage.getItem('accessToken');
-// const refreshToken = localStorage.getItem('refreshToken');
-
 // 1. create instance with baseUrl
-export const axiosClient = axios.create({
+export const axiosInstance = axios.create({
   baseURL: backendBaseUrl,
   timeout: 5000, // allowed time for an open request before being canceled (milliseconds)
   headers: {
@@ -19,28 +15,27 @@ export const axiosClient = axios.create({
   },
 });
 
-axiosClient.interceptors.request.use(
+axiosInstance.interceptors.request.use(
   async (req) => {
-
     const accessToken = localStorage.getItem('accessToken');
     req.headers.Authorization = `Bearer ${accessToken}`;
 
     const payload = jwtDecode(String(accessToken)) as IDecodedToken;
     const isExpired = dayjs.unix(Number(payload.exp)).diff(dayjs()) < 1;
-    
-    if(!isExpired) {
+
+    if (!isExpired) {
       return req;
     }
 
     const refreshToken = localStorage.getItem('refreshToken');
 
-    if(!refreshToken || refreshToken === 'undefined') {
+    if (!refreshToken || refreshToken === 'undefined') {
       throw new Error('INVALID_REFRESH_TOKEN');
     }
 
     const data = await getNewAccessAndRefreshTokens(refreshToken);
-  
-    if(!data) {
+
+    if (!data) {
       throw new Error('refresh controller does not return anything');
     }
 
@@ -51,17 +46,14 @@ axiosClient.interceptors.request.use(
     req.headers.Authorization = `Bearer ${data.accessToken}`;
 
     return req;
-
   },
   (error) => {
-
     console.error(error);
     return Promise.reject(error);
   }
 );
 
-
-// axiosClient.interceptors.response.use(
+// axiosInstance.interceptors.response.use(
 //   (res) => {
 //     return res;
 //   },
@@ -105,7 +97,7 @@ axiosClient.interceptors.request.use(
 //           localStorage.setItem('accessToken', data.accessToken);
 //           localStorage.setItem('refreshToken', data.refreshToken);
 
-//           return axiosClient(config);
+//           return axiosInstance(config);
 
 //         } catch(_error) {
 

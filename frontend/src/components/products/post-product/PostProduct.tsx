@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import styles from './PostProduct.module.scss';
@@ -11,44 +11,47 @@ import EmptyState from './EmptyState';
 import ProductDetails from './ProductDetails';
 import UserType from './UserType';
 import ActionButtons from './ActionButtons';
-import { postProductActions } from '~/features/post-product/postProductSlice';
 import PostDetails from './PostDetails';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import postProductFormSchema from '~/schemas/post-product/post-product-form-schema';
-import { commaSeparatedStringToNumber, sanitizeBigIntString, sanitizeNumberString } from '~/utils/number.util';
+import { sanitizeBigIntString } from '~/utils/number.util';
 import useId from '@mui/material/utils/useId';
-import { extractUploadedFiles, validateFileSize, validateFilesSize } from '~/utils/file.util';
-import { backendBaseUrl } from '~/utils/variables.util';
+import {
+  extractUploadedFiles,
+  validateFileSize,
+  validateFilesSize,
+} from '~/utils/file.util';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '~/contexts/auth/AuthContext';
-
-let renderCount = 0;
-
-
+import { ToastContainer, toast } from 'react-toastify';
+import { createProduct } from '~/features/products/productThunks';
+import { productActions } from '~/features/products/productSlice';
 
 const PostProduct = () => {
-  const authContext = useContext(AuthContext);
+
   const formId = useId();
-  const product = useSelector((state: RootState) => state.postProduct.product);
+  const product = useSelector((state: RootState) => state.product);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [imageErrors, setImageErrors] = useState<string | null>(null);
   const [videoErrors, setVideoErrors] = useState<string | null>(null);
-  const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
+
     return () => {
       console.log('reset states');
-      dispatch(postProductActions.resetStates());
+      dispatch(productActions.resetAllProductProperties());
     };
   }, []);
 
   useEffect(() => {
-    console.log({ ...product });
-    console.log({ imageCount: product.images?.length });
-  }, [product]);
+
+    if (product.productCreated) {
+      toast.success('Đăng tải thành công');
+    }
+
+  }, [product.productCreated]);
 
   const form = useForm({
     mode: 'all',
@@ -60,197 +63,37 @@ const PostProduct = () => {
     e.preventDefault();
 
     try {
-      const numBedrooms = product.numBedrooms
-        ? parseInt(product.numBedrooms)
-        : null;
-      const numBathrooms = product.numBathrooms
-        ? parseInt(product.numBathrooms)
-        : null;
-      const price = product.price
-        ? commaSeparatedStringToNumber(product.price)
-        : null;
-      const deposit = product.deposit
-        ? commaSeparatedStringToNumber(product.deposit)
-        : null;
-      const area = product.area ? parseFloat(product.area) : null;
-      const productData = {
-        type: product.productType,
-        category: product.productCategory,
-        projectName: product.projectName,
-        address: product.address,
-        numBedrooms,
-        numBathrooms,
-        balconDirection: product.balconDirection,
-        mainDoorDirection: product.mainDoorDirection,
-        legalDocsStatus: product.legalDocsStatus,
-        furnitureStatus: product.furnitureStatus,
-        area,
-        price,
-        deposit,
-        postTitle: product.postTitle,
-        description: product.description,
-        userType: product.userType,
-      };
-      delete productData['images'];
-      delete productData['video'];
 
-      const productFormData = new FormData();
-      const videoFormData = new FormData();
-
-      if (!product.images) {
-        throw new Error('No product images found');
+      if (!product.value.images) {
+        throw new Error('Product images are undefined');
       }
-
+      
       // add media files to form data
-      if (product.images?.length === 0) {
+      if (product.value.images?.length === 0) {
         setImageErrors('Cần có ảnh minh họa cho sản phẩm');
         window.scrollTo(0, 0);
         throw new Error('Images are required');
       }
 
-      product.images.forEach((image) =>
-        productFormData.append('images', image)
-      );
+      // dispatch(productActions.generateProductData());
+      dispatch(createProduct());
 
-      // inspect productFormData
-      // logFormData(productFormData);
-
-      if (!authContext) {
-        throw new Error('No auth context');
-      }
-
-      if (!authContext.user) {
-        throw new Error('No user found');
-      }
-
-      const idToken = await authContext.user.getIdToken();
-
-      if (!authContext.user.uid) {
-        throw new Error('No user UID found');
-      }
-
-      setToken(idToken);
-
-      for (let [key, value] of Object.entries(productData)) {
-        productFormData.set(key, value as string);
-      }
-
-      productFormData.set('userId', authContext.user.uid);
-
-      const createProductUrl = new URL('api/products', backendBaseUrl);
-      const createdProductResponse = await fetch(createProductUrl, {
-        method: 'POST',
-        body: productFormData,
-        headers: {
-          Authorization: `Bearer ${idToken}`,
-        },
-      });
-
-      const createdProductData = await createdProductResponse.json();
-
-      console.log({ createdProductData });
-
-      const productId = createdProductData['productId'];
-      videoFormData.set('video', product.video as Blob);
-      const uploadVideoUrl = new URL('api/products/video', backendBaseUrl);
-      const uploadedVideoResponse = await fetch(
-        uploadVideoUrl + '?' + new URLSearchParams({ productId }),
-        {
-          method: 'POST',
-          body: videoFormData,
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const uploadedVideoData = await uploadedVideoResponse.json();
-
-      console.log({ uploadedVideoData });
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleProductCategoryChange = (value) => {
-    dispatch(postProductActions.setProductCategory(value));
-  };
-
-  const handleProductTypeSelect = (value) => {
-    dispatch(postProductActions.setProductType(value));
-  };
-
-  const handleProjectNameChange = (e) => {
-    dispatch(postProductActions.setProjectName(e.target.value));
-  };
-
-  const handleAddressChange = (e) => {
-    dispatch(postProductActions.setAddress(e.target.value));
-  };
-
-  const handleNumBedRoomsChange = (e) => {
-    dispatch(
-      postProductActions.setNumBedrooms(sanitizeBigIntString(e.target.value))
-    );
-  };
-
-  const handleNumBathroomsChange = (e) => {
-    dispatch(
-      postProductActions.setNumBathrooms(sanitizeBigIntString(e.target.value))
-    );
-  };
-
-  const handleBalconDirectionChange = (e) => {
-    dispatch(postProductActions.setBalconDirection(e.target.value));
-  };
-
-  const handleMainDirectionChange = (e) => {
-    dispatch(postProductActions.setMainDoorDirection(e.target.value));
-  };
-
-  const handleLegalDocsStatusChange = (e) => {
-    dispatch(postProductActions.setLegalDocsStatus(e.target.value));
-  };
-
-  const handleFurnitureStatusChange = (e) => {
-    dispatch(postProductActions.setFurnitureStatus(e.target.value));
-  };
-
-  const handleAreaChange = (e) => {
-    dispatch(postProductActions.setArea(e.target.value));
-  };
-
-  const handlePriceChange = (e) => {
-    dispatch(postProductActions.setPrice(sanitizeBigIntString(e.target.value)));
-  };
-  const handleDepositChange = (e) => {
-    dispatch(
-      postProductActions.setDeposit(sanitizeBigIntString(e.target.value))
-    );
-  };
-
-  const handleProductTitleChange = (e) => {
-    dispatch(postProductActions.setPostTitle(e.target.value));
-  };
-
-  const handleProductDescriptionChange = (e) => {
-    dispatch(postProductActions.setDescription(e.target.value));
-  };
-
-  const handleUserTypeSelect = (value) => {
-    dispatch(postProductActions.setUserType(value));
-  };
-
   const handleImageChange = (event) => {
     const imageArr = extractUploadedFiles(event.target.files);
     const imageSizeLimit = 5; // MB
+
     if (!validateFilesSize(imageArr, imageSizeLimit)) {
       setImageErrors(`Mỗi ảnh cho phép kích thước tối đa là ${imageSizeLimit}`);
     } else if (imageArr.length > 6) {
       setImageErrors(`Chỉ có thể tải lên tối đa 6 ảnh`);
     } else {
       setImageErrors('');
-      dispatch(postProductActions.appendImages(imageArr));
+      dispatch(productActions.setProductProperties({ images: imageArr }));
     }
   };
 
@@ -260,21 +103,12 @@ const PostProduct = () => {
 
     if (validateFileSize(video, videoSizeLimit)) {
       setVideoErrors('');
-      dispatch(postProductActions.setVideo(video));
+      dispatch(productActions.setProductProperties({ video: video }));
     } else {
       setVideoErrors(`Video cho phép kích thước tối đa là ${videoSizeLimit}`);
     }
   };
 
-  const handleImageRemove = (index) => {
-    dispatch(postProductActions.removeImageByIndex(index));
-  };
-
-  const handleVideoRemove = () => {
-    dispatch(postProductActions.clearVideo());
-  };
-
-  // renderCount++;
   const postProductFormId = formId;
   const isAddressValid = !form.formState.errors?.['address'];
   const isProductDetailsValid =
@@ -291,12 +125,16 @@ const PostProduct = () => {
       <FormProvider {...form}>
         <UploadMedia
           formId={postProductFormId}
-          images={product.images}
-          video={product.video}
+          images={product.value.images}
+          video={product.value.video}
           onImageChange={handleImageChange}
-          onImageRemove={handleImageRemove}
+          onImageRemove={(index) =>
+            dispatch(productActions.removeImageByIndex(index))
+          }
           onVideoChange={handleVideoChange}
-          onVideoRemove={handleVideoRemove}
+          onVideoRemove={() =>
+            dispatch(productActions.resetProductProperties('video'))
+          }
           imageErrors={imageErrors}
           videoErrors={videoErrors}
         />
@@ -309,72 +147,159 @@ const PostProduct = () => {
             noValidate
           >
             <ProductCategory
-              product={product}
-              onProductCategoryChange={handleProductCategoryChange}
-              name='productCategory'
+              product={product.value}
+              onCategoryChange={(value) =>
+                dispatch(
+                  productActions.setProductProperties({ category: value })
+                )
+              }
+              name='category'
             />
 
-            {product.productCategory && (
+            {product.value.category && (
               <ProductType
-                product={product}
-                onProductTypeSelect={handleProductTypeSelect}
+                product={product.value}
+                onProductTypeSelect={(value) =>
+                  dispatch(productActions.setProductProperties({ type: value }))
+                }
               />
             )}
 
-            {product.productType && (
+            {product.value.type && (
               <ProductLocation
-                product={product}
-                onAddressChange={handleAddressChange}
-                onProjectNameChange={handleProjectNameChange}
+                product={product.value}
+                onAddressChange={(e) =>
+                  dispatch(
+                    productActions.setProductProperties({
+                      address: e.target.value,
+                    })
+                  )
+                }
+                onProjectNameChange={(e) =>
+                  dispatch(
+                    productActions.setProductProperties({
+                      projectName: e.target.value,
+                    })
+                  )
+                }
               />
             )}
 
-            {product.address && isAddressValid && (
+            {product.value.address && isAddressValid && (
               <ProductDetails
-                product={product}
-                onNumBedRoomsChange={handleNumBedRoomsChange}
-                onNumBathroomsChange={handleNumBathroomsChange}
-                onBalconDirectionChange={handleBalconDirectionChange}
-                onMainDirectionChange={handleMainDirectionChange}
-                onLegalDocsStatusChange={handleLegalDocsStatusChange}
-                onFurnitureStatusChange={handleFurnitureStatusChange}
-                onAreaChange={handleAreaChange}
-                onPriceChange={handlePriceChange}
-                onDepositChange={handleDepositChange}
+                product={product.value}
+                onNumBedRoomsChange={(e) =>
+                  dispatch(
+                    productActions.setProductProperties({
+                      numBedrooms: sanitizeBigIntString(e.target.value),
+                    })
+                  )
+                }
+                onNumBathroomsChange={(e) =>
+                  dispatch(
+                    productActions.setProductProperties({
+                      numBathrooms: sanitizeBigIntString(e.target.value),
+                    })
+                  )
+                }
+                onBalconDirectionChange={(e) =>
+                  dispatch(
+                    productActions.setProductProperties({
+                      balconDirection: e.target.value,
+                    })
+                  )
+                }
+                onMainDirectionChange={(e) =>
+                  dispatch(
+                    productActions.setProductProperties({
+                      mainDoorDirection: e.target.value,
+                    })
+                  )
+                }
+                onLegalDocsStatusChange={(e) =>
+                  dispatch(
+                    productActions.setProductProperties({
+                      legalDocsStatus: e.target.value,
+                    })
+                  )
+                }
+                onFurnitureStatusChange={(e) =>
+                  dispatch(
+                    productActions.setProductProperties({
+                      furnitureStatus: e.target.value,
+                    })
+                  )
+                }
+                onAreaChange={(e) =>
+                  dispatch(
+                    productActions.setProductProperties({
+                      area: e.target.value,
+                    })
+                  )
+                }
+                onPriceChange={(e) =>
+                  dispatch(
+                    productActions.setProductProperties({
+                      price: sanitizeBigIntString(e.target.value),
+                    })
+                  )
+                }
+                onDepositChange={(e) =>
+                  dispatch(
+                    productActions.setProductProperties({
+                      deposit: sanitizeBigIntString(e.target.value),
+                    })
+                  )
+                }
               />
             )}
 
-            {product.numBedrooms &&
-              product.numBathrooms &&
-              product.area &&
-              product.price &&
+            {product.value.numBedrooms &&
+              product.value.numBathrooms &&
+              product.value.area &&
+              product.value.price &&
               isProductDetailsValid && (
                 <PostDetails
-                  product={product}
-                  onPostTitleChange={handleProductTitleChange}
-                  onPostDescriptionChange={handleProductDescriptionChange}
+                  product={product.value}
+                  onPostTitleChange={(e) =>
+                    dispatch(
+                      productActions.setProductProperties({
+                        postTitle: e.target.value,
+                      })
+                    )
+                  }
+                  onPostDescriptionChange={(e) =>
+                    dispatch(
+                      productActions.setProductProperties({
+                        description: e.target.value,
+                      })
+                    )
+                  }
                 />
               )}
-            {product.postTitle && product.description && isPostDetailsValid && (
-              <UserType
-                product={product}
-                onUserTypeSelect={handleUserTypeSelect}
-              />
+
+            {product.value.postTitle &&
+              product.value.description &&
+              isPostDetailsValid && (
+                <UserType
+                  product={product.value}
+                  onUserTypeSelect={(value) =>
+                    dispatch(
+                      productActions.setProductProperties({ userType: value })
+                    )
+                  }
+                />
+              )}
+
+            {product.value.userType && (
+              <ActionButtons formId={postProductFormId} />
             )}
 
-            {product.userType && <ActionButtons formId={postProductFormId} />}
-
             {/* {JSON.stringify({ errors: form.formState.errors })} */}
-            {/* 
-            {JSON.stringify({
-              isAddressValid,
-              isProductDetailsValid,
-              isPostDetailsValid,
-            })}
-             */}
+            {/* {JSON.stringify({ isAddressValid, isProductDetailsValid, isPostDetailsValid })} */}
             {/* {JSON.stringify({ values: form.getValues() })} */}
 
-            {!product.productCategory && <EmptyState />}
+            {!product.value.category && <EmptyState />}
           </form>
         </div>
       </FormProvider>
@@ -386,6 +311,12 @@ const Wrapper = ({ children }) => {
   return (
     <div className={styles['outer-wrapper']}>
       <div className='container'>
+        <ToastContainer
+          position='top-right'
+          hideProgressBar
+          theme='colored'
+          autoClose={2000}
+        />
         <div className={styles['inner-wrapper']}>{children}</div>
       </div>
     </div>

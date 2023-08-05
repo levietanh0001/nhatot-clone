@@ -4,7 +4,7 @@ import { SelectInput, SelectOption } from '~/components/common/input/SelectInput
 import { useController, useFormContext } from 'react-hook-form';
 
 const ProductCategory = (props) => {
-  const { product, onProductCategoryChange } = props;
+  const { product, onCategoryChange, name } = props;
   // const { control, formState } = useFormContext();
   // const { errors } = formState;
   // const { field } = useController({ name, control });
@@ -13,11 +13,11 @@ const ProductCategory = (props) => {
     // phai spread ...field vao select input
     // bo sung field.onChange
     <SelectInput
-      name='productCategory'
+      name={name}
       label='Chọn loại bất động sản'
       required
-      inputValue={product.productCategory}
-      onInputValueChange={(e) => onProductCategoryChange(e.currentTarget.value)}
+      inputValue={product.category}
+      onInputValueChange={(e) => onCategoryChange(e.currentTarget.value)}
       wrapperClass={styles['product-category-wrapper']}
       labelClass={clsx('required', styles['title'])}
       inputWrapperClass={styles['product-category']}

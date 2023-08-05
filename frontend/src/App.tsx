@@ -12,6 +12,7 @@ import ResetPasswordPage from './pages/ResetPassword';
 const HomePage = lazy(() => import('./pages/HomePage'));
 const ProductListPage = lazy(() => import('./pages/ProductListPage'));
 const PostProductPage = lazy(() => import('./pages/PostProductPage'));
+const UpdateProductPage = lazy(() => import('./pages/UpdateProductPage'));
 const ProductPage = lazy(() => import('./pages/ProductPage'));
 const UserProfilePage = lazy(() => import('./pages/UserProfilePage'));
 const ChatPage = lazy(() => import('./pages/ChatPage'));
@@ -32,11 +33,7 @@ function App() {
           <Routes>
             <Route
               path='/'
-              element={
-                <SuspenseComponent>
-                  <HomePage />
-                </SuspenseComponent>
-              }
+              element={<SuspenseComponent><HomePage /></SuspenseComponent>}
             ></Route>
             <Route
               path='/post-product'
@@ -52,9 +49,7 @@ function App() {
               path='/update-product/:productId'
               element={
                 <LoggedInRequired>
-                  <SuspenseComponent>
-                    <PostProductPage />
-                  </SuspenseComponent>
+                  <SuspenseComponent><UpdateProductPage /></SuspenseComponent>
                 </LoggedInRequired>
               }
             ></Route>

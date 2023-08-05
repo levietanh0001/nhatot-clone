@@ -10,33 +10,20 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { axiosClient } from '~/utils/axios.util';
+import { axiosInstance } from '~/utils/axios.util';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
-import { backendBaseUrl } from '~/utils/variables.util';
 import { AuthContext } from '~/contexts/auth/AuthContext';
-import useAxiosAuth from '~/hooks/useAxiosAuth';
 
 const pageSize = 9;
 const productPerPage = 20;
 
-// async function getFavoriteList(accessToken, signal) {
-//   const response = await fetch(new URL('favorite-list', backendBaseUrl), {
-//     headers: {
-//       Authorization: `Bearer ${accessToken}`,
-//     },
-//     signal: signal ? signal : null,
-//   });
-
-//   return response.json();
-// }
-
 function addProductToFavoriteList(favoriteProductId) {
-  return axiosClient.post(`favorite-list/${String(favoriteProductId)}`);
+  return axiosInstance.post(`favorite-list/${String(favoriteProductId)}`);
 }
 
 function removeProductFromFavoriteList(favoriteProductId) {
-  return axiosClient.delete(`favorite-list/${String(favoriteProductId)}`);
+  return axiosInstance.delete(`favorite-list/${String(favoriteProductId)}`);
 }
 
 const ProductList = () => {
@@ -48,12 +35,8 @@ const ProductList = () => {
   const [userType, setUserType] = useState<string>('');
   const [category, setCategory] = useState<string>('');
   const [gridView, setGridView] = useState<boolean>(false);
-  const [accessToken, setAccessToken] = useState<string | null>(() =>
-    localStorage.getItem('accessToken')
-  );
+  // const [accessToken, setAccessToken] = useState<string | null>(() => localStorage.getItem('accessToken'));
   const [favoriteProductIds, setFavoriteProductIds] = useState<any[]>([]);
-
-  const { axiosAuth } = useAxiosAuth();
 
   useEffect(() => {
     console.log('first mount');
@@ -62,7 +45,9 @@ const ProductList = () => {
     async function favoriteListPopulate() {
       try {
         // const data = await getFavoriteList(accessToken, controller.signal);
-        const response = await axiosClient.get('favorite-list', { signal: controller.signal });
+        const response = await axiosInstance.get('favorite-list', {
+          signal: controller.signal,
+        });
         const data = response.data;
         if (data && data.productIds) {
           setFavoriteProductIds(data.productIds);
@@ -101,8 +86,6 @@ const ProductList = () => {
         };
 
         const params = new URLSearchParams({
-          // limit: '20',
-          // offset: '0',
           limit: `${productPerPage}`,
           offset: `${productPerPage * (currentPage - 1)}`,
           ...filters,
@@ -114,7 +97,7 @@ const ProductList = () => {
           ...filters,
         });
 
-        return axiosClient.get('/products', { params, signal });
+        return axiosInstance.get('/products', { params, signal });
       },
       // keepPreviousData: true,
       refetchOnWindowFocus: false,
@@ -123,7 +106,7 @@ const ProductList = () => {
   const products = data?.data;
 
   useEffect(() => {
-    axiosClient
+    axiosInstance
       .get('/products/count')
       .then((result) => setNumPages(Math.ceil(Number(result.data) / pageSize)))
       .catch((error) => console.error(error));
@@ -164,7 +147,7 @@ const ProductList = () => {
         // axiosAuth.post(`favorite-list/${String(productId)}`)
         .then(() => {
           console.log('adding product to favorite list');
-          return axiosClient.get('favorite-list');
+          return axiosInstance.get('favorite-list');
         })
         .then((response) => {
           const data = response.data;
@@ -195,7 +178,7 @@ const ProductList = () => {
         // axiosAuth.delete(`favorite-list/${String(productId)}`)
         .then(() => {
           console.log('removing product from favorite list');
-          return axiosClient.get('favorite-list');
+          return axiosInstance.get('favorite-list');
         })
         .then((response) => {
           const data = response.data;

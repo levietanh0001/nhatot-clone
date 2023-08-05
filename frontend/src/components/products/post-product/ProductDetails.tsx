@@ -164,7 +164,7 @@ const ProductDetails = ({
             }
             onInputValueChange={onPriceChange}
             name='price'
-            label={product.productType === 'canban' ? 'Giá' : 'Giá cho thuê'}
+            label={product.type === 'canban' ? 'Giá' : 'Giá cho thuê'}
             required
             type='text'
             inputMode='decimal'

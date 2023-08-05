@@ -96,7 +96,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 // middleware that always runs first before the rest
 app.use('/', (req, res, next) => {
   console.log('running first request');
-  // console.log({ magicMethods: getMagicMethods(FavoriteList) });
+  console.log({ magicMethods: getMagicMethods(Product) });
   return next();
 });
 

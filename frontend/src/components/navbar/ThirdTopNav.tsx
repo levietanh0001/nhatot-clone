@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import styles from './ThirdTopNav.module.scss';
+import { ProductTypeType } from '~/interfaces/product.interface';
 
 
 const ThirdTopNav = () => {
@@ -25,11 +26,7 @@ const ThirdTopNav = () => {
 const ProductTypeMenu = () => {
 
   const [show, setShow] = useState<boolean>(false);
-  const [productType, setProductType] = useState<'muaban' | 'chothue' | 'duan'>('muaban');
-
-  // useEffect(() => {
-  //   console.log({ productType });
-  // }, [productType]);
+  const [productType, setProductType] = useState<ProductTypeType>('muaban');
 
   return (
     <>

@@ -4,13 +4,15 @@ import { commaSeparatedStringToNumber, isNumeric } from '~/utils/number.util';
 
 
 const postProductSchema = object({
-  productCategory:
-    string().required('Xin hãy chọn loại bất động sản'),
+  // category:
+  //   string().required('Xin hãy chọn loại bất động sản'),
   // productType:
   //   string().required('Xin hãy chọn danh mục bất động sản').oneOf(['canban', 'chothue']),
-  // projectName:
-  //   // string().test('projectName', 'Cần ít nhất 6 ký tự', val => { if(val) { return val.toString().length >= 6 } }),
-  //   string(),
+  projectName:
+    string()
+    // .nullable()
+    // .notRequired()
+    .max(100, 'Tên dự án cho phép tối đa 100 ký tự'),
   address:
     string().typeError('').required('Địa chỉ không thể trống'),
   numBedrooms:

@@ -15,7 +15,7 @@ const ProductType = ({ product, onProductTypeSelect }) => {
               <button
                 type='button'
                 className={clsx({
-                  [styles['active']]: product.productType === 'canban',
+                  [styles['active']]: product.type === 'canban',
                 })}
                 onClick={() => onProductTypeSelect('canban')}
               >
@@ -26,7 +26,7 @@ const ProductType = ({ product, onProductTypeSelect }) => {
               <button
                 type='button'
                 className={clsx({
-                  [styles['active']]: product.productType === 'chothue',
+                  [styles['active']]: product.type === 'chothue',
                 })}
                 onClick={() => onProductTypeSelect('chothue')}
               >

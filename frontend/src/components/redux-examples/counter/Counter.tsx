@@ -6,12 +6,12 @@ import { RootState, useAppDispatch } from '~/app/store';
 
 const Counter = () => {
 
-  const count = useSelector((state: RootState) => state.counter.value);
+  // const count = useSelector((state: RootState) => state.counter.value);
   const dispatch = useAppDispatch();
 
   return (
     <div className='counter'>
-      <p>{count}</p>
+      {/* <p>{count}</p> */}
       <div className='row'>
         <button onClick={() => dispatch(increment())}>increment</button>
         <button onClick={() => dispatch(decrement())}>decrement</button>

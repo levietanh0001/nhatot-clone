@@ -87,10 +87,10 @@ function validateCreateProduct() {
       .isIn(directions)
       .withMessage('Hướng cửa chính không hợp lệ'),
     body('legalDocsStatus')
-      .isIn(['dacoso', 'dangchoso', 'khac'])
+      .isIn(['dacoso', 'dangchoso', 'giaytokhac'])
       .withMessage('Giấy tờ pháp lý không hợp lệ'),
     body('furnitureStatus')
-      .isIn(['daydu', 'caocap', 'coban', 'khong'])
+      .isIn(['daydu', 'caocap', 'coban', 'khong', ''])
       .withMessage('Tình trạng nội thất không hợp lệ'),
     body('area')
       .notEmpty()
