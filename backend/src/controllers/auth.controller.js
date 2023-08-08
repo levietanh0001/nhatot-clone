@@ -26,9 +26,9 @@ async function register(req, res, next) {
 
     const currentUser = await User.findOne({ where: { email: email } });
 
-    console.log({ email, currentUser });
+    console.log({ isTrue: currentUser && !currentUser.dataValues.isVerified });
 
-    if(currentUser) {
+    if(currentUser && currentUser.dataValues.isVerified) {
 
       return res.status(403).json({
         code: 'USER_ALREADY_EXISTS', 
@@ -276,11 +276,6 @@ function resetPasswordEmail(req, res, next) {
         return user.save();
       })
       .then(user => {
-
-        // const url = new URL(
-        //   path.join('/auth', 'reset-password-form'), // needs to be more dynamic
-        //   process.env.BASE_URL
-        // );
 
         const url = new URL('reset-password', process.env.FRONTEND_ORIGIN);
 

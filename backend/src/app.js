@@ -24,7 +24,7 @@ const { graphqlMiddleware } = require('./middlewares/graphql.middleware');
 
 
 // import middlewares
-const { uploadSingleFile, uploadMultipleImages, uploadVideo } = require('./middlewares/upload-data.middleware');
+const { uploadSingleFile, uploadMultipleImages, uploadVideo } = require('./middlewares/upload.middleware');
 const { authenticateUser } = require('./middlewares/auth.middleware');
 
 
@@ -47,6 +47,8 @@ const ProductImage = require('./models/product-image.model');
 const ProductVideo = require('./models/product-video.model');
 const userRouter = require('./routes/user.route');
 const { extractAccessTokenFromRequest, verifyAccessTokenAsync } = require('./utils/cryptography.util');
+const ProductThumbnail = require('./models/product-thumbnail');
+const VideoThumbnail = require('./models/video-thumbnail');
 
 
 // define associations
@@ -62,6 +64,10 @@ Product.hasMany(ProductImage);
 ProductImage.belongsTo(Product);
 Product.hasMany(ProductVideo);
 ProductVideo.belongsTo(Product);
+ProductThumbnail.belongsTo(Product);
+Product.hasOne(ProductThumbnail);
+VideoThumbnail.belongsTo(Product);
+Product.hasOne(VideoThumbnail);
 
 
 // init express app
@@ -69,7 +75,10 @@ const app = express();
 
 
 // add headers for extra security
-app.use(helmet());
+const helmetConfig = {
+  crossOriginResourcePolicy: false,
+}
+app.use(helmet(helmetConfig));
 
 
 // add cors and cache preflight request

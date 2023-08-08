@@ -5,11 +5,20 @@ import { commaSeparatedStringToNumber } from "~/utils/number.util";
 
 export const getProducts = createAsyncThunk(
   'product/getProducts', // used to generate additional Redux action type constants, representing the lifecycle of an async request
-  async (product, thunkAPI) => {
+  async (arg, thunkAPI) => {
     const res = await axiosInstance.get('products');
     return res.data;
   }
 ); // returns a promise (pending, fulfilled, rejected)
+
+export const getProductById = createAsyncThunk(
+  'product/getProductById', // used to generate additional Redux action type constants, representing the lifecycle of an async request
+  async (productId: string, thunkAPI) => {
+
+    const res = await axiosInstance.get(`products/${productId}`);
+    return res.data;
+  }
+);
 
 export const createProduct = createAsyncThunk(
   'product/createProduct', // used to generate additional Redux action type constants, representing the lifecycle of an async request
@@ -20,16 +29,17 @@ export const createProduct = createAsyncThunk(
 
     const numBedrooms = productState.value.numBedrooms
       ? parseInt(productState.value.numBedrooms)
-      : null;
+      : '';
     const numBathrooms = productState.value.numBathrooms
       ? parseInt(productState.value.numBathrooms)
-      : null;
+      : '';
     const price = productState.value.price
       ? commaSeparatedStringToNumber(productState.value.price)
-      : null;
+      : '';
     const deposit = productState.value.deposit
       ? commaSeparatedStringToNumber(productState.value.deposit)
-      : null;
+      : '';
+
     const area = productState.value.area ? parseFloat(productState.value.area) : null;
     const productData = {
       type: productState.value.type,
@@ -51,6 +61,8 @@ export const createProduct = createAsyncThunk(
     };
     delete productData['images'];
     delete productData['video'];
+
+    console.log({ productData });
 
     const productFormData = new FormData();
 
@@ -75,6 +87,7 @@ export const createProduct = createAsyncThunk(
     const createdProductData = createdProductResponse.data;
 
     const videoFormData = new FormData();
+
     if (productState.value.video) {
       const productId = createdProductData['id'];
       videoFormData.set('video', productState.value.video as Blob);
@@ -87,7 +100,20 @@ export const createProduct = createAsyncThunk(
           headers: { 'Content-Type': 'multipart/form-data' },
         }
       );
+
+      const videoThumbnailFormData = new FormData();
+      videoThumbnailFormData.set('image', productState.value.videoThumbnail as Blob);
+      await axiosInstance.post(
+        'products/video-thumbnail',
+        videoThumbnailFormData,
+        {
+          params: { productId },
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }
+      )
     }
+
+    
 
   }
 );

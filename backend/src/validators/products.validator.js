@@ -117,12 +117,14 @@ function validateCreateProduct() {
     body('deposit')
       .isInt()
       .withMessage('Số tiền đặt cọc không hợp lệ')
+      .optional({ values: 'falsy' }) // allows false values
       .custom((value, { req, res }) => {
         if(Number(value) < 0) {
           throw new Error('Diện tích cần lớn hơn 0')
         }
         return true;
-      }),
+      })
+      ,
     body('postTitle')
       .notEmpty()
       .withMessage('Tiêu đề không thể trống')
@@ -217,15 +219,16 @@ function validateUpdateProduct() {
         return true;
       }),
     body('deposit')
-      .optional()
       .isInt()
       .withMessage('Số tiền đặt cọc không hợp lệ')
+      .optional({ values: 'falsy' })
       .custom((value, { req, res }) => {
         if(Number(value) < 0) {
           throw new Error('Diện tích cần lớn hơn 0')
         }
         return true;
-      }),
+      })
+      ,
     body('postTitle')
       .optional()
       .isString()

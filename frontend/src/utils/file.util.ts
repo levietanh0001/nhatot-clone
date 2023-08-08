@@ -1,27 +1,27 @@
-import { MutableRefObject } from 'react'
+import { MutableRefObject } from 'react';
 
 export function validateFilesSize(files, fileSize = 10) {
-  let valid = true
+  let valid = true;
   if (files) {
-    files.map(file => {
-      const size = file.size / 1024 / 1024
+    files.map((file) => {
+      const size = file.size / 1024 / 1024;
       if (size > fileSize) {
-        valid = false
+        valid = false;
       }
-    })
+    });
   }
-  return valid
+  return valid;
 }
 
 export function validateFileSize(file, fileSize = 10) {
-  let valid = true
+  let valid = true;
   if (file) {
-    const size = file.size / 1024 / 1024
+    const size = file.size / 1024 / 1024;
     if (size > fileSize) {
-      valid = false
+      valid = false;
     }
   }
-  return valid
+  return valid;
 }
 
 export function extractUploadedFiles(files) {
@@ -29,7 +29,7 @@ export function extractUploadedFiles(files) {
   return [...files];
 }
 
-export const generateVideoThumbnail = (file: File): Promise<string> => {
+export const generateVideoThumbnailUrl = (file: File, callback): Promise<string> => {
   return new Promise((resolve) => {
     const canvas = document.createElement('canvas');
     const video = document.createElement('video');
@@ -45,40 +45,37 @@ export const generateVideoThumbnail = (file: File): Promise<string> => {
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
 
-      if(context) {
+      if (context) {
         context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
         video.pause();
+        
+        canvas.toBlob((blob) => {
+          let file = new File([blob as BlobPart], 'video-thumbnail.png', { type: 'image/png' })
+          console.log({ videoThumb: file });
+          callback(file);
+        }, 'image/jpeg');
+        
+
         return resolve(canvas.toDataURL('image/png'));
       }
-      resolve('');
+
+      return resolve('');
     };
   });
 };
 
-// export const generateVideoThumbnail = (file: File, canvasElement, videoElement): Promise<string> => {
-//   return new Promise((resolve) => {
-//     // const canvas = document.createElement('canvas');
-//     // const video = document.createElement('video');
 
-//     // this is important
-//     videoElement.autoplay = true;
-//     videoElement.muted = true;
-//     videoElement.src = URL.createObjectURL(file);
-
-//     videoElement.onloadeddata = () => {
-//       let ctx = canvasElement.getContext('2d');
-
-//       canvasElement.width = videoElement.videoWidth;
-//       canvasElement.height = videoElement.videoHeight;
-
-//       if(ctx) {
-//         ctx.drawImage(videoElement, 0, 0, videoElement.videoWidth, videoElement.videoHeight);
-//         videoElement.pause();
-//         return resolve(canvasElement.toDataURL('image/png'));
-//       }
-
-//       resolve('');
+// export function createThumb(video, w, h, callback) {
+//   const canvas = document.createElement('canvas'),    // create a canvas
+//       context = canvas.getContext('2d'),                // get context
+//       img = new Image();                       // final image
+//   canvas.width = w;                                 // set size = thumb
+//   canvas.height = h;
+//   if(context) {
+//     context.drawImage(video, 0, 0, w, h);            // draw in frame
+//     img.onload = function() {                    // handle async loading
+//       callback(this);                            // provide image to callback
 //     };
-
-//   });
-// };
+//     img.src = canvas.toDataURL();                     // convert canvas to URL
+//   }
+// }

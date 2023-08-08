@@ -2,7 +2,7 @@ const express = require('express');
 
 
 const productsController = require('../controllers/products.controller');
-const { uploadMultipleFiles, uploadProduct, uploadMultipleImages, uploadVideo } = require('../middlewares/upload-data.middleware');
+const { uploadMultipleFiles, uploadProduct, uploadMultipleImages, uploadVideo, uploadImage } = require('../middlewares/upload.middleware');
 const { authRequired, loggedInRequired } = require('../middlewares/auth.middleware');
 const { validateCreateProduct, validateUpdateProduct, validateGetProduct } = require('../validators/products.validator');
 
@@ -22,6 +22,13 @@ router.post(
   validateCreateProduct(),
   productsController.createProduct
 );
+
+router.post(
+  '/video-thumbnail',
+  uploadImage,
+  loggedInRequired,
+  productsController.createVideoThumbnail
+)
 
 router.post(
   '/video',

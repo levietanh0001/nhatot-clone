@@ -100,13 +100,13 @@ function signTokenAsync(payload, privateKey, options) {
 }
 
 
-function createAccessTokenAsync(payload) {
+function createAccessTokenAsync(payload, expiresIn = process.env.ACCESS_TOKEN_LIFE_SPAN) {
 
   return new Promise((resolve, reject) => {
     jwt.sign(
       payload,
       accessPrivateKey,
-      { algorithm: 'RS256', expiresIn: process.env.ACCESS_TOKEN_LIFE_SPAN },
+      { algorithm: 'RS256', expiresIn: expiresIn || '30m' },
       (error, data) => {
         if (error) {
           reject(error)

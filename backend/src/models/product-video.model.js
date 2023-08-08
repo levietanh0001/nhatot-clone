@@ -13,9 +13,9 @@ const ProductVideo = sequelize.define('product_video', {
   videoUrl: {
     ...asString(0, 255, true, 'videoUrl')
   },
-  // productId: {
-  //   ...asNonNegativeInt()
-  // }
+  thumbnailUrl: {
+    ...asString(0, 255, true, 'thumbnailUrl')
+  },
 
 }, {
   freezeTableName: true

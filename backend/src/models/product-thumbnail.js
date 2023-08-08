@@ -1,9 +1,9 @@
 const Sequelize = require('sequelize');
 const { sequelize } = require('../utils/database.util');
-const { asString, asNonNegativeInt } = require('../utils/model-types.util');
+const { asString } = require('../utils/model-types.util');
 
 
-const ProductImage = sequelize.define('product_image', {
+const ProductThumbnail = sequelize.define('product_thumbnail', {
   id: {
     type: Sequelize.INTEGER.UNSIGNED,
     autoIncrement: true,
@@ -19,4 +19,4 @@ const ProductImage = sequelize.define('product_image', {
 });
 
 
-module.exports = ProductImage;
+module.exports = ProductThumbnail;

@@ -4,6 +4,7 @@ import jwtDecode from 'jwt-decode';
 import dayjs from 'dayjs';
 import { IDecodedToken } from '~/interfaces/jwt.interface';
 import { backendBaseUrl } from '~/utils/variables.util';
+import { toast } from 'react-toastify';
 
 // 1. create instance with baseUrl
 export const axiosInstance = axios.create({
@@ -30,15 +31,21 @@ axiosInstance.interceptors.request.use(
     const refreshToken = localStorage.getItem('refreshToken');
 
     if (!refreshToken || refreshToken === 'undefined') {
-      throw new Error('INVALID_REFRESH_TOKEN');
+      const e = new Error();
+      e.name = 'InvalidRefreshToken';
+      e.message = 'Refresh token is invalid';
+      throw e;
     }
 
     const data = await getNewAccessAndRefreshTokens(refreshToken);
 
     if (!data) {
-      throw new Error('refresh controller does not return anything');
+      const e = new Error();
+      e.name = 'NoReponseFromServer';
+      e.message = 'Refresh controller does not return anything';
+      throw e;
     }
-
+    
     console.log({ newTokenPair: data });
     localStorage.setItem('accessToken', data.accessToken);
     localStorage.setItem('refreshToken', data.refreshToken);

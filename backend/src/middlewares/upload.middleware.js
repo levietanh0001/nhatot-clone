@@ -39,7 +39,7 @@ function uploadSingleFile() {
 }
 
 
-function uploadMultipleImages(req, res, next) {
+function uploadImage(req, res, next) {
 
   const options = {
     storage: multer.diskStorage({
@@ -65,7 +65,50 @@ function uploadMultipleImages(req, res, next) {
       }
     },
     limits: {
-      fileSize: 5 * 1024 * 1024 // bytes
+      fileSize: 5 * 1024 * 1024 // 5mb
+    }
+  }
+
+  const uploads = multer({ ...options }).single('image');
+
+  return uploads(req, res, (error) => {
+
+    if(error) {
+      returnError(res, 422, error);
+    }
+
+    return next();
+  });
+
+}
+
+
+function uploadMultipleImages(req, res, next) {
+
+  const options = {
+    storage: multer.diskStorage({
+      destination: (req, file, cb) => {
+
+        const dest = path.join(uploadDir, 'images');
+        mkDirIfNotExists(dest);
+        
+        cb(null, dest); // error = null, destination = 'uploads'
+      },
+      filename: (req, file, cb) => {
+        req.imageName = new Date().toISOString() + file.originalname;
+        cb(null, new Date().toISOString() + file.originalname);
+      }
+    }),
+    fileFilter: function(req, file, cb) {
+
+      if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
+        cb(null, true); // error = null, acceptFile = true
+      } else {
+        cb(null, false); // error = null, acceptFile = false
+      }
+    },
+    limits: {
+      fileSize: 5 * 1024 * 1024 // 5mb
     }
   }
 
@@ -173,6 +216,7 @@ module.exports = {
   uploadSingleFile,
   uploadMultipleImages,
   uploadVideo,
+  uploadImage
 };
 
 

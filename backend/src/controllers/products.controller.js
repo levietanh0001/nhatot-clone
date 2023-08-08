@@ -7,6 +7,8 @@ const ProductImage = require('../models/product-image.model');
 const { sequelize, getMagicMethods } = require('../utils/database.util');
 const { redisClient } = require('../utils/redis-store.util');
 const User = require('../models/user.model');
+const ProductVideo = require('../models/product-video.model');
+const ProductThumbnail = require('../models/product-thumbnail');
 
 
 async function createProduct(req, res, next) {
@@ -36,14 +38,17 @@ async function createProduct(req, res, next) {
     const furnitureStatus = req.body['furnitureStatus'];
     const area = req.body['area'];
     const price = req.body['price'];
-    const deposit = req.body['deposit'];
+    const deposit = req.body['deposit'] || null;
     const postTitle = req.body['postTitle'];
     const description = req.body['description'];
     const userType = req.body['userType'];
   
     validationUtils.sendMessage(req, res, 422);
-  
-    const product = await req.user.createProduct({ type, category, projectName, address, numBedrooms, numBathrooms, balconDirection, mainDoorDirection, legalDocsStatus, furnitureStatus, area, price, deposit, postTitle, description, userType });
+    
+    const productData = { type, category, projectName, address, numBedrooms, numBathrooms, balconDirection, mainDoorDirection, legalDocsStatus, furnitureStatus, area, price, deposit, postTitle, description, userType };
+    console.log({ productData });
+
+    const product = await req.user.createProduct(productData);
 
     if(!product) {
       return res.status(500).json({
@@ -51,17 +56,18 @@ async function createProduct(req, res, next) {
       })
     }
 
-    imageUrls.forEach(url => {
-      product.createProduct_image({
-        imageUrl: url
-      })
+    await product.createProduct_thumbnail({ imageUrl: imageUrls[0] });
+
+    const createProductImages = imageUrls.slice(1).map((imageUrl) => {
+      return product.createProduct_image({ imageUrl });
     });
 
-    return res
-      .status(200)
-      .json(product)
+    await Promise.all(createProductImages);
+
+    return res.status(200).json(product);
 
   } catch(error) {
+
     console.error(error);
     return next(error);
   }
@@ -89,8 +95,6 @@ async function uploadProductVideo(req, res, next) {
 
   const videoUrl = `${req.protocol}://${req.get('host')}/uploads/videos/${req.file.filename}`
 
-  // const product = await req.user.getProducts({ where: { id: productId } });
-
   const productArray = await Product.findAll({ where: { id: productId }, include: User });
 
   if(productArray.length === 0) {
@@ -110,11 +114,54 @@ async function uploadProductVideo(req, res, next) {
       message: 'User is not allowed to create video for this product'
     });
   }
-
-  // return res.status(200).json(currentUser);
   
   const video = await product.createProduct_video({ videoUrl });
   return res.status(200).json(video);
+
+}
+
+async function createVideoThumbnail(req, res, next) {
+
+  const productId = req.query['productId'];
+
+  if(!productId) {
+    return res.status(422).json({
+      code: 'NO_PRODUCT_ID',
+      message: 'No product id is specified'
+    })
+  }
+
+  if(!req.file) {
+    return res.status(422).json({
+      code: 'VIDEO_THUMBNAIL_MISSING',
+      message: 'No video thumbnail is uploaded'
+    })
+  }
+
+  const videoThumbnailUrl = `${req.protocol}://${req.get('host')}/uploads/images/${req.file.filename}`;
+
+  const productArray = await Product.findAll({ where: { id: productId }, include: User });
+
+  if(productArray.length === 0) {
+    return res.status(404).json({
+      code: 'PRODUCT_NOT_FOUND',
+      message: 'User does not have specified product'
+    });
+  }
+
+  const product = productArray[0];
+
+  const currentUser = await product.getUser({ id: req.user.id });
+
+  if(!currentUser) {
+    return res.status(403).json({
+      code: 'Unauthorized',
+      message: 'User is not allowed to create video thumbnail for this product'
+    });
+  }
+  
+  const videoThumbnail = await product.createVideo_thumbnail({ imageUrl: videoThumbnailUrl });
+  return res.status(200).json(videoThumbnail);
 
 }
 
@@ -172,7 +219,7 @@ async function getProducts(req, res, next) {
     const products = await Product.findAll({ where, limit, offset, order: [[ 'updatedAt', 'DESC' ]] })
 
     if(!products) {
-      res.status(200).json([]);
+      return res.status(200).json([]);
     }
 
     const productIdList = products.map(product => product.id);
@@ -219,9 +266,13 @@ async function getProductById(req, res, next) {
       return res.status(200).json({});
     }
 
-    const productImage = await ProductImage.findOne({ where: { productId }, attributes: ['imageUrl'] });
+    const productImages = await ProductImage.findAll({ where: { productId }, attributes: ['imageUrl'] });
+    const productImageUrls = productImages.map(item => item.imageUrl);
+    const productVideo = await ProductVideo.findOne({ where: { productId }, attributes: ['videoUrl'] });
     const result = {
-      ...product, imageUrl: productImage.imageUrl
+      ...product, 
+      images: productImageUrls,
+      video: productVideo? productVideo.videoUrl: ''
     }
 
     await redisClient.setEx(`/products[${productId}]`, 10, JSON.stringify(result));
@@ -229,7 +280,9 @@ async function getProductById(req, res, next) {
     return res.status(200).json(result);
     
   } catch(error) {
-    return next(error);1
+
+    console.error(error);
+    return next(error);
   }
   
 }
@@ -281,7 +334,7 @@ async function updateProductById(req, res, next) {
 
     await product.save();
 
-    res.status(200).json(product);
+    return res.status(200).json(product);
 
   } catch(error) {
 
@@ -298,7 +351,7 @@ async function deleteProductById(req, res, next) {
   const product = await Product.findByPk(productId);
   await product.destroy();
 
-  res.status(200).json(product);
+  return res.status(200).json(product);
   
 }
 
@@ -342,6 +395,7 @@ async function deleteProductById(req, res, next) {
 module.exports = {
   createProduct,
   uploadProductVideo,
+  createVideoThumbnail,
   getProducts,
   getProductCount,
   getProductById,

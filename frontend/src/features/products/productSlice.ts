@@ -11,7 +11,8 @@ import {
 } from '~/interfaces/product.interface';
 import { axiosInstance } from '~/utils/axios.util';
 import { commaSeparatedStringToNumber } from '~/utils/number.util';
-import { createProduct, getProducts } from './productThunks';
+import { createProduct, getProductById, getProducts } from './productThunks';
+import { extractUploadedFiles, validateFileSize, validateFilesSize } from '~/utils/file.util';
 
 export interface IAction extends PayloadAction<IProduct> {}
 
@@ -35,11 +36,14 @@ const initialState: IInitialProductState = {
     userType: '',
     images: [],
     video: null,
+    videoThumbnail: null
   },
   loading: false,
   products: [],
   productCreated: false,
   error: '',
+  imageError: '',
+  videoError: '',
 };
 
 const productSlice = createSlice({
@@ -66,6 +70,55 @@ const productSlice = createSlice({
           [action.payload]: initialState.value[action.payload],
         };
       }
+    },
+    setProductImages: (state, action) => {
+
+      const imageArr = extractUploadedFiles(action.payload);
+      const imageSizeLimit = 5; // MB
+
+      if (!validateFilesSize(imageArr, imageSizeLimit)) {
+        state.imageError = `Mỗi ảnh cho phép kích thước tối đa là ${imageSizeLimit}`;
+      } else if (imageArr.length > 6) {
+        state.imageError = `Chỉ có thể tải lên tối đa 6 ảnh`;
+      } else {
+        state.imageError = '';
+        state.value.images = imageArr;
+      }
+    },
+    addProductImage: (state, action) => {
+
+      const image = action.payload;
+
+      console.log({ addProductImage_image: image });
+      const imageSizeLimit = 5; // MB
+
+      if (!validateFileSize(image, imageSizeLimit)) {
+        state.imageError = `Mỗi ảnh cho phép kích thước tối đa là ${imageSizeLimit}`;
+      } else {
+        state.imageError = '';
+        state.value.images?.push(image);
+      }
+    },
+    setProductVideo: (state, action) => {
+
+      const video = action.payload;
+      const videoSizeLimit = 25;
+
+      if (validateFileSize(video, videoSizeLimit)) {
+        state.videoError = '';
+        state.value.video = video;
+      } else {
+        state.videoError = `Video cho phép kích thước tối đa là ${videoSizeLimit}`;
+      }
+    },
+    setVideoThumbnail: (state, action) => {
+      state.value.videoThumbnail = action.payload;
+    },
+    setImageError: (state, action) => {
+      state.imageError = action.payload;
+    },
+    setVideoError: (state, action) => {
+      state.videoError = action.payload;
     },
     removeImageByIndex: (state, action) => {
       if (state.value.images) {
@@ -95,6 +148,22 @@ const productSlice = createSlice({
         : 'Some error occured';
     });
 
+    builder.addCase(getProductById.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getProductById.fulfilled, (state, action) => {
+      state.loading = false;
+      // state.value = action.payload; // comes from returned res.data in async thunk above
+      state.error = '';
+    });
+    builder.addCase(getProductById.rejected, (state, action) => {
+      state.loading = false;
+      state.value = initialState.value;
+      state.error = action.error.message
+        ? action.error.message
+        : 'Some error occured';
+    });
+
     builder.addCase(createProduct.pending, (state) => {
       state.loading = true;
       state.productCreated = false;
@@ -116,6 +185,17 @@ const productSlice = createSlice({
 
 const productReducer = productSlice.reducer;
 
-export const productActions = productSlice.actions;
+export const {
+  setProductProperties, 
+  resetAllProductProperties,
+  resetProductProperties, 
+  setProductImages,
+  addProductImage,
+  removeImageByIndex,
+  setImageError,
+  setVideoError,
+  setProductVideo,
+  setVideoThumbnail,
+} = productSlice.actions;
 
 export default productReducer;

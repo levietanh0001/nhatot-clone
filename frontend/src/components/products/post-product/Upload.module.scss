@@ -91,6 +91,7 @@
 
 
 .media-list {
+
   display: flex;
   flex-flow: row wrap;
   column-gap: 5px;
@@ -124,7 +125,6 @@
     border: 0;
 
     color: lightgray;
-
   }
 }
 
