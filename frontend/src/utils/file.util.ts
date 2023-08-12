@@ -29,6 +29,7 @@ export function extractUploadedFiles(files) {
   return [...files];
 }
 
+
 export const generateVideoThumbnailUrl = (file: File, callback): Promise<string> => {
   return new Promise((resolve) => {
     const canvas = document.createElement('canvas');

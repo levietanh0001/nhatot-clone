@@ -1,10 +1,13 @@
-import {
-  formatNumberWithCommas,
-  sanitizeNumberString,
-} from '~/utils/number.util';
 import FloatingLabelInput from '~/components/common/input/FloatingLabelInput';
-import { SelectInput, SelectOption } from '~/components/common/input/SelectInput';
-import styles from './ProductDetails.module.scss';
+import {
+  SelectInput,
+  SelectOption,
+} from '~/components/common/input/SelectInput';
+import {
+  formatNumberWithCommas
+} from '~/utils/number.util';
+import styles from './ProductInfo.module.scss';
+import { useEffect } from 'react';
 
 const directionOptions = [
   {
@@ -39,7 +42,24 @@ const directionOptions = [
     value: 'taybac',
     label: 'Tây Bắc',
   },
+
 ];
+
+const balconDirectionOptions = [
+  {
+    value: '',
+    label: 'Hướng ban công'
+  },
+  ...directionOptions
+]
+
+const mainDoorDirectionOptions = [
+  {
+    value: '',
+    label: 'Hướng cửa chính'
+  },
+  ...directionOptions
+]
 
 const legalDocsStatus = [
   {
@@ -75,7 +95,7 @@ const furnitureStatus = [
   },
 ];
 
-const ProductDetails = ({
+const ProductInfo = ({
   product,
   onNumBedRoomsChange,
   onNumBathroomsChange,
@@ -87,6 +107,22 @@ const ProductDetails = ({
   onPriceChange,
   onDepositChange,
 }) => {
+
+  let balconDirectionLabel;
+  balconDirectionOptions.forEach(option => {
+    if(product.balconDirection === option.value) {
+      balconDirectionLabel = option.label;
+    }
+  })
+  const otherBalconDirectionOptions = balconDirectionOptions.filter(item => item.value !== product.balconDirection && item.value !== '');
+
+  let mainDoorDirectionLabel;
+  mainDoorDirectionOptions.forEach(option => {
+    if(product.mainDoorDirection === option.value) {
+      mainDoorDirectionLabel = option.label;
+    }
+  })
+
   return (
     <div className={styles['product-details-wrapper']}>
       <h2 className={styles['title']}>Thông tin chi tiết</h2>
@@ -111,25 +147,24 @@ const ProductDetails = ({
           <SelectInput
             name='balconDirection'
             onInputValueChange={onBalconDirectionChange}
+            inputValue={product.balconDirection}
           >
-            <SelectOption label='Hướng ban công' value='' />
-            {directionOptions.map((item, index) => (
+            {balconDirectionOptions.map((item, index) => (
               <SelectOption key={index} {...item} />
             ))}
           </SelectInput>
-          {/* <FloatingLabelInput inputValue={product.balconDirection} onInputValueChange={onBalconDirectionChange} name='balconDirection' label='Hướng ban công' /> */}
           <SelectInput
             name='mainDoorDirection'
+            inputValue={product.mainDoorDirection}
             onInputValueChange={onMainDirectionChange}
           >
-            <SelectOption label='Hướng cửa chính' value='' />
-            {directionOptions.map((item, index) => (
+            {mainDoorDirectionOptions.map((item, index) => (
               <SelectOption key={index} {...item} />
             ))}
           </SelectInput>
-          {/* <FloatingLabelInput inputValue={product.mainDoorDirection} onInputValueChange={onMainDirectionChange} name='mainDoorDirection' label='Hướng cửa chính' /> */}
           <SelectInput
             name='legalDocsStatus'
+            inputValue={product.legalDocsStatus}
             onInputValueChange={onLegalDocsStatusChange}
           >
             <SelectOption label='Giấy tờ pháp lý' value='' />
@@ -139,7 +174,8 @@ const ProductDetails = ({
           </SelectInput>
           {/* <FloatingLabelInput inputValue={product.legalDocsStatus} onInputValueChange={onlegalDocsStatusChange} name='legalDocsStatus' label='Giấy tờ pháp lý' /> */}
           <SelectInput
-            name='legalDocsStatus'
+            name='furnitureStatus'
+            inputValue={product.furnitureStatus}
             onInputValueChange={onFurnitureStatusChange}
           >
             <SelectOption label='Tình trạng nội thất' value='' />
@@ -184,4 +220,4 @@ const ProductDetails = ({
   );
 };
 
-export default ProductDetails;
+export default ProductInfo;

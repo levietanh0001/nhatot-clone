@@ -1,7 +1,6 @@
-import TopNav from '~/components/navbar'
-// import UpdateProduct from '~/components/products/post-product/UpdateProduct'
-import Header from '~/layouts/Header'
-
+import TopNav from '~/components/common/navbar';
+import UpdateProduct from '~/components/product/product-crud/UpdateProduct';
+import Header from '~/layouts/Header';
 
 const UpdateProductPage = () => {
   return (
@@ -11,11 +10,11 @@ const UpdateProductPage = () => {
       </Header>
       <body style={{ height: 'auto' }}>
         <main>
-          {/* <UpdateProduct /> */}
+          <UpdateProduct />
         </main>
       </body>
     </>
-  )
-}
+  );
+};
 
-export default UpdateProductPage
+export default UpdateProductPage;

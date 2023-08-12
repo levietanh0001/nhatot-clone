@@ -1,7 +1,7 @@
 // import { debounce } from "lodash";
 import { useUpdateEffect } from 'usehooks-ts';
-import FilterBoard from '~/components/products/filters/FilterBoard';
-import UserTypeTabs from '~/components/products/tabs/UserTypeTabs';
+import FilterBoard from '~/components/product/product-filters/FilterBoard';
+import UserTypeTabs from '~/components/product/user-type-tabs/UserTypeTabs';
 import ProductCardList from './ProductCardList';
 import {
   useCallback,
@@ -10,20 +10,21 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { axiosInstance } from '~/utils/axios.util';
+import { axiosPrivate, axiosPublic } from '~/utils/axios.util';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { AuthContext } from '~/contexts/auth/AuthContext';
+import { AxiosError } from 'axios';
 
 const pageSize = 9;
 const productPerPage = 20;
 
 function addProductToFavoriteList(favoriteProductId) {
-  return axiosInstance.post(`favorite-list/${String(favoriteProductId)}`);
+  return axiosPrivate.post(`favorite-list/${String(favoriteProductId)}`);
 }
 
 function removeProductFromFavoriteList(favoriteProductId) {
-  return axiosInstance.delete(`favorite-list/${String(favoriteProductId)}`);
+  return axiosPrivate.delete(`favorite-list/${String(favoriteProductId)}`);
 }
 
 const ProductList = () => {
@@ -45,7 +46,7 @@ const ProductList = () => {
     async function favoriteListPopulate() {
       try {
         // const data = await getFavoriteList(accessToken, controller.signal);
-        const response = await axiosInstance.get('favorite-list', {
+        const response = await axiosPrivate.get('favorite-list', {
           signal: controller.signal,
         });
         const data = response.data;
@@ -68,7 +69,7 @@ const ProductList = () => {
     console.log({ favoriteProductIds });
   }, [favoriteProductIds]);
 
-  const { isLoading, isError, error, data, isFetching, isPreviousData } =
+  const { isLoading, isError, error, data } =
     useQuery({
       queryKey: ['products', currentPage, category, userType, type],
       queryFn: ({ signal }) => {
@@ -97,21 +98,26 @@ const ProductList = () => {
           ...filters,
         });
 
-        return axiosInstance.get('/products', { params, signal });
+        return axiosPublic.get('/products', { params, signal });
       },
-      // keepPreviousData: true,
+      keepPreviousData: true,
+      refetchOnMount: true, // if component is mounted, refetch
       refetchOnWindowFocus: false,
+      // cacheTime: 5000, // by default 5 mins
+      staleTime: 5000,
     });
 
   const products = data?.data;
+  console.log({ products });
 
   useEffect(() => {
-    axiosInstance
+    axiosPublic
       .get('/products/count')
       .then((result) => setNumPages(Math.ceil(Number(result.data) / pageSize)))
       .catch((error) => console.error(error));
 
     const storedPage = sessionStorage.getItem('currentPage');
+
     if (storedPage) {
       setCurrentPage(JSON.parse(storedPage));
     }
@@ -127,9 +133,12 @@ const ProductList = () => {
     }
   }, [products]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 10, behavior: 'smooth' });
+  }, [currentPage]);
+
   const handlePageChange = (event, page) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 10, behavior: 'smooth' });
     sessionStorage.setItem('currentPage', JSON.stringify(page));
   };
 
@@ -147,7 +156,7 @@ const ProductList = () => {
         // axiosAuth.post(`favorite-list/${String(productId)}`)
         .then(() => {
           console.log('adding product to favorite list');
-          return axiosInstance.get('favorite-list');
+          return axiosPrivate.get('favorite-list');
         })
         .then((response) => {
           const data = response.data;
@@ -178,7 +187,7 @@ const ProductList = () => {
         // axiosAuth.delete(`favorite-list/${String(productId)}`)
         .then(() => {
           console.log('removing product from favorite list');
-          return axiosInstance.get('favorite-list');
+          return axiosPrivate.get('favorite-list');
         })
         .then((response) => {
           const data = response.data;
@@ -205,6 +214,16 @@ const ProductList = () => {
         });
     }
   };
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (isError) {
+    if (error instanceof AxiosError || error instanceof Error) {
+      return <p>{error.message}</p>;
+    }
+  }
 
   return (
     <>

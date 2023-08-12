@@ -1,47 +1,51 @@
-import { lazy, Profiler, Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import './App.scss';
-import Counter from './components/redux-examples/counter';
-import RegisterPage from './pages/RegisterPage';
-import { AuthProvider } from './contexts/auth/AuthContext';
-import LoggedInRequired from './components/auth/LoggedInRequired';
-import ForgetPasswordPage from './pages/ForgetPassword';
 import AsBroker from './components/auth/AsBroker';
+import LoggedInRequired from './components/auth/LoggedInRequired';
+import { AuthProvider } from './contexts/auth/AuthContext';
+import ForgetPasswordPage from './pages/ForgetPassword';
+import RegisterPage from './pages/RegisterPage';
 import ResetPasswordPage from './pages/ResetPassword';
 const HomePage = lazy(() => import('./pages/HomePage'));
 const ProductListPage = lazy(() => import('./pages/ProductListPage'));
 const PostProductPage = lazy(() => import('./pages/PostProductPage'));
 const UpdateProductPage = lazy(() => import('./pages/UpdateProductPage'));
-const ProductPage = lazy(() => import('./pages/ProductPage'));
+const ProductDetailsPage = lazy(() => import('./pages/ProductDetailsPage'));
 const UserProfilePage = lazy(() => import('./pages/UserProfilePage'));
 const ChatPage = lazy(() => import('./pages/ChatPage'));
-const AdminPage = lazy(() => import('./pages/AdminPage'));
+// const AdminPage = lazy(() => import('./pages/AdminPage'));
 const Dashboard = lazy(() => import('./components/admin/dashboard/Dashboard'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
-export const SuspenseComponent = ({ children, fallback = <></> }) => {
+// fallback component
+export const SuspenseWrapper = ({ children, fallback = <></> }) => {
   return <Suspense fallback={fallback}>{children}</Suspense>;
 };
 
 function App() {
   return (
     <BrowserRouter>
-      <SuspenseComponent>
+      <SuspenseWrapper>
         <AuthProvider>
           <Routes>
             <Route
               path='/'
-              element={<SuspenseComponent><HomePage /></SuspenseComponent>}
+              element={
+                <SuspenseWrapper>
+                  <HomePage />
+                </SuspenseWrapper>
+              }
             ></Route>
             <Route
               path='/post-product'
               element={
                 <LoggedInRequired>
-                  <SuspenseComponent>
+                  <SuspenseWrapper>
                     <PostProductPage />
-                  </SuspenseComponent>
+                  </SuspenseWrapper>
                 </LoggedInRequired>
               }
             ></Route>
@@ -49,7 +53,9 @@ function App() {
               path='/update-product/:productId'
               element={
                 <LoggedInRequired>
-                  <SuspenseComponent><UpdateProductPage /></SuspenseComponent>
+                  <SuspenseWrapper>
+                    <UpdateProductPage />
+                  </SuspenseWrapper>
                 </LoggedInRequired>
               }
             ></Route>
@@ -57,68 +63,68 @@ function App() {
             <Route
               path='/product'
               element={
-                <SuspenseComponent>
-                  <ProductPage />
-                </SuspenseComponent>
+                <SuspenseWrapper>
+                  <ProductDetailsPage />
+                </SuspenseWrapper>
               }
             ></Route>
 
             <Route
               path='/product-list/:type'
               element={
-                <SuspenseComponent>
+                <SuspenseWrapper>
                   <ProductListPage />
-                </SuspenseComponent>
+                </SuspenseWrapper>
               }
             ></Route>
 
             <Route
               path='/chat'
               element={
-                <SuspenseComponent>
+                <SuspenseWrapper>
                   <ChatPage />
-                </SuspenseComponent>
+                </SuspenseWrapper>
               }
             ></Route>
 
             <Route
               path='/login'
               element={
-                <SuspenseComponent>
+                <SuspenseWrapper>
                   <LoginPage />
-                </SuspenseComponent>
+                </SuspenseWrapper>
               }
             ></Route>
             <Route
               path='/register'
               element={
-                <SuspenseComponent>
+                <SuspenseWrapper>
                   <RegisterPage />
-                </SuspenseComponent>
+                </SuspenseWrapper>
               }
             ></Route>
             <Route
               path='/forget-password'
               element={
-                <SuspenseComponent>
+                <SuspenseWrapper>
                   <ForgetPasswordPage />
-                </SuspenseComponent>
+                </SuspenseWrapper>
               }
             ></Route>
             <Route
               path='/reset-password'
               element={
-                <SuspenseComponent>
+                <SuspenseWrapper>
                   <ResetPasswordPage />
-                </SuspenseComponent>
+                </SuspenseWrapper>
               }
             ></Route>
             <Route
               path='/user-profile'
               element={
-                <SuspenseComponent>
+                <SuspenseWrapper>
                   <UserProfilePage />
-                </SuspenseComponent>
+                </SuspenseWrapper>
               }
             ></Route>
 
@@ -128,9 +134,9 @@ function App() {
               element={
                 <LoggedInRequired>
                   <AsBroker>
-                    <SuspenseComponent>
+                    <SuspenseWrapper>
                       <Dashboard />
-                    </SuspenseComponent>
+                    </SuspenseWrapper>
                   </AsBroker>
                 </LoggedInRequired>
               }
@@ -139,14 +145,14 @@ function App() {
             <Route
               path='*'
               element={
-                <SuspenseComponent>
+                <SuspenseWrapper>
                   <NotFound />
-                </SuspenseComponent>
+                </SuspenseWrapper>
               }
             ></Route>
           </Routes>
         </AuthProvider>
-      </SuspenseComponent>
+      </SuspenseWrapper>
     </BrowserRouter>
   );
 }

@@ -1,5 +1,6 @@
 const multer = require("multer");
 const path = require('path');
+const { v4: uuidv4 } = require('uuid');
 const { passErrorToHandler, throwError } = require("../controllers/errors.controller");
 const { rootDir } = require("../utils/path.util");
 const { mkDirIfNotExists } = require("../utils/file.util");
@@ -19,6 +20,7 @@ function uploadSingleFile() {
         new Date().toISOString()
         + '-' + file.fieldname
         + '-' + file.originalname
+        + uuidv4().toString()
       )
     }
   });
@@ -51,9 +53,8 @@ function uploadImage(req, res, next) {
         cb(null, dest); // error = null, destination = 'uploads'
       },
       filename: (req, file, cb) => {
-        req.imageName = new Date().toISOString() + file.originalname;
-        cb(null, new Date().toISOString() + file.originalname);
-        // cb(null, new Date().toISOString() + '-' + file.fieldname + '-' + file.originalname)
+        req.imageName = new Date().toISOString() + file.originalname + uuidv4().toString();
+        cb(null, req.imageName);
       }
     }),
     fileFilter: function(req, file, cb) {
@@ -95,8 +96,8 @@ function uploadMultipleImages(req, res, next) {
         cb(null, dest); // error = null, destination = 'uploads'
       },
       filename: (req, file, cb) => {
-        req.imageName = new Date().toISOString() + file.originalname;
-        cb(null, new Date().toISOString() + file.originalname);
+        req.imageName = new Date().toISOString() + file.originalname + uuidv4().toString();
+        cb(null, req.imageName);
       }
     }),
     fileFilter: function(req, file, cb) {
@@ -137,9 +138,8 @@ function uploadVideo(req, res, next) {
         cb(null, dest); // error = null, destination = 'uploads'
       },
       filename: (req, file, cb) => {
-        req.videoName = new Date().toISOString() + file.originalname;
+        req.videoName = new Date().toISOString() + file.originalname + uuidv4().toString();
         cb(null, req.videoName)
-        // cb(null, new Date().toISOString() + '-' + file.fieldname + '-' + file.originalname)
       }
     }),
     fileFilter: function(req, file, cb) {

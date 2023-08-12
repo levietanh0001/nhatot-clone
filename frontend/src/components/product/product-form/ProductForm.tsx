@@ -7,15 +7,14 @@ import ActionButtons from './ActionButtons';
 import EmptyState from './EmptyState';
 import PostDetails from './PostDetails';
 import ProductCategory from './ProductCategory';
-import ProductDetails from './ProductDetails';
+import ProductInfo from './ProductInfo';
 import ProductLocation from './ProductLocation';
 import ProductType from './ProductType';
 import UploadMedia from './Upload';
 import UserType from './UserType';
-
+import { useEffect } from 'react';
 
 const ProductForm = (props) => {
-
   const {
     formId,
     form,
@@ -45,24 +44,25 @@ const ProductForm = (props) => {
     onUserTypeSelect,
   } = props;
 
-  const isAddressValid = !form.formState.errors?.['address'];
-  const isProductDetailsValid = !form.formState.errors?.['numBedrooms'] && !form.formState.errors?.['numBathrooms'] && !form.formState.errors?.['area'] && !form.formState.errors?.['price'];
-  const isPostDetailsValid = !form.formState.errors['postTitle'] && !form.formState.errors['description'];
+  // useEffect(() => {
+  //   console.log({ uploadProduct: product });
+  // }, []);
 
   return (
     <Wrapper>
       <FormProvider {...form}>
         <UploadMedia
           formId={formId}
-          images={product.value.images}
-          video={product.value.video}
+          product={product}
+          // images={product.value.images}
+          // video={product.value.video}
           onImageChange={onImageChange}
           onImagesChange={onImagesChange}
           onImageRemove={onImageRemove}
           onVideoChange={onVideoChange}
           onVideoRemove={onVideoRemove}
           onVideoThumbnailCreate={onVideoThumbnailCreate}
-          imageError={product.imageError}
+          imageError={product.inputError.image}
           videoErrors={product.videoError}
         />
 
@@ -79,64 +79,47 @@ const ProductForm = (props) => {
               name='category'
             />
 
-            {product.value.category && (
-              <ProductType
-                product={product.value}
-                onProductTypeSelect={onProductTypeSelect}
-              />
-            )}
+            <ProductType
+              product={product.value}
+              onProductTypeSelect={onProductTypeSelect}
+              productTypeError={product.inputError.type}
+            />
 
-            {product.value.type && (
-              <ProductLocation
-                product={product.value}
-                onAddressChange={onAddressChange}
-                onProjectNameChange={onProjectNameChange}
-              />
-            )}
+            <ProductLocation
+              product={product.value}
+              onAddressChange={onAddressChange}
+              onProjectNameChange={onProjectNameChange}
+            />
 
-            {product.value.address && isAddressValid && (
-              <ProductDetails
-                product={product.value}
-                onNumBedRoomsChange={onNumBedRoomsChange}
-                onNumBathroomsChange={onNumBathroomsChange}
-                onBalconDirectionChange={onBalconDirectionChange}
-                onMainDirectionChange={onMainDirectionChange}
-                onLegalDocsStatusChange={onLegalDocsStatusChange}
-                onFurnitureStatusChange={onFurnitureStatusChange}
-                onAreaChange={onAreaChange}
-                onPriceChange={onPriceChange}
-                onDepositChange={onDepositChange}
-              />
-            )}
+            <ProductInfo
+              product={product.value}
+              onNumBedRoomsChange={onNumBedRoomsChange}
+              onNumBathroomsChange={onNumBathroomsChange}
+              onBalconDirectionChange={onBalconDirectionChange}
+              onMainDirectionChange={onMainDirectionChange}
+              onLegalDocsStatusChange={onLegalDocsStatusChange}
+              onFurnitureStatusChange={onFurnitureStatusChange}
+              onAreaChange={onAreaChange}
+              onPriceChange={onPriceChange}
+              onDepositChange={onDepositChange}
+            />
 
-            {product.value.numBedrooms &&
-              product.value.numBathrooms &&
-              product.value.area &&
-              product.value.price &&
-              isProductDetailsValid && (
-                <PostDetails
-                  product={product.value}
-                  onPostTitleChange={onPostTitleChange}
-                  onPostDescriptionChange={onPostDescriptionChange}
-                />
-              )}
+            <PostDetails
+              product={product.value}
+              onPostTitleChange={onPostTitleChange}
+              onPostDescriptionChange={onPostDescriptionChange}
+            />
 
-            {product.value.postTitle &&
-              product.value.description &&
-              isPostDetailsValid && (
-                <UserType
-                  product={product.value}
-                  onUserTypeSelect={onUserTypeSelect}
-                />
-              )}
+            <UserType
+              product={product.value}
+              onUserTypeSelect={onUserTypeSelect}
+            />
 
-            {product.value.userType && (
-              <ActionButtons formId={formId} />
-            )}
+            <ActionButtons formId={formId} />
 
+            {JSON.stringify({ errors: form.formState.errors, values: form.getValues().projectName })}
             {/* {JSON.stringify({ errors: form.formState.errors, values: form.getValues() })} */}
-
-            {!product.value.category && <EmptyState />}
+            {/* {!product.value.category && <EmptyState />} */}
           </form>
         </div>
       </FormProvider>
@@ -187,6 +170,6 @@ ProductForm.propTypes = {
   onPostTitleChange: PropTypes.func,
   onPostDescriptionChange: PropTypes.func,
   onUserTypeSelect: PropTypes.func,
-}
+};
 
 export default ProductForm;

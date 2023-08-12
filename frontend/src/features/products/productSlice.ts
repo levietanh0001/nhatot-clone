@@ -5,14 +5,15 @@ import {
   createSlice,
 } from '@reduxjs/toolkit';
 import { RootState } from '~/app/store';
-import {
-  IInitialProductState,
-  IProduct,
-} from '~/interfaces/product.interface';
-import { axiosInstance } from '~/utils/axios.util';
+import { IInitialProductState, IProduct } from '~/interfaces/product.interface';
+import { axiosPrivate } from '~/utils/axios.util';
 import { commaSeparatedStringToNumber } from '~/utils/number.util';
-import { createProduct, getProductById, getProducts } from './productThunks';
-import { extractUploadedFiles, validateFileSize, validateFilesSize } from '~/utils/file.util';
+import { createProduct, getProductById, getProducts, updateProduct } from './productThunks';
+import {
+  extractUploadedFiles,
+  validateFileSize,
+  validateFilesSize,
+} from '~/utils/file.util';
 
 export interface IAction extends PayloadAction<IProduct> {}
 
@@ -35,14 +36,17 @@ const initialState: IInitialProductState = {
     description: '',
     userType: '',
     images: [],
+    imageUrls: [],
     video: null,
-    videoThumbnail: null
+    videoThumbnailUrl: '',
   },
   loading: false,
   products: [],
   productCreated: false,
+  productUpdated: false,
   error: '',
-  imageError: '',
+  inputError: {},
+  // imageError: '',
   videoError: '',
 };
 
@@ -66,41 +70,39 @@ const productSlice = createSlice({
         });
       } else {
         state.value = {
-          ...initialState.value,
+          // ...initialState.value,
+          ...state.value,
           [action.payload]: initialState.value[action.payload],
         };
       }
     },
     setProductImages: (state, action) => {
-
       const imageArr = extractUploadedFiles(action.payload);
       const imageSizeLimit = 5; // MB
 
       if (!validateFilesSize(imageArr, imageSizeLimit)) {
-        state.imageError = `Mỗi ảnh cho phép kích thước tối đa là ${imageSizeLimit}`;
+        state.inputError.image = `Mỗi ảnh cho phép kích thước tối đa là ${imageSizeLimit}`;
       } else if (imageArr.length > 6) {
-        state.imageError = `Chỉ có thể tải lên tối đa 6 ảnh`;
+        state.inputError.image = `Chỉ có thể tải lên tối đa 6 ảnh`;
       } else {
-        state.imageError = '';
+        state.inputError.image = '';
         state.value.images = imageArr;
       }
     },
     addProductImage: (state, action) => {
-
       const image = action.payload;
 
       console.log({ addProductImage_image: image });
       const imageSizeLimit = 5; // MB
 
       if (!validateFileSize(image, imageSizeLimit)) {
-        state.imageError = `Mỗi ảnh cho phép kích thước tối đa là ${imageSizeLimit}`;
+        state.inputError.image = `Mỗi ảnh cho phép kích thước tối đa là ${imageSizeLimit}`;
       } else {
-        state.imageError = '';
+        state.inputError.image = '';
         state.value.images?.push(image);
       }
     },
     setProductVideo: (state, action) => {
-
       const video = action.payload;
       const videoSizeLimit = 25;
 
@@ -114,8 +116,11 @@ const productSlice = createSlice({
     setVideoThumbnail: (state, action) => {
       state.value.videoThumbnail = action.payload;
     },
+    setInputError: (state, action) => {
+      state.inputError = {...state, ...action.payload};
+    },
     setImageError: (state, action) => {
-      state.imageError = action.payload;
+      state.inputError.image = action.payload;
     },
     setVideoError: (state, action) => {
       state.videoError = action.payload;
@@ -153,7 +158,7 @@ const productSlice = createSlice({
     });
     builder.addCase(getProductById.fulfilled, (state, action) => {
       state.loading = false;
-      // state.value = action.payload; // comes from returned res.data in async thunk above
+      // state.value = action.payload; // comes from `res.data` returned from async thunk
       state.error = '';
     });
     builder.addCase(getProductById.rejected, (state, action) => {
@@ -180,18 +185,37 @@ const productSlice = createSlice({
         ? action.error.message
         : 'Some error occured';
     });
+
+    builder.addCase(updateProduct.pending, (state) => {
+      state.loading = true;
+      state.productUpdated = false;
+    });
+    builder.addCase(updateProduct.fulfilled, (state, action) => {
+      state.loading = false;
+      state.productUpdated = true;
+      state.error = '';
+    });
+    builder.addCase(updateProduct.rejected, (state, action) => {
+      state.loading = false;
+      state.productUpdated = false;
+      state.error = action.error.message
+        ? action.error.message
+        : 'Some error occured';
+    });
+
   },
 });
 
 const productReducer = productSlice.reducer;
 
 export const {
-  setProductProperties, 
+  setProductProperties,
   resetAllProductProperties,
-  resetProductProperties, 
+  resetProductProperties,
   setProductImages,
   addProductImage,
   removeImageByIndex,
+  setInputError,
   setImageError,
   setVideoError,
   setProductVideo,

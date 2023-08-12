@@ -1,8 +1,6 @@
-
-import TopNav from '~/components/navbar'
-import PostProduct from '~/components/products/post-product'
-import Header from '~/layouts/Header'
-
+import TopNav from '~/components/common/navbar';
+import PostProduct from '~/components/product/product-crud/PostProduct';
+import Header from '~/layouts/Header';
 
 const PostProductPage = () => {
   return (
@@ -16,7 +14,7 @@ const PostProductPage = () => {
         </main>
       </body>
     </>
-  )
-}
+  );
+};
 
-export default PostProductPage
+export default PostProductPage;

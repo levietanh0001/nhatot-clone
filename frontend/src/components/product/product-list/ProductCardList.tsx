@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import styles from './ProductCardList.module.scss';
 import { useDebugValue, useEffect, useState } from 'react';
-import { axiosInstance } from '~/utils/axios.util';
+import { axiosPrivate } from '~/utils/axios.util';
 import { IProductData } from '~/interfaces/product.interface';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -13,10 +13,10 @@ import { convertToInternationalCurrencySystem } from '~/utils/number.util';
 import clsx from 'clsx';
 dayjs.extend(relativeTime);
 
-const placeholderImageSrc = 'https://placehold.co/210x163/orange/white/png?text=Nh%C3%A0%20T%E1%BB%91t';
+const placeholderImageSrc =
+  'https://placehold.co/210x163/orange/white/png?text=Nh%C3%A0%20T%E1%BB%91t';
 
 const ProductCardList = (props) => {
-
   const {
     isGridView,
     currentPage,
@@ -80,7 +80,10 @@ const ProductCardList = (props) => {
                           src={product.images?.[0].imageUrl}
                           alt={product.details.postTitle}
                           loading='lazy'
-                          onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = placeholderImageSrc }}
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = placeholderImageSrc;
+                          }}
                         />
                       )}
                     </div>

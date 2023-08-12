@@ -10,8 +10,6 @@ const postProductSchema = object({
   //   string().required('Xin hãy chọn danh mục bất động sản').oneOf(['canban', 'chothue']),
   projectName:
     string()
-    // .nullable()
-    // .notRequired()
     .max(100, 'Tên dự án cho phép tối đa 100 ký tự'),
   address:
     string().typeError('').required('Địa chỉ không thể trống'),
@@ -60,6 +58,9 @@ const postProductSchema = object({
     }),
   deposit:
     string().typeError('').test('min-deposit', 'Số tiền đặt cọc quá thấp', (val) => {
+      if(String(val) === 'null') {
+        return true;
+      }
       if(val) {
         return commaSeparatedStringToNumber(val) >= 1*10**6;
       }

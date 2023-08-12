@@ -13,7 +13,7 @@ export function sanitizeNumberString(n) {
 }
 
 export const formatNumberWithCommas = (value) => {
-  return Number(value.replace(/,/g, '')).toLocaleString();
+  return Number(String(value).replace(/,/g, '')).toLocaleString();
 };
 
 export const commaSeparatedStringToNumber = (str) => {

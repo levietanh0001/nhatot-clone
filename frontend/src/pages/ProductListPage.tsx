@@ -1,16 +1,16 @@
 import React, { Profiler } from 'react';
-import AboutUs from '~/components/footer/about-us/AboutUs';
-import Filters from '~/components/products/filters/Filters';
-import TopNav from '~/components/navbar';
+import AboutUs from '~/components/common/footer/about-us/AboutUs';
+import Filters from '~/components/product/product-filters/Filters';
+import TopNav from '~/components/common/navbar';
 import Footer from '~/layouts/Footer';
 import Header from '~/layouts/Header';
 import Breadcrumb from '~/components/common/breadcrumb/Breadcrumb';
 import Ads from '~/components/common/ads/Ads';
-import FilterBoard from '~/components/products/filters/FilterBoard';
-import UserTypeTabs from '~/components/products/tabs/UserTypeTabs';
-import ProductCardList from '~/components/products/product-list/ProductCardList';
+import FilterBoard from '~/components/product/product-filters/FilterBoard';
+import UserTypeTabs from '~/components/product/user-type-tabs/UserTypeTabs';
+import ProductCardList from '~/components/product/product-list/ProductCardList';
 import ContentWithAdsLayout from '~/layouts/ContentWithAdsLayout';
-import ProductList from '~/components/products/product-list/ProductList';
+import ProductList from '~/components/product/product-list/ProductList';
 
 const ProductListPage = () => {
   // function onRender(id, phase, actualDuration, baseDuration, startTime, commitTime) {

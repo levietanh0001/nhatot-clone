@@ -23,7 +23,13 @@ const ProductCategory = (props) => {
       inputWrapperClass={styles['product-category']}
     >
       {selectOptions.map((item, index) => (
-        <SelectOption key={index} {...item} />
+        // <SelectOption key={index} value={product.category} label={
+        //   product.category === ''? 'Chọn loại bất động sản':
+        //   product.category === 'canhochungcu'? 'Căn hộ/Chung cư':
+        //   product.category === 'nhao'? 'Nhà ở': 'khac'
+        // } inputOptionClass={item.inputOptionClass}
+        // />
+        <SelectOption key={index} value={item.value} label={item.label} />
       ))}
     </SelectInput>
   );

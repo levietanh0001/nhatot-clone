@@ -25,7 +25,7 @@ interface IProductDetails {
 
 export interface IProductData {
   details: IProductDetails;
-  images: {
+  images?: {
     imageUrl: string;
   }[];
 }
@@ -47,7 +47,7 @@ export interface IProduct {
   postTitle?: string;
   description?: string;
   userType?: string;
-  images?: File[];
+  images?: File[] | string[];
   imageUrls?: string[];
   thumbnailUrl?: string;
   videoThumbnailUrl?: string;
@@ -60,8 +60,10 @@ export interface IInitialProductState {
   loading: boolean;
   products: any[];
   productCreated: boolean;
+  productUpdated: boolean;
   error: string;
-  imageError: string;
+  inputError: any;
+  // imageError: string;
   videoError: string;
 }
 

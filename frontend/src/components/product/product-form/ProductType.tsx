@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import styles from './ProductType.module.scss';
 
-const ProductType = ({ product, onProductTypeSelect }) => {
+const ProductType = ({ product, onProductTypeSelect, productTypeError }) => {
 
   return (
     <>
@@ -35,6 +35,7 @@ const ProductType = ({ product, onProductTypeSelect }) => {
             </li>
           </ul>
         </div>
+        <div className='field-error'>{productTypeError}</div>
       </div>
     </>
   );

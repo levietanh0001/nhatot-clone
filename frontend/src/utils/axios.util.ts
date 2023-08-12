@@ -1,22 +1,29 @@
-import axios from 'axios';
-import { getNewAccessAndRefreshTokens } from './cryptography';
-import jwtDecode from 'jwt-decode';
+import axios, { AxiosInstance } from 'axios';
 import dayjs from 'dayjs';
+import jwtDecode from 'jwt-decode';
 import { IDecodedToken } from '~/interfaces/jwt.interface';
 import { backendBaseUrl } from '~/utils/variables.util';
-import { toast } from 'react-toastify';
+import { getNewAccessAndRefreshTokens } from './cryptography';
 
-// 1. create instance with baseUrl
-export const axiosInstance = axios.create({
+export const axiosPublic = axios.create({
+  baseURL: backendBaseUrl,
+  timeout: 5000, // allowed time for an open request before being canceled (milliseconds)
+  headers: {
+    'Content-Type': 'application/json',
+  },
+}) as AxiosInstance;
+
+export const axiosPrivate = axios.create({
   baseURL: backendBaseUrl,
   timeout: 5000, // allowed time for an open request before being canceled (milliseconds)
   headers: {
     'Content-Type': 'application/json',
     // 'Authorization': `Bearer ${accessToken}`
   },
-});
+}) as AxiosInstance;
 
-axiosInstance.interceptors.request.use(
+// refresh before request
+axiosPrivate.interceptors.request.use(
   async (req) => {
     const accessToken = localStorage.getItem('accessToken');
     req.headers.Authorization = `Bearer ${accessToken}`;
@@ -45,7 +52,7 @@ axiosInstance.interceptors.request.use(
       e.message = 'Refresh controller does not return anything';
       throw e;
     }
-    
+
     console.log({ newTokenPair: data });
     localStorage.setItem('accessToken', data.accessToken);
     localStorage.setItem('refreshToken', data.refreshToken);
@@ -60,7 +67,8 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// axiosInstance.interceptors.response.use(
+// // refresh on response
+// axiosPrivate.interceptors.response.use(
 //   (res) => {
 //     return res;
 //   },
@@ -104,7 +112,7 @@ axiosInstance.interceptors.request.use(
 //           localStorage.setItem('accessToken', data.accessToken);
 //           localStorage.setItem('refreshToken', data.refreshToken);
 
-//           return axiosInstance(config);
+//           return axiosPrivate(config);
 
 //         } catch(_error) {
 

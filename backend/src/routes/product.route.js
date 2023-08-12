@@ -16,9 +16,8 @@ router.get('/:productId', productsController.getProductById);
 // must be authenticated
 router.post(
   '/', 
-  uploadMultipleImages, 
-  // authRequired, 
   loggedInRequired,
+  uploadMultipleImages, 
   validateCreateProduct(),
   productsController.createProduct
 );
@@ -33,22 +32,35 @@ router.post(
 router.post(
   '/video',
   uploadVideo,
-  // authRequired,
   loggedInRequired,
-  productsController.uploadProductVideo
+  productsController.createProductVideo
 );
 
 router.put(
   '/:productId',
-  // authRequired,
   loggedInRequired,
-  validateUpdateProduct(),
+  uploadMultipleImages,
+  // validateUpdateProduct(),
   productsController.updateProductById
 );
 
+router.put(
+  '/video-thumbnail',
+  uploadImage,
+  loggedInRequired,
+  productsController.updateVideoThumbnail
+)
+
+router.put(
+  '/video',
+  uploadVideo,
+  loggedInRequired,
+  productsController.createProductVideo
+);
+
+
 router.delete(
   '/:productId', 
-  // authRequired,
   loggedInRequired,
   productsController.deleteProductById
 );

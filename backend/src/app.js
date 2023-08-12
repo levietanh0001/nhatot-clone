@@ -52,7 +52,7 @@ const VideoThumbnail = require('./models/video-thumbnail');
 
 
 // define associations
-Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' }); // on delete Product, remove children referencing Product
+Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' }); // on delete User, remove Product
 User.hasMany(Product); // one-to-many relationship: getProducts() and createProduct() methods generated
 User.hasOne(UserProfile);
 UserProfile.belongsTo(User);

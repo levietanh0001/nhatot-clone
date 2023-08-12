@@ -13,13 +13,13 @@ interface IAuthContext {
   setUser: SetStateAction<any | null>;
   userData?: any | null;
   setUserData?: SetStateAction<any | null>;
-  authenticated: boolean;
-  setAuthenticated: React.Dispatch<SetStateAction<boolean>>;
+  authenticated?: boolean;
+  setAuthenticated?: React.Dispatch<SetStateAction<boolean>>;
   registerUser: (email: string, password: string, confirmPassword: string) => Promise<any>;
   loginUser: (email: string, password: string) => Promise<any>;
   logoutUser: () => Promise<any>;
   resetUserPassword: (email: string) => Promise<any>;
-  // updateUserEmail: (email: string) => Promise<any>;
+  //? updateUserEmail: (email: string) => Promise<any>;
   updateUserPassword: (newPassword: string, userId: string, resetToken: string,) => Promise<any>;
   checkLoggedIn: () => Promise<boolean>;
   redirectToLoginPage: (loginUrl?: string) => void;
@@ -35,14 +35,14 @@ export const AuthProvider = ({ children }) => {
 
   const [user, setUser] = useState<any | null>(null);
   const [userData, setUserData] = useState<any | null>(null);
-  const [authenticated, setAuthenticated] = useState<boolean>(false);
+  // const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [email, setEmail] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log({ authenticated });
-  }, [authenticated]);
+  // useEffect(() => {
+  //   console.log({ authenticated });
+  // }, [authenticated]);
 
   useEffect(() => {
 
@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
         const accessToken = localStorage.getItem('accessToken');
     
         if(!accessToken) {
-          setAuthenticated(false);
+          // setAuthenticated(false);
           setUser(null);
           setLoading(false);
         }
@@ -67,10 +67,11 @@ export const AuthProvider = ({ children }) => {
         if(!payload) {
 
           const refreshToken = localStorage.getItem('refreshToken');
+          console.log({ refreshToken });
           const newTokens = await getNewTokens(refreshToken, abortController.signal);
 
           if(!newTokens) {
-            setAuthenticated(false);
+            // setAuthenticated(false);
             setUser(null);
             setLoading(false);
           }
@@ -79,13 +80,13 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem('accessToken', newTokens.accessToken);
             localStorage.setItem('refreshToken', newTokens.refreshToken);
             const payload = jwtDecode(newTokens.accessToken);
-            setAuthenticated(true);
+            // setAuthenticated(true);
             setUser(payload);
             setLoading(false);
           }
 
         } else {
-          setAuthenticated(true);
+          // setAuthenticated(true);
           setUser(payload);
           localStorage.setItem('user', JSON.stringify(user));
           setLoading(false);
@@ -220,8 +221,8 @@ export const AuthProvider = ({ children }) => {
   const value = {
     user,
     setUser,
-    authenticated,
-    setAuthenticated,
+    // authenticated,
+    // setAuthenticated,
     registerUser,
     loginUser,
     logoutUser,

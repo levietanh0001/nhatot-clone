@@ -15,7 +15,9 @@ interface ISelectInput {
   inputWrapperClass?: string;
 
   inputValue?: string;
-  onInputValueChange?: React.ChangeEventHandler<HTMLSelectElement>,
+  onInputValueChange?: React.ChangeEventHandler<HTMLSelectElement>;
+
+  [x:string]: any;
 }
 
 
@@ -57,7 +59,7 @@ export const SelectInput: React.FC<ISelectInput> = (props) => {
         
         <select
           id={id}
-          // name={name}
+          className={clsx(styles['select'])}
 
           {...field}
           value={inputValue}
@@ -79,10 +81,12 @@ export const SelectOption = (props) => {
   const {
     value = '',
     label = '',
-    inputOptionClass = ''
+    inputOptionClass = '',
+    // args
   } = props;
 
   return (
+    // <option className={args.inputOptionClass} value={args.value}>{args.label}</option>
     <option className={inputOptionClass} value={value}>{label}</option>
   )
 }

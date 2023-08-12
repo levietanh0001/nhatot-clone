@@ -4,8 +4,8 @@ import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import styles from './SecondTopNav.module.scss';
-import DropdownMenu from '../common/dropdown-menu/DropdownMenu';
-import DropdownMenuItem from '../common/dropdown-menu/DropdownMenuItem';
+import DropdownMenu from '~/components/common/dropdown-menu/DropdownMenu';
+import DropdownMenuItem from '~/components/common/dropdown-menu/DropdownMenuItem';
 import { AuthContext } from '~/contexts/auth/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -37,12 +37,9 @@ const Dropdown = () => {
   const user = authContext?.user;
   // const userData = authContext?.userData;
 
-  useEffect(() => {
-
-    console.log({ user });
-
-
-  }, [user]);
+  // useEffect(() => {
+  //   console.log({ user });
+  // }, [user]);
 
   if(user?.providerData) {
     setPhotoUrl(user?.providerData[0]['photoURL'] ?? '');
