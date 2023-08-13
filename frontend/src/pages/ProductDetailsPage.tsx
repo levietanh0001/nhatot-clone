@@ -16,10 +16,11 @@ const ProductDetailsPage = () => {
       <body>
         <Breadcrumb />
         <main>
-          <ContentWithStickyBox
+          <ProductDetails />
+          {/* <ContentWithStickyBox
             content={<ProductDetails />}
             stickyBox={<ContactUser />}
-          />
+          /> */}
         </main>
       </body>
       <Footer>

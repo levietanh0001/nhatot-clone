@@ -4,6 +4,7 @@ const { validationResult } = require('express-validator');
 function sendMessage(req, res, status) {
 
   const errors = validationResult(req);
+  console.log('validation error');
   console.log({ errors });
   
   if (!errors.isEmpty()) {

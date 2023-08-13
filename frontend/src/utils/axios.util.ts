@@ -13,6 +13,16 @@ export const axiosPublic = axios.create({
   },
 }) as AxiosInstance;
 
+axiosPublic.interceptors.request.use(function (config) {
+  
+  console.log(config)
+  return config;
+}, function (error) {
+  
+  return Promise.reject(error);
+});
+
+
 export const axiosPrivate = axios.create({
   baseURL: backendBaseUrl,
   timeout: 5000, // allowed time for an open request before being canceled (milliseconds)

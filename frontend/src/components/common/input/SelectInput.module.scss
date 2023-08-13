@@ -50,5 +50,9 @@
     padding: 15px;
   }
 
+  & .select > option:first-child {
+    color: var(--orange-900);
+  }
+
   
 }

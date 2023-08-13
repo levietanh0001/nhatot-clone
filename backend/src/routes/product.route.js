@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.get('/', validateGetProduct(), productsController.getProducts);
 router.get('/count', productsController.getProductCount);
-router.get('/:productId', productsController.getProductById);
+router.get('/:productId/:slug', productsController.getProductById);
 
 // must be authenticated
 router.post(

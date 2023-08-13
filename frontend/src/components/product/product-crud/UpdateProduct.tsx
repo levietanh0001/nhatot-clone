@@ -185,9 +185,12 @@ const UpdateProduct = () => {
             dispatch(resetProductProperties('videoThumbnailUrl'));
             dispatch(resetProductProperties('video'));
           }}
-          onVideoThumbnailCreate={(videoThumbnailUrl) =>
-            dispatch(setProductProperties({ videoThumbnailUrl }))
+          onVideoThumbnailCreate={(videoThumbnail) =>
+            dispatch(setProductProperties({ videoThumbnail }))
           }
+          onVideoThumbnailUrlCreate={(url) => {
+            dispatch(setProductProperties({ videoThumbnailUrl: 'true' }));
+          }}
           onCategoryChange={(value) =>
             dispatch(setProductProperties({ category: value }))
           }

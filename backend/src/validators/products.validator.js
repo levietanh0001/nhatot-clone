@@ -227,8 +227,7 @@ function validateUpdateProduct() {
           throw new Error('Diện tích cần lớn hơn 0')
         }
         return true;
-      })
-      ,
+      }),
     body('postTitle')
       .optional()
       .isString()
@@ -241,6 +240,10 @@ function validateUpdateProduct() {
       .withMessage('Miêu tả không hợp lệ')
       .isLength({ min: 6, max: 200 })
       .withMessage('Miêu tả cần ít nhất 6 ký tự và tối đa 200 ký tự'),
+    body('videoThumbnailUrl')
+      .optional()
+      .isString()
+      .withMessage('Invalid video thumbnail url')
   ];
 }
 

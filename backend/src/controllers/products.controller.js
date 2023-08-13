@@ -1,8 +1,9 @@
+const { kebabCase } = require('lodash');
 const path = require('path');
 const { Op, QueryTypes } = require('sequelize');
 const Product = require('../models/product.model');
 const validationUtils = require('../utils/validation.util');
-const fileUtils = require('../utils/file.util');
+const { doesPathExist, deleteFileByPath } = require('../utils/file.util');
 const errorsService = require('../controllers/errors.controller');
 const ProductImage = require('../models/product-image.model');
 const { sequelize, getMagicMethods } = require('../utils/database.util');
@@ -12,6 +13,7 @@ const ProductVideo = require('../models/product-video.model');
 const ProductThumbnail = require('../models/product-thumbnail');
 const VideoThumbnail = require('../models/video-thumbnail');
 const { uploadedImagesDir, uploadedVideosDir } = require('../utils/path.util');
+const { toLowerCaseNonAccentVietnamese } = require('../utils/text.util');
 
 
 
@@ -49,7 +51,8 @@ async function createProduct(req, res, next) {
   
     validationUtils.sendMessage(req, res, 422);
     
-    const productData = { type, category, projectName, address, numBedrooms, numBathrooms, balconDirection, mainDoorDirection, legalDocsStatus, furnitureStatus, area, price, deposit, postTitle, description, userType };
+    const slug = kebabCase(toLowerCaseNonAccentVietnamese(postTitle));
+    const productData = { type, category, projectName, address, numBedrooms, numBathrooms, balconDirection, mainDoorDirection, legalDocsStatus, furnitureStatus, area, price, deposit, postTitle, description, userType, slug };
     console.log({ productData });
 
     const product = await req.user.createProduct(productData);
@@ -353,14 +356,16 @@ async function getProductById(req, res, next) {
   try {
     
     const productId = req.params['productId'];
+    const slug = req.params['slug'];
 
-    const cachedProduct = await redisClient.get(`products[${productId}]`);
+    const cachedProduct = await redisClient.get(`products[${productId},${slug}]`);
 
     if(cachedProduct) {
       return res.status(200).json(JSON.parse(cachedProduct));
     }
 
-    const product = await Product.findByPk(productId, { raw: true });
+    // const product = await Product.findByPk(productId, { raw: true });
+    const product = await Product.findOne({ where: { id: productId, slug }, raw: true });
 
     if(!product) {
       return res.status(200).json({});
@@ -380,7 +385,7 @@ async function getProductById(req, res, next) {
       // video: productVideo? productVideo.videoUrl: ''
     }
 
-    await redisClient.setEx(`products[${productId}]`, 10, JSON.stringify(result));
+    await redisClient.setEx(`products[${productId},${slug}]`, 10, JSON.stringify(result));
 
     return res.status(200).json(result);
     
@@ -415,12 +420,13 @@ async function updateProductById(req, res, next) {
     const description = req.body['description'];
     const userType = req.body['userType'];
     const imageUrls = JSON.parse(req.body['imageUrls']);
+    const videoThumbnailUrl = req.body['videoThumbnailUrl'];
 
     // console.log({ body: req.body });
     // console.log({ uploadedImagesDir, uploadedVideosDir });
     console.log({ imageUrls });
     
-    validationUtils.sendMessage(req, res, 422);
+    // validationUtils.sendMessage(req, res, 422);
     
     const productData = { type, category, projectName, address, numBedrooms, numBathrooms, balconDirection, mainDoorDirection, legalDocsStatus, furnitureStatus, area, price, deposit, postTitle, description, userType };
     console.log({ productData });
@@ -434,7 +440,6 @@ async function updateProductById(req, res, next) {
       });
     }
 
-    
     const currentUser = await currentProduct.getUser({ id: req.user.id });
     
     if(!currentUser) {
@@ -511,9 +516,9 @@ async function updateProductById(req, res, next) {
           deletedImageUrls.forEach((imageUrl) => {
             // console.log(String(imageUrl).replace(`${req.protocol}://${req.get('host')}/uploads/images/`, ''));
             if(imageUrl) {
-              const deletePath = path.join(uploadedImagesDir, String(imageUrl).replace(`${req.protocol}://${req.get('host')}/uploads/images/`, ''));
-              if(fileUtils.doesPathExist(deletePath)) {
-                fileUtils.deleteFileByPath(deletePath);
+              const imagePath = path.join(uploadedImagesDir, String(imageUrl).replace(`${req.protocol}://${req.get('host')}/uploads/images/`, ''));
+              if(doesPathExist(imagePath)) {
+                deleteFileByPath(imagePath);
               }
             }
           });
@@ -522,6 +527,21 @@ async function updateProductById(req, res, next) {
 
       }
 
+    }
+
+
+    console.log({ videoThumbnailUrl });
+    if(!videoThumbnailUrl) {
+      const productVideos = await currentProduct.getProduct_videos({ where: { productId } });
+      const productVideo = productVideos[0];
+      if(productVideo) {
+        const videoUrl = productVideo.videoUrl;
+        await productVideo.destroy();
+        const videoThumbnail = await currentProduct.getVideo_thumbnail();
+        await videoThumbnail.destroy();
+        const videoPath = path.join(uploadedVideosDir, String(videoUrl).replace(`${req.protocol}://${req.get('host')}/uploads/videos/`, ''));
+        deleteFileByPath(videoPath);
+      }
     }
 
     if(req.files) {

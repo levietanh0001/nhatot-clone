@@ -51,23 +51,32 @@ const ProductThumbnail = require('./models/product-thumbnail');
 const VideoThumbnail = require('./models/video-thumbnail');
 
 
+const constraints = { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: false } };
+
 // define associations
-Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' }); // on delete User, remove Product
+Product.belongsTo(User, constraints); // on delete User, remove Product
 User.hasMany(Product); // one-to-many relationship: getProducts() and createProduct() methods generated
-User.hasOne(UserProfile);
-UserProfile.belongsTo(User);
-FavoriteList.belongsTo(User);
-User.hasOne(FavoriteList);
-FavoriteList.belongsToMany(Product, { through: FavoriteItem });
+
 Product.belongsToMany(FavoriteList, { through: FavoriteItem });
-Product.hasMany(ProductImage);
-ProductImage.belongsTo(Product);
-Product.hasMany(ProductVideo);
-ProductVideo.belongsTo(Product);
-ProductThumbnail.belongsTo(Product);
-Product.hasOne(ProductThumbnail);
-VideoThumbnail.belongsTo(Product);
-Product.hasOne(VideoThumbnail);
+FavoriteList.belongsToMany(Product, { through: FavoriteItem });
+
+Product.hasMany(ProductImage, constraints);
+ProductImage.belongsTo(Product, constraints);
+
+Product.hasMany(ProductVideo, constraints);
+ProductVideo.belongsTo(Product, constraints);
+
+Product.hasOne(ProductThumbnail, constraints);
+ProductThumbnail.belongsTo(Product, constraints);
+
+Product.hasOne(VideoThumbnail, constraints);
+VideoThumbnail.belongsTo(Product, constraints);
+
+User.hasOne(FavoriteList, constraints);
+FavoriteList.belongsTo(User, constraints);
+
+User.hasOne(UserProfile, constraints);
+UserProfile.belongsTo(User, constraints);
 
 
 // init express app
@@ -82,7 +91,6 @@ app.use(helmet(helmetConfig));
 
 
 // add cors and cache preflight request
-
 app.use(cors({
   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'X-Access-Token', 'Authorization'],
   credentials: true,

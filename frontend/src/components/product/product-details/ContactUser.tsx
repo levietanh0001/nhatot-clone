@@ -1,8 +1,12 @@
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import styles from './ContactUser.module.scss';
 
 
-const ContactUser = () => {
+const ContactUser = (props) => {
+
+  const { data, user } = props;
+
   return (
     <div className={styles['wrapper']}>
       <div className={styles['user-card']}>
@@ -24,7 +28,7 @@ const ContactUser = () => {
               <span className={styles['user-icon']}>
                 <img src='https://static.chotot.com/storage/default_images/pty/private-pty-icon.svg' alt='https://static.chotot.com/storage/default_images/pty/private-pty-icon.svg' />
               </span>
-              <span className={styles['user-type']}>Cá nhân</span>
+              <span className={styles['user-type']}>{data.userType}</span>
             </div>
             <div className={styles['status-wrapper']}>
               <span className={styles['status-icon']}>•</span>
@@ -79,6 +83,11 @@ const ContactUser = () => {
       </div>
     </div>
   )
+}
+
+ContactUser.propTypes = {
+  data: PropTypes.object,
+  user: PropTypes.object
 }
 
 export default ContactUser

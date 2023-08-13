@@ -53,7 +53,7 @@ export const updateProduct = createAsyncThunk(
 
     delete newProductData['images'];
     delete newProductData['video'];
-    delete newProductData['videoThumbnailUrl'];
+    delete newProductData['videoThumbnail'];
     console.log({ productId, newProductData });
 
     if (!Array.isArray(productState.value.images)) {
@@ -80,6 +80,7 @@ export const updateProduct = createAsyncThunk(
 
     console.log({ updateProductResponse });
 
+    // update video
     if(productState.value.video) {
 
       const videoFormData = new FormData();

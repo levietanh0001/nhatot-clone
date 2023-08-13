@@ -15,13 +15,10 @@ function uploadSingleFile() {
       cb(null, 'uploads/images'); // error = null, destination = 'uploads'
     },
     filename: (req, file, cb) => {
-      cb(
-        null,
-        new Date().toISOString()
-        + '-' + file.fieldname
-        + '-' + file.originalname
-        + uuidv4().toString()
-      )
+      const fileName =  new Date().toISOString() + '-' +
+                        uuidv4().toString() + '-' +
+                        file.originalname;
+      cb(null, fileName)
     }
   });
 
@@ -53,7 +50,9 @@ function uploadImage(req, res, next) {
         cb(null, dest); // error = null, destination = 'uploads'
       },
       filename: (req, file, cb) => {
-        req.imageName = new Date().toISOString() + file.originalname + uuidv4().toString();
+        req.imageName = new Date().toISOString() + '-' +
+                        uuidv4().toString() + '-' +
+                        file.originalname
         cb(null, req.imageName);
       }
     }),
@@ -96,7 +95,9 @@ function uploadMultipleImages(req, res, next) {
         cb(null, dest); // error = null, destination = 'uploads'
       },
       filename: (req, file, cb) => {
-        req.imageName = new Date().toISOString() + file.originalname + uuidv4().toString();
+        req.imageName = new Date().toISOString() + '-' +
+                        uuidv4().toString() + '-' +
+                        file.originalname;
         cb(null, req.imageName);
       }
     }),
@@ -138,7 +139,9 @@ function uploadVideo(req, res, next) {
         cb(null, dest); // error = null, destination = 'uploads'
       },
       filename: (req, file, cb) => {
-        req.videoName = new Date().toISOString() + file.originalname + uuidv4().toString();
+        req.videoName = new Date().toISOString() + '-' +
+                        uuidv4().toString() + '-' +
+                        file.originalname;
         cb(null, req.videoName)
       }
     }),
@@ -168,55 +171,59 @@ function uploadVideo(req, res, next) {
 
 }
 
-// function uploadMedia(req, res, next) {
+function uploadMedia(req, res, next) {
 
-//   const options = {
-//     storage: multer.diskStorage({
-//       destination: (req, file, cb) => {
+  const options = {
+    storage: multer.diskStorage({
+      destination: (req, file, cb) => {
         
-//         const dest = path.join(uploadDir);
-//         mkDirIfNotExists(dest);
-//         cb(null, dest); // error = null, destination = 'uploads'
-//       },
-//       filename: (req, file, cb) => {
-//         cb(null, new Date().toISOString() + '-' + file.fieldname + '-' + file.originalname)
-//       }
-//     }),
-//     fileFilter: function(req, file, cb) {
+        const dest = path.join(uploadDir);
+        mkDirIfNotExists(dest);
+        cb(null, dest); // error = null, destination = 'uploads'
+      },
+      filename: (req, file, cb) => {
+        const fileName =  new Date().toISOString() + '-' +
+                          uuidv4().toString() + '-' +
+                          file.originalname;
+        cb(null, fileName)
+      }
+    }),
+    fileFilter: function(req, file, cb) {
 
-//       if (file.mimetype === 'video/mp4') {
-//         cb(null, true); // error = null, acceptFile = true
-//       } else {
-//         cb(null, false); // error = null, acceptFile = false
-//       }
-//     },
-//     limits: {
-//       fileSize: 50 * 1024 * 1024 // bytes
-//     }
-//   }
+      if (file.mimetype === 'video/mp4') {
+        cb(null, true); // error = null, acceptFile = true
+      } else {
+        cb(null, false); // error = null, acceptFile = false
+      }
+    },
+    limits: {
+      fileSize: 50 * 1024 * 1024 // bytes
+    }
+  }
 
-//   const uploads = multer({ ...options }).fields([
-//     { name: 'images', maxCount: 6 },
-//     { name: 'video', maxCount: 1 }
-//   ]);
+  const uploads = multer({ ...options }).fields([
+    { name: 'images', maxCount: 6 },
+    { name: 'video', maxCount: 1 }
+  ]);
 
-//   return uploads(req, res, (error) => {
+  return uploads(req, res, (error) => {
 
-//     if(error) {
-//       returnError(res, 422, error);
-//     }
+    if(error) {
+      returnError(res, 422, error);
+    }
 
-//     next();
-//   });
+    next();
+  });
 
-// }
+}
 
 
 module.exports = {
   uploadSingleFile,
   uploadMultipleImages,
   uploadVideo,
-  uploadImage
+  uploadImage,
+  uploadMedia
 };
 
 

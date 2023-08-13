@@ -9,30 +9,69 @@ import {
 import styles from './ProductInfo.module.scss';
 import { useEffect } from 'react';
 
+
+function directions(what) {
+  return [
+    {
+      value: 'dong',
+      label: `${what} Đông`,
+    },
+    {
+      value: 'tay',
+      label: `${what} Tây`,
+    },
+    {
+      value: 'nam',
+      label: `${what} Nam`,
+    },
+    {
+      value: 'bac',
+      label: `${what} Bắc`,
+    },
+    {
+      value: 'dongnam',
+      label: `${what} Đông Nam`,
+    },
+    {
+      value: 'dongbac',
+      label: `${what} Đông Bắc`,
+    },
+    {
+      value: 'taynam',
+      label: `${what} Tây Nam`,
+    },
+    {
+      value: 'taybac',
+      label: `${what} Tây Bắc`,
+    },
+  
+  ];
+}
+
 const directionOptions = [
   {
     value: 'dong',
-    label: 'Đông',
+    label: 'đông',
   },
   {
     value: 'tay',
-    label: 'Tây',
+    label: 'tây',
   },
   {
     value: 'nam',
-    label: 'Nam',
+    label: 'nam',
   },
   {
     value: 'bac',
-    label: 'Bắc',
+    label: 'bắc',
   },
   {
     value: 'dongnam',
-    label: 'Đông Nam',
+    label: 'đông nam',
   },
   {
     value: 'dongbac',
-    label: 'Đông Bắc',
+    label: 'đông bắc',
   },
   {
     value: 'taynam',
@@ -40,7 +79,7 @@ const directionOptions = [
   },
   {
     value: 'taybac',
-    label: 'Tây Bắc',
+    label: 'tây bắc',
   },
 
 ];
@@ -50,7 +89,8 @@ const balconDirectionOptions = [
     value: '',
     label: 'Hướng ban công'
   },
-  ...directionOptions
+  // ...directionOptions
+  ...directions('Ban công hướng')
 ]
 
 const mainDoorDirectionOptions = [
@@ -58,7 +98,8 @@ const mainDoorDirectionOptions = [
     value: '',
     label: 'Hướng cửa chính'
   },
-  ...directionOptions
+  // ...directionOptions
+  ...directions('Cửa chính hướng')
 ]
 
 const legalDocsStatus = [
@@ -78,19 +119,19 @@ const legalDocsStatus = [
 
 const furnitureStatus = [
   {
-    label: 'Cao cấp',
+    label: 'Nội thất cao cấp',
     value: 'caocap',
   },
   {
-    label: 'Đầy đủ',
+    label: 'Nội thất đầy đủ',
     value: 'daydu',
   },
   {
-    label: 'Cơ bản',
+    label: 'Nội thất cơ bản',
     value: 'coban',
   },
   {
-    label: 'Không',
+    label: 'Không nội thất',
     value: 'khong',
   },
 ];
@@ -148,6 +189,7 @@ const ProductInfo = ({
             name='balconDirection'
             onInputValueChange={onBalconDirectionChange}
             inputValue={product.balconDirection}
+            what='Ban công hướng'
           >
             {balconDirectionOptions.map((item, index) => (
               <SelectOption key={index} {...item} />
@@ -157,6 +199,7 @@ const ProductInfo = ({
             name='mainDoorDirection'
             inputValue={product.mainDoorDirection}
             onInputValueChange={onMainDirectionChange}
+            what='Cửa chính hướng'
           >
             {mainDoorDirectionOptions.map((item, index) => (
               <SelectOption key={index} {...item} />

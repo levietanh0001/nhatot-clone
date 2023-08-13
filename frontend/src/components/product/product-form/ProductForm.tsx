@@ -26,6 +26,7 @@ const ProductForm = (props) => {
     onVideoChange,
     onVideoRemove,
     onVideoThumbnailCreate,
+    onVideoThumbnailUrlCreate,
     onCategoryChange,
     onProductTypeSelect,
     onAddressChange,
@@ -62,6 +63,7 @@ const ProductForm = (props) => {
           onVideoChange={onVideoChange}
           onVideoRemove={onVideoRemove}
           onVideoThumbnailCreate={onVideoThumbnailCreate}
+          onVideoThumbnailUrlCreate={onVideoThumbnailUrlCreate}
           imageError={product.inputError.image}
           videoErrors={product.videoError}
         />
@@ -154,6 +156,7 @@ ProductForm.propTypes = {
   onVideoChange: PropTypes.func,
   onVideoRemove: PropTypes.func,
   onVideoThumbnailCreate: PropTypes.func,
+  onVideoThumbnailUrlCreate: PropTypes.func,
   onCategoryChange: PropTypes.func,
   onProductTypeSelect: PropTypes.func,
   onAddressChange: PropTypes.func,

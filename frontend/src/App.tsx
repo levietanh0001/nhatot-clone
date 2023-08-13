@@ -61,13 +61,22 @@ function App() {
             ></Route>
 
             <Route
-              path='/product'
+              path='/product/:productId/:slug.htm'
               element={
                 <SuspenseWrapper>
                   <ProductDetailsPage />
                 </SuspenseWrapper>
               }
             ></Route>
+
+            {/* <Route
+              path='/product'
+              element={
+                <SuspenseWrapper>
+                  <ProductDetailsPage />
+                </SuspenseWrapper>
+              }
+            ></Route> */}
 
             <Route
               path='/product-list/:type'

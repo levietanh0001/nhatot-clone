@@ -55,6 +55,9 @@ const Product = sequelize.define('product', {
   postTitle: {
     ...asString(10, 255, allowNull=false, 'postTitle')
   },
+  slug: {
+    type: Sequelize.STRING
+  },
   description: {
     ...asString(0, 255)
   },

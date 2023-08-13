@@ -11,6 +11,7 @@ import { Pagination } from '@mui/material';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { convertToInternationalCurrencySystem } from '~/utils/number.util';
 import clsx from 'clsx';
+import { timeAgo } from '~/utils/date.util';
 dayjs.extend(relativeTime);
 
 const placeholderImageSrc =
@@ -41,7 +42,9 @@ const ProductCardList = (props) => {
             <li key={index}>
               <Link
                 key={index}
-                to='#'
+                // to=''
+                // slug field on backend
+                to={`/product/${product.details.id}/${product.details.slug}.htm`}
                 className={clsx(styles['link-wrapper'], {
                   [styles['grid-view']]: isGridView,
                 })}
@@ -160,18 +163,7 @@ const ProductCardList = (props) => {
                             <span>{product.details.userType}</span>
                             &nbsp;&sdot;&nbsp;
                             <span>
-                              {dayjs(product.details.updatedAt)
-                                .fromNow()
-                                .replace('minutes ago', 'phút trước')
-                                .replace('minute ago', 'phút trước')
-                                .replace('hours ago', 'giờ trước')
-                                .replace('hour ago', 'giờ trước')
-                                .replace('days ago', 'ngày trước')
-                                .replace('a day ago', '1 ngày trước')
-                                .replace('months ago', 'ngày trước')
-                                .replace('month ago', 'ngày trước')
-                                .replace('years ago', 'năm trước')
-                                .replace('year ago', 'năm trước')}
+                              {timeAgo(product.details.updatedAt)}
                             </span>
                           </div>
                         </div>

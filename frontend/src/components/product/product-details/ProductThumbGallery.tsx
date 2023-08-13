@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useState } from "react";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -20,7 +21,9 @@ const imgSrc = [
   "https://cdn.chotot.com/7hDwhy5PGp-uyPAeSmoeJQe6HORx6wBx9dyTCnrtjuI/preset:view/plain/9169c9196d15da9ae5fda6286bf4bc1e-2830698564407904551.jpg", 
 ]
 
-export default function ProductThumbGallery() {
+export default function ProductThumbGallery(props) {
+
+  const { imageUrls } = props;
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
 
   return (
@@ -37,9 +40,9 @@ export default function ProductThumbGallery() {
               Thumbs
             ]}
           >
-              {imgSrc.map((src, index) => (
-                <SwiperSlide>
-                  <img key={index} src={src} alt="" />
+              {imageUrls.map((src, index) => (
+                <SwiperSlide key={index}>
+                  <img key={index} src={src} alt="Ảnh minh họa sản phẩm" />
                 </SwiperSlide>
               ))}
           </Swiper>
@@ -58,8 +61,8 @@ export default function ProductThumbGallery() {
             ]}
           >
             {imgSrc.map((src, index) => (
-              <SwiperSlide>
-                <img key={index} src={src} alt="" />
+              <SwiperSlide key={index}>
+                <img key={index} src={src} alt="Ảnh minh họa sản phẩm" />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -67,4 +70,9 @@ export default function ProductThumbGallery() {
       </div>
     </>
   );
+}
+
+
+ProductThumbGallery.propTypes = {
+  imageUrls: PropTypes.array
 }
