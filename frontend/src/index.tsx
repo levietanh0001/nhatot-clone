@@ -1,5 +1,6 @@
 import ReactDOM from "react-dom";
 import { Provider as ReactReduxProvider } from "react-redux";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import App from "./App";
 
 import MUIStyledEngineProvider from "./providers/MUIStyledEngineProvider";
@@ -25,6 +26,7 @@ ReactDOM.render(
       {/* <PersistGate loading={null} persistor={persistor}></PersistGate> */}
       <QueryClientProvider client={queryClient}>
         <App />
+        <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
       </QueryClientProvider>
     </ReactReduxProvider>
   </MUIStyledEngineProvider>,

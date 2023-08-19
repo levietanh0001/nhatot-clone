@@ -1,11 +1,16 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import styles from './ContactUser.module.scss';
+import { useState } from 'react';
+import clsx from 'clsx';
 
 
 const ContactUser = (props) => {
 
-  const { data, user } = props;
+  const { user, userProfile } = props;
+  const phoneNumber = userProfile?.phoneNumber ?? '';
+
+  const [showPhone, setShowPhone] = useState<boolean>(false);
 
   return (
     <div className={styles['wrapper']}>
@@ -16,10 +21,10 @@ const ContactUser = (props) => {
         <div className={styles['user-info']}>
           <div className={styles['card-header']}>
             <div className={styles['card-title']}>
-              <span>Lê Việt Anh</span>
+              <span>{userProfile?.username ?? ''}</span>
             </div>
             <div className={styles['to-profile-page']}>
-              <span><Link to='/user-profile'>Xem trang</Link></span>
+              <span><Link to={`/user-profile/${user?.userId ?? ''}`}>Xem trang</Link></span>
               <span>&gt;</span>
             </div>
           </div>
@@ -28,7 +33,7 @@ const ContactUser = (props) => {
               <span className={styles['user-icon']}>
                 <img src='https://static.chotot.com/storage/default_images/pty/private-pty-icon.svg' alt='https://static.chotot.com/storage/default_images/pty/private-pty-icon.svg' />
               </span>
-              <span className={styles['user-type']}>{data.userType}</span>
+              <span className={styles['user-type']}>{String(user?.role ?? '').replace('canhan', 'Cá nhân').replace('moigioi', 'Môi giới')}</span>
             </div>
             <div className={styles['status-wrapper']}>
               <span className={styles['status-icon']}>•</span>
@@ -52,13 +57,15 @@ const ContactUser = (props) => {
           </ul>
         </div>
         <div className={styles['card-actions']}>
-          <button className={styles['call']}>
-            <span className={styles['call-icon']}>
-              <img alt="loadingIcon" src="https://static.chotot.com/storage/chotot-icons/svg/white-phone.svg" />
-            </span>
-            <span className={styles['phone-number']}>0326896269</span>
-            <span className={styles['expand']}>Bấm để hiện số</span>
-          </button>
+          {phoneNumber && (
+            <button className={styles['call']} onClick={() => setShowPhone((prev) => !prev)}>
+              <span className={styles['call-icon']}>
+                <img alt="loadingIcon" src="https://static.chotot.com/storage/chotot-icons/svg/white-phone.svg" />
+              </span>
+              <span className={clsx(styles['phone-number'], { [styles['shortened']]: !showPhone })}>{phoneNumber}</span>
+              <span className={styles['expand']}>Bấm để hiện số</span>
+            </button>
+          )}
           <button className={styles['chat']}>
             <span className={styles['chat-icon']}></span>
             <span className={styles['chat-with-user']}>
@@ -86,8 +93,9 @@ const ContactUser = (props) => {
 }
 
 ContactUser.propTypes = {
-  data: PropTypes.object,
-  user: PropTypes.object
+  // data: PropTypes.object,
+  user: PropTypes.object,
+  userProfile: PropTypes.object
 }
 
 export default ContactUser

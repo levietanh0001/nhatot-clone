@@ -3,7 +3,9 @@ import { number, object, ref, string } from 'yup';
 const passwordMinChar = 6;
 
 const registerFormSchema = object({
-  email: 
+  userName:
+    string(),
+  email:
     string()
     .required('Email không thể trống')
     .email('Email không hợp lệ'),

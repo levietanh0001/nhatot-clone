@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -42,22 +42,7 @@ const PostProduct = () => {
       toast.success('Đăng tải thành công');
     }
 
-    // if (Object.entries(product.inputError).length > 0) {
-    //   console.log({inputError: product.inputError});
-    //   toast.error('Vui lòng kiểm tra lại form');
-    // }
-    
   }, [product.productCreated]);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    for (const [key, value] of Object.entries(product.inputError)) {
-      if(value) {
-        toast.error('Vui lòng kiểm tra lại form');
-        break;
-      }
-    }
-  }, [product.inputError]);
 
   const form = useForm({
     mode: 'all',
@@ -67,27 +52,68 @@ const PostProduct = () => {
   const { handleSubmit } = form;
 
   const onSubmit = async (data, e) => {
+
     e.preventDefault();
 
     try {
+
       if (!product.value.images) {
         throw new Error('Product images are undefined');
       }
 
       if (product.value.images?.length === 0) {
         dispatch(setInputError({ image: 'Cần có ảnh minh họa cho sản phẩm' }));
+        window.scrollTo({ top: 10, behavior: 'smooth' });
+        toast.error('Vui lòng kiểm tra lại form');
         return;
       }
 
       if(!product.value.type) {
         dispatch(setInputError({ type: 'Danh mục sản phẩm không thể trống' }));
+        window.scrollTo({ top: 10, behavior: 'smooth' });
+        toast.error('Vui lòng kiểm tra lại form');
+        return;
       }
 
+      if(Object.entries(form.formState.errors).length > 0) {
+        window.scrollTo({ top: 10, behavior: 'smooth' });
+        toast.error('Vui lòng kiểm tra lại form');
+        return;
+      }
+  
+      for (const [key, value] of Object.entries(product.inputError)) {
+        if(value) {
+          console.log({ key, value });
+          window.scrollTo({ top: 10, behavior: 'smooth' });
+          toast.error('Vui lòng kiểm tra lại form');
+          break;
+        }
+      }
+      
       dispatch(createProduct());
+
     } catch (error) {
       console.error(error);
     }
   };
+  
+  // useEffect(() => {
+    
+  //     if(Object.entries(form.formState.errors).length > 0) {
+  //       window.scrollTo({ top: 10, behavior: 'smooth' });
+  //       toast.error('Vui lòng kiểm tra lại form');
+  //     }
+  
+  //     console.log({ productInputError: product.inputError });
+  //     for (const [key, value] of Object.entries(product.inputError)) {
+  //       if(value) {
+  //         window.scrollTo({ top: 10, behavior: 'smooth' });
+  //         toast.error('Vui lòng kiểm tra lại form');
+  //         break;
+  //       }
+  //     }
+    
+  // }, [product.inputError, form.formState.errors]);
 
   return (
     <ProductForm

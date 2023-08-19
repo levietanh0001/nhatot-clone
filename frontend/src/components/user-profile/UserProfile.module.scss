@@ -1,21 +1,22 @@
 .user-profile-wrapper {
-  width: 650px;
+  width: 100%;
   background-color: var(--secondary-background-color);
+  border-radius: 12px;
+  padding: 10px;
+  padding-top: 0;
 }
 
-.tab {
-  display: flex;
+@media (max-width: 768px) {
+
+  .user-profile-wrapper {
+    width: 550px;
+  }
+
 }
 
-.tab-btn {
-  flex: 1;
-  padding: 7px 15px;
-  border: 0;
-  background-color: var(--secondary-background-color);
-  font-size: 0.875rem;
-}
+@media (max-width: 576px) {
 
-.active {
-  border-bottom: 3px solid var(--orange-800);
-  font-weight: 600;
+  .user-profile-wrapper {
+    width: 100%;
+  }
 }

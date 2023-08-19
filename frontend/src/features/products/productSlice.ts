@@ -117,7 +117,7 @@ const productSlice = createSlice({
       state.value.videoThumbnail = action.payload;
     },
     setInputError: (state, action) => {
-      state.inputError = {...state, ...action.payload};
+      state.inputError = {...state.inputError, ...action.payload};
     },
     setImageError: (state, action) => {
       state.inputError.image = action.payload;

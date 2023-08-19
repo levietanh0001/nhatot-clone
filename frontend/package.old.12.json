@@ -39,7 +39,6 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "7.21.11",
-    "@tanstack/react-query-devtools": "4.32.6",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "12.1.2",
     "@types/jest": "29.5.2",

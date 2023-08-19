@@ -1,0 +1,214 @@
+@mixin text-collapse($num-line: 1) {
+  display: -webkit-box;
+  -webkit-line-clamp: $num-line;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+
+.wrapper {
+
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  margin-top: 10px;
+  
+  min-height: 600px;
+}
+
+.card-wrapper {
+  flex: 0 0 33.33%;
+  text-decoration: none;
+  color: inherit;
+}
+
+.card {
+
+  display: flex;
+  flex-direction: column;
+  
+  width: 214px;
+  // height: 300px;
+  height: 350px;
+  border: 1px solid lightgray;
+  border-radius: 4px;
+  padding: 7px 10px;
+  
+  background-color: var(--secondary-background-color);
+  
+  @for $i from 1 to 20 {
+    
+    &:hover {
+      box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.65);
+    }
+    
+    &:nth-child(#{$i}):hover {
+      z-index: $i;
+      position: relative;
+    }
+  }
+
+  
+}
+
+.card-media {
+  flex: 1;
+  position: relative;
+
+  & img {
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+    height: 182px;
+  }
+  
+}
+
+
+.action-btn {
+  // z-index: 999;
+}
+
+
+.favorite-btn {
+
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  @extend .action-btn;
+
+  flex-grow: 0;
+
+  border: 0;
+  vertical-align: middle;
+  margin: auto 0;
+
+  background-color: transparent;
+  // font-size: 1.75rem;
+
+  transition: scale 300ms;
+
+  &:hover {
+    scale: 1.5;
+  }
+}
+
+.delete-btn {
+
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  @extend .action-btn;
+
+  background-color: transparent;
+  border: 0;
+  
+  transition: scale 300ms;
+
+  & > svg {
+    fill: white;
+  }
+
+  &:hover {
+    scale: 1.5;
+  }
+}
+
+
+.card-details {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  // gap: 5px;
+
+  text-align: left;
+}
+
+.card-title {
+  // flex: 0.1;
+  line-height: 1.3;
+  @include text-collapse(2);
+}
+
+.card-content {
+  flex: 1;
+
+  font-size: 0.875rem;
+  
+  display: flex;
+  flex-direction: column;
+
+  & .content-line {
+    color: gray;
+  }
+  
+  & .content-line:not(:last-child) {
+    margin-bottom: 5px;
+  }
+
+  & .price {
+    color: red;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  & .address {
+    @include text-collapse(2);
+  }
+
+}
+
+.superscript {
+  font-size: 70%;
+  position: relative;
+  bottom: 0.3em;
+}
+
+.card-footer {
+
+  // flex: 0.1;
+  width: 100%;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  color: gray;
+
+  & .card-info {
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    font-size: 0.875rem;
+  }
+  
+}
+
+@media (max-width: 992px) {
+  .card-wrapper {
+    display: contents;
+  }
+
+  .card {
+    flex: 0 0 33.33%;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .card {
+    flex: 0 0 50%;
+  }
+}
+
+@media (max-width: 420px) {
+
+  .card {
+    flex: 0 0 100%;
+  }
+}

@@ -6,22 +6,22 @@ import ProductThumbGallery from './ProductThumbGallery';
 
 const AboutProduct = (props) => {
 
-  const { data } = props;
+  const { product } = props;
 
   return (
     <>
-      <ProductThumbGallery imageUrls={data.imageUrls} />
+      <ProductThumbGallery imageUrls={product.imageUrls} />
       <div className={styles['product-details']}>
         <div className={styles['product-overview']}>
-          <h1 className={styles['title']}>{data.postTitle}</h1>
+          <h1 className={styles['title']}>{product.postTitle}</h1>
           <div className={styles['subheading']}>
             <div className={styles['area-price']}>
               <span className={styles['price']}>
-                {convertToInternationalCurrencySystem(data.price)}
-                {data.type === 'chothue' && '/tháng'}
+                {convertToInternationalCurrencySystem(product.price)}
+                {product.type === 'chothue' && '/tháng'}
               </span>
               <span>&nbsp;-&nbsp;</span>
-              <span className={styles['area']}>{data.area} m2</span>
+              <span className={styles['area']}>{product.area} m2</span>
             </div>
             <div className={styles['actions']}>
               <div className={styles['share']}>
@@ -51,7 +51,7 @@ const AboutProduct = (props) => {
                   src='https://static.chotot.com/storage/icons/logos/ad-param/location.svg'
                 />
               </span>
-              <span>{data.address}</span>
+              <span>{product.address}</span>
               <span>&nbsp;</span>
               <span className={styles['see-project']}>
                 <span>Xem bản đồ</span>
@@ -70,7 +70,7 @@ const AboutProduct = (props) => {
                   alt='location'
                 />
               </span>
-              <span>{timeAgo(data.createdAt)}</span>
+              <span>{timeAgo(product.createdAt)}</span>
             </div>
             <div className={styles['project-name']}>
               <span>
@@ -79,7 +79,7 @@ const AboutProduct = (props) => {
                   src='https://static.chotot.com/storage/default_images/pty/group.svg'
                 />
               </span>
-              <span>Dự án: {data.projectName}</span>
+              <span>Dự án: {product.projectName}</span>
             </div>
             <div className={styles['verified']}>
               <span>
@@ -107,7 +107,7 @@ const AboutProduct = (props) => {
                 />
               </span>
               <span className={styles['info']}>
-                {data.type === 'canban' ? 'Cần bán' : 'Cho thuê'}
+                {product.type === 'canban' ? 'Cần bán' : 'Cho thuê'}
               </span>
             </div>
             <div className={styles['feature']}>
@@ -118,7 +118,7 @@ const AboutProduct = (props) => {
                 />
               </span>
               <span className={styles['info']}>
-                Diện tích: {data.area} m<sup>2</sup>
+                Diện tích: {product.area} m<sup>2</sup>
               </span>
             </div>
             <div className={styles['feature']}>
@@ -129,7 +129,7 @@ const AboutProduct = (props) => {
                 />
               </span>
               <span className={styles['info']}>
-                Số phòng ngủ: {data.numBedrooms} phòng
+                Số phòng ngủ: {product.numBedrooms} phòng
               </span>
             </div>
             <div className={styles['feature']}>
@@ -140,7 +140,7 @@ const AboutProduct = (props) => {
                 />
               </span>
               <span className={styles['info']}>
-                Hướng cửa chính: {data.mainDoorDirection}
+                Hướng cửa chính: {product.mainDoorDirection}
               </span>
             </div>
             <div className={styles['feature']}>
@@ -151,7 +151,7 @@ const AboutProduct = (props) => {
                 />
               </span>
               <span className={styles['info']}>
-                Số phòng vệ sinh: {data.numBathrooms} phòng
+                Số phòng vệ sinh: {product.numBathrooms} phòng
               </span>
             </div>
             <div className={styles['feature']}>
@@ -162,7 +162,7 @@ const AboutProduct = (props) => {
                 />
               </span>
               <span className={styles['info']}>
-                Hướng ban công: {data.balconDirection}
+                Hướng ban công: {product.balconDirection}
               </span>
             </div>
             <div className={styles['feature']}>
@@ -173,7 +173,7 @@ const AboutProduct = (props) => {
                 />
               </span>
               <span className={styles['info']}>
-                Loại hình căn hộ: {data.category}
+                Loại hình căn hộ: {product.category}
               </span>
             </div>
             <div className={styles['feature']}>
@@ -184,7 +184,7 @@ const AboutProduct = (props) => {
                 />
               </span>
               <span className={styles['info']}>
-                Giấy tờ pháp lý: {data.legalDocsStatus}
+                Giấy tờ pháp lý: {product.legalDocsStatus}
               </span>
             </div>
             <div className={styles['feature']}>
@@ -195,14 +195,14 @@ const AboutProduct = (props) => {
                 />
               </span>
               <span className={styles['info']}>
-                Số tiền cọc: {convertToInternationalCurrencySystem(data.deposit)}
+                Số tiền cọc: {convertToInternationalCurrencySystem(product.deposit)}
               </span>
             </div>
           </div>
         </div>
         <div className={styles['product-description']}>
           <h2 className={styles['title']}>Mô tả chi tiết</h2>
-          <pre className={styles['description']}>{data.description}</pre>
+          <pre className={styles['description']}>{product.description}</pre>
         </div>
         <div className={styles['product-location']}>
           <h2 className={styles['title']}>Địa điểm bất động sản</h2>
@@ -214,7 +214,7 @@ const AboutProduct = (props) => {
 };
 
 AboutProduct.propTypes = {
-  data: PropTypes.object
+  product: PropTypes.object
 }
 
 export default AboutProduct;

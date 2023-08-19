@@ -1,6 +1,9 @@
-import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useGetProduct } from '~/hooks/product.hook';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import useHandleQueryError from '~/hooks/error-handling.hook';
+import useDecodeAccessToken from '~/hooks/jwt.hook';
+import { useGetProductById } from '~/hooks/product.hook';
+import { useGetUserProfile } from '~/hooks/user.hook';
 import ContentWithStickyBox from '~/layouts/ContentWithStickyBox';
 import AboutProduct from './AboutProduct';
 import ContactUser from './ContactUser';
@@ -8,33 +11,43 @@ import ContactUser from './ContactUser';
 const ProductDetails = () => {
 
   const { productId, slug } = useParams();
-  console.log({ productId, slug });
-  const { data, error, isLoading, isError } = useGetProduct(productId, slug);
-  const navigate = useNavigate();
+  const [user, setUser] = useState();
+  const {
+    data: product, 
+    error: productError, 
+    isLoading: isProductLoading, 
+    isError: isProductError
+  } = useGetProductById(productId, slug);
+  const {
+    data: userProfile,
+    error: userProfileError,
+    isLoading: isUserProfileLoading,
+    isError: isUserProfileError,
+  } = useGetUserProfile(product?.userId, !!product);
+
+  useHandleQueryError(isProductError, productError);
+  useHandleQueryError(isUserProfileError, userProfileError);
+
+  const decodedPayload = useDecodeAccessToken();
 
   useEffect(() => {
+    setUser(decodedPayload);
+    console.log({ productId });
+  }, []);
 
-    if(isError) {
-      console.error(error);
-      navigate('/404');
+  useEffect(() => {
+    if(!isUserProfileLoading) {
+      console.log({ userProfile });
     }
-  }, [isError]);
+  }, [userProfile]);
 
   return (
     <>
-      {!isLoading && (
-        <>
-          {/* {JSON.stringify(data)} */}
-          <ContentWithStickyBox
-            content={<AboutProduct data={data} />}
-            stickyBox={
-              <ContactUser 
-                data={data} 
-                // user={user}
-              />
-            }
-          />
-        </>
+      {!isProductLoading && (
+        <ContentWithStickyBox
+          content={<AboutProduct product={product} />}
+          stickyBox={<ContactUser user={user} userProfile={userProfile} />}
+        />
       )}
     </>
   );

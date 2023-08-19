@@ -296,25 +296,29 @@ async function getProducts(req, res, next) {
 
     const limit = Number.parseInt(req.query['limit']) || 20;
     const offset = Number.parseInt(req.query['offset']) || 0;
-    const category = req.query['category'];
-    const userType = req.query['userType'];
-    const type = req.query['type'];
+    const filterCriteria = req.query;
+    delete filterCriteria['limit'];
+    delete filterCriteria['offset'];
+
+    // const category = req.query['category'];
+    // const userType = req.query['userType'];
+    // const type = req.query['type'];
     
     validationUtils.sendMessage(req, res, 422);
 
-    console.log({ limit, offset, category, userType, type });
+    // console.log({ limit, offset, category, userType, type });
 
-    const where = {
-      ...(category) && { category }, 
-      ...(userType) && { userType }, 
-      ...(type) && { type }
-    };
+    // const where = {
+    //   ...(category) && { category }, 
+    //   ...(userType) && { userType }, 
+    //   ...(type) && { type }
+    // };
 
-    console.log({ where });
+    const where = { ...filterCriteria };
 
-    const criteria = { ...where, limit, offset };
+    const cacheKey = { ...where, limit, offset };
 
-    const cachedProducts = await redisClient.get(`getProducts:${Object.values(criteria)}`);
+    const cachedProducts = await redisClient.get(`getProducts:${Object.values(cacheKey)}`);
     if(cachedProducts) {
       return res.status(200).json(JSON.parse(cachedProducts));
     }
@@ -326,19 +330,20 @@ async function getProducts(req, res, next) {
     }
 
     const productIdList = products.map(product => product.id);
-    const productImages = productIdList.map(async (productId) => {
-      return ProductImage.findAll({ where: { productId }, attributes: ['imageUrl', 'updatedAt'] })
+    const productThumbnailImages = productIdList.map(async (productId) => {
+      return ProductThumbnail.findOne({ where: { productId } });
     })
-    const productImageList = await Promise.all(productImages);
 
-    const productInfo = productImageList.map((imageList, index) => {
+    const productThumbnailImageList = await Promise.all(productThumbnailImages);
+
+    const productInfo = productThumbnailImageList.map((thumbnailImage, index) => {
       return {
-        details: products[index],
-        images: imageList
+        ...products[index].dataValues,
+        thumbnailImageUrl: thumbnailImage.imageUrl
       }
     });
 
-    await redisClient.setEx(`getProducts:${Object.values(criteria)}`, 10, JSON.stringify(productInfo));    
+    await redisClient.setEx(`getProducts:${Object.values(cacheKey)}`, 10, JSON.stringify(productInfo));    
 
     return res.status(200).json(productInfo);
 
@@ -630,12 +635,30 @@ async function updateProductById(req, res, next) {
 
 async function deleteProductById(req, res, next) {
 
-  const productId = req.params['productId'];
-  
-  const product = await Product.findByPk(productId);
-  await product.destroy();
+  try {
 
-  return res.status(200).json(product);
+    const productId = req.params['productId'];
+    
+    const currentProducts = await req.user.getProducts({ where: { id: productId } });
+    if(currentProducts.length === 0) {
+      return res.status(422).json({
+        code: 'PRODUCT_NOT_FOUND',
+        message: 'User does not have such product'
+      });  
+    }
+
+    const currentProduct = await Product.findByPk(productId);
+    const product = await currentProduct.destroy();
+    const count = await Product.count();
+    // const result = await sequelize.query(`DELETE FROM nhatot.product WHERE (id = :productId)`, { replacements: { productId } });
+  
+    return res.status(200).json({ product, count });
+    
+  } catch(error) {
+
+    console.error(error);
+    return next(error);
+  }
   
 }
 

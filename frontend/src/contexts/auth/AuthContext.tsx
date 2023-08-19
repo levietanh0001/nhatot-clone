@@ -15,7 +15,7 @@ interface IAuthContext {
   setUserData?: SetStateAction<any | null>;
   authenticated?: boolean;
   setAuthenticated?: React.Dispatch<SetStateAction<boolean>>;
-  registerUser: (email: string, password: string, confirmPassword: string) => Promise<any>;
+  registerUser: (email: string, password: string, confirmPassword: string, userName: string) => Promise<any>;
   loginUser: (email: string, password: string) => Promise<any>;
   logoutUser: () => Promise<any>;
   resetUserPassword: (email: string) => Promise<any>;
@@ -118,11 +118,12 @@ export const AuthProvider = ({ children }) => {
     return !Boolean(dayjs.unix(Number(payload.exp)).diff(dayjs()) < 1);
   }
 
-  const registerUser = async (email, password, confirmPassword) => {  
+  const registerUser = async (email, password, confirmPassword, userName) => {  
 
     const response = await fetch(new URL('auth/register', backendBaseUrl), {
       method: 'POST',
       body: JSON.stringify({
+        userName,
         email,
         password,
         confirmPassword

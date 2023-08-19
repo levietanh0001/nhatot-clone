@@ -19,6 +19,7 @@ type FormFieldValues = {
   password: string;
 };
 
+
 const LoginForm = () => {
   const authContext = useContext(AuthContext);
 
@@ -28,7 +29,7 @@ const LoginForm = () => {
   const navigate = useNavigate();
 
   const form = useForm<FormFieldValues>({
-    mode: 'all',
+    mode: 'onTouched',
     defaultValues: {
       email: '',
       password: '',

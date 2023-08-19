@@ -1,15 +1,18 @@
 .card-wrapper {
   background-color: var(--secondary-background-color);
   width: 320px;
-  height: 400px;
+  // height: 400px;
+  height: auto;
 
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+
+  border-radius: 12px;
 }
 
 .user-details {
-  padding-inline: 10px;
+  padding: 15px;
 }
 
 
@@ -63,8 +66,9 @@
 .rating {
   display: flex;
   justify-content: flex-start;
-  align-items: center;
-  gap: 5px;
+  align-items: flex-start;
+
+  margin-bottom: 5px;
 }
 
 .follow {
@@ -98,8 +102,9 @@
   color: white;
   font-weight: bold;
 
-  & svg {
+  & > span > svg {
     vertical-align: middle;
+    fill: white;
   }
 }
 
@@ -115,7 +120,28 @@
     vertical-align: middle;
   }
 
-  & .stats-line {
+  & .stats-line:not(:last-child) {
     margin-bottom: 5px;
+  }
+}
+
+@media (max-width: 992px) {
+
+  .follow-btn {
+    display: none;
+  }
+
+  .card-wrapper {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+  }
+
+}
+
+@media (max-width: 576px) {
+
+  .user-details {
+    margin-inline: 15px;  
   }
 }

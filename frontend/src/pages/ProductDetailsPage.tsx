@@ -17,10 +17,6 @@ const ProductDetailsPage = () => {
         <Breadcrumb />
         <main>
           <ProductDetails />
-          {/* <ContentWithStickyBox
-            content={<ProductDetails />}
-            stickyBox={<ContactUser />}
-          /> */}
         </main>
       </body>
       <Footer>

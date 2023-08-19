@@ -129,11 +129,13 @@ function App() {
               }
             ></Route>
             <Route
-              path='/user-profile'
+              path='/user-profile/:userId'
               element={
-                <SuspenseWrapper>
-                  <UserProfilePage />
-                </SuspenseWrapper>
+                <LoggedInRequired>
+                  <SuspenseWrapper>
+                    <UserProfilePage />
+                  </SuspenseWrapper>
+                </LoggedInRequired>
               }
             ></Route>
 

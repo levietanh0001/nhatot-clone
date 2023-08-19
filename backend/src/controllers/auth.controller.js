@@ -12,6 +12,7 @@ const { verifyToken, signToken, accessPrivateKey, accessPublicKey, refreshPrivat
 const User = require('../models/user.model');
 const { constructUrlWithQueryParams, constructUrlWithQueryParamsAsync } = require('../utils/url.util');
 const { redisClient } = require('../utils/redis-store.util');
+const UserProfile = require('../models/user-profile.model');
 
 
 
@@ -21,6 +22,7 @@ async function register(req, res, next) {
 
     const email = req.body['email'];
     const password = req.body['password'];
+    const userName = req.body['userName'];
 
     validationUtils.sendMessage(req, res, 422);
 
@@ -42,6 +44,11 @@ async function register(req, res, next) {
       password: hashedPassword,
       role: email === process.env.ADMIN_EMAIL? 'admin': 'canhan'
     });
+
+    // update userName in UserProfile
+    const userProfile = await createdUser.createUser_profile();
+    userProfile.username = userName;
+    await userProfile.save();
 
     const createdUserEmail = createdUser['email'];
     const createdUserId = createdUser['id'];
@@ -88,7 +95,7 @@ async function verifyRegister(req, res, next) {
 
     currentUser.isVerified = true;
     currentUser.save();      
-    res.send('Xác nhận email thành công, vui lòng đăng nhập');
+    res.send(`Xác nhận email thành công, vui lòng đăng nhập`);
 
   } catch(error) {
     return next(error);
@@ -110,6 +117,7 @@ async function login(req, res, next) {
     validationUtils.sendMessage(req, res, 422);
 
     const user = await User.findOne({ where: { email: email } });
+    const userProfile = await UserProfile.findByPk(user.id);
 
     if (!user) {
       throwError(401, 'Unauthenticated', 'Current user is not registered');
@@ -130,6 +138,7 @@ async function login(req, res, next) {
 
     const payload = {
       userId,
+      username: userProfile.username,
       email: user.email,
       role: email === process.env.ADMIN_EMAIL ? 'admin': broker? 'broker': 'canhan'
     };

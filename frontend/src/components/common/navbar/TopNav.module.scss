@@ -6,15 +6,34 @@
 }
 
 @media (max-width: 992px) {
-  .wrapper {
-    padding: 0 10% 0px 10%;
+  .inner-wrapper {
+    width: 700px;
+    margin: auto;
   }
+
+  // .wrapper {
+  //   padding: 0 10% 0px 10%;
+  // }
 }
 
 @media (max-width: 768px) {
+
+  .inner-wrapper {
+    width: 550px;
+  }
+
   .wrapper {
-    margin: 0;
-    margin-bottom: 15px;
-    padding-inline: 20px;
+    // margin: 0;
+    // margin-bottom: 15px;
+    // padding-inline: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+
+  .inner-wrapper {
+    width: 100%;
+    padding: 30px;
+    padding-bottom: 0;
   }
 }

@@ -153,7 +153,6 @@ const ProductList = () => {
 
     if (favoriteProductIds && !favoriteProductIds.includes(productId)) {
       addProductToFavoriteList(productId)
-        // axiosAuth.post(`favorite-list/${String(productId)}`)
         .then(() => {
           console.log('adding product to favorite list');
           return axiosPrivate.get('favorite-list');
@@ -184,7 +183,6 @@ const ProductList = () => {
         });
     } else if (favoriteProductIds && favoriteProductIds.includes(productId)) {
       removeProductFromFavoriteList(productId)
-        // axiosAuth.delete(`favorite-list/${String(productId)}`)
         .then(() => {
           console.log('removing product from favorite list');
           return axiosPrivate.get('favorite-list');

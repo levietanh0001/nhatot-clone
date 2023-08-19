@@ -40,7 +40,7 @@ export default function ProductThumbGallery(props) {
               Thumbs
             ]}
           >
-              {imageUrls.map((src, index) => (
+              {imageUrls?.map((src, index) => (
                 <SwiperSlide key={index}>
                   <img key={index} src={src} alt="Ảnh minh họa sản phẩm" />
                 </SwiperSlide>
@@ -60,7 +60,7 @@ export default function ProductThumbGallery(props) {
               Thumbs
             ]}
           >
-            {imgSrc.map((src, index) => (
+            {imageUrls?.map((src, index) => (
               <SwiperSlide key={index}>
                 <img key={index} src={src} alt="Ảnh minh họa sản phẩm" />
               </SwiperSlide>

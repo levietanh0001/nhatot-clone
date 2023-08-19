@@ -28,7 +28,8 @@ export function isNumeric(num){
 export function convertToInternationalCurrencySystem(labelValue) {
 
   // Nine Zeroes for Billions
-  return Math.abs(Number(labelValue)) >= 1.0e+9
+
+  const formatted = Math.abs(Number(labelValue)) >= 1.0e+9
 
   ? (Math.abs(Number(labelValue)) / 1.0e+9).toFixed(2) + " tỷ"
   // Six Zeroes for Millions 
@@ -41,5 +42,7 @@ export function convertToInternationalCurrencySystem(labelValue) {
   ? (Math.abs(Number(labelValue)) / 1.0e+3).toFixed(2) + " nghìn"
 
   : Math.abs(Number(labelValue));
+
+  return String(formatted).replace('.', ',').replace(',00', '');
 
 }

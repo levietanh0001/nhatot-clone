@@ -1,6 +1,6 @@
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -13,6 +13,7 @@ import { promiseWrapper } from '~/utils/function.util';
 import { FirebaseError } from 'firebase/app';
 
 type FormFieldValues = {
+  userName: string | undefined;
   email: string;
   password: string;
   confirmPassword: string;
@@ -21,15 +22,14 @@ type FormFieldValues = {
 const RegisterForm = () => {
   const authContext = useContext(AuthContext);
 
+  const [userName, setUserName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
-  const navigate = useNavigate();
-
   const form = useForm<FormFieldValues>({
-    mode: 'all',
+    mode: 'onTouched',
     resolver: yupResolver(registerFormSchema),
   });
 
@@ -40,7 +40,7 @@ const RegisterForm = () => {
 
     setLoading(true);
     authContext
-      ?.registerUser(email, password, confirmPassword)
+      ?.registerUser(email, password, confirmPassword, userName)
       .then((data) => {
         if (data.code === 'USER_ALREADY_EXISTS') {
           toast.error('Tài khoản đã tồn tại, vui lòng đăng nhập');
@@ -57,36 +57,6 @@ const RegisterForm = () => {
       })
       .finally(() => setLoading(false));
 
-    // setLoading(true);
-    // toast.promise(promiseWrapper(authContext?.registerUser(email, password)
-    //   .then(() => {
-
-    //     toast.success('Vui lòng kiểm tra email để xác minh tài khoản của bạn');
-    //   })
-    //   .then(data => {
-    //     console.log({ userData: data })
-    //   })
-    // ), {
-    //   pending: 'Đang thực hiện yêu cầu...',
-    //   success: 'Gửi email xác nhận thành công',
-    //   error: {
-    //     render({ data }) {
-    //       if(data instanceof FirebaseError && data.code === 'auth/email-already-in-use') {
-    //         return `Lỗi: Email đã tồn tại`;
-    //       } else {
-    //         console.log(data);
-    //         return `Lỗi: ${JSON.stringify((data))}`;
-    //       }
-    //     }
-    //   },
-    // }).then(() => {
-    //   setLoading(false);
-    //   navigate('/login');
-    // }).catch(e => {
-    //   console.error(e);
-    // }).finally(() => {
-    //   setLoading(false);
-    // });
   };
 
   return (
@@ -106,12 +76,15 @@ const RegisterForm = () => {
           noValidate
         >
           <h1 className={styles['main-title']}>Đăng Ký</h1>
+
           <FloatingLabelInput
             label='Email'
             name='email' // important for RHF to identify input field
             inputValue={email}
-            onInputValueChange={(event) => setEmail(event.target.value)}
+            onInputValueChange={(event) => { setEmail(event.target.value) }}
+            onBlur={() => setUserName(email.split('@')[0])}
             autoComplete='email'
+            required
           />
 
           <FloatingLabelInput
@@ -121,6 +94,7 @@ const RegisterForm = () => {
             inputValue={password}
             onInputValueChange={(event) => setPassword(event.target.value)}
             autoComplete='current-password'
+            required
           />
 
           <FloatingLabelInput
@@ -128,9 +102,16 @@ const RegisterForm = () => {
             name='confirmPassword'
             type='password'
             inputValue={confirmPassword}
-            onInputValueChange={(event) =>
-              setConfirmPassword(event.target.value)
-            }
+            onInputValueChange={(event) => setConfirmPassword(event.target.value)}
+            required
+          />
+
+          <FloatingLabelInput
+            label='Tên người dùng'
+            name='userName' // important for RHF to identify input field
+            inputValue={userName}
+            onInputValueChange={(event) => setUserName(event.target.value)}
+            autoComplete='name'
           />
 
           <div className={styles['form-control']}>
@@ -138,9 +119,7 @@ const RegisterForm = () => {
               className={styles['submit-btn']}
               type='submit'
               disabled={loading}
-            >
-              Đăng ký
-            </button>
+            >Đăng ký</button>
           </div>
         </form>
       </FormProvider>

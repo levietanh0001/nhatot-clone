@@ -7,10 +7,12 @@ import FirstTopNav from './FirstTopNav';
 const TopNav = () => {
   return (
     <div className={styles['wrapper']}>
-      <FirstTopNav />
-      <SecondTopNav />
-      <ThirdTopNav />
-      <div className="nav-spacer"></div>
+      <div className={styles['inner-wrapper']}>
+        <FirstTopNav />
+        <SecondTopNav />
+        <ThirdTopNav />
+        <div className="nav-spacer"></div>
+      </div>
     </div>
   );
 };

@@ -23,6 +23,6 @@ function createUser(req, res, next) {
 }
 
 
-module.exports = {
+module.exports = { 
   createUser
 }

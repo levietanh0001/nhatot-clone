@@ -1,16 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { axiosPublic } from "~/utils/axios.util";
 
-export function useGetProduct(productId, slug) {
+export function useGetUserProfile(userId, enabled=false) {
 
   return useQuery({
-    queryKey: ['products', productId, slug],
+    queryKey: ['user-profile', userId],
     queryFn: ({ signal }) => {
       
-      const params = new URLSearchParams({ productId, slug });
-      return axiosPublic.get(`/products/${productId}/${slug}`, { params, signal });
+      return axiosPublic.get(`/user-profile/${userId}`, { signal });
     },
-    keepPreviousData: true,
+    keepPreviousData: false,
     refetchOnMount: true, // if component is mounted, refetch
     refetchOnWindowFocus: false,
     // cacheTime: 5000, // by default 5 mins
@@ -18,6 +17,10 @@ export function useGetProduct(productId, slug) {
     select: (data) => {
       return data.data;
     },
-    
+    enabled
   });
+}
+
+export function useGetUser(userId) {
+
 }
