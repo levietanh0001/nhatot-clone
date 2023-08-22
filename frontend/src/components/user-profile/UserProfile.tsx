@@ -1,4 +1,4 @@
-import { lazy, useEffect, useState } from 'react';
+import { lazy, useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './UserProfile.module.scss';
 import { SuspenseWrapper } from '~/App';
@@ -6,6 +6,7 @@ import { useGetUserProfile } from '~/hooks/user.hook';
 import { useDeleteUserProductById, useGetFavoriteProductCount, useGetProductCount, useGetProducts, useGetUserFavoriteProducts, useGetUserProducts } from '~/hooks/product.hook';
 import { ToastContainer, toast } from 'react-toastify';
 import { useQueryClient } from '@tanstack/react-query';
+import { AuthContext } from '~/contexts/auth/AuthContext';
 
 const TopLeftSideCardLayout = lazy(
   () => import('~/layouts/TopLeftSideCardLayout')
@@ -22,15 +23,20 @@ const UserProfile = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [products, setProducts] = useState<any[]>([]);
   const [productCount, setProductCount] = useState<number | null>();
+  const authContext = useContext(AuthContext);
+  const user = authContext?.user;
+  
   // refractor to remove userId from params
   // pagination must handle multiple product pages
   // set product count for user products and fav products (optimistic update?)
   // currentPage as query key for both products
   const { data: userProfile } = useGetUserProfile(userId, true);
   const { data: userProducts, isLoading: isUserProductsLoading, refetch: refetchUserProducts } = useGetUserProducts(userId, currentPage);
-  const { data: favoriteProducts, isLoading: isFavoriteProductsLoading, refetch: refetchFavoriteProducts } = useGetUserFavoriteProducts(currentPage);
-  const { data: userProductCount, isLoading: isUserProductCountLoading, refetch: refetchUserProductCount } = useGetProductCount();
-  const { data: favoriteProductCount, isLoading: isFavoriteProductCountLoading, refetch: refetchFavoriteProductCount } = useGetFavoriteProductCount();
+
+  // userId here
+  const { data: favoriteProducts, isLoading: isFavoriteProductsLoading, refetch: refetchFavoriteProducts } = useGetUserFavoriteProducts(userId, currentPage);
+  const { data: userProductCount, isLoading: isUserProductCountLoading, refetch: refetchUserProductCount } = useGetProductCount({ userId });
+  const { data: favoriteProductCount, isLoading: isFavoriteProductCountLoading, refetch: refetchFavoriteProductCount } = useGetFavoriteProductCount({ userId });
   const deleteUserProductById = useDeleteUserProductById(currentPage);
 
   useEffect(() => {
@@ -116,20 +122,24 @@ const UserProfile = () => {
         <TopLeftSideCardLayout
           CardComponent={
             <SuspenseWrapper>
-              <UserCard 
-                userProfile={userProfile} 
+              <UserCard
+                userProfile={userProfile}
+                user={user}
+                userId={Number(userId)}
               />
             </SuspenseWrapper>
           }
           ContentComponent={
             <SuspenseWrapper>
               <div className={styles['user-profile-wrapper']}>
-                {<ProductsTab
+                <ProductsTab
                   userProductCount={userProductCount}
                   favoriteProductCount={favoriteProductCount}
                   currentTab={currentTab}
                   setCurrentTab={setCurrentTab}
-                />}
+                  user={user}
+                  userId={Number(userId)}
+                />
                 <ProductListing
                   products={products}
                   onDeleteButtonClick={handleDeleteButtonClick}
@@ -140,6 +150,8 @@ const UserProfile = () => {
                     setCurrentPage(page);
                     // sessionStorage.setItem('currentPage', JSON.stringify(page));
                   }}
+                  user={user}
+                  userId={Number(userId)}
                 />
               </div>
             </SuspenseWrapper>

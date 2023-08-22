@@ -2,18 +2,28 @@ const FavoriteItem = require("../models/favorite-item.model");
 const FavoriteList = require("../models/favorite-list.model");
 const ProductThumbnail = require("../models/product-thumbnail");
 const Product = require("../models/product.model");
+const User = require("../models/user.model");
 
 
 async function countUserFavoriteProducts(req, res, next) {
 
   try {
 
-    const currentFavoriteList = await req.user.getFavorite_list();
-    const currentProducts = await currentFavoriteList.getProducts();
-  
-    const productCount = currentProducts.reduce((total, current) => {
-      return total + current.favorite_item.dataValues.quantity;
-    }, 0);
+    const userId = req.query['userId'];
+
+    let productCount;
+    if(userId) {
+
+      const currentUser = await User.findByPk(userId);
+      const currentFavoriteList = await currentUser.getFavorite_list();
+      const currentProducts = await currentFavoriteList.getProducts();
+      productCount = currentProducts.reduce((total, current) => {
+        return total + current.favorite_item.dataValues.quantity;
+      }, 0);
+
+    } else {
+      productCount = 0;
+    }
     
     return res.status(200).json(productCount);
 

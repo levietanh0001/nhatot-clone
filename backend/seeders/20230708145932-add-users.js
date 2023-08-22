@@ -3,7 +3,7 @@
 const { faker } = require('@faker-js/faker/locale/vi');
 const { randomOption } = require('../src/utils/random.util');
 
-const users = [...Array(10000)].map((user) => (
+const users = [...Array(1000)].map((user) => (
   {
     email: faker.internet.email(),
     password: faker.internet.password(),

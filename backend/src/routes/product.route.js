@@ -1,17 +1,18 @@
 const express = require('express');
 
 
-const productsController = require('../controllers/products.controller');
+const { getProducts, getProductById, getProductCount, searchProducts, createProduct, createProductVideo, createVideoThumbnail, deleteProductById, updateProductById, updateProductVideo, updateVideoThumbnail } = require('../controllers/products.controller');
 const { uploadMultipleFiles, uploadProduct, uploadMultipleImages, uploadVideo, uploadImage } = require('../middlewares/upload.middleware');
 const { authRequired, loggedInRequired } = require('../middlewares/auth.middleware');
-const { validateCreateProduct, validateUpdateProduct, validateGetProduct } = require('../validators/products.validator');
+const { validateCreateProduct, validateUpdateProduct, validateGetProduct, validateSearchProducts } = require('../validators/products.validator');
 
 
 const router = express.Router();
 
-router.get('/', validateGetProduct(), productsController.getProducts);
-router.get('/count', productsController.getProductCount);
-router.get('/:productId/:slug', productsController.getProductById);
+router.get('/', validateGetProduct(), getProducts);
+router.get('/count', getProductCount);
+router.get('/:productId/:slug', getProductById);
+router.get('/search', validateSearchProducts(), searchProducts);
 
 // must be authenticated
 router.post(
@@ -19,21 +20,21 @@ router.post(
   loggedInRequired,
   uploadMultipleImages, 
   validateCreateProduct(),
-  productsController.createProduct
+  createProduct
 );
 
 router.post(
   '/video-thumbnail',
   uploadImage,
   loggedInRequired,
-  productsController.createVideoThumbnail
+  createVideoThumbnail
 )
 
 router.post(
   '/video',
   uploadVideo,
   loggedInRequired,
-  productsController.createProductVideo
+  createProductVideo
 );
 
 router.put(
@@ -41,28 +42,28 @@ router.put(
   loggedInRequired,
   uploadMultipleImages,
   // validateUpdateProduct(),
-  productsController.updateProductById
+  updateProductById
 );
 
 router.put(
   '/video-thumbnail',
   uploadImage,
   loggedInRequired,
-  productsController.updateVideoThumbnail
+  updateVideoThumbnail
 )
 
 router.put(
   '/video',
   uploadVideo,
   loggedInRequired,
-  productsController.createProductVideo
+  createProductVideo
 );
 
 
 router.delete(
   '/:productId', 
   loggedInRequired,
-  productsController.deleteProductById
+  deleteProductById
 );
     
 

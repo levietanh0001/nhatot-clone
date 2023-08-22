@@ -90,7 +90,7 @@
 .card-media {
   flex: 0;
 
-  & img {
+  & > img {
     object-fit: cover;
     object-position: center;
     width: 128px;
@@ -152,9 +152,19 @@
   & .price {
     color: var(--red);
     font-weight: bold;
+    font-size: 1rem;
   }
 
   & .address {
+    font-size: 0.875rem; // added
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  & .project-name {
+    
     font-size: 0.875rem; // added
     display: -webkit-box;
     -webkit-line-clamp: 1;
@@ -270,7 +280,7 @@
 
   position: absolute;
   right: 15px;
-  top: -40px;
+  top: -15px;
 
 }
 

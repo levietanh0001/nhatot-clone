@@ -40,12 +40,40 @@ export function useGetProducts(criteria) {
   });
 }
 
-export function useGetProductCount() {
+export function useSearchProducts(options={}) {
+
+  const { query, type, category } = options as any;
+
+  return useQuery({
+    queryKey: ['searchProducts', query, type, category],
+    enabled: !!query,
+    queryFn: ({ signal }) => {
+      const params = new URLSearchParams({ 
+        query: query ?? ''
+        // type, 
+        // category 
+      });
+      return axiosPublic.get(`/products/search`, { params, signal });
+    },
+    // keepPreviousData: true,
+    refetchOnMount: true, // if component is mounted, refetch
+    refetchOnWindowFocus: false,
+    cacheTime: 0, // by default 5 mins
+    staleTime: 0,
+    select: (data) => {
+      return data.data;
+    },
+  });
+}
+
+export function useGetProductCount(options={}) {
   return useQuery({
     queryKey: ['getProductCount'],
     queryFn: ({ signal }) => {
-
-      return axiosPublic.get('/products/count', { signal });
+      const params = new URLSearchParams({
+        userId: (options as any)?.userId
+      });
+      return axiosPublic.get('/products/count', { params, signal });
     },
     keepPreviousData: true,
     refetchOnMount: true, // if component is mounted, refetch
@@ -57,12 +85,14 @@ export function useGetProductCount() {
   })
 }
 
-export function useGetFavoriteProductCount() {
+export function useGetFavoriteProductCount(options={}) {
   return useQuery({
     queryKey: ['getFavoriteProductCount'],
     queryFn: ({ signal }) => {
-
-      return axiosPrivate.get('favorite-list/products/count', { signal });
+      const params = new URLSearchParams({
+        userId: (options as any)?.userId
+      });
+      return axiosPublic.get('favorite-list/products/count', { params, signal });
     },
     keepPreviousData: true,
     refetchOnMount: true, // if component is mounted, refetch
@@ -87,12 +117,12 @@ export function useGetUserProducts(userId, currentPage=1) {
         limit: String(limit),
         offset: String(offset),
       });
-      return axiosPrivate.get(`/products`, { params, signal });
+      return axiosPublic.get(`/products`, { params, signal });
     },
     // keepPreviousData: true,
     refetchOnMount: true, // if component is mounted, refetch
     refetchOnWindowFocus: false,
-    // cacheTime: 0, // by default 5 mins
+    cacheTime: 0, // by default 5 mins
     staleTime: 0,
     select: (data) => {
       return data.data;
@@ -160,7 +190,7 @@ export function useDeleteUserProductById(currentPage=1) {
 }
 
 
-export function useGetUserFavoriteProducts(currentPage=1) {
+export function useGetUserFavoriteProducts(userId, currentPage=1) {
   return useQuery({
     queryKey: ['getUserFavoriteProducts', currentPage],
     queryFn: ({ signal }) => {

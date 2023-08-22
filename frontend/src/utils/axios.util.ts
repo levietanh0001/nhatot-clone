@@ -15,7 +15,7 @@ export const axiosPublic = axios.create({
 
 axiosPublic.interceptors.request.use(function (config) {
   
-  console.log(config)
+  // console.log(config)
   return config;
 }, function (error) {
   

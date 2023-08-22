@@ -4,7 +4,7 @@ import styles from './UserCard.module.scss';
 
 const UserCard = (props) => {
 
-  const { userProfile } = props;
+  const { userProfile, user, userId } = props;
   const rating = userProfile?.rating ?? '';
   const joinDate = new Date(userProfile?.createdAt ?? '').toLocaleDateString('en-GB');
   
@@ -40,12 +40,12 @@ const UserCard = (props) => {
             <span className={styles['following-count']}>{userProfile?.following ?? ''}</span>
           </span>
         </div>
-        <button className={styles['follow-btn']}>
-          <span>
-            <svg xmlns="http://www.w3.org/2000/svg" height="1em" fill='white' viewBox="0 0 448 512">{/*! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. */}<path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" /></svg>
-          </span>
-          <span>Theo dõi</span>
-        </button>
+        {user?.userId !== userId && (
+          <button className={styles['follow-btn']}>
+            <span><svg xmlns="http://www.w3.org/2000/svg" height="1em" fill='white' viewBox="0 0 448 512">{/*! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. */}<path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" /></svg></span>
+            <span>Theo dõi</span>
+          </button>
+        )}
         <div className={styles["stats"]}>
           <div className={styles["stats-line"]}>
             <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path fillRule="evenodd" d="M3.644 4.392a.15.15 0 01.106-.044h12a.15.15 0 01.15.15v8.25a.15.15 0 01-.15.15H6.712a.6.6 0 00-.377.134L3.6 15.242V4.498a.15.15 0 01.044-.106zM6.9 14.118l-3.523 2.847a.6.6 0 01-.977-.467v-12a1.35 1.35 0 011.35-1.35h12a1.35 1.35 0 011.35 1.35v3.15h3.15a1.35 1.35 0 011.35 1.35v12a.6.6 0 01-.977.467l-3.548-2.867H8.25a1.35 1.35 0 01-1.35-1.35v-3.13zm10.2-5.27h3.15a.15.15 0 01.15.15v10.744l-2.735-2.21a.6.6 0 00-.378-.134H8.25a.15.15 0 01-.15-.15v-3.15h7.65a1.35 1.35 0 001.35-1.35v-3.9zM6.8 7.23c0-.276.192-.5.428-.5h5.143c.237 0 .429.224.429.5 0 .277-.192.5-.429.5H7.228c-.236 0-.428-.223-.428-.5zm.428 2.5c-.236 0-.428.224-.428.5 0 .277.192.5.428.5h5.143c.237 0 .429-.223.429-.5 0-.276-.192-.5-.429-.5H7.228z" clipRule="evenodd" /></svg></span>
@@ -70,7 +70,9 @@ const UserCard = (props) => {
 }
 
 UserCard.propTypes = {
-  userProfile: PropTypes.object
+  userProfile: PropTypes.object,
+  user: PropTypes.object,
+  userId: PropTypes.number
 }
 
 export default UserCard

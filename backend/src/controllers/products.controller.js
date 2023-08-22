@@ -1,6 +1,5 @@
 const { kebabCase } = require('lodash');
 const path = require('path');
-const { Op, QueryTypes } = require('sequelize');
 const Product = require('../models/product.model');
 const validationUtils = require('../utils/validation.util');
 const { doesPathExist, deleteFileByPath } = require('../utils/file.util');
@@ -14,6 +13,8 @@ const ProductThumbnail = require('../models/product-thumbnail');
 const VideoThumbnail = require('../models/video-thumbnail');
 const { uploadedImagesDir, uploadedVideosDir } = require('../utils/path.util');
 const { toLowerCaseNonAccentVietnamese } = require('../utils/text.util');
+const { databaseName } = require('../utils/variables.util');
+const { QueryTypes } = require('sequelize');
 
 
 
@@ -271,21 +272,28 @@ async function createVideoThumbnail(req, res, next) {
 async function getProductCount(req, res, next) {
 
   try {
-    
-    const cachedProductCount = await redisClient.get('productCount');
+    // if userid, else
+    const userId = req.query['userId'];
+    const cachedProductCount = await redisClient.get(`productCount${userId}`);
 
     if(cachedProductCount) {
       return res.status(200).json(JSON.parse(cachedProductCount));
     }
 
-    const count = await Product.count();
+    let count;
+    if(!userId) {
+      count = await Product.count();
+    } else {
+      const currentUser = await User.findByPk(userId);
+      count = await currentUser.countProducts();
+    }
     
-    await redisClient.setEx('productCount', 10, JSON.stringify(count));
+    await redisClient.setEx(`productCount${userId}`, 10, JSON.stringify(count));
 
     return res.status(200).json(count);
 
   } catch(error) {
-
+    console.error(error);
     return next(error);
   }
 }
@@ -299,26 +307,14 @@ async function getProducts(req, res, next) {
     const filterCriteria = req.query;
     delete filterCriteria['limit'];
     delete filterCriteria['offset'];
-
-    // const category = req.query['category'];
-    // const userType = req.query['userType'];
-    // const type = req.query['type'];
     
     validationUtils.sendMessage(req, res, 422);
-
-    // console.log({ limit, offset, category, userType, type });
-
-    // const where = {
-    //   ...(category) && { category }, 
-    //   ...(userType) && { userType }, 
-    //   ...(type) && { type }
-    // };
 
     const where = { ...filterCriteria };
 
     const cacheKey = { ...where, limit, offset };
-
     const cachedProducts = await redisClient.get(`getProducts:${Object.values(cacheKey)}`);
+
     if(cachedProducts) {
       return res.status(200).json(JSON.parse(cachedProducts));
     }
@@ -339,13 +335,69 @@ async function getProducts(req, res, next) {
     const productInfo = productThumbnailImageList.map((thumbnailImage, index) => {
       return {
         ...products[index].dataValues,
-        thumbnailImageUrl: thumbnailImage.imageUrl
+        thumbnailImageUrl: thumbnailImage?.imageUrl
       }
     });
 
     await redisClient.setEx(`getProducts:${Object.values(cacheKey)}`, 10, JSON.stringify(productInfo));    
 
     return res.status(200).json(productInfo);
+
+  } catch(error) {
+
+    console.log(error);
+    return next(error);
+  }
+
+}
+
+// let count = 0;
+
+async function searchProducts(req, res, next) {
+
+  // count++;
+  // console.log({ count });
+
+  try {
+
+    const limit = Number.parseInt(req.query['limit']) || 10;
+    const offset = Number.parseInt(req.query['offset']) || 0;
+    const query = req.query['query'] ?? '%';
+    const category = req.query['category'] ?? '%';
+    const type = req.query['type'] ?? '%';
+    
+    validationUtils.sendMessage(req, res, 422);
+
+    const cacheKey = { query, category, type, limit, offset };
+    const cachedProducts = await redisClient.get(`searchProducts:${Object.values(cacheKey)}`);
+
+    if(cachedProducts) {
+      return res.status(200).json(JSON.parse(cachedProducts));
+    }
+
+    const sql = `
+      SELECT type, category, projectName, postTitle, address 
+        from ${databaseName}.product
+        where 
+          category like :category and
+          type like :type and
+          (postTitle like :query or address like :query or projectName like :query)
+        limit :limit
+        offset :offset
+    `
+
+    const products = await sequelize.query(sql, { 
+      replacements: { query: `%${query}%`, limit, offset, category, type }, 
+      type: QueryTypes.SELECT
+    });
+
+    if(!products) {
+      return res.status(200).json([]);
+    }
+
+    await redisClient.setEx(`searchProducts:${Object.values(cacheKey)}`, 10, JSON.stringify(products));
+
+    return res.status(200).json(products);
 
   } catch(error) {
 
@@ -706,6 +758,7 @@ module.exports = {
   createVideoThumbnail,
   updateVideoThumbnail,
   getProducts,
+  searchProducts,
   getProductCount,
   getProductById,
   updateProductById,

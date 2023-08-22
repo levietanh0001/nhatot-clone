@@ -1,23 +1,22 @@
 .carousel {
-  height: 300px;
+  height: 350px;
   position: relative;
   
+  & .swiper-button-disabled{
+    display:none;   
+  }
+
   & .swiper {
-    // width: calc(100% + 25px);
+    
     width: 100%;
     height: 100%;
     padding: 1px;
   }
 
   & .swiper-slide {
-    // opacity: 0!important;
-    // width: auto;
-    // width: 100%;
-    // width: fit-content;
-    // width: 195.2px !important;
 
     margin-right: 0px !important;
-    flex-basis: 20%;
+    flex-basis: 25%;
 
     text-align: center;
     font-size: 18px;
@@ -93,6 +92,8 @@
   margin: auto 0;
   z-index: 1;
 
+  box-shadow: 0 0 10px 0 rgba($color: #000000, $alpha: 0.3);
+
   transition-property: all;
   transition-duration: 100ms;
   transition-timing-function: ease-out;
@@ -113,6 +114,7 @@
   padding: 0;
 
   background-color: #fff;
+  box-shadow: 0 0 10px 0 rgba($color: #000000, $alpha: 0.3);
   
   position: absolute;
   right: -20px;

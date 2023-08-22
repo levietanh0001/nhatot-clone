@@ -2,6 +2,26 @@ const { check, body, query } = require('express-validator');
 const { directions } = require('../utils/variables.util');
 
 
+function validateSearchProducts() {
+  return [
+    query('query')
+      .notEmpty()
+      .withMessage('Search query can not be empty')
+      .isLength({ min: 1 })
+      .withMessage('Search query can not be blank')
+      .trim(),
+    query('category')
+      .optional()
+      .isIn(['canhochungcu', 'nhao', 'khac'])
+      .withMessage('Loại bất động sản không hợp lệ'),
+    query('type')
+      .optional()
+      .isIn(['canban', 'chothue'])
+      .withMessage('Tư cách thành viên không hợp lệ'),
+  ]
+}
+
+
 function validateGetProduct() {
   return [
     // query('limit')
@@ -275,4 +295,4 @@ function validateUpdateProduct() {
 
 
 
-module.exports = { validateCreateProduct, validateUpdateProduct, validateGetProduct }
+module.exports = { validateCreateProduct, validateUpdateProduct, validateGetProduct, validateSearchProducts }

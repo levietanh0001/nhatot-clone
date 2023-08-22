@@ -32,6 +32,7 @@ const { authenticateUser } = require('./middlewares/auth.middleware');
 const authRouter = require('./routes/auth.route');
 const productRouter = require('./routes/product.route');
 const favoriteListRouter = require('./routes/favorite-list.route');
+const userRouter = require('./routes/user.route');
 // const firebaseRouter = require('./routes/firebase-auth.route');
 const errorsService = require('./controllers/errors.controller');
 
@@ -45,7 +46,6 @@ const FavoriteList = require('./models/favorite-list.model');
 const FavoriteItem = require('./models/favorite-item.model');
 const ProductImage = require('./models/product-image.model');
 const ProductVideo = require('./models/product-video.model');
-const userRouter = require('./routes/user.route');
 const userProfileRouter = require('./routes/user-profile.route');
 const { extractAccessTokenFromRequest, verifyAccessTokenAsync } = require('./utils/cryptography.util');
 const ProductThumbnail = require('./models/product-thumbnail');
@@ -143,7 +143,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 // middleware that always runs first before the rest
 app.use('/', (req, res, next) => {
   console.log('running first request');
-  console.log({ magicMethods: getMagicMethods(FavoriteList) });
+  console.log({ magicMethods: getMagicMethods(User) });
   return next();
 });
 

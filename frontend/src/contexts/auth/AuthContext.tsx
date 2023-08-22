@@ -55,7 +55,6 @@ export const AuthProvider = ({ children }) => {
         const accessToken = localStorage.getItem('accessToken');
     
         if(!accessToken) {
-          // setAuthenticated(false);
           setUser(null);
           setLoading(false);
         }
@@ -71,7 +70,6 @@ export const AuthProvider = ({ children }) => {
           const newTokens = await getNewTokens(refreshToken, abortController.signal);
 
           if(!newTokens) {
-            // setAuthenticated(false);
             setUser(null);
             setLoading(false);
           }
@@ -80,13 +78,11 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem('accessToken', newTokens.accessToken);
             localStorage.setItem('refreshToken', newTokens.refreshToken);
             const payload = jwtDecode(newTokens.accessToken);
-            // setAuthenticated(true);
             setUser(payload);
             setLoading(false);
           }
 
         } else {
-          // setAuthenticated(true);
           setUser(payload);
           localStorage.setItem('user', JSON.stringify(user));
           setLoading(false);

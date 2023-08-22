@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const { databaseName } = require('./variables.util');
 
 
 function getMagicMethods(model) {
@@ -12,7 +13,7 @@ function getMagicMethods(model) {
 
 
 const sequelize = new Sequelize(
-  'nhatot', 'root', '123321',
+  databaseName, 'root', '123321',
   {
     dialect: 'mysql',
     host: process.env.NODE_ENV === 'prod'? process.env.MYSQL_HOST: 'localhost',

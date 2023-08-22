@@ -1,18 +1,14 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import styles from './ProductCardList.module.scss';
-import { useDebugValue, useEffect, useState } from 'react';
-import { axiosPrivate } from '~/utils/axios.util';
-import { IProductData } from '~/interfaces/product.interface';
+import { Pagination } from '@mui/material';
+import clsx from 'clsx';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Pagination } from '@mui/material';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { convertToInternationalCurrencySystem } from '~/utils/number.util';
-import clsx from 'clsx';
 import { timeAgo } from '~/utils/date.util';
+import { convertToInternationalCurrencySystem } from '~/utils/number.util';
 import { placeholderImageSrc } from '~/utils/variables.util';
+import styles from './ProductCardList.module.scss';
 dayjs.extend(relativeTime);
 
 
@@ -118,9 +114,13 @@ const ProductCardList = (props) => {
                         </div>
                         <div className={styles['price']}>
                           {String(convertToInternationalCurrencySystem(product.price))}
+                          {product?.type === 'chothue' && '/tháng'}
                         </div>
                         <div className={styles['address']}>
-                          {product.address}
+                          {product?.address}
+                        </div>
+                        <div className={styles['project-name']}>
+                          {product?.projectName}
                         </div>
                       </div>
                       <div
@@ -135,7 +135,7 @@ const ProductCardList = (props) => {
                         >
                           <div className={styles['text']}>
                             <span className={styles['person-icon']}>
-                              {product.userType === 'moigioi' ? (
+                              {product?.userType === 'moigioi' ? (
                                 <img
                                   src='https://static.chotot.com/storage/icons/owner/pro.svg'
                                   alt='Môi giới'
@@ -155,10 +155,10 @@ const ProductCardList = (props) => {
                               )}
                             </span>
                             &nbsp;&sdot;&nbsp;
-                            <span>{product.userType}</span>
+                            <span>{product?.userType}</span>
                             &nbsp;&sdot;&nbsp;
                             <span>
-                              {timeAgo(product.updatedAt)}
+                              {timeAgo(product?.updatedAt)}
                             </span>
                           </div>
                         </div>
@@ -168,7 +168,7 @@ const ProductCardList = (props) => {
                 </div>
               </Link>
               <button
-                onClick={() => onFavoriteButtonClick(product.id)}
+                onClick={() => onFavoriteButtonClick(product?.id)}
                 className={clsx(styles['favorite-btn'], {
                   [styles['grid-view']]: isGridView,
                 })}

@@ -10,7 +10,9 @@ const ProductsTab = (props) => {
     userProductCount,
     favoriteProductCount,
     currentTab,
-    setCurrentTab
+    setCurrentTab,
+    user,
+    userId
   } = props;
 
   return (
@@ -21,16 +23,20 @@ const ProductsTab = (props) => {
             Sản phẩm đã đăng ({ userProductCount ?? '' })
           </button>
         </div>
-        <div className={styles['tab']} tabIndex={0}>
-          <button className={clsx(styles['tab-btn'], { [styles['active']]: currentTab === 'favoriteProducts' })} onClick={() => setCurrentTab('favoriteProducts')}>
-            Danh sách yêu thích ({ favoriteProductCount ?? '' })
-          </button>
-        </div>
-        <div className={styles['tab']} tabIndex={0}>
-          <button className={clsx(styles['tab-btn'], { [styles['active']]: currentTab === 'following' })} onClick={() => setCurrentTab('following')}>
-            Đang theo dõi ()
-          </button>
-        </div>
+        {user?.userId === userId && (
+          <>
+            <div className={styles['tab']} tabIndex={0}>
+              <button className={clsx(styles['tab-btn'], { [styles['active']]: currentTab === 'favoriteProducts' })} onClick={() => setCurrentTab('favoriteProducts')}>
+                Danh sách yêu thích ({ favoriteProductCount ?? '' })
+              </button>
+            </div>
+            <div className={styles['tab']} tabIndex={0}>
+              <button className={clsx(styles['tab-btn'], { [styles['active']]: currentTab === 'following' })} onClick={() => setCurrentTab('following')}>
+                Đang theo dõi ()
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </>
   );
@@ -40,7 +46,9 @@ ProductsTab.propTypes = {
   userProductCount: PropTypes.number,
   favoriteProductCount: PropTypes.number,
   currentTab: PropTypes.string,
-  setCurrentTab: PropTypes.func
+  setCurrentTab: PropTypes.func,
+  user: PropTypes.object,
+  userId: PropTypes.number
 }
 
 export default ProductsTab;

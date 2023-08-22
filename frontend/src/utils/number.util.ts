@@ -25,23 +25,22 @@ export function isNumeric(num){
   return !isNaN(num);
 }
 
+function removeTrailingZeroes(n) {
+  return parseFloat(String(n));
+}
+
 export function convertToInternationalCurrencySystem(labelValue) {
 
   // Nine Zeroes for Billions
 
-  const formatted = Math.abs(Number(labelValue)) >= 1.0e+9
-
-  ? (Math.abs(Number(labelValue)) / 1.0e+9).toFixed(2) + " tỷ"
-  // Six Zeroes for Millions 
-  : Math.abs(Number(labelValue)) >= 1.0e+6
-
-  ? (Math.abs(Number(labelValue)) / 1.0e+6).toFixed(2) + " triệu"
-  // Three Zeroes for Thousands
-  : Math.abs(Number(labelValue)) >= 1.0e+3
-
-  ? (Math.abs(Number(labelValue)) / 1.0e+3).toFixed(2) + " nghìn"
-
-  : Math.abs(Number(labelValue));
+  const strippedNumber = (Math.abs(Number(labelValue)));
+  const formatted = strippedNumber >= 1.0e+9
+  ? removeTrailingZeroes((strippedNumber / 1.0e+9).toFixed(2)) + " tỷ"
+  : strippedNumber >= 1.0e+6
+  ? removeTrailingZeroes((strippedNumber / 1.0e+6).toFixed(2)) + " triệu"
+  : strippedNumber >= 1.0e+3
+  ? removeTrailingZeroes((strippedNumber / 1.0e+3).toFixed(2)) + " nghìn"
+  : removeTrailingZeroes(strippedNumber);
 
   return String(formatted).replace('.', ',').replace(',00', '');
 

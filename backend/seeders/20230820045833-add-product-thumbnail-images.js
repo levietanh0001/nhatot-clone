@@ -16,26 +16,24 @@ module.exports = {
     const productIdList = productIds.map(item => item.id);
     console.log(productIdList);
 
-    let productImages = [];
+    let productThumbnails = [];
     productIdList.forEach(productId => {
-      [...Array(randomInRange(1, 5, 1))].map(() => {
-        productImages = [...productImages, {
-          imageUrl: faker.image.urlLoremFlickr({ category: 'city' }),
-          productId,
-          createdAt: new Date(),
-          updatedAt: new Date(),    
-        }]
-      })
+      productThumbnails = [...productThumbnails, {
+        imageUrl: faker.image.urlLoremFlickr({ category: 'city' }),
+        productId,
+        createdAt: new Date(),
+        updatedAt: new Date(),    
+      }]
     })
 
     // console.log({ productImagesLength: productImages.length });
     
     // throw new Error();
 
-    await queryInterface.bulkInsert('product_image', productImages, {});
+    await queryInterface.bulkInsert('product_thumbnail', productThumbnails, {});
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('product_image', null, {});
+    await queryInterface.bulkDelete('product_thumbnail', null, {});
   }
 };

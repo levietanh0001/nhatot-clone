@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useHandleQueryError from '~/hooks/error-handling.hook';
@@ -10,8 +11,8 @@ import ContactUser from './ContactUser';
 
 const ProductDetails = () => {
 
-  const { productId, slug } = useParams();
-  const [user, setUser] = useState();
+  const { productId, slug, userId } = useParams();
+  const [user, setUser] = useState<any | null>(null);
   const {
     data: product, 
     error: productError, 
@@ -28,12 +29,21 @@ const ProductDetails = () => {
   useHandleQueryError(isProductError, productError);
   useHandleQueryError(isUserProfileError, userProfileError);
 
-  const decodedPayload = useDecodeAccessToken();
+  // const decodedPayload = useDecodeAccessToken();
+
+  // useEffect(() => {
+  //   setUser(userId);
+  //   console.log({ productId });
+  // }, []);
 
   useEffect(() => {
-    setUser(decodedPayload);
-    console.log({ productId });
-  }, []);
+    if(!isProductLoading && !isProductError) {
+      setUser({
+        userId: product?.userId,
+
+      })
+    }
+  }, [isProductLoading]);
 
   useEffect(() => {
     if(!isUserProfileLoading) {
@@ -52,5 +62,11 @@ const ProductDetails = () => {
     </>
   );
 };
+
+ProductDetails.propTypes = {
+  productId: PropTypes.number, 
+  slug: PropTypes.string, 
+  userId: PropTypes.number
+}
 
 export default ProductDetails;

@@ -15,7 +15,9 @@ const ProductListing = (props) => {
     onDeleteButtonClick,
     currentPage,
     productCount,
-    onPageChange
+    onPageChange,
+    user,
+    userId
   } = props;
 
   return (
@@ -26,18 +28,25 @@ const ProductListing = (props) => {
             <div className={styles['card']}>
               <div className={styles['card-media']}>
                 <img src={item?.thumbnailImageUrl ?? placeholderImageSrc} alt={item?.postTitle ?? ''} />
-                <button className={styles['favorite-btn']} onClick={(e) => { e.preventDefault(); e.stopPropagation(); onFavoriteButtonClick(item?.id ?? '') }}>
-                  <svg width={24} height={24} viewBox='0 0 24 24' fill='red' xmlns='http://www.w3.org/2000/svg'><path opacity='0.8' d='M12.0004 20.95C11.7085 20.9488 11.4233 20.8619 11.1804 20.7C6.7604 17.7 2.2404 13.87 2.3004 8.28C2.28968 6.8971 2.82608 5.56604 3.79266 4.57698C4.75924 3.58792 6.07762 3.02107 7.4604 3C8.35262 3.02544 9.22682 3.25717 10.0145 3.67703C10.8022 4.09689 11.4819 4.69347 12.0004 5.42C12.5189 4.69347 13.1986 4.09689 13.9863 3.67703C14.774 3.25717 15.6482 3.02544 16.5404 3C17.9145 3.02098 19.2253 3.58093 20.1905 4.5592C21.1557 5.53747 21.6979 6.85575 21.7004 8.23C21.7604 13.82 17.2404 17.65 12.8104 20.65C12.5775 20.8305 12.2947 20.9352 12.0004 20.95Z' fill='white' /><path d='M12.0004 20.95C11.7085 20.9488 11.4233 20.8619 11.1804 20.7C6.7604 17.7 2.2404 13.87 2.3004 8.28C2.28968 6.8971 2.82608 5.56604 3.79266 4.57698C4.75924 3.58792 6.07762 3.02107 7.4604 3C8.35262 3.02544 9.22682 3.25717 10.0145 3.67703C10.8022 4.09689 11.4819 4.69347 12.0004 5.42C12.5189 4.69347 13.1986 4.09689 13.9863 3.67703C14.774 3.25717 15.6482 3.02544 16.5404 3C17.9145 3.02098 19.2253 3.58093 20.1905 4.5592C21.1557 5.53747 21.6979 6.85575 21.7004 8.23C21.7604 13.82 17.2404 17.65 12.8104 20.65C12.5775 20.8305 12.2947 20.9352 12.0004 20.95ZM7.4604 4.4C6.45333 4.41839 5.49404 4.83276 4.79028 5.55336C4.08653 6.27396 3.69497 7.24278 3.7004 8.25C3.6504 13.17 7.8504 16.7 12.0004 19.49C16.1804 16.7 20.3804 13.18 20.3304 8.24C20.3332 7.2345 19.9405 6.26824 19.237 5.5498C18.5335 4.83136 17.5757 4.41837 16.5704 4.4C14.0004 4.4 12.6404 6.95 12.6204 7.01C12.565 7.1274 12.4773 7.2265 12.3674 7.29561C12.2575 7.36472 12.1302 7.40094 12.0004 7.4C11.8694 7.40045 11.7409 7.36413 11.6296 7.29519C11.5182 7.22625 11.4284 7.12744 11.3704 7.01C11.3704 7.01 10.0004 4.4 7.4604 4.4Z' fill='#E5193B' /></svg>
-                </button>
-                <button className={styles['delete-btn']} onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDeleteButtonClick(item?.id ?? '') }}>
-                  <svg width={18} height={18} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" /></svg>
-                </button>
+                {user?.userId === userId && (
+                  <button className={styles['favorite-btn']} onClick={(e) => { e.preventDefault(); e.stopPropagation(); onFavoriteButtonClick(item?.id ?? '') }}>
+                    <svg width={24} height={24} viewBox='0 0 24 24' fill='red' xmlns='http://www.w3.org/2000/svg'><path opacity='0.8' d='M12.0004 20.95C11.7085 20.9488 11.4233 20.8619 11.1804 20.7C6.7604 17.7 2.2404 13.87 2.3004 8.28C2.28968 6.8971 2.82608 5.56604 3.79266 4.57698C4.75924 3.58792 6.07762 3.02107 7.4604 3C8.35262 3.02544 9.22682 3.25717 10.0145 3.67703C10.8022 4.09689 11.4819 4.69347 12.0004 5.42C12.5189 4.69347 13.1986 4.09689 13.9863 3.67703C14.774 3.25717 15.6482 3.02544 16.5404 3C17.9145 3.02098 19.2253 3.58093 20.1905 4.5592C21.1557 5.53747 21.6979 6.85575 21.7004 8.23C21.7604 13.82 17.2404 17.65 12.8104 20.65C12.5775 20.8305 12.2947 20.9352 12.0004 20.95Z' fill='white' /><path d='M12.0004 20.95C11.7085 20.9488 11.4233 20.8619 11.1804 20.7C6.7604 17.7 2.2404 13.87 2.3004 8.28C2.28968 6.8971 2.82608 5.56604 3.79266 4.57698C4.75924 3.58792 6.07762 3.02107 7.4604 3C8.35262 3.02544 9.22682 3.25717 10.0145 3.67703C10.8022 4.09689 11.4819 4.69347 12.0004 5.42C12.5189 4.69347 13.1986 4.09689 13.9863 3.67703C14.774 3.25717 15.6482 3.02544 16.5404 3C17.9145 3.02098 19.2253 3.58093 20.1905 4.5592C21.1557 5.53747 21.6979 6.85575 21.7004 8.23C21.7604 13.82 17.2404 17.65 12.8104 20.65C12.5775 20.8305 12.2947 20.9352 12.0004 20.95ZM7.4604 4.4C6.45333 4.41839 5.49404 4.83276 4.79028 5.55336C4.08653 6.27396 3.69497 7.24278 3.7004 8.25C3.6504 13.17 7.8504 16.7 12.0004 19.49C16.1804 16.7 20.3804 13.18 20.3304 8.24C20.3332 7.2345 19.9405 6.26824 19.237 5.5498C18.5335 4.83136 17.5757 4.41837 16.5704 4.4C14.0004 4.4 12.6404 6.95 12.6204 7.01C12.565 7.1274 12.4773 7.2265 12.3674 7.29561C12.2575 7.36472 12.1302 7.40094 12.0004 7.4C11.8694 7.40045 11.7409 7.36413 11.6296 7.29519C11.5182 7.22625 11.4284 7.12744 11.3704 7.01C11.3704 7.01 10.0004 4.4 7.4604 4.4Z' fill='#E5193B' /></svg>
+                  </button>
+                )}
+                {user?.userId === userId && (
+                  <button className={styles['delete-btn']} onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDeleteButtonClick(item?.id ?? '') }}>
+                    <svg width={18} height={18} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" /></svg>
+                  </button>
+                )}
               </div>
               <div className={styles['card-details']}>
                 <div className={styles['card-title']}>{item?.postTitle ?? ''}</div>
                 <div className={styles['card-content']}>
                   <span className={styles['content-line']}>{item?.area ?? ''} m<sup>2</sup> &middot; {item?.numBedrooms ?? ''} PN &middot; {item?.numBathrooms ?? ''} WC</span>
-                  <span className={clsx(styles['price'], styles['content-line'])}>{convertToInternationalCurrencySystem(item?.price ?? '')}</span>
+                  <span className={clsx(styles['price'], styles['content-line'])}>
+                    {convertToInternationalCurrencySystem(item?.price ?? '')}
+                    {item?.type === 'chothue'? '/tháng': ''}
+                  </span>
                   <span className={clsx(styles['address'], styles['content-line'])}>{item?.address ?? ''}</span>
                 </div>
                 <div className={styles['card-footer']}>
@@ -54,18 +63,20 @@ const ProductListing = (props) => {
         ))}
       </div>
 
-      <Pagination
-        className={styles['pagination']}
-        page={currentPage}
-        count={Number(Math.ceil(Number(productCount ?? 0) / 9))}
-        boundaryCount={0}
-        siblingCount={2}
-        defaultPage={currentPage}
-        shape='rounded'
-        variant='outlined'
-        onChange={onPageChange}
-        showFirstButton
-      />
+      <div style={{ marginTop: '15px' }}>
+        <Pagination
+          className={styles['pagination']}
+          page={currentPage}
+          count={Number(Math.ceil(Number(productCount ?? 0) / 9))}
+          boundaryCount={0}
+          siblingCount={2}
+          defaultPage={currentPage}
+          shape='rounded'
+          variant='outlined'
+          onChange={onPageChange}
+          showFirstButton
+        />
+      </div>
     </>
   );
 };
@@ -76,7 +87,9 @@ ProductListing.propTypes = {
   onFavoriteButtonClick: PropTypes.func,
   onDeleteButtonClick: PropTypes.func,
   onPageChange: PropTypes.func,
-  productCount: PropTypes.number
+  productCount: PropTypes.number,
+  user: PropTypes.object,
+  userId: PropTypes.number
 }
 
 // const srcList = [

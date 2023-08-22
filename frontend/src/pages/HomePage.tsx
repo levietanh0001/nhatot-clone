@@ -1,5 +1,6 @@
 import { lazy } from 'react';
 import { SuspenseWrapper } from '~/App';
+import ProductSliders from '~/components/product/product-sliders/ProductSliders';
 
 const Header = lazy(() => import('~/layouts/Header'));
 const TopNav = lazy(() => import('~/components/common/navbar'));
@@ -11,9 +12,6 @@ const KhamPhaNhaTot = lazy(
 );
 const CongCuDichVu = lazy(
   () => import('~/components/home/cong-cu-dich-vu/CongCuDichVu')
-);
-const ProductCardSlider = lazy(
-  () => import('~/components/home/product-card-slider/ProductCardSlider')
 );
 const Glossary = lazy(() => import('~/components/home/glossary/Glossary'));
 const Keywords = lazy(() => import('~/components/home/keywords/Keywords'));
@@ -42,35 +40,7 @@ const HomePage = () => {
             <CongCuDichVu />
           </SuspenseWrapper>
 
-          <SuspenseWrapper>
-            <ProductCardSlider
-              type='mua-ban'
-              title='Mua bán bất động sản'
-              className='mua-ban-bds-carousel'
-              prevEl='prev-mua-ban'
-              nextEl='next-mua-ban'
-            />
-          </SuspenseWrapper>
-
-          <SuspenseWrapper>
-            <ProductCardSlider
-              type='cho-thue'
-              title='Cho thuê bất động sản'
-              className='cho-thue-bds-carousel'
-              prevEl='prev-cho-thue'
-              nextEl='next-cho-thue'
-            />
-          </SuspenseWrapper>
-
-          <SuspenseWrapper>
-            <ProductCardSlider
-              type='khac'
-              title='Các loại hình bất động sản khác'
-              className='du-an-bds-carousel'
-              prevEl='prev-du-an'
-              nextEl='next-du-an'
-            />
-          </SuspenseWrapper>
+          <ProductSliders />
 
           <SuspenseWrapper>
             <Glossary />
