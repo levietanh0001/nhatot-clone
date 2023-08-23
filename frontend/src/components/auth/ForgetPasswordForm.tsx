@@ -21,7 +21,7 @@ const ForgetPasswordForm = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const form = useForm<FormFieldValues>({
-    mode: 'all',
+    mode: 'onTouched',
     defaultValues: {
       email: '',
     },

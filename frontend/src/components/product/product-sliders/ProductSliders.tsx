@@ -6,7 +6,7 @@ const ProductCardSlider = lazy(() => import('~/components/home/product-card-slid
 const ProductSliders = () => {
 
   const { data: allProducts } = useGetProducts({ limit: 10, offset: 0 });
-  const { data: muabanProducts } = useGetProducts({ limit: 10, offset: 0, type: 'canban' });
+  const { data: canbanProducts } = useGetProducts({ limit: 10, offset: 0, type: 'canban' });
   const { data: chothueProducts } = useGetProducts({ limit: 10, offset: 0, type: 'chothue' });
 
   return (
@@ -15,22 +15,22 @@ const ProductSliders = () => {
       <SuspenseWrapper>
         <ProductCardSlider
           slides={allProducts}
-          type='khac'
-          title='Các loại hình bất động sản khác'
-          className='du-an-bds-carousel'
-          prevEl='prev-du-an'
-          nextEl='next-du-an'
+          type='latest'
+          title='Mới nhất'
+          className='latest-products-carousel'
+          prevEl='prev-latest'
+          nextEl='next-latest'
         />
       </SuspenseWrapper>
 
       <SuspenseWrapper>
         <ProductCardSlider
-          slides={muabanProducts}
-          type='mua-ban'
-          title='Mua bán bất động sản'
-          className='mua-ban-bds-carousel'
-          prevEl='prev-mua-ban'
-          nextEl='next-mua-ban'
+          slides={canbanProducts}
+          type='can-ban'
+          title='Cần bán bất động sản'
+          className='can-ban-products-carousel'
+          prevEl='prev-can-ban'
+          nextEl='next-can-ban'
         />
       </SuspenseWrapper>
 
@@ -39,7 +39,7 @@ const ProductSliders = () => {
           slides={chothueProducts}
           type='cho-thue'
           title='Cho thuê bất động sản'
-          className='cho-thue-bds-carousel'
+          className='cho-thue-products-carousel'
           prevEl='prev-cho-thue'
           nextEl='next-cho-thue'
         />

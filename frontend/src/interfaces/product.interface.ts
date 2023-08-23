@@ -96,4 +96,4 @@ export interface IProductForm {
   onUserTypeSelect: (...args: any) => any;
 }
 
-export type ProductTypeType = 'muaban' | 'chothue' | 'duan';
+export type ProductTypeType = 'canban' | 'chothue' | 'duan';

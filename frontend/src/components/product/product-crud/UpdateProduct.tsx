@@ -122,7 +122,7 @@ const UpdateProduct = () => {
   }, [product.productCreated, product.inputError.image]);
 
   const form = useForm({
-    mode: 'all',
+    mode: 'onTouched',
     resolver: yupResolver(postProductFormSchema),
     values: {
       projectName: formValues && String(formValues.projectName),

@@ -281,6 +281,7 @@ async function getProductCount(req, res, next) {
     }
 
     let count;
+    console.log({ userId})
     if(!userId) {
       count = await Product.count();
     } else {
@@ -301,47 +302,114 @@ async function getProductCount(req, res, next) {
 async function getProducts(req, res, next) {
 
   try {
-
-    const limit = Number.parseInt(req.query['limit']) || 20;
-    const offset = Number.parseInt(req.query['offset']) || 0;
-    const filterCriteria = req.query;
-    delete filterCriteria['limit'];
-    delete filterCriteria['offset'];
     
     validationUtils.sendMessage(req, res, 422);
 
-    const where = { ...filterCriteria };
+    // get product by query here
+    const q = req.query['q'];
+    const limit = Number.parseInt(req.query['limit']) || 20;
+    const offset = Number.parseInt(req.query['offset']) || 0;
+    const type = req.query['type'];
+    const category = req.query['category'];
 
-    const cacheKey = { ...where, limit, offset };
-    const cachedProducts = await redisClient.get(`getProducts:${Object.values(cacheKey)}`);
+    console.log({ category, type });
+    
+    if(q) {
 
-    if(cachedProducts) {
-      return res.status(200).json(JSON.parse(cachedProducts));
-    }
-
-    const products = await Product.findAll({ where, limit, offset, order: [[ 'updatedAt', 'DESC' ]] })
-
-    if(!products) {
-      return res.status(200).json([]);
-    }
-
-    const productIdList = products.map(product => product.id);
-    const productThumbnailImages = productIdList.map(async (productId) => {
-      return ProductThumbnail.findOne({ where: { productId } });
-    })
-
-    const productThumbnailImageList = await Promise.all(productThumbnailImages);
-
-    const productInfo = productThumbnailImageList.map((thumbnailImage, index) => {
-      return {
-        ...products[index].dataValues,
-        thumbnailImageUrl: thumbnailImage?.imageUrl
+      const cacheKey = { q, limit, offset, category, type };
+      const cachedProducts = await redisClient.get(`getProducts:${Object.values(cacheKey)}`);
+  
+      if(cachedProducts) {
+        return res.status(200).json(JSON.parse(cachedProducts));
       }
-    });
 
-    await redisClient.setEx(`getProducts:${Object.values(cacheKey)}`, 10, JSON.stringify(productInfo));    
+      const sql = `
+        SELECT *, match(projectName, address, postTitle) against (:q) as relevanceScore
+        FROM (
+          SELECT *, CONCAT(projectName, ' ', address, ' ', postTitle) as result
+          FROM nhatot.product
+        ) base
+        WHERE
+          match (projectName, address, postTitle) against (:q) > 0
+            and category like :category
+            and type like :type
+        ORDER BY relevanceScore DESC
+        LIMIT :limit
+        OFFSET :offset
+      `
 
-    return res.status(200).json(productInfo);
+      const products = await sequelize.query(
+        sql, 
+        { 
+          replacements: { q: `%${q}%`, limit, offset, category: category ?? '%', type: type ?? '%' }, 
+          type: QueryTypes.SELECT
+        }
+      );
+
+      if(!products) {
+        return res.status(200).json([]);
+      }
+
+      const productIdList = products.map(product => product.id);
+      const productThumbnailImages = productIdList.map(async (productId) => {
+        return ProductThumbnail.findOne({ where: { productId } });
+      })
+  
+      const productThumbnailImageList = await Promise.all(productThumbnailImages);
+  
+      const productInfo = productThumbnailImageList.map((thumbnailImage, index) => {
+        return {
+          ...products[index],
+          thumbnailImageUrl: thumbnailImage?.imageUrl
+        }
+      });
+
+      await redisClient.setEx(`getProducts:${Object.values(cacheKey)}`, 10, JSON.stringify(productInfo));
+
+      return res.status(200).json(productInfo);
+
+    }
+
+    if(!q) {
+
+      const filterCriteria = { ...req.query, ...(type) && { type } };
+      delete filterCriteria['limit'];
+      delete filterCriteria['offset'];
+      
+  
+      const where = { ...filterCriteria };
+  
+      const cacheKey = { ...where, limit, offset };
+      const cachedProducts = await redisClient.get(`getProducts:${Object.values(cacheKey)}`);
+  
+      if(cachedProducts) {
+        return res.status(200).json(JSON.parse(cachedProducts));
+      }
+      
+      const products = await Product.findAll({ where, limit, offset, order: [[ 'updatedAt', 'DESC' ]] })
+  
+      if(!products) {
+        return res.status(200).json([]);
+      }
+  
+      const productIdList = products.map(product => product.id);
+      const productThumbnailImages = productIdList.map(async (productId) => {
+        return ProductThumbnail.findOne({ where: { productId } });
+      })
+  
+      const productThumbnailImageList = await Promise.all(productThumbnailImages);
+  
+      const productInfo = productThumbnailImageList.map((thumbnailImage, index) => {
+        return {
+          ...products[index].dataValues,
+          thumbnailImageUrl: thumbnailImage?.imageUrl
+        }
+      });
+  
+      await redisClient.setEx(`getProducts:${Object.values(cacheKey)}`, 10, JSON.stringify(productInfo));    
+  
+      return res.status(200).json(productInfo);
+    }
 
   } catch(error) {
 
@@ -354,9 +422,6 @@ async function getProducts(req, res, next) {
 // let count = 0;
 
 async function searchProducts(req, res, next) {
-
-  // count++;
-  // console.log({ count });
 
   try {
 
@@ -375,15 +440,28 @@ async function searchProducts(req, res, next) {
       return res.status(200).json(JSON.parse(cachedProducts));
     }
 
+    // const sql = `
+    //   SELECT type, category, projectName, postTitle, address 
+    //     from ${databaseName}.product
+    //     where 
+    //       category like :category and
+    //       type like :type and
+    //       (postTitle like :query or address like :query or projectName like :query)
+    //     limit :limit
+    //     offset :offset
+    // `
+
     const sql = `
-      SELECT type, category, projectName, postTitle, address 
-        from ${databaseName}.product
-        where 
-          category like :category and
-          type like :type and
-          (postTitle like :query or address like :query or projectName like :query)
-        limit :limit
-        offset :offset
+      SELECT type, category, projectName, postTitle, address FROM (
+        SELECT *, CONCAT(projectName, ' ', postTitle, ' ', address) as result
+        FROM nhatot.product
+      ) base
+      WHERE 
+        lower(result) like lower(:query)
+          and lower(category) like lower(:category)
+          and lower(type) like lower(:type)
+      LIMIT :limit
+      OFFSET :offset
     `
 
     const products = await sequelize.query(sql, { 
@@ -398,6 +476,9 @@ async function searchProducts(req, res, next) {
     await redisClient.setEx(`searchProducts:${Object.values(cacheKey)}`, 10, JSON.stringify(products));
 
     return res.status(200).json(products);
+    
+
+    // if there is search query
 
   } catch(error) {
 

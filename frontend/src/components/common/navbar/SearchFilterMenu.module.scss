@@ -1,4 +1,5 @@
 .dropdown-menu {
+
   display: flex;
   align-items: center;
   flex: 0 1 100px;
@@ -46,13 +47,14 @@
 }
 
 .menu-btn {
+
   flex: 1 1 auto;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   gap: 10px;
 
-  text-align: center;
+  text-align: left;
 
   & span {
     font-size: 0.875rem;

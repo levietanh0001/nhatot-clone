@@ -45,7 +45,7 @@ const PostProduct = () => {
   }, [product.productCreated]);
 
   const form = useForm({
-    mode: 'all',
+    mode: 'onTouched',
     resolver: yupResolver(postProductFormSchema),
   });
 

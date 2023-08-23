@@ -23,6 +23,7 @@ export function useGetProductById(productId, slug) {
 }
 
 export function useGetProducts(criteria) {
+
   return useQuery({
     queryKey: ['getProducts', criteria],
     queryFn: ({ signal }) => {
@@ -37,7 +38,44 @@ export function useGetProducts(criteria) {
     select: (data) => {
       return data.data;
     },
+    onSettled: (data) => {
+      console.log({ data });
+    }
   });
+}
+
+export function usePaginateProducts(currentPage, productPerPage, filter) {
+
+  const q = filter?.q;
+  const type = filter?.type;
+  const productType = type === 'can-ban' ? 'canban' : type === 'cho-thue' ? 'chothue' : '';
+  const category = filter?.category;
+  const userType = filter?.userType;
+
+  let temp;
+  Object.entries(filter).forEach(([key, value]) => {
+    temp = {
+      ...temp,
+      ...(key) && { [String(key)]: value },
+    };
+  });
+  
+  temp = {
+    ...(category) && { category },
+    ...(userType) && { userType },
+    ...(productType) && { type: productType },
+    ...(q) && { q },
+  };
+
+  const criteria = {
+    ...temp,
+    limit: `${productPerPage}`,
+    offset: `${productPerPage * (currentPage - 1)}`,
+  };
+
+  console.log({ criteria });
+
+  return useGetProducts(criteria);
 }
 
 export function useSearchProducts(options={}) {
@@ -71,7 +109,7 @@ export function useGetProductCount(options={}) {
     queryKey: ['getProductCount'],
     queryFn: ({ signal }) => {
       const params = new URLSearchParams({
-        userId: (options as any)?.userId
+        userId: (options as any)?.userId ?? ''
       });
       return axiosPublic.get('/products/count', { params, signal });
     },

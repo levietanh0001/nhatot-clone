@@ -223,6 +223,7 @@ const ProductCardList = (props) => {
         variant='outlined'
         onChange={onPageChange}
         showFirstButton
+        // showLastButton
       />
     </>
   );

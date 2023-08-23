@@ -1,71 +1,63 @@
-import PropTypes from 'prop-types';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { createSearchParams, useLocation, useNavigate } from 'react-router-dom';
 
-import styles from './ThirdTopNav.module.scss';
-import { ProductTypeType } from '~/interfaces/product.interface';
-import { useSearchProducts } from '~/hooks/product.hook';
-import { useDebounceCallback } from '~/hooks/useDebounce.hook';
 import { useDebounce } from 'usehooks-ts';
+import { useSearchProducts } from '~/hooks/product.hook';
+import { useConsoleLogOnChange } from '~/hooks/utils.hook';
 import PostButton from './PostButton';
-import SearchFilterMenu from './SearchFilterMenu';
 import SearchBox from './SearchBox';
-
+import SearchFilterMenu from './SearchFilterMenu';
+import styles from './ThirdTopNav.module.scss';
 
 const ThirdTopNav = () => {
-
-  // khac -> duan (type)
-  // khac -> all (category)
-  // search by postTitle, receive postTitle as results, then get products by more criteria
-
-  const [productType, setProductType] = useState<string>('muaban');
+  const [productType, setProductType] = useState<string>('canban');
   const [searchInput, setSearchInput] = useState<string>('');
   const [showResults, setShowResults] = useState<boolean>(false);
-  const [filteredData, setFilteredData] = useState<any[]>([]);
-  const query = String(useDebounce(searchInput, 500)).trim() ?? '';
+  const [filteredResults, setFilteredResults] = useState<any[]>([]);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const query = String(useDebounce(searchInput, 800)).trim() ?? '';
+
   const {
     data: searchResults,
     isLoading: isSearchResultsLoading,
     isError: isSearchResultsError,
-    error
+    error,
   } = useSearchProducts({ query });
 
-  useEffect(() => {
-    console.log({ searchResults, error });
-  }, [searchResults, error]);
-
-  useEffect(() => {
-    if (!isSearchResultsLoading && !isSearchResultsError) {
-      setFilteredData(
-        // searchResults
-        searchResults.filter((item) => {
-          const type = item?.type === 'canban'? 'can ban': item?.type === 'chothue'? 'cho thue': 'du an';
-          const category =  item?.category === 'canhochungcu'? 'can ho chung cu': 
-                            item?.category === 'nhao'? 'nha o': 'khac';
-          const result = `${type}${category}${item?.postTitle}`;
-          return result.toLowerCase().includes(searchInput.toLowerCase());
-        })
-      );
-    }
-  }, [isSearchResultsLoading]);
-
-  // useDebounceCallback(() => {
-  //   setFilteredData(
-  //     searchResults
-      // searchResults.filter((item) => item.postTitle.toLowerCase().includes(searchInput.toLowerCase()))
-  //   );
-  // }, [searchInput, searchResults], 800);
-
-  useEffect(() => {
-    if (!searchInput) {
-      setShowResults(Boolean(searchInput));
-    } else {
-      setShowResults(Boolean(searchInput));
-    }
-  }, [searchInput]);
+  useShowSearchResultsOnSearchInputEntered(searchInput, setShowResults);
+  useSetFilteredResults(
+    searchResults,
+    isSearchResultsLoading,
+    isSearchResultsError,
+    setFilteredResults
+  );
+  useConsoleLogOnChange({ location, searchResults, error });
 
   const handleSearchButtonClick = () => {};
+
+  const handleSearchResultClick = (result) => {
+    const type =
+      result?.type === 'chothue'
+        ? 'cho-thue'
+        : result?.type === 'canban'
+        ? 'can-ban'
+        : 'latest';
+    const q = result?.projectName + result?.address;
+    navigate(
+      {
+        pathname: `/product-list`,
+        // pathname: `/product-list/${type}`,
+        search: createSearchParams({ q }).toString(),
+      },
+      {
+        // state, // pass data from one route to another
+        replace: true, // replace current entry in the history
+      }
+    );
+    navigate(0); // refresh current page
+  };
 
   return (
     <div className='container'>
@@ -76,12 +68,13 @@ const ThirdTopNav = () => {
             setProductType={setProductType}
           />
           <SearchBox
+            onSearchResultClick={handleSearchResultClick}
             searchInput={searchInput}
             // onSearchInputKeyUp={(e) => setSearchInput(e.target.value)}
             onSearchInputChange={(e) => setSearchInput(e.target.value)}
             onClearButtonClick={() => setSearchInput('')}
             onSearchButtonClick={handleSearchButtonClick}
-            results={filteredData}
+            results={filteredResults}
             showResults={showResults}
             setShowResults={setShowResults}
           />
@@ -92,7 +85,39 @@ const ThirdTopNav = () => {
   );
 };
 
+const useShowSearchResultsOnSearchInputEntered = (
+  searchInput,
+  setShowResults
+) => {
+  useEffect(() => {
+    if (!searchInput) {
+      setShowResults(Boolean(searchInput));
+    } else {
+      setShowResults(Boolean(searchInput));
+    }
+  }, [searchInput]);
+};
 
-
+const useSetFilteredResults = (
+  data,
+  isLoading,
+  isError,
+  setFilteredResults
+) => {
+  useEffect(() => {
+    if (!isLoading && !isError) {
+      setFilteredResults(
+        data
+        // searchResults.filter((item) => {
+        //   const type = item?.type === 'canban'? 'can ban': item?.type === 'chothue'? 'cho thue': 'du an';
+        //   const category =  item?.category === 'canhochungcu'? 'can ho chung cu':
+        //                     item?.category === 'nhao'? 'nha o': 'khac';
+        //   const result = `${type}${category}${item?.projectName}${item?.address}`;
+        //   return result.toLowerCase().includes(searchInput.toLowerCase());
+        // })
+      );
+    }
+  }, [isLoading]);
+};
 
 export default ThirdTopNav;

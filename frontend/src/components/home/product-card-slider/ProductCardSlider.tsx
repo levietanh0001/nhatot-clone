@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+  import PropTypes from 'prop-types';
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -40,24 +40,6 @@ const ProductCardSlider: React.FC<IProductCardSliderProps> = (props) => {
               nextEl: `.${nextEl}`,
             }}
             modules={[Navigation]}
-            // breakpoints={{
-            //   420: {
-            //     slidesPerView: 2,
-            //     spaceBetween: 5,
-            //   },
-            //   576: {
-            //     slidesPerView: 3,
-            //     spaceBetween: 5,
-            //   },
-            //   768: {
-            //     slidesPerView: 4,
-            //     spaceBetween: 5,
-            //   },
-            //   992: {
-            //     slidesPerView: 4,
-            //     spaceBetween: 5,
-            //   },
-            // }}
           >
             {slides?.map((item, index) => (
               <SwiperSlide key={index}>
@@ -117,7 +99,8 @@ const ProductCardSlider: React.FC<IProductCardSliderProps> = (props) => {
           />
         </div>
 
-        <Link to={`/product-list/${type}`} className={styles['more']}>
+        {/* <Link to={`/product-list/${type}`} className={styles['more']}> */}
+        <Link to={`/product-list?type=${type}`} className={styles['more']}>
           <div>
             <span>Xem thêm 148.654 tin khác</span>
           </div>
@@ -132,14 +115,14 @@ const ProductCardSlider: React.FC<IProductCardSliderProps> = (props) => {
 
 
 
-interface ICardProps {
-  children?: React.ReactNode,
-  img?: {
-    src: string;
-    alt?: string;
-  },
-  title?: string;
-}
+// interface ICardProps {
+//   children?: React.ReactNode,
+//   img?: {
+//     src: string;
+//     alt?: string;
+//   },
+//   title?: string;
+// }
 
 const Card = (props) => {
   const {

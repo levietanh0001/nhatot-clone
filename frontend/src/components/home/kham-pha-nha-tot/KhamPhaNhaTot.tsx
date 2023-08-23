@@ -73,7 +73,7 @@ const data = [
     imgSrc:
       'https://cdn.chotot.com/admincentre/Ze85oPvJOgPXMSQm6u1xiqvu2RGQHNgD6FnILbx9Psc/preset:raw/plain/dc76e8acaeb3b34307e8dbb80d5bbf27-2818605517951121494.jpg',
     imgAlt: 'Cho thuê bất động sản',
-    href: 'cho-thue-bds',
+    href: 'cho-thue-products',
     title: 'Cho thuê',
     content: `324223 tin đăng cho thuê`,
   },
@@ -81,8 +81,8 @@ const data = [
     imgSrc:
       'https://cdn.chotot.com/admincentre/e4OAdVx0dKh5BE-rE99uclbZ4wL3TzmkdmXUmtlUrCw/preset:raw/plain/db20d2a83102192e7e5e1cdb0719b25d-2818605604419105198.jpg',
     imgAlt: 'Dự án bất động sản',
-    href: 'du-an-bds',
-    title: 'Khác',
+    href: 'du-an-products',
+    title: 'Tất cả',
     content: `432 sản phẩm`,
   },
   {

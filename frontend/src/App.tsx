@@ -78,8 +78,10 @@ function App() {
               }
             ></Route> */}
 
+            {/* type path param to query params */}
             <Route
-              path='/product-list/:type'
+              // path='/product-list/:type'
+              path='/product-list'
               element={
                 <SuspenseWrapper>
                   <ProductListPage />

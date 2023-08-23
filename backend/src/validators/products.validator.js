@@ -41,16 +41,20 @@ function validateGetProduct() {
     //     return true;
     //   })
     //   .withMessage('Offset phải là một số'),
+    query('q')
+      .optional({ values: 'falsy' })
+      .isString()
+      .withMessage('q is not valid'),
     query('category')
-      .optional()
+      .optional({ values: 'falsy' })
       .isIn(['canhochungcu', 'nhao', 'khac'])
       .withMessage('Loại bất động sản không hợp lệ'),
     query('userType')
-      .optional()
+      .optional({ values: 'falsy' })
       .isIn(['canhan', 'moigioi'])
       .withMessage('Tư cách thành viên không hợp lệ'),
     query('type')
-      .optional()
+      .optional({ values: 'falsy' })
       .isIn(['canban', 'chothue'])
       .withMessage('Tư cách thành viên không hợp lệ'),
   ]

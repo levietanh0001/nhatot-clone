@@ -9,8 +9,10 @@ import { persistor, store } from "./app/store";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 
+const isProductionMode = process.env.NODE_ENV?.includes('prod');
+
 // disable logging in production
-if (process.env.NODE_ENV?.includes('prod')) {
+if (isProductionMode) {
   console.log = () => {}
   console.error = () => {}
   console.debug = () => {}
@@ -26,7 +28,7 @@ ReactDOM.render(
       {/* <PersistGate loading={null} persistor={persistor}></PersistGate> */}
       <QueryClientProvider client={queryClient}>
         <App />
-        <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
+        {!isProductionMode && <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />}
       </QueryClientProvider>
     </ReactReduxProvider>
   </MUIStyledEngineProvider>,

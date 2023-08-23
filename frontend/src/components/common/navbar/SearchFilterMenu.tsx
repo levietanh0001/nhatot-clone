@@ -17,9 +17,9 @@ const SearchFilterMenu = (props) => {
             <span>
               {productType === 'chothue'
                 ? 'Cho thuê'
-                : productType === 'duan'
-                ? 'Dự án'
-                : 'Mua bán'}
+                : productType === 'canban'
+                ? 'Cần bán'
+                : 'Tất cả'}
             </span>
             <svg
               data-type='monochrome'
@@ -41,12 +41,12 @@ const SearchFilterMenu = (props) => {
             <div className={styles['menu-content']}>
               <div
                 className={styles['menu-item']}
-                onClick={() => setProductType('muaban')}
+                onClick={() => setProductType('canban')}
               >
-                <span>Mua bán</span>
+                <span>Cần bán</span>
                 <svg
                   style={{
-                    visibility: productType === 'muaban' ? 'initial' : 'hidden',
+                    visibility: productType === 'canban' ? 'initial' : 'hidden',
                   }}
                   xmlns='http://www.w3.org/2000/svg'
                   height='1em'
@@ -76,12 +76,12 @@ const SearchFilterMenu = (props) => {
 
               <div
                 className={styles['menu-item']}
-                onClick={() => setProductType('duan')}
+                onClick={() => setProductType('')}
               >
-                <span>Khác</span>
+                <span>Tất cả</span>
                 <svg
                   style={{
-                    visibility: productType === 'duan' ? 'initial' : 'hidden',
+                    visibility: productType === '' ? 'initial' : 'hidden',
                   }}
                   xmlns='http://www.w3.org/2000/svg'
                   height='1em'

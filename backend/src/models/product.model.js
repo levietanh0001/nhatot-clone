@@ -74,7 +74,10 @@ const Product = sequelize.define('product', {
   
 
 }, {
-  freezeTableName: true
+  freezeTableName: true,
+  indexes: [
+    { type: 'FULLTEXT', name: 'searchIndex', fields: ['projectName', 'address', 'postTitle'] }
+  ]
 });
 
 

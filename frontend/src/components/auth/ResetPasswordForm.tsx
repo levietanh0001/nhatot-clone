@@ -35,7 +35,7 @@ const ResetPasswordForm = () => {
   }, []);
 
   const form = useForm<FormFieldValues>({
-    mode: 'all',
+    mode: 'onTouched',
     defaultValues: {
       password: '',
     },

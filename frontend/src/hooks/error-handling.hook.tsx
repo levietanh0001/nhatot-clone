@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -16,11 +15,6 @@ function useHandleQueryError(isError, error) {
     }
 
   }, [isError]);
-}
-
-useHandleQueryError.propTypes = {
-  isError: PropTypes.bool,
-  error: PropTypes.object
 }
 
 
