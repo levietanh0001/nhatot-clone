@@ -10,6 +10,7 @@ import SearchFilterMenu from './SearchFilterMenu';
 import styles from './ThirdTopNav.module.scss';
 
 const ThirdTopNav = () => {
+
   const [productType, setProductType] = useState<string>('canban');
   const [searchInput, setSearchInput] = useState<string>('');
   const [showResults, setShowResults] = useState<boolean>(false);
@@ -38,18 +39,14 @@ const ThirdTopNav = () => {
   const handleSearchButtonClick = () => {};
 
   const handleSearchResultClick = (result) => {
-    const type =
-      result?.type === 'chothue'
-        ? 'cho-thue'
-        : result?.type === 'canban'
-        ? 'can-ban'
-        : 'latest';
+    // const type = result?.type === 'chothue' ? 'cho-thue' : result?.type === 'canban' ? 'can-ban' : 'latest';
     const q = result?.projectName + result?.address;
     navigate(
       {
         pathname: `/product-list`,
         // pathname: `/product-list/${type}`,
         search: createSearchParams({ q }).toString(),
+        
       },
       {
         // state, // pass data from one route to another
@@ -57,6 +54,7 @@ const ThirdTopNav = () => {
       }
     );
     navigate(0); // refresh current page
+    
   };
 
   return (

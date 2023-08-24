@@ -33,6 +33,17 @@
 
 }
 
+.settings {
+
+  & > .settings-icon {
+    height: 100%;
+  }
+
+  & > .settings-icon > img {
+    vertical-align: middle;
+  }
+}
+
 .message-filter-menu {
   position: relative;
 

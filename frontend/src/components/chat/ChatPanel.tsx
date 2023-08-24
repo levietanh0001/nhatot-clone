@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import styles from "./ChatPanel.module.scss";
 import { AiOutlineSend } from "react-icons/ai";
 
@@ -52,17 +53,40 @@ const MessageBox = () => {
 };
 
 const ChatBox = () => {
+
+  const [input, setInput] = useState<string>('');
+  const inputRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInput(e.currentTarget.value);
+  }
+
+  useEffect(() => {
+
+    if(inputRef.current) {
+      if(input.length > 62) {
+        inputRef.current.style.height = `35px`;
+        inputRef.current.style.height = `${inputRef.current.scrollHeight}px`;
+      } else {
+        inputRef.current.style.height = `35px`;
+      }
+    }
+
+  }, [input]);
+
   return (
     <div className={styles["chat-box"]}>
       <div className={styles["more-actions"]}>
         <img src="https://chat.chotot.com/icons/plusCircle.svg" alt="open" />
       </div>
       <div className={styles["chat-input"]}>
-        <textarea contentEditable={true} onKeyUp={(e) => { 
-          const element = e.currentTarget;
-          element.style.height = `35px`;
-          element.style.height = `${element.scrollHeight}px`;
-        }} placeholder="Nhập tin nhắn"></textarea>
+        <textarea 
+          contentEditable={true}
+          ref={inputRef}
+          value={input}
+          onChange={handleInputChange}
+          placeholder="Nhập tin nhắn"
+        ></textarea>
       </div>
       <div className={styles["send-icon"]}>
         <AiOutlineSend />

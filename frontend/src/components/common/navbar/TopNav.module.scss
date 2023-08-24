@@ -1,8 +1,5 @@
 .wrapper {
   background-color: var(--secondary-background-color);
-  // margin-bottom: 15px;
-  // padding-bottom: 15px;
-  // position: relative;
 }
 
 @media (max-width: 992px) {
@@ -10,23 +7,14 @@
     width: 700px;
     margin: auto;
   }
-
-  // .wrapper {
-  //   padding: 0 10% 0px 10%;
-  // }
 }
 
 @media (max-width: 768px) {
 
   .inner-wrapper {
-    width: 550px;
+    width: 570px;
   }
 
-  .wrapper {
-    // margin: 0;
-    // margin-bottom: 15px;
-    // padding-inline: 20px;
-  }
 }
 
 @media (max-width: 576px) {
@@ -35,5 +23,14 @@
     width: 100%;
     padding: 30px;
     padding-bottom: 0;
+  }
+}
+
+@media (max-width: 576px) {
+
+  .inner-wrapper {
+    padding: 10px;
+    padding-bottom: 0;
+    padding-top: 0;
   }
 }

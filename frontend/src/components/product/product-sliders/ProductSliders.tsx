@@ -11,7 +11,6 @@ const ProductSliders = () => {
 
   return (
     <>
-
       <SuspenseWrapper>
         <ProductCardSlider
           slides={allProducts}

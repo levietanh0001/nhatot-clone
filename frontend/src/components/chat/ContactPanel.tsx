@@ -36,9 +36,9 @@ const Toolbar = () => {
         </div>
       </ClickAwayListener>
       <div className={styles['settings']}>
-        <span className={styles['settings-icon']}>
-          <img src='https://chat.chotot.com/icons/setting.svg' alt='settings' />
-        </span>
+        <div className={styles['settings-icon']}>
+          <img src='https://chat.chotot.com/icons/setting.svg' alt='' />
+        </div>
       </div>
     </div>
   );

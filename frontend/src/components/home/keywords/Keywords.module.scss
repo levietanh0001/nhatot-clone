@@ -8,7 +8,7 @@
     font-size: 0.875rem;
   }
 
-  & ul {
+  & .grid {
     text-align: left;
     list-style-position: inside;
   }
@@ -37,6 +37,7 @@
 
 @media (max-width: 576px) {
   .grid {
+    list-style-type: none;
     grid-template-columns: repeat(2, 1fr);
   }
 }

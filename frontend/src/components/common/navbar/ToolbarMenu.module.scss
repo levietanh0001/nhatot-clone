@@ -1,0 +1,42 @@
+.wrapper {
+
+  background-color: white;
+  overflow-y: scroll;
+  overscroll-behavior: contain;
+
+  height: 100vh;
+  width: max(200px, 25vh);
+
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+
+  transition: translate 300ms;
+  translate: -200px 0;
+
+  &.opened {
+    translate: 0;
+  }
+
+  // & > ul > li:first-child {
+  //   text-align: center;
+  // }
+}
+
+.overlay {
+
+  position: fixed;
+  inset: 0 0 0 0;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.7);
+  cursor: default;
+
+  display: none;
+
+  &.opened {
+    display: initial;
+  }
+
+}

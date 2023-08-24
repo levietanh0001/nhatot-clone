@@ -21,6 +21,9 @@
 
 @media (max-width: 768px) {
   .post-btn {
-    display: none;
+
+    & > a > span {
+      display: none;
+    }
   }
 }
