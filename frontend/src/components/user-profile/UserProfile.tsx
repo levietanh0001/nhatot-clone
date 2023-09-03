@@ -32,12 +32,11 @@ const UserProfile = () => {
   // currentPage as query key for both products
   const { data: userProfile } = useGetUserProfile(userId, true);
   const { data: userProducts, isLoading: isUserProductsLoading, refetch: refetchUserProducts } = useGetUserProducts(userId, currentPage);
-
-  // userId here
-  const { data: favoriteProducts, isLoading: isFavoriteProductsLoading, refetch: refetchFavoriteProducts } = useGetUserFavoriteProducts(userId, currentPage);
   const { data: userProductCount, isLoading: isUserProductCountLoading, refetch: refetchUserProductCount } = useGetProductCount({ userId });
-  const { data: favoriteProductCount, isLoading: isFavoriteProductCountLoading, refetch: refetchFavoriteProductCount } = useGetFavoriteProductCount({ userId });
   const deleteUserProductById = useDeleteUserProductById(currentPage);
+
+  const { data: favoriteProducts, isLoading: isFavoriteProductsLoading, refetch: refetchFavoriteProducts } = useGetUserFavoriteProducts(currentPage, String(userId) === String(user?.userId));
+  const { data: favoriteProductCount, isLoading: isFavoriteProductCountLoading, refetch: refetchFavoriteProductCount } = useGetFavoriteProductCount(userId, String(userId) === String(user?.userId));
 
   useEffect(() => {
 

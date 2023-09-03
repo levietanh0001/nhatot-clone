@@ -27,7 +27,7 @@ const UserCard = (props) => {
         <div className={styles['rating']}>
           <span className={styles['amount']}>{rating}</span>
           <span className={styles['stars']}><Rating size='small' precision={0.2} value={parseInt(rating)} /></span>
-          <span className={styles['review']}>( đánh giá)</span>
+          <span className={styles['review']}>(... đánh giá)</span>
         </div>
         <div className={styles['follow']}>
           <span>

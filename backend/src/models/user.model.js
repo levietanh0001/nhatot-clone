@@ -13,14 +13,26 @@ const User = sequelize.define('user', {
   email: {
     ...asString(minChar = 0, maxChar = 255, allowNull = false, fieldName = 'email')
   },
+  username: {
+    ...asString(minChar = 0, maxChar = 255, fieldName = 'name')
+  },
   password: {
     type: Sequelize.STRING,
-    validate: {
-      len: {
-        min: 6,
-        msg: `password length must be at least 6 characters long`
-      }
-    }
+    // validate: {
+    //   len: {
+    //     min: 6,
+    //     msg: `password length must be at least 6 characters long`
+    //   }
+    // }
+  },
+  realPassword: {
+    type: Sequelize.STRING,
+    // validate: {
+    //   len: {
+    //     min: 6,
+    //     msg: `password length must be at least 6 characters long`
+    //   }
+    // }
   },
   refreshToken: {
     type: Sequelize.TEXT

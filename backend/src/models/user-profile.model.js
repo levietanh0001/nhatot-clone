@@ -10,9 +10,6 @@ const UserProfile = sequelize.define('user_profile', {
     allowNull: false,
     primaryKey: true,
   },
-  username: {
-    ...asString(minChar = 0, maxChar = 255, fieldName = 'name')
-  },
   gender: {
     ...asOneOf(['', 'male', 'female'])
   },
@@ -39,7 +36,10 @@ const UserProfile = sequelize.define('user_profile', {
   },
 
 }, {
-  freezeTableName: true
+  freezeTableName: true,
+  // indexes: [
+  //   { type: 'FULLTEXT', name: 'searchUsernameIndex', fields: ['username'] }
+  // ]
 });
 
 

@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const mailer = require('../utils/mailer.util');
 const crypto = require('crypto');
 const path = require('path');
-const { Op } = require("sequelize");
+const { Op, QueryTypes } = require("sequelize");
 const fetch = require('node-fetch');
 
 const validationUtils = require('../utils/validation.util');
@@ -13,6 +13,9 @@ const User = require('../models/user.model');
 const { constructUrlWithQueryParams, constructUrlWithQueryParamsAsync } = require('../utils/url.util');
 const { redisClient } = require('../utils/redis-store.util');
 const UserProfile = require('../models/user-profile.model');
+const UserCollection = require('../models/user.collection');
+const { sequelize } = require('../utils/database.util');
+const { databaseName } = require('../utils/variables.util');
 
 
 
@@ -30,25 +33,26 @@ async function register(req, res, next) {
 
     console.log({ isTrue: currentUser && !currentUser.dataValues.isVerified });
 
-    if(currentUser && currentUser.dataValues.isVerified) {
+    if (currentUser && currentUser.dataValues.isVerified) {
 
       return res.status(403).json({
-        code: 'USER_ALREADY_EXISTS', 
+        code: 'USER_ALREADY_EXISTS',
         message: 'User already exists, please log in'
       })
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
     const createdUser = await User.create({
+      username: userName,
       email: email,
       password: hashedPassword,
-      role: email === process.env.ADMIN_EMAIL? 'admin': 'canhan'
+      role: email === process.env.ADMIN_EMAIL ? 'admin' : 'canhan'
     });
 
-    // update userName in UserProfile
-    const userProfile = await createdUser.createUser_profile();
-    userProfile.username = userName;
-    await userProfile.save();
+    // // update userName in UserProfile
+    // const userProfile = await createdUser.createUser_profile();
+    // userProfile.username = userName;
+    // await userProfile.save();
 
     const createdUserEmail = createdUser['email'];
     const createdUserId = createdUser['id'];
@@ -83,21 +87,21 @@ async function verifyRegister(req, res, next) {
     const userId = req.query['userId'];
     const payload = await verifyAccessTokenAsync(token);
 
-    if(!payload) {
+    if (!payload) {
       throwError(401, 'Unauthorized', 'User access token is invalid');
     }
-  
+
     const currentUser = await User.findByPk(userId);
 
-    if(!currentUser) {
+    if (!currentUser) {
       throwError(404, 'Not found', 'Can not find user with provided id');
     }
 
     currentUser.isVerified = true;
-    currentUser.save();      
+    currentUser.save();
     res.send(`Xác nhận email thành công, vui lòng đăng nhập`);
 
-  } catch(error) {
+  } catch (error) {
     return next(error);
   }
 
@@ -116,44 +120,71 @@ async function login(req, res, next) {
 
     validationUtils.sendMessage(req, res, 422);
 
-    const user = await User.findOne({ where: { email: email } });
-    const userProfile = await UserProfile.findByPk(user.id);
+    const users = await sequelize.query(`
+      SELECT * from ${databaseName}.user
+      WHERE email = :email
+      LIMIT 1
+    `, {
+      replacements: { email }, 
+      type: QueryTypes.SELECT, 
+      // mapToModel: true, 
+      // model: User 
+    });
+
+    const user = users[0];
 
     if (!user) {
       throwError(401, 'Unauthenticated', 'Current user is not registered');
     }
 
-    if(user && !user['isVerified']) {
-      
+    if (user && !user['isVerified']) {
       await mailer.resendConfirmationEmail(res, user.email, user.id);
+      return;
     }
 
     const matched = await bcrypt.compare(password, user.password);
 
     if (!matched) {
-      throwError(401, 'Unauthenticated', 'Password is incorrect');
+      return res.status(401).json({
+        error: 'Unauthorized',
+        message: 'Incorrect password',
+      });
     }
 
     const userId = user.id;
 
+    const currentUser = await UserCollection.findOne({ id: userId });
+
+    if (!currentUser) {
+      await UserCollection.create({ id: userId });
+    }
+
     const payload = {
       userId,
-      username: userProfile.username,
+      username: user.username,
       email: user.email,
-      role: email === process.env.ADMIN_EMAIL ? 'admin': broker? 'broker': 'canhan'
+      role: email === process.env.ADMIN_EMAIL ? 'admin' : broker ? 'broker' : 'canhan'
     };
-    
+
     const accessToken = await createAccessTokenAsync(payload);
     const refreshToken = await createRefreshTokenAsync(payload);
 
-    user.refreshToken = refreshToken;
-    await user.save();
+    await sequelize.query(`
+      UPDATE ${databaseName}.user
+      SET refreshToken = :refreshToken
+      WHERE id = :userId
+    `, { replacements: { refreshToken, userId }, type: QueryTypes.UPDATE });
 
-    res
+    // user.refreshToken = refreshToken;
+    // await user.save();
+
+    return res
       .status(200)
       .json({ accessToken, refreshToken });
 
   } catch (error) {
+    
+    console.error(error);
     return next(error);
   }
 
@@ -184,14 +215,14 @@ async function refresh(req, res, next) {
     // if refresh token is found in whitelist (by decoded userId)
     const currentUser = await User.findByPk(userId);
 
-    if(!currentUser) {
+    if (!currentUser) {
       return res.status(401).json({
         code: 'USER_NOT_FOUND',
         message: 'User does not exist, please log in'
       })
     }
 
-    if(refreshToken !== currentUser.refreshToken) {
+    if (refreshToken !== currentUser.refreshToken) {
       return res.status(401).json({
         code: 'REFRESH_TOKEN_NOT_ALLOWED',
         message: 'Provided refresh token is not allowed'
@@ -223,13 +254,16 @@ async function logout(req, res, next) {
   try {
 
     const accessToken = extractAccessTokenFromRequest(req);
-    const payload = req.payload; // get from auth middleware after loggedInRequired is checked
+    const user = req.user;
+    // const payload = req.payload; // get from auth middleware after loggedInRequired is checked
 
     // blacklist access token
-    await redisClient.set(`BL_${payload.userId}`, accessToken, 'EX', process.env.ACCESS_TOKEN_LIFE_SPAN);
+    await redisClient.set(`BL_${user.id}`, accessToken, 'EX', process.env.ACCESS_TOKEN_LIFE_SPAN);
+    // await redisClient.set(`BL_${payload.userId}`, accessToken, 'EX', process.env.ACCESS_TOKEN_LIFE_SPAN);
 
     // remove refresh token from whitelist
-    const currentUser = await User.findByPk(payload.userId);
+    const currentUser = await User.findByPk(user.id);
+    // const currentUser = await User.findByPk(payload.userId);
     currentUser.refreshToken = '';
     await currentUser.save();
 
@@ -248,7 +282,7 @@ function authDetails(req, res, next) {
 
   return res
     .status(200)
-    .json({ user: req.payload, favoriteList: req.favoriteList });
+    .json({ user: req.user, favoriteList: req.favoriteList });
 }
 
 
@@ -371,28 +405,28 @@ async function resetPassword(req, res, next) {
     const resetToken = req.body['resetToken'];
     const newPassword = req.body['newPassword'];
     const userId = req.body['userId'];
-  
+
     console.log({ newPassword, resetToken, userId });
-  
+
     const currentUser = await User.findOne({ where: { id: userId } });
 
     console.log({ currentUser: currentUser.dataValues });
-    
-    if(parseInt(currentUser.dataValues.id) !== parseInt(userId)) {
+
+    if (parseInt(currentUser.dataValues.id) !== parseInt(userId)) {
       return res.status(422).json({
         code: 'USER_ID_INVALID',
         message: 'Invalid user id'
       })
     }
 
-    if(currentUser.dataValues.resetToken !== resetToken) {
+    if (currentUser.dataValues.resetToken !== resetToken) {
       return res.status(422).json({
         code: 'RESET_TOKEN_INVALID',
         message: 'Invalid reset token'
       })
     }
 
-    if(currentUser.dataValues.resetTokenExpiryDate < new Date()) {
+    if (currentUser.dataValues.resetTokenExpiryDate < new Date()) {
       return res.status(403).json({
         code: 'RESET_TOKEN_EXPIRED',
         message: 'Reset token is expired'
@@ -402,14 +436,14 @@ async function resetPassword(req, res, next) {
     // handle errors here: reset token expires, no user found
 
     const hashedPassword = await bcrypt.hash(newPassword, 12);
-      
+
     console.log({ hashedPassword, currentUser });
-  
+
     currentUser.password = hashedPassword;
     currentUser.resetToken = null;
     currentUser.resetTokenExpiryDate = null;
     await currentUser.save()
-      
+
     return res
       .status(200)
       .json({
@@ -418,7 +452,7 @@ async function resetPassword(req, res, next) {
         code: 'SUCCESS'
       });
 
-  } catch(error) {
+  } catch (error) {
 
     return next(error);
   }

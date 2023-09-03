@@ -18,9 +18,9 @@ redisClient.on('connect', () => {
   console.log('connected to redis');
 });
 
-redisClient.on('ready', () => {
-  console.log('redis is ready');
-});
+// redisClient.on('ready', () => {
+//   console.log('redis is ready');
+// });
 
 redisClient.on('error', (error) => {
   console.log(error);
@@ -29,6 +29,13 @@ redisClient.on('error', (error) => {
 const redisConn = redisClient.connect();
 
 
+// async function returnCacheIfExists(redisClient, query) {
 
+//   const cache = await redisClient.get(query);
+
+//   if(cache) {
+//     return res.status(200).json(JSON.parse(cache));
+//   }
+// }
 
 module.exports = { redisClient, redisConn };

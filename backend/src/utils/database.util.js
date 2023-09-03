@@ -3,7 +3,6 @@ const { databaseName } = require('./variables.util');
 
 
 function getMagicMethods(model) {
-  
   for (let assoc of Object.keys(model.associations)) {
     for (let accessor of Object.keys(model.associations[assoc].accessors)) {
       console.log(model.name + '.' + model.associations[assoc].accessors[accessor]+'()');
@@ -28,11 +27,15 @@ const sequelize = new Sequelize(
   }
 );
 
+
 sequelize.authenticate().then(() => {
-  console.log('Connection has been established successfully.');
+  console.log('connected to mysql');
 }).catch((error) => {
   console.error('Unable to connect to the database: ', error);
 });
 
 
-module.exports = { sequelize, getMagicMethods };
+module.exports = {
+  sequelize, 
+  getMagicMethods,
+};

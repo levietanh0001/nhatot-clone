@@ -12,6 +12,22 @@
     // margin: 20px;
     // margin-left: 0;
   }
+
+}
+
+.password-input {
+  position: relative;
+
+  & .show-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  & .show-password > svg {
+    vertical-align: middle;
+  }
 }
 
 .form-control {

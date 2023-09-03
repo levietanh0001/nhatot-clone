@@ -59,8 +59,17 @@ const Dropdown = () => {
 
   const options = [
     {
-      href: `user-profile/${user?.userId}`,
+      href: `/user-profile/${user?.userId}`,
       label: `${user?.email}`,
+      Icon: (
+        <img
+          src='https://cdn.chotot.com/73TO65Il6h0sDADPUC1slh5Y1vS2PLWhtNQHi_jRmOQ/preset:uac/plain/d01e19fd5a0155b562cce3020725c41a-7b935f90d149c81e3a81f07cce1a9040332e6d90.jpg'
+          alt='userAvatar'
+          height='30px'
+          width='30px'
+          style={{borderRadius: '50%'}}
+        />
+      ),
       show: Boolean(user),
     },
     {
@@ -69,8 +78,8 @@ const Dropdown = () => {
       Icon: (
         <svg
           xmlns='http://www.w3.org/2000/svg'
-          height='30px'
-          width='30px'
+          // height='30px'
+          // width='30px'
           viewBox='0 0 512 512'
         >
           <path d='M406.5 399.6C387.4 352.9 341.5 320 288 320H224c-53.5 0-99.4 32.9-118.5 79.6C69.9 362.2 48 311.7 48 256C48 141.1 141.1 48 256 48s208 93.1 208 208c0 55.7-21.9 106.2-57.5 143.6zm-40.1 32.7C334.4 452.4 296.6 464 256 464s-78.4-11.6-110.5-31.7c7.3-36.7 39.7-64.3 78.5-64.3h64c38.8 0 71.2 27.6 78.5 64.3zM256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-272a40 40 0 1 1 0-80 40 40 0 1 1 0 80zm-88-40a88 88 0 1 0 176 0 88 88 0 1 0 -176 0z' />
@@ -99,7 +108,8 @@ const Dropdown = () => {
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
             navigate('/');
-            toast.success('Đăng xuất thành công');
+            navigate(0);
+            // toast.success('Đăng xuất thành công');
           })
           .catch((error) => {
             console.error(error);

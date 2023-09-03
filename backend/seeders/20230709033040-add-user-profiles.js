@@ -33,7 +33,7 @@ module.exports = {
 
     const userProfiles = userList.map(user => (
       {
-        username: user.username,
+        // username: user.username,
         gender: randomOption(['male', 'female', '']),
         rating: randomInRange(0, 5, 0.5),
         follower: randomInRange(0, userCount),

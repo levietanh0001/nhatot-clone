@@ -3,7 +3,6 @@ const path = require('path');
 const Product = require('../models/product.model');
 const validationUtils = require('../utils/validation.util');
 const { doesPathExist, deleteFileByPath } = require('../utils/file.util');
-const errorsService = require('../controllers/errors.controller');
 const ProductImage = require('../models/product-image.model');
 const { sequelize, getMagicMethods } = require('../utils/database.util');
 const { redisClient } = require('../utils/redis-store.util');
@@ -272,24 +271,35 @@ async function createVideoThumbnail(req, res, next) {
 async function getProductCount(req, res, next) {
 
   try {
+
+    console.log({ query: req.query });
+
     // if userid, else
     const userId = req.query['userId'];
-    const cachedProductCount = await redisClient.get(`productCount${userId}`);
+    const type = req.query['type'] ?? '';
+    // const cachedProductCount = await redisClient.get(`productCount${userId}`);
 
-    if(cachedProductCount) {
-      return res.status(200).json(JSON.parse(cachedProductCount));
-    }
+    // if(cachedProductCount) {
+    //   return res.status(200).json(JSON.parse(cachedProductCount));
+    // }
 
     let count;
-    console.log({ userId})
     if(!userId) {
-      count = await Product.count();
+
+      count = await sequelize.query(`
+        SELECT COUNT(id) as count from ${databaseName}.product
+        WHERE type like :type
+      `, { replacements: { type: `%${type}%` }, type: QueryTypes.SELECT });
+
+      count = count[0]['count'];
+
+      // count = await Product.count();
     } else {
       const currentUser = await User.findByPk(userId);
       count = await currentUser.countProducts();
     }
     
-    await redisClient.setEx(`productCount${userId}`, 10, JSON.stringify(count));
+    // await redisClient.setEx(`productCount${userId}`, 10, JSON.stringify(count));
 
     return res.status(200).json(count);
 
@@ -440,17 +450,6 @@ async function searchProducts(req, res, next) {
       return res.status(200).json(JSON.parse(cachedProducts));
     }
 
-    // const sql = `
-    //   SELECT type, category, projectName, postTitle, address 
-    //     from ${databaseName}.product
-    //     where 
-    //       category like :category and
-    //       type like :type and
-    //       (postTitle like :query or address like :query or projectName like :query)
-    //     limit :limit
-    //     offset :offset
-    // `
-
     const sql = `
       SELECT type, category, projectName, postTitle, address FROM (
         SELECT *, CONCAT(projectName, ' ', postTitle, ' ', address) as result
@@ -464,7 +463,7 @@ async function searchProducts(req, res, next) {
       OFFSET :offset
     `
 
-    const products = await sequelize.query(sql, { 
+    const products = await sequelize.query(sql, {
       replacements: { query: `%${query}%`, limit, offset, category, type }, 
       type: QueryTypes.SELECT
     });
@@ -476,9 +475,6 @@ async function searchProducts(req, res, next) {
     await redisClient.setEx(`searchProducts:${Object.values(cacheKey)}`, 10, JSON.stringify(products));
 
     return res.status(200).json(products);
-    
-
-    // if there is search query
 
   } catch(error) {
 
@@ -520,7 +516,6 @@ async function getProductById(req, res, next) {
       ...product, 
       imageUrls: [productThumbnailUrl, ...productImageUrls],
       videoThumbnailUrl
-      // video: productVideo? productVideo.videoUrl: ''
     }
 
     await redisClient.setEx(`products[${productId},${slug}]`, 10, JSON.stringify(result));
@@ -562,7 +557,7 @@ async function updateProductById(req, res, next) {
 
     // console.log({ body: req.body });
     // console.log({ uploadedImagesDir, uploadedVideosDir });
-    console.log({ imageUrls });
+    // console.log({ imageUrls });
     
     // validationUtils.sendMessage(req, res, 422);
     
@@ -667,8 +662,6 @@ async function updateProductById(req, res, next) {
 
     }
 
-
-    console.log({ videoThumbnailUrl });
     if(!videoThumbnailUrl) {
       const productVideos = await currentProduct.getProduct_videos({ where: { productId } });
       const productVideo = productVideos[0];
@@ -709,60 +702,6 @@ async function updateProductById(req, res, next) {
     return next(error);
   }
 
-
-
-  // try {
-
-  //   const productId = req.params['productId'];
-  //   const type = req.body['type'];
-  //   const category = req.body['category'];
-  //   const projectName = req.body['projectName'];
-  //   const address = req.body['address'];
-  //   const numBedrooms = req.body['numBedrooms'];
-  //   const numBathrooms = req.body['numBathrooms'];
-  //   const balconDirection = req.body['balconDirection'];
-  //   const mainDoorDirection = req.body['mainDoorDirection'];
-  //   const legalDocsStatus = req.body['legalDocsStatus'];
-  //   const furnitureStatus = req.body['furnitureStatus'];
-  //   const area = req.body['area'];
-  //   const price = req.body['price'];
-  //   const deposit = req.body['deposit'];
-  //   const postTitle = req.body['postTitle'];
-  //   const description = req.body['description'];
-  
-  //   validationUtils.sendMessage(req, res, 422);
-  
-  //   const product = await Product.findByPk(productId);
-
-  //   if(!product) {
-  //     return res.status(200).json({});
-  //   }
-
-  //   product.type = type? type: product.type;
-  //   product.category = category? category: product.category;
-  //   product.projectName = projectName? projectName: product.projectName;
-  //   product.address = address? address: product.address;
-  //   product.numBedrooms = numBedrooms? numBedrooms: product.numBedrooms;
-  //   product.numBathrooms = numBathrooms? numBathrooms: product.numBathrooms;
-  //   product.balconDirection = balconDirection? balconDirection: product.balconDirection;
-  //   product.mainDoorDirection = mainDoorDirection? mainDoorDirection: product.mainDoorDirection;
-  //   product.legalDocsStatus = legalDocsStatus? legalDocsStatus: product.legalDocsStatus;
-  //   product.furnitureStatus = furnitureStatus? furnitureStatus: product.furnitureStatus;
-  //   product.area = area? area: product.area;
-  //   product.price = price? price: product.price;
-  //   product.deposit = deposit? deposit: product.deposit;
-  //   product.postTitle = postTitle? postTitle: product.postTitle;
-  //   product.description = description? description: product.description;
-
-  //   await product.save();
-
-  //   return res.status(200).json(product);
-
-  // } catch(error) {
-
-  //   return next(error);
-  // }
-
 }
 
 
@@ -794,42 +733,6 @@ async function deleteProductById(req, res, next) {
   }
   
 }
-
-
-// function createProduct(req, res, next) {
-
-//   const productTitle = req.body['title'];
-//   const productPrice = req.body['price'];
-//   const productDescription = req.body['description'];
-//   const image = req.file;
-//   const productImageURL = image?.path;
-
-//   console.log(req.file);
-
-//   validationUtils.sendMessage(req, res, 422);
-
-//   req.user
-//     .createProduct({
-//       title: productTitle,
-//       price: productPrice,
-//       description: productDescription,
-//       imageURL: productImageURL,
-//     })
-//     .then(product => {
-//       const statusCode = 201;
-//       return res
-//         .status(statusCode)
-//         .json({
-//           statusCode: statusCode,
-//           data: product.dataValues,
-//           message: 'Product created successfully'
-//         });
-//     })
-//     .catch(error => {
-//       errorsService.passErrorToHandler(error, next);
-//     });
-// }
-
 
 
 module.exports = {

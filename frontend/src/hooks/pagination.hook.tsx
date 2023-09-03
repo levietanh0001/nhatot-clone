@@ -16,6 +16,12 @@ export function useScrollToTopOnPageChange(currentPage) {
   }, [currentPage]);
 }
 
+export function useScrollToTop() {
+  useEffect(() => {
+    window.scrollTo({ top: 10, behavior: 'smooth' });
+  }, []);
+}
+
 export function useSetAvailablePages(productCount, productPerPage, setNumPages) {
   useEffect(() => {
     if(productCount && productPerPage) {

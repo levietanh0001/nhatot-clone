@@ -21,6 +21,6 @@ export function useGetUserProfile(userId, enabled=false) {
   });
 }
 
-export function useGetUser(userId) {
+export function useGetUserById(userId) {
 
 }

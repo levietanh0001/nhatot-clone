@@ -8,6 +8,7 @@ import { AuthProvider } from './contexts/auth/AuthContext';
 import ForgetPasswordPage from './pages/ForgetPassword';
 import RegisterPage from './pages/RegisterPage';
 import ResetPasswordPage from './pages/ResetPassword';
+import ProtectedChatRoute from './components/auth/ProtectedChatRoute';
 const HomePage = lazy(() => import('./pages/HomePage'));
 const ProductListPage = lazy(() => import('./pages/ProductListPage'));
 const PostProductPage = lazy(() => import('./pages/PostProductPage'));
@@ -89,12 +90,25 @@ function App() {
               }
             ></Route>
 
-            <Route
-              path='/chat'
+            {/* <Route
+              path='/chatroom'
               element={
-                <SuspenseWrapper>
-                  <ChatPage />
-                </SuspenseWrapper>
+                <LoggedInRequired>
+                  <SuspenseWrapper>
+                    <ChatPage />
+                  </SuspenseWrapper>
+                </LoggedInRequired>
+              }
+            ></Route> */}
+
+            <Route
+              path='/chat/:userId?'
+              element={
+                <LoggedInRequired>
+                  <SuspenseWrapper>
+                    <ChatPage />
+                  </SuspenseWrapper>
+                </LoggedInRequired>
               }
             ></Route>
 

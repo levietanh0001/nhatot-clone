@@ -2,8 +2,8 @@ const errorsService = require('../controllers/errors.controller');
 let io;
 
 module.exports = {
-  init: function (httpServer) {
-    io = require('socket.io')(httpServer);
+  init: function (server, options) {
+    io = require('socket.io')(server, options);
     return io;
   },
   getIO: function () {

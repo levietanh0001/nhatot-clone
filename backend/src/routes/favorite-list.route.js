@@ -7,7 +7,7 @@ const { createFavoriteListIfNotExists } = require('../middlewares/favorite-list.
 const router = express.Router();
 
 router.get('/products', loggedInRequired, createFavoriteListIfNotExists, getUserFavoriteProducts);
-router.get('/products/count', countUserFavoriteProducts);
+router.get('/products/count', loggedInRequired, countUserFavoriteProducts);
 router.get('/', loggedInRequired, createFavoriteListIfNotExists, getFavoriteListDetails);
 router.post('/:productId', loggedInRequired, createFavoriteListIfNotExists, addProductToFavoriteList);
 router.delete('/:productId', loggedInRequired, createFavoriteListIfNotExists, deleteProductToFavoriteList);

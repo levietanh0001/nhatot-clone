@@ -31,7 +31,6 @@
     "redux-persist": "6.0.0",
     "redux-thunk": "2.4.2",
     "sass": "1.63.4",
-    "socket.io-client": "4.7.2",
     "swiper": "9.4.1",
     "universal-cookie": "4.0.4",
     "usehooks-ts": "2.9.1",

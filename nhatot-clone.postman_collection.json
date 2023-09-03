@@ -1,0 +1,668 @@
+{
+	"info": {
+		"_postman_id": "c71d1803-732e-4fe4-ba8c-e0152766389b",
+		"name": "nhatot-clone",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25677776"
+	},
+	"item": [
+		{
+			"name": "chat",
+			"item": [
+				{
+					"name": "one-one-chat",
+					"item": [
+						{
+							"name": "get-user-chats",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "go-to-chat",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "user",
+					"item": [
+						{
+							"name": "create-user",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:4000/chat/user",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "4000",
+									"path": [
+										"chat",
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get-user-by-id",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "get-other-users",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "group-chat",
+					"item": [
+						{
+							"name": "get-group-chats",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "create-group-chat",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "rename-group-chat",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "add-user-to-group-chat",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "remove-user-from-group-chat",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "message",
+					"item": [
+						{
+							"name": "send-message",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "get-message",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "products",
+			"item": [
+				{
+					"name": "get-products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:4000/products?limit=20&offset=0&category=canhochungcu&type=canban&q=Est+magnam+nostrum.590+Hồ+Estates+Suite+558",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "4000",
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "20"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "category",
+									"value": "canhochungcu"
+								},
+								{
+									"key": "userType",
+									"value": "canhan",
+									"disabled": true
+								},
+								{
+									"key": "type",
+									"value": "canban"
+								},
+								{
+									"key": "q",
+									"value": "Est+magnam+nostrum.590+Hồ+Estates+Suite+558"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search-products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:4000/products?limit=20&offset=0&category=khac&userType=canhan&type=canban",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "4000",
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "20"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "category",
+									"value": "khac"
+								},
+								{
+									"key": "userType",
+									"value": "canhan"
+								},
+								{
+									"key": "type",
+									"value": "canban"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-product-by-id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:4000/products/4",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "4000",
+							"path": [
+								"products",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-product-by-id",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"type\": \"chothue\",\n    \"category\": \"nhao\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:4000/products/4",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "4000",
+							"path": [
+								"products",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-product-by-id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:4000/products/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "4000",
+							"path": [
+								"products",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-product-count",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:4000/products/count",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "4000",
+							"path": [
+								"products",
+								"count"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "get-user-profile",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "get-user-product-count",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "favorite-list",
+			"item": [
+				{
+					"name": "get-favorite-list",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "delete-favorite-list-by-id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:4000/favorite-list/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "4000",
+							"path": [
+								"favorite-list",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"vietanh2000april@gmail.com\",\n    \"password\": \"123321\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:4000/auth/login",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "4000",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"vietanh2000april@gmail.com\",\n    \"password\": \"123321\",\n    \"confirmPassword\": \"123321\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:4000/auth/register",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "4000",
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMDAxLCJlbWFpbCI6InZpZXRhbmgyMDAwYXByaWxAZ21haWwuY29tIiwicm9sZSI6ImNhbmhhbiIsImlhdCI6MTY5MDc3ODY1NiwiZXhwIjoxNjkwNzc5NTU2fQ.LkqVs390XZpE8TXDQdAhAUpP0R-8inKMfInnJ27UamRVgVYx4SdFf43Ad3ZSJzjO6COaciwRECcgBnWZ6fxb4RA0m_omAftkhBM7Zg4-xGswU9b2658CTwFsjOwdt66Te1jLlzbRkKKK8XfQeZJzTnzQI_J5Ynjy0_9rr2Ft8M2J9vFI9aGvn8na0gVil-4cfTnV5IaKzdpCuns_Jx3Im-j3HGbdw588iTKsGihnLZlM_S0r4VLHtANixdn0yuGPCxgS0bc4w3VeVKebrTdvuggj4U18IOzST3MoFzyGYTUoLzDvV2M2pIWNUhxkpykvrIHLBr9FMyrNOtV_mezvTQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:4000/auth/logout",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "4000",
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "refresh",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"refreshToken\": \"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMDAxLCJlbWFpbCI6InZpZXRhbmgyMDAwYXByaWxAZ21haWwuY29tIiwicm9sZSI6ImNhbmhhbiIsImlhdCI6MTY5MDc3ODcxNiwiZXhwIjoxNzIyMzE0NzE2fQ.PFDyUKVtqv4-BnfDTs74oHpZvsSDHkFZnFzMCB8CDqgqQDrVXgF_TsNmsVaLfxZAESKbaBBdXzBM7Qd3ivg9EH8N6hobQeHWB1bnmfcpHl690R8T4ujWbqVBRPIIPt3p5j-nWnnzng9hSA_EnAzSjE61Xap4EuB_NcUmhzEqM6Q8XZuYxqNOQxoDYQ0dkDYTQTt0TgD2h95Ct-6RB2JoXzZdGSvV-jvL1vG2DMAtDoK27c4Mdf-7NGxNuRfSa8JdYIgmiZa_GjuDZMvpINi8_5Pks6TW7mnNJ6t-Yt01U_qT5XHEbYmKu88rwySXNKbN8veEHY7pC6slOLCc8NMOpA\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:4000/auth/refresh",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "4000",
+							"path": [
+								"auth",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reset-password-email",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoibGV3aWxsaWFtMDAwMUBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2OTAxMjgyOTgsImV4cCI6MTY5MDEyOTE5OH0.J4qK_plsCSUW3J8oHiHOtUaSYHx2RKhCQj-sNGnQkLRb_08-AY77U1tx0cNPBpbz9M-tvQx8-q3VOlHK7a79pX_tFgOWntW52quKJZGrYbdIllCLux6-awt5ftBUwv2X1eaNtcqjRIWwZpjHBYLkk2RZpidK_8T69WSuXkroKmMwn6FFC9T0mKDTAc9gAHUvrFvS-vLiZa1OGs9RtNvvO3uNGMkMN1bMHQ85y1sGqJ5KsmQN01KfKjp27sScW6liCs13RBJ90fsNHCpq7BI6aiP3T3OQx6d2KVDcNjlQhNv-B_mGGOaYKmz6eKl8uR2LwJqyZQAJVh3P2NB7Xf8ixA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"lewilliam0001@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:4000/auth/reset-password-email",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "4000",
+							"path": [
+								"auth",
+								"reset-password-email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reset-password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"resetToken\": \"92b1925174d783a6ff71f4ee6a7657c8e52af93f0b61832181f6a31dc1996c82\",\n    \"newPassword\": \"levietanh@nhatot.com\",\n    \"userId\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:4000/auth/reset-password",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "4000",
+							"path": [
+								"auth",
+								"reset-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "verify-access-token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoibGV3aWxsaWFtMDAwMUBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2OTAxOTA5NTQsImV4cCI6MTY5MDE5MTg1NH0.h9Xmp9F3zfVNrH-cP8IWYQlemgLEBpdIGPJEazbDqmdW8osaFn9YxHPjH2tm3g33FmnY6SHQOp_n9x-zyZoHUBki5Z6jVX6nJB0c3dNcVDWhLPqKPgsB8wSWkQnkNbRrwJwFiOyFk4agITZ_YOzfUQbRHQ_AOLPtp6UVaVhkBU5efXlrckodUB-paeTYXOQ2FnfgTVhFy7X0t_rlhKFVeSu5zaaOWaKdaqr63r7jG5NZiZIJdlZkNiAtw4KddiUt7Po97gMtSnTdc9B_yvhusgbSPVJEfwY5CkkE4HiItTL7rkYJUdviLWBULiLX3gBTHJuLyQZ2GCN9kNXV0Rn12Q",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:4000/auth/verify-access-token",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "4000",
+							"path": [
+								"auth",
+								"verify-access-token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMDAxLCJlbWFpbCI6InZpZXRhbmgyMDAwYXByaWxAZ21haWwuY29tIiwicm9sZSI6ImNhbmhhbiIsImlhdCI6MTY5MDc5NzMxNywiZXhwIjoxNjkwNzk4MjE3fQ.nEO9HFOSGMlyRi9IkC1189v0l3TOTXs888__OZU9ba02Qg8B50ZwdqL1zO8pZkBQUo0Ad6GBuxSAMB7PXsMpHAFTQJmgLM_WHCyFBCZyfNMMAKJcAJT014XvFAJA4nDsumrpBgixnebtRW4_1fCl4x1HdP-qfm92AIkI_Of0A-SmcZ6e-uDqUrJFtPOoqW5FJS-ogmKN7yYgnBnWgarsQ_MlFmC-9oKvECQR2On2tRba6Cd3Z4dZx2HqlsNX74fi0Fb8MQ1vk_LacBWfzKO7QBuL-Nzyxa-dStfbO7mSeqt4GAk76xps2KcCq16XW1Gl2Ya2eYSaR3yT1o9gMB_Z1A",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:4000/auth",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "4000",
+							"path": [
+								"auth"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

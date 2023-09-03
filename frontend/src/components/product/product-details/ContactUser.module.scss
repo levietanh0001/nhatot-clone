@@ -199,14 +199,15 @@
 
   & .call-icon {
     margin-right: 5px;
-    img {
+    & > img {
       width: 24px;
       height: 24px;
     }
   }
 
   & .phone-number {
-    flex: 0.6;
+    flex: 1;
+    text-align: left;
     // should be removed on click
   }
 
@@ -215,8 +216,12 @@
   }
 
   & .expand {
-    flex: 0.4 0 auto;
+    flex: 0 1 auto;
     text-align: right;
+
+    &.hidden {
+      display: none;
+    }
   }
 }
 

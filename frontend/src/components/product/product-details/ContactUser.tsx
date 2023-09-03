@@ -7,9 +7,8 @@ import clsx from 'clsx';
 
 const ContactUser = (props) => {
 
-  const { user, userProfile } = props;
+  const { userId, userProfile } = props;
   const phoneNumber = userProfile?.phoneNumber ?? '';
-
   const [showPhone, setShowPhone] = useState<boolean>(false);
 
   return (
@@ -24,7 +23,7 @@ const ContactUser = (props) => {
               <span>{userProfile?.username ?? ''}</span>
             </div>
             <div className={styles['to-profile-page']}>
-              <span><Link to={`/user-profile/${user?.userId ?? ''}`}>Xem trang</Link></span>
+              <span><Link to={`/user-profile/${userId ?? ''}`}>Xem trang</Link></span>
               <span>&gt;</span>
             </div>
           </div>
@@ -33,7 +32,7 @@ const ContactUser = (props) => {
               <span className={styles['user-icon']}>
                 <img src='https://static.chotot.com/storage/default_images/pty/private-pty-icon.svg' alt='https://static.chotot.com/storage/default_images/pty/private-pty-icon.svg' />
               </span>
-              <span className={styles['user-type']}>{String(user?.role ?? '').replace('canhan', 'Cá nhân').replace('moigioi', 'Môi giới')}</span>
+              <span className={styles['user-type']}>{String(userProfile?.role ?? '').replace('canhan', 'Cá nhân').replace('moigioi', 'Môi giới')}</span>
             </div>
             <div className={styles['status-wrapper']}>
               <span className={styles['status-icon']}>•</span>
@@ -63,13 +62,13 @@ const ContactUser = (props) => {
                 <img alt="loadingIcon" src="https://static.chotot.com/storage/chotot-icons/svg/white-phone.svg" />
               </span>
               <span className={clsx(styles['phone-number'], { [styles['shortened']]: !showPhone })}>{phoneNumber}</span>
-              <span className={styles['expand']}>Bấm để hiện số</span>
+              <span className={clsx(styles['expand'], { [styles['hidden']]: showPhone })}>Bấm để hiện số</span>
             </button>
           )}
           <button className={styles['chat']}>
             <span className={styles['chat-icon']}></span>
             <span className={styles['chat-with-user']}>
-              <Link to='/chat'>Chat với người dùng</Link>
+              <Link to={`/chat/${userId}`}>Chat với người dùng</Link>
             </span>
           </button>
         </div>
@@ -94,7 +93,7 @@ const ContactUser = (props) => {
 
 ContactUser.propTypes = {
   // data: PropTypes.object,
-  user: PropTypes.object,
+  userId: PropTypes.number,
   userProfile: PropTypes.object
 }
 

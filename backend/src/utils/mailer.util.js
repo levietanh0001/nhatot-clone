@@ -45,7 +45,7 @@ async function resendConfirmationEmail(res, email, userId) {
     message: 'Tài khoản người dùng chưa được kích hoạt, đã gửi lại email xác nhận'
   })
 
-  sendConfimationEmail(recipientEmail = email, confirmationUrl = verifyRegisterUrl);
+  return sendConfimationEmail(recipientEmail = email, confirmationUrl = verifyRegisterUrl);
 
 }
 

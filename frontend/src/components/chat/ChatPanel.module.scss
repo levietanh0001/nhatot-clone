@@ -79,12 +79,116 @@
 
 .messages {
   // flex: 0 1 100%;
-  flex: 1;
+  flex: 1 0 200px;
+
+  width: 100%;
+  overflow-y: scroll;
+  overscroll-behavior: contain;
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  word-break: break-all;
+
+  background-color: lightgray;
+
+  & > ul {
+    padding-inline: 20px;
+    list-style-type: none;
+    margin-top: 0;
+    padding-top: 10px;
+    & > li {
+      margin-bottom: 5px;
+    }
+  }
+
+  & > ul > li .message-content {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    &.self {
+      justify-content: flex-end;
+      & .avatar {
+        order: 1;
+      }
+    }
+    
+    &.other {
+      justify-content: flex-start;
+      & .avatar {
+        order: -1;
+      }
+    }
+  }
+
 }
 
-.quick-messages { 
+.avatar > img {
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+.scroll-to-end-btn {
+
+  position: sticky;
+  // position: absolute;
+
+  background-color: transparent;
+
+  margin: 0 auto;
+  border: 0;
+  width: 30px;
+  // border-radius: 50%;
+  padding: 5px 7px;
+  // box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    // box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.2);
+  }
+
+  & > svg {
+    // vertical-align: middle;
+  }
+
+  transition: transform 300ms ease;
+}
+
+.scroll-to-top-btn {
+  @extend .scroll-to-end-btn;
+  top: 0;
+
+  &.hidden {
+    transform: translateY(-50px);
+  }
+}
+
+.scroll-to-bottom-btn {
+  @extend .scroll-to-end-btn;
+  bottom: 0;
+
+  &.hidden {
+    position: fixed;
+    transform: translateY(50px);
+  }
+}
+
+.quick-messages {
+
   padding-inline: 10px;
-  & ul {
+
+  &>ul {
     flex: 0;
     list-style-type: none;
 
@@ -92,6 +196,7 @@
     gap: 7px;
     overflow-x: scroll;
     padding: 5px 0 5px 0;
+    margin-top: 0;
 
     & li {
       flex-shrink: 0;
@@ -111,14 +216,36 @@
   justify-content: space-between;
   align-items: center;
   gap: 7px;
-  
+
   padding-inline: 10px;
 
-  & .more-actions img, & .send-icon svg {
+  & .more-actions img,
+  & .send-button>svg {
     flex: 0;
     vertical-align: middle;
     width: 20px;
     height: 20px;
+  }
+
+  & .send-button {
+
+    border: 0;
+    background-color: transparent;
+    border-radius: 50%;
+    padding: 10px;
+    transition: background-color 300ms ease;
+
+    &:hover {
+      background-color: lightgray;
+    }
+
+    &:focus {
+      outline: 1px solid gray;
+    }
+
+    &:active {
+      opacity: 0.8;
+    }
   }
 
   & .chat-input {
@@ -139,7 +266,7 @@
     border: 0;
     border-radius: 16px;
     padding: 10px;
-    
+
     background-color: #f4f4f4;
     position: relative;
 
@@ -158,5 +285,3 @@
     }
   }
 }
-
-

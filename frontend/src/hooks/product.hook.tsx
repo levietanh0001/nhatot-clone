@@ -106,10 +106,12 @@ export function useSearchProducts(options={}) {
 
 export function useGetProductCount(options={}) {
   return useQuery({
-    queryKey: ['getProductCount'],
+    queryKey: ['getProductCount', options],
     queryFn: ({ signal }) => {
+      console.log({ options });
       const params = new URLSearchParams({
-        userId: (options as any)?.userId ?? ''
+        userId: (options as any)?.userId ?? '',
+        ...options
       });
       return axiosPublic.get('/products/count', { params, signal });
     },
@@ -123,14 +125,15 @@ export function useGetProductCount(options={}) {
   })
 }
 
-export function useGetFavoriteProductCount(options={}) {
+export function useGetFavoriteProductCount(userId, enabled=false) {
   return useQuery({
     queryKey: ['getFavoriteProductCount'],
     queryFn: ({ signal }) => {
       const params = new URLSearchParams({
-        userId: (options as any)?.userId
+        userId
+        // userId: (options as any)?.userId
       });
-      return axiosPublic.get('favorite-list/products/count', { params, signal });
+      return axiosPrivate.get('favorite-list/products/count', { params, signal });
     },
     keepPreviousData: true,
     refetchOnMount: true, // if component is mounted, refetch
@@ -138,7 +141,8 @@ export function useGetFavoriteProductCount(options={}) {
     staleTime: 0,
     select: (data) => {
       return data.data;
-    }
+    },
+    enabled
   })
 }
 
@@ -228,7 +232,7 @@ export function useDeleteUserProductById(currentPage=1) {
 }
 
 
-export function useGetUserFavoriteProducts(userId, currentPage=1) {
+export function useGetUserFavoriteProducts(currentPage=1, enabled=false) {
   return useQuery({
     queryKey: ['getUserFavoriteProducts', currentPage],
     queryFn: ({ signal }) => {
@@ -250,6 +254,7 @@ export function useGetUserFavoriteProducts(userId, currentPage=1) {
     select: (data) => {
       return data.data;
     },
+    enabled
   })
 }
 

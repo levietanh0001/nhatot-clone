@@ -24,8 +24,8 @@ const { graphqlMiddleware } = require('./middlewares/graphql.middleware');
 
 
 // import middlewares
-const { uploadSingleFile, uploadMultipleImages, uploadVideo } = require('./middlewares/upload.middleware');
-const { authenticateUser } = require('./middlewares/auth.middleware');
+// const { uploadSingleFile, uploadMultipleImages, uploadVideo } = require('./middlewares/upload.middleware');
+// const { authenticateUser } = require('./middlewares/auth.middleware');
 
 
 // import routers
@@ -33,6 +33,8 @@ const authRouter = require('./routes/auth.route');
 const productRouter = require('./routes/product.route');
 const favoriteListRouter = require('./routes/favorite-list.route');
 const userRouter = require('./routes/user.route');
+const chatRouter = require('./routes/chat.route');
+const messageRouter = require('./routes/message.route');
 // const firebaseRouter = require('./routes/firebase-auth.route');
 const errorsService = require('./controllers/errors.controller');
 
@@ -47,12 +49,12 @@ const FavoriteItem = require('./models/favorite-item.model');
 const ProductImage = require('./models/product-image.model');
 const ProductVideo = require('./models/product-video.model');
 const userProfileRouter = require('./routes/user-profile.route');
-const { extractAccessTokenFromRequest, verifyAccessTokenAsync } = require('./utils/cryptography.util');
+// const { extractAccessTokenFromRequest, verifyAccessTokenAsync } = require('./utils/cryptography.util');
 const ProductThumbnail = require('./models/product-thumbnail');
 const VideoThumbnail = require('./models/video-thumbnail');
+const connectToMongoDB = require('./utils/database.mongo.util');
+const UserCollection = require('./models/user.collection');
 
-
-// const constraints = { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: true }, hooks: true };
 
 // define associations
 Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: true } }); // on delete User, remove Product
@@ -78,35 +80,6 @@ FavoriteList.belongsTo(User, { constraints: true, onDelete: 'CASCADE', foreignKe
 
 User.hasOne(UserProfile, { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: true } });
 UserProfile.belongsTo(User, { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: true } });
-
-
-
-// const constraints = { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: true }, hooks: true };
-
-// // define associations
-// Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: true }, hooks: true }); // on delete User, remove Product
-// User.hasMany(Product);
-
-// Product.belongsToMany(FavoriteList, { through: FavoriteItem });
-// FavoriteList.belongsToMany(Product, { through: FavoriteItem });
-
-// Product.hasMany(ProductImage, constraints);
-// ProductImage.belongsTo(Product, constraints);
-
-// Product.hasMany(ProductVideo, constraints);
-// ProductVideo.belongsTo(Product, constraints);
-
-// Product.hasOne(ProductThumbnail, constraints);
-// ProductThumbnail.belongsTo(Product, constraints);
-
-// Product.hasOne(VideoThumbnail, constraints);
-// VideoThumbnail.belongsTo(Product, constraints);
-
-// User.hasOne(FavoriteList, constraints);
-// FavoriteList.belongsTo(User, constraints);
-
-// User.hasOne(UserProfile, constraints);
-// UserProfile.belongsTo(User, constraints);
 
 
 // init express app
@@ -155,10 +128,6 @@ app.get('/', (req, res, next) => {
 });
 
 
-// authenticate user for subsequent requests to resources (attach user object to req object)
-// app.use(authenticateUser);
-
-
 // graphql
 app.use('/graphql', graphqlMiddleware);
 
@@ -171,21 +140,89 @@ app.use('/products', productRouter);
 app.use('/user', userRouter);
 app.use('/user-profile', userProfileRouter);
 app.use('/favorite-list', favoriteListRouter);
+app.use('/chat', chatRouter);
+app.use('/message', messageRouter);
 
 // error handling
 app.use(errorsService.handle404);
 app.use(errorsService.errorHandler);
 
 
+connectToMongoDB();
+
 // sync sequelize model with database
 sequelize
   .sync({ force: process.env.SYNC_MODE === 'force' }) // force overwrite relationships, only in dev mode
   .then(() => {
-    const server = app.listen(process.env.SERVER_PORT? process.env.SERVER_PORT: process.env.PORT);
-    const io = require('./utils/socket.util').init(server);
-    io.on('connection', socket => {
-      console.log('Socket connected');
+
+    const server = app.listen(process.env.SERVER_PORT || process.env.PORT);
+
+    const io = require('socket.io')(server, {
+      pingTimeOut: 60000, // close connection after 60s of inactivity (user not sending anything)
+      cors: {
+        origin: ['http://localhost:3000']
+      },
     });
+
+    io.on('connection', socket => {
+
+      const socketId = socket.id;
+
+      console.log(`connected to socket with id ${socketId}`);
+
+      // socket.on('setup', async (userId) => { // client emits 'setup' with `userData` as args
+
+      //   if(userId) {
+
+      //     // create user if not exists
+      //     const currentUser = await UserCollection.findOne({ id: { $eq: userId } });
+
+      //     if (!currentUser) {
+      //       await UserCollection.create({ id: userId });
+      //     }
+
+      //     if(currentUser) {
+      //       // socket.join(currentUser._id);
+      //       socket.emit('privated_chat_connected', currentUser._id);
+      //     }
+          
+      //   }
+
+      // });
+
+      socket.on('one_one_chat_setup', (chatId) => {
+        socket.join(chatId);
+        socket.emit('one_one_chat_created', chatId);
+      })
+
+      socket.on('send_message', (message, chatId) => {
+        
+        console.log({ message });
+        // socket.emit('receive_message', message); // send to self and recipient
+        // io.emit('receive_message', message); // send to all clients including self
+        // io.in(receiverId).emit('receive_message', message);
+        // socket.broadcast.emit('receive_message', message);
+        socket.to(chatId).emit('receive_message', message);
+
+      });
+
+      // socket.on('send_message', (message, room) => {
+        
+      //   console.log({ message, room });
+      //   if(room) {
+      //     io.emit('receive_message', message);
+      //     // socket.broadcast.emit('receive_message', message);
+      //     // socket.to(room).emit('receive_message', message);
+      //   }
+      //   // else {
+      //   //   // io.emit('receive_message', message); // send to all clients including sender
+      //   //   socket.broadcast.emit('receive_message', message); // send to all clients except for sender
+      //   // }
+        
+      // });
+
+    });
+
   })
   .catch(error => {
     console.error(error);

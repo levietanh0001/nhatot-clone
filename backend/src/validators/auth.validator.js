@@ -10,8 +10,8 @@ const validateAndNormalizeEmail = body('email')
       throw new Error('Not an email');
     }
     return true;
-  })
-  .normalizeEmail();
+  });
+  // .normalizeEmail();
 
 
 function validateLogin(req, res, next) {
