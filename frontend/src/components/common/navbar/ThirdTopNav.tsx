@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { createSearchParams, useLocation, useNavigate } from 'react-router-dom';
-
 import { useDebounce } from 'usehooks-ts';
-import { useSearchProducts } from '~/hooks/product.hook';
+
 import { useConsoleLogOnChange } from '~/hooks/utils.hook';
 import PostButton from './PostButton';
 import SearchBox from './SearchBox';
 import SearchFilterMenu from './SearchFilterMenu';
 import styles from './ThirdTopNav.module.scss';
+import { useSearchProducts } from '~/api/product.api';
 
 const ThirdTopNav = () => {
 

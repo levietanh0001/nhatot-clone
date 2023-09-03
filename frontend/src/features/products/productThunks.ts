@@ -1,7 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { axiosPrivate } from '~/api/axios.api';
 import { RootState } from '~/app/store';
-import { axiosPrivate } from '~/utils/axios.util';
 import { commaSeparatedStringToNumber } from '~/utils/number.util';
 
 export const getProducts = createAsyncThunk(

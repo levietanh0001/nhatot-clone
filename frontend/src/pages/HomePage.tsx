@@ -1,21 +1,25 @@
 import { lazy } from 'react';
 import { SuspenseWrapper } from '~/App';
-import ProductSliders from '~/components/product/product-sliders/ProductSliders';
+import ProductSliders from '~/components/features/product/product-sliders/ProductSliders';
 
-const Header = lazy(() => import('~/layouts/Header'));
+const Header = lazy(() => import('~/components/layouts/Header'));
 const TopNav = lazy(() => import('~/components/common/navbar'));
 const TopCarousel = lazy(
-  () => import('~/components/home/top-carousel/TopCarousel')
+  () => import('~/components/features/home/top-carousel/TopCarousel')
 );
 const KhamPhaNhaTot = lazy(
-  () => import('~/components/home/kham-pha-nha-tot/KhamPhaNhaTot')
+  () => import('~/components/features/home/kham-pha-nha-tot/KhamPhaNhaTot')
 );
 const CongCuDichVu = lazy(
-  () => import('~/components/home/cong-cu-dich-vu/CongCuDichVu')
+  () => import('~/components/features/home/cong-cu-dich-vu/CongCuDichVu')
 );
-const Glossary = lazy(() => import('~/components/home/glossary/Glossary'));
-const Keywords = lazy(() => import('~/components/home/keywords/Keywords'));
-const Footer = lazy(() => import('~/layouts/Footer'));
+const Glossary = lazy(
+  () => import('~/components/features/home/glossary/Glossary')
+);
+const Keywords = lazy(
+  () => import('~/components/features/home/keywords/Keywords')
+);
+const Footer = lazy(() => import('~/components/layouts/Footer'));
 const AboutUs = lazy(
   () => import('~/components/common/footer/about-us/AboutUs')
 );

@@ -1,19 +1,14 @@
 import {
   PayloadAction,
-  createAction,
-  createAsyncThunk,
-  createSlice,
+  createSlice
 } from '@reduxjs/toolkit';
-import { RootState } from '~/app/store';
 import { IInitialProductState, IProduct } from '~/interfaces/product.interface';
-import { axiosPrivate } from '~/utils/axios.util';
-import { commaSeparatedStringToNumber } from '~/utils/number.util';
-import { createProduct, getProductById, getProducts, updateProduct } from './productThunks';
 import {
   extractUploadedFiles,
   validateFileSize,
   validateFilesSize,
 } from '~/utils/file.util';
+import { createProduct, getProductById, getProducts, updateProduct } from './productThunks';
 
 export interface IAction extends PayloadAction<IProduct> {}
 

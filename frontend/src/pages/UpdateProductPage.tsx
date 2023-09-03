@@ -1,6 +1,6 @@
 import TopNav from '~/components/common/navbar';
-import UpdateProduct from '~/components/product/product-crud/UpdateProduct';
-import Header from '~/layouts/Header';
+import UpdateProduct from '~/components/features/product/product-crud/UpdateProduct';
+import Header from '~/components/layouts/Header';
 
 const UpdateProductPage = () => {
   return (

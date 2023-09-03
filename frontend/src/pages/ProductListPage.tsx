@@ -1,22 +1,14 @@
-import React, { Profiler } from 'react';
-import AboutUs from '~/components/common/footer/about-us/AboutUs';
-import Filters from '~/components/product/product-filters/Filters';
-import TopNav from '~/components/common/navbar';
-import Footer from '~/layouts/Footer';
-import Header from '~/layouts/Header';
-import Breadcrumb from '~/components/common/breadcrumb/Breadcrumb';
 import Ads from '~/components/common/ads/Ads';
-import FilterBoard from '~/components/product/product-filters/FilterBoard';
-import UserTypeTabs from '~/components/product/user-type-tabs/UserTypeTabs';
-import ProductCardList from '~/components/product/product-list/ProductCardList';
-import ContentWithAdsLayout from '~/layouts/ContentWithAdsLayout';
-import ProductList from '~/components/product/product-list/ProductList';
+import Breadcrumb from '~/components/common/breadcrumb/Breadcrumb';
+import AboutUs from '~/components/common/footer/about-us/AboutUs';
+import TopNav from '~/components/common/navbar';
+import Filters from '~/components/features/product/product-filters/Filters';
+import ProductList from '~/components/features/product/product-list/ProductList';
+import ContentWithAdsLayout from '~/components/layouts/ContentWithAdsLayout';
+import Footer from '~/components/layouts/Footer';
+import Header from '~/components/layouts/Header';
 
 const ProductListPage = () => {
-  // function onRender(id, phase, actualDuration, baseDuration, startTime, commitTime) {
-
-  // }
-
   return (
     <>
       <Header>
@@ -30,13 +22,6 @@ const ProductListPage = () => {
         <main>
           <ContentWithAdsLayout>
             <ProductList />
-            {/* <Profiler id='ProductList' onRender={onRender}>
-            </Profiler> */}
-            {/* 
-            <FilterBoard />
-            <UserTypeTabs />
-            <ProductCardList /> 
-            */}
           </ContentWithAdsLayout>
         </main>
       </body>

@@ -1,6 +1,6 @@
-import Chat from '~/components/chat/Chat'
-import TopNav from '~/components/common/navbar/TopNav'
-import Header from '~/layouts/Header'
+import Chat from '~/components/features/chat/Chat';
+import TopNav from '~/components/common/navbar/TopNav';
+import Header from '~/components/layouts/Header';
 
 const ChatPage = () => {
   return (
@@ -12,7 +12,7 @@ const ChatPage = () => {
         <Chat />
       </body>
     </>
-  )
-}
+  );
+};
 
-export default ChatPage
+export default ChatPage;

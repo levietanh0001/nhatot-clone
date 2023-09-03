@@ -1,10 +1,14 @@
 import { Suspense, lazy } from 'react';
 import { SuspenseWrapper } from '~/App';
-const Header = lazy(() => import('~/layouts/Header'));
+const Header = lazy(() => import('~/components/layouts/Header'));
 const TopNav = lazy(() => import('~/components/common/navbar'));
-const UserProfile = lazy(() => import('~/components/user-profile/UserProfile'));
-const Footer = lazy(() => import('~/layouts/Footer'));
-const AboutUs = lazy(() => import('~/components/common/footer/about-us/AboutUs'));
+const UserProfile = lazy(
+  () => import('~/components/features/user-profile/UserProfile')
+);
+const Footer = lazy(() => import('~/components/layouts/Footer'));
+const AboutUs = lazy(
+  () => import('~/components/common/footer/about-us/AboutUs')
+);
 
 // import AboutUs from '~/components/common/footer/about-us/AboutUs';
 // import TopNav from '~/components/common/navbar';
@@ -12,7 +16,6 @@ const AboutUs = lazy(() => import('~/components/common/footer/about-us/AboutUs')
 // import UserProfile from '~/components/user-profile/UserProfile';
 // import Footer from '~/layouts/Footer';
 // import Header from '~/layouts/Header';
-
 
 const UserProfilePage = () => {
   return (

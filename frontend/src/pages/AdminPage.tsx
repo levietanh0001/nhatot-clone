@@ -1,5 +1,5 @@
-import { Link, Outlet } from "react-router-dom"
-import Dashboard from "~/components/admin/dashboard/Dashboard"
+import { Link, Outlet } from 'react-router-dom';
+import Dashboard from '~/components/features/dashboard/Dashboard';
 
 const AdminPage = () => {
   return (
@@ -8,7 +8,7 @@ const AdminPage = () => {
       {/* <Outlet /> */}
       <Dashboard />
     </>
-  )
-}
+  );
+};
 
-export default AdminPage
+export default AdminPage;

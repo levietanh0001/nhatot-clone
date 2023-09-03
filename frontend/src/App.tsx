@@ -2,13 +2,13 @@ import { lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import './App.scss';
-import AsBroker from './components/auth/AsBroker';
-import LoggedInRequired from './components/auth/LoggedInRequired';
+import AsBroker from './components/features/auth/AsBroker';
+import LoggedInRequired from './components/features/auth/LoggedInRequired';
 import { AuthProvider } from './contexts/auth/AuthContext';
 import ForgetPasswordPage from './pages/ForgetPassword';
 import RegisterPage from './pages/RegisterPage';
 import ResetPasswordPage from './pages/ResetPassword';
-import ProtectedChatRoute from './components/auth/ProtectedChatRoute';
+import ProtectedChatRoute from './components//features/auth/ProtectedChatRoute';
 const HomePage = lazy(() => import('./pages/HomePage'));
 const ProductListPage = lazy(() => import('./pages/ProductListPage'));
 const PostProductPage = lazy(() => import('./pages/PostProductPage'));
@@ -17,7 +17,9 @@ const ProductDetailsPage = lazy(() => import('./pages/ProductDetailsPage'));
 const UserProfilePage = lazy(() => import('./pages/UserProfilePage'));
 const ChatPage = lazy(() => import('./pages/ChatPage'));
 // const AdminPage = lazy(() => import('./pages/AdminPage'));
-const Dashboard = lazy(() => import('./components/admin/dashboard/Dashboard'));
+const Dashboard = lazy(
+  () => import('./components/features/dashboard/Dashboard')
+);
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
@@ -101,8 +103,9 @@ function App() {
               }
             ></Route> */}
 
+            {/* userId is last opened chat */}
             <Route
-              path='/chat/:userId?'
+              path='/chat/:chatId?'
               element={
                 <LoggedInRequired>
                   <SuspenseWrapper>
