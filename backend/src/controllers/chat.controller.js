@@ -1,6 +1,9 @@
 const ChatCollection = require('../models/chat.collection');
 const UserCollection = require('../models/user.collection');
+const { sequelize } = require('../utils/database.util');
 const { redisClient } = require('../utils/redis-store.util');
+const { databaseName } = require('../utils/variables.util');
+
 
 
 async function getUserChats(req, res, next) {
@@ -30,6 +33,11 @@ async function getUserChats(req, res, next) {
       path: 'latestMessage.sender',
       select: 'id'
     });
+
+    // const usernames = await sequelize.query(`
+    //   SELECT * from ${databaseName}.user
+    //   WHERE id = ?
+    // `, { replacements: {  } })
 
     await redisClient.setEx(cacheKey, 2, JSON.stringify(userChats));
 
@@ -83,21 +91,28 @@ async function createOneOneChat(req, res, next) {
 
     const userId = req.body['userId'];
 
+    // if no userId
     if (!userId || !parseInt(userId)) {
       return res.status(400).json({
         message: 'No user id is provided'
       });
     }
 
-    const currentUser = await UserCollection.findOne({ id: { $eq: userId } });
-    const otherUser = await UserCollection.findOne({ id: { $eq: req.user.id } });
+    const receiver = await UserCollection.findOne({ id: { $eq: userId } });
+
+    // create user id for chat if not exists
+    if(!receiver) {
+      await UserCollection.create({ id: userId });
+    }
+
+    const sender = await UserCollection.findOne({ id: { $eq: req.user.id } });
 
     // if there is already users (current user and receiver) in chat
     let currentChats = await ChatCollection.find({
       isGroupChat: false,
       $and: [
-        { users: { $elemMatch: { $eq: currentUser._id } } },
-        { users: { $elemMatch: { $eq: otherUser._id } } },
+        { users: { $elemMatch: { $eq: receiver._id } } },
+        { users: { $elemMatch: { $eq: sender._id } } },
       ]
     })
       .populate('users') // populate users field (which has ref to user collection)
@@ -115,7 +130,7 @@ async function createOneOneChat(req, res, next) {
     const createdChat = await ChatCollection.create({
       chatName: 'sender', // ?
       isGroupChat: false,
-      users: [otherUser._id, currentUser._id]
+      users: [sender._id, receiver._id]
     });
 
     const currentChat = await ChatCollection.findOne({ _id: createdChat._id })

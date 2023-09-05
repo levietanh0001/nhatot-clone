@@ -1,18 +1,23 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { axiosPrivate } from "~/api/axios.api";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { axiosPrivate } from '~/api/axios.api';
 
-export function useCreateOneOneChat() {
+export function useCreateOneOneChatQuery() {
+
+  const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ['createChat'],
+    mutationKey: ['createOneOneChat'],
     mutationFn: (userId: string) => {
-      return axiosPrivate.post('chat', { userId })
+      return axiosPrivate.post('chat', { userId });
     },
-  })
+    onSuccess: (data) => {
+      // console.log({ data });
+      // queryClient.setQueryData(['createOneOneChat'], (old) => old);
+    }
+  });
 }
 
-
-export function useGetUserChats(enabled=true) {
+export function useGetUserChats(enabled = true) {
   return useQuery({
     queryKey: ['getUserChats'],
     queryFn: ({ signal }) => {
@@ -26,7 +31,7 @@ export function useGetUserChats(enabled=true) {
     select: (data) => {
       return data.data;
     },
-    enabled
+    enabled,
     // onSettled: (data) => {
     //   console.log({ data });
     // }

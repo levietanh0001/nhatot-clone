@@ -1,16 +1,8 @@
+import { ILinkCardProps } from '~/components/features/home/Home.interface';
 import styles from './CongCu.module.scss';
 
 
-interface ILinkCardProps {
-  children?: React.ReactNode;
-  className?: string;
-  href?: string;
-}
 
-// interface IBadgeProps {
-//   children?: React.ReactNode;
-//   className?: string;
-// }
 
 const LinkCard: React.FC<ILinkCardProps> = ({ children, className, href }) => {
   return (

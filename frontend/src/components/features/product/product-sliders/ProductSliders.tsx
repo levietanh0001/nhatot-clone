@@ -1,6 +1,6 @@
 import { lazy, useEffect } from 'react';
-import { SuspenseWrapper } from '~/App';
 import { useGetProductCount, useGetProducts } from '~/api/product.api';
+import { SuspenseWrapper } from '~/components/common/suspense/SuspenseWrapper';
 const ProductCardSlider = lazy(() => import('~/components/features/home/product-card-slider/ProductCardSlider'));
 
 const ProductSliders = () => {
@@ -12,19 +12,11 @@ const ProductSliders = () => {
   const { data: canbanProductCount, isLoading: isCanBanProductCountLoading } = useGetProductCount({ type: 'canban' });
   const { data: chothueProductCount, isLoading: isChoThueProductCountLoading } = useGetProductCount({ type: 'chothue' });
 
-  // useEffect(() => {
-
-  //   if(!isAllProductCountLoading && !isCanBanProductCountLoading && !isChoThueProductCountLoading) {
-  //     console.log({ allProductCount, canbanProductCount, chothueProductCount });
-  //   }
-
-  // }, [isAllProductCountLoading, isCanBanProductCountLoading, isChoThueProductCountLoading]);
-
   return (
     <>
       <SuspenseWrapper>
         <ProductCardSlider
-          slides={allProducts}
+          slides={allProducts ?? []}
           numMore={allProductCount}
           type='latest'
           title='Mới nhất'
@@ -36,7 +28,7 @@ const ProductSliders = () => {
 
       <SuspenseWrapper>
         <ProductCardSlider
-          slides={canbanProducts}
+          slides={canbanProducts ?? []}
           numMore={canbanProductCount}
           type='can-ban'
           title='Cần bán bất động sản'
@@ -48,7 +40,7 @@ const ProductSliders = () => {
 
       <SuspenseWrapper>
         <ProductCardSlider
-          slides={chothueProducts}
+          slides={chothueProducts ?? []}
           numMore={chothueProductCount}
           type='cho-thue'
           title='Cho thuê bất động sản'

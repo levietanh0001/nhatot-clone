@@ -1,20 +1,8 @@
+import { IDropdownMenuItem } from './DropdownMenu.interface';
 import styles from './DropdownMenuItem.module.scss';
 import clsx from 'clsx';
 
-interface IDropdownMenuItem {
 
-  href?: string;
-  Icon?: JSX.Element;
-  label?: string;
-  isTitle?: boolean;
-  
-  wrapperClass?: string;
-  iconClass?: string;
-  labelClass?: string;
-
-  onClick?: React.MouseEventHandler<HTMLDivElement>;
-  show?: boolean;
-}
 
 const DropdownMenuItem: React.FC<IDropdownMenuItem> = (props) => {
 

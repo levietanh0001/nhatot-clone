@@ -1,50 +1,134 @@
-import { useEffect, useState } from "react"
-import { io } from "socket.io-client";
+import { useEffect, useState } from 'react';
+import { io } from 'socket.io-client';
+import { useCreateOneOneChatQuery } from './chat.api';
+import {
+  IUseConnectSocketProps,
+  IUseConnectSocketReturn,
+} from './socket.interface';
 
-
-// interface IUseConnectSocketProps {
-//   backendUrl?: string;
-//   // userId: number;
-//   // input?: string;
-//   // connect: boolean;
-//   // onConnect: (userChatId: string) => void;  
-// }
-
-
-export const useConnectSocket = (props?): any => {
-  
-  // const { backendUrl } = props;
-
-  const [currentSocket, setCurrentSocket] = useState<any | null>(null);
-  const [connected, setConnected] = useState<boolean>(false);
+export const useConnectSocket = (
+  props?: IUseConnectSocketProps
+): IUseConnectSocketReturn => {
+  const [socket, setSocket] = useState<any | null>(null);
+  const [isConnected, setIsConnected] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
   const [error, setError] = useState<any | null>(null);
-  // const [user, setUser] = useState<any | null>(null);
 
   useEffect(() => {
+    const socketConn = io(props?.backendUrl || 'http://localhost:4000', {
+      forceNew: true,
+    });
 
-    const socket = io('http://localhost:4000');
-
-    socket.on('connect', () => {
-      // console.log('connected with id = ' + socket.id);
-      setCurrentSocket(socket);
-      setConnected(true);
+    socketConn.on('connect', () => {
+      console.log('socket connected with id = ' + socketConn.id);
+      setSocket(socketConn);
+      setIsConnected(true);
+      setIsError(false);
       setError(null);
     });
 
-    socket.on('connect_error', error => {
-      setConnected(false);
+    socketConn.on('connect_error', (error) => {
+      setSocket(null);
+      setIsConnected(false);
+      setIsError(true);
       setError(error);
     });
 
+    socketConn.on('disconnect', (name) => {
+      console.log(name + ' has disconnected from the chat.' + socketConn.id);
+      setSocket(null);
+      setIsConnected(false);
+      setIsError(false);
+    });
+
+    return () => {
+      socketConn.disconnect();
+    }
+    
   }, []);
 
-  return { currentSocket: currentSocket ?? null, error: error ?? null, connected };
+  return { socket, error, isConnected, isError };
+};
 
-  // if(currentSocket) {
-  //   return { currentSocket, error, connected };
-  // } else {
-  //   return null;
-  // }
+export function useSetupOneOneChat(userId, callback) {
+  const [oneOneChatConnected, setOneOneChatConnected] =
+    useState<boolean>(false);
+  const { socket, isConnected, error: socketError } = useConnectSocket();
+  const mutation = useCreateOneOneChatQuery();
 
+  useEffect(() => {
+    if (isConnected && userId) {
+      mutation.mutate(String(userId));
+    }
+  }, [isConnected, userId]);
+
+  useEffect(() => {
+    if (socket) {
+      // 2. on private chat created, set privateChatConnected to true
+      socket.on('one_one_chat_created', (chatId) => {
+        setOneOneChatConnected(true);
+        callback(chatId);
+        // console.log('one one chat created ' + chatId);
+      });
+    }
+  }, [socket, socketError]);
+
+  useEffect(() => {
+    if (!mutation.isLoading && !mutation.error) {
+      // // 1. setup chat room with chat id from data
+      // // console.log({ fetchedChatId: mutation?.data });
+      // setChatId(mutation?.data?.data._id);
+      // if(socket && chatId) {
+      //   socket.emit('one_one_chat_setup', chatId);
+      // }
+    }
+  }, [
+    socket,
+    mutation.isLoading,
+    // chatId
+  ]);
+
+  return { socket, oneOneChatConnected };
 }
 
+// export function useSetupOneOneChat(userId, chatId, setChatId) {
+
+//   const [oneOneChatConnected, setOneOneChatConnected] = useState<boolean>(false);
+//   const { currentSocket: socket, connected, error: socketError } = useConnectSocket();
+//   const mutation = useCreateOneOneChat();
+
+//   useEffect(() => {
+
+//     if(socket) {
+
+//       // 2. on private chat created, set privateChatConnected to true
+//       socket.on('one_one_chat_created', (chatId) => {
+//         console.log('one one chat created ' + chatId);
+//         setOneOneChatConnected(true);
+//       });
+
+//     }
+
+//   }, [socket, socketError]);
+
+//   useEffect(() => {
+//     if(connected && userId) {
+//       mutation.mutate(String(userId));
+//     }
+//   }, [connected, userId]);
+
+//   useEffect(() => {
+//     if(!mutation.isLoading && !mutation.error) {
+
+//       // 1. setup chat room with chat id from data
+//       // console.log({ fetchedChatId: mutation?.data });
+//       setChatId(mutation?.data?.data._id);
+
+//       if(socket && chatId) {
+//         socket.emit('one_one_chat_setup', chatId);
+//       }
+//     }
+//   }, [socket, mutation.isLoading, chatId]);
+
+//   return { socket, oneOneChatConnected };
+// }

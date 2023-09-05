@@ -1,18 +1,6 @@
-import { CSSProperties, forwardRef } from "react";
+import { forwardRef } from "react";
+import { IArrowBtn } from "./ProductCardSlider.interface";
 
-interface IconBaseProps extends React.SVGAttributes<SVGElement> {
-  children?: React.ReactNode;
-  size?: string | number;
-  color?: string;
-  title?: string;
-}
-
-interface IArrowBtn {
-  IconComp: IconBaseProps;
-  className?: string;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  style?: CSSProperties
-}
 
 const ArrowBtn = forwardRef<HTMLButtonElement, IArrowBtn>(
   ({ IconComp, className, onClick, style }, ref) => {

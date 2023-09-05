@@ -1,7 +1,6 @@
 import { lazy, useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { SuspenseWrapper } from '~/App';
 import {
   useDeleteUserProductById,
   useGetFavoriteProductCount,
@@ -12,6 +11,7 @@ import {
 import { useGetUserProfile } from '~/api/user.api';
 import { AuthContext } from '~/contexts/auth/AuthContext';
 import styles from './UserProfile.module.scss';
+import { SuspenseWrapper } from '~/components/common/suspense/SuspenseWrapper';
 
 const TopLeftSideCardLayout = lazy(
   () => import('~/components/layouts/TopLeftSideCardLayout')
@@ -131,8 +131,9 @@ const UserProfile = () => {
   }, [deleteUserProductById.isSuccess, deleteUserProductById.isError]);
 
   const handleDeleteButtonClick = (productId) => {
-    console.log({ deleteProductId: productId });
-    deleteUserProductById.mutate(productId);
+    if (window.confirm('Bạn có chắc muốn xóa sản phẩm này?') === true) {
+      deleteUserProductById.mutate(productId);
+    }
   };
 
   const handleFavoriteButtonClick = (productId) => {

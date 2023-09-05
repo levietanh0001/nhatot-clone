@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useConsoleLogOnChange } from '~/hooks/utils.hook';
 import FirstTopNav from './FirstTopNav';
 import SecondTopNav from './SecondTopNav';
 import ThirdTopNav from './ThirdTopNav';
@@ -10,7 +9,7 @@ const TopNav = () => {
 
   const [showToolbarMenu, setShowToolbarMenu] = useState<boolean>(false);
 
-  useConsoleLogOnChange({ showToolbarMenu });
+  // useConsoleLogOnChange({ showToolbarMenu });
 
   return (
     <>

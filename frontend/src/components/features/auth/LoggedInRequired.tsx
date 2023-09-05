@@ -13,7 +13,7 @@ const LoggedInRequired = ({ children, redirectPath='/login' }) => {
 
   useEffect(() => {
 
-    console.log('logged in checking');
+    // console.log('logged in checking');
 
     const abortController = new AbortController();
 

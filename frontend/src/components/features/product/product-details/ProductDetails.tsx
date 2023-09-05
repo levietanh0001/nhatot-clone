@@ -7,7 +7,7 @@ import AboutProduct from './AboutProduct';
 import ContactUser from './ContactUser';
 import { useScrollToTop } from '~/hooks/pagination.hook';
 import { useGetProductById } from '~/api/product.api';
-import { useGetUserProfile } from '~/api/user.api';
+import { useGetUserIdForChat, useGetUserProfile } from '~/api/user.api';
 
 const ProductDetails = () => {
   const { productId, slug } = useParams();
@@ -28,6 +28,12 @@ const ProductDetails = () => {
     isLoading: isUserProfileLoading,
     isError: isUserProfileError,
   } = useGetUserProfile(product?.userId, !!product);
+  // const {
+  //   data: userIdForChat,
+  //   error: userIdForChatError,
+  //   isLoading: isUserIdForChatLoading,
+  //   isError: isUserIdForChatError,
+  // } = useGetUserIdForChat(userId);
 
   useHandleQueryError(isProductError, productError);
   useHandleQueryError(isUserProfileError, userProfileError);
@@ -50,17 +56,19 @@ const ProductDetails = () => {
       {!isProductLoading && !isUserProfileLoading && (
         <ContentWithStickyBox
           content={<AboutProduct product={product} />}
-          stickyBox={<ContactUser userId={userId} userProfile={userProfile} />}
+          stickyBox={
+            <ContactUser userId={userId ? String(userId): ''} userProfile={userProfile} />
+          }
         />
       )}
     </>
   );
 };
 
-ProductDetails.propTypes = {
-  productId: PropTypes.number,
-  slug: PropTypes.string,
-  userId: PropTypes.number,
-};
+// ProductDetails.propTypes = {
+//   productId: PropTypes.number,
+//   slug: PropTypes.string,
+//   userId: PropTypes.number,
+// };
 
 export default ProductDetails;

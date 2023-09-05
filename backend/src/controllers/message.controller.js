@@ -62,6 +62,7 @@ async function getMessagesFromChat(req, res, next) {
     const limit = req.params['limit'] || null;
     const currentUserId = req.user.id;
 
+
     const currentChat = await ChatCollection.findById(chatId).populate('users');
     const currentChatUsers = currentChat.users;
     const isCurrentUserInChat = currentChatUsers.some(user => user.id === currentUserId);
@@ -81,7 +82,7 @@ async function getMessagesFromChat(req, res, next) {
     .populate('sender')
     .populate('chat');
   
-    return res.status(200).json(messages);
+    return res.status(200).json(messages ?? []);
 
   } catch(error) {
 
@@ -93,7 +94,9 @@ async function getMessagesFromChat(req, res, next) {
 
 
 
+
 module.exports = {
   sendMessage,
-  getMessagesFromChat
+  getMessagesFromChat,
+  // getLatestMessageFromChat
 }

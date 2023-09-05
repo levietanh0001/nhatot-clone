@@ -8,10 +8,8 @@ import DropdownMenuItem from '~/components/common/dropdown-menu/DropdownMenuItem
 import { AuthContext } from '~/contexts/auth/AuthContext';
 import styles from './SecondTopNav.module.scss';
 import ToolbarMenuButton from '../button/ToolbarMenuButton';
+import { ISecondTopNav } from './Navbar.interface';
 
-interface ISecondTopNav {
-  handleToolbarMenuIconClick: React.MouseEventHandler<HTMLDivElement>;
-}
 
 const SecondTopNav: React.FC<ISecondTopNav> = (props) => {
 

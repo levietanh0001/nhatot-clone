@@ -1,10 +1,8 @@
 import clsx from 'clsx';
 import styles from './ToolbarMenu.module.scss';
+import { IToolbarMenu } from './Navbar.interface';
 
-interface IToolbarMenu { 
-  show: boolean;
-  onCloseButtonClick: React.MouseEventHandler<HTMLDivElement>
-}
+
 
 const ToolbarMenu: React.FC<IToolbarMenu> = (props) => {
 

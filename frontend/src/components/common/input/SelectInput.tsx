@@ -2,23 +2,8 @@ import clsx from 'clsx';
 import styles from './SelectInput.module.scss';
 import useId from '@mui/material/utils/useId';
 import { useController, useFormContext } from 'react-hook-form';
+import { ISelectInput } from './Input.interface';
 
-
-interface ISelectInput {
-  children: React.ReactNode;
-
-  name?: string;
-  label?: string;
-  required?: boolean;
-  wrapperClass?: string;
-  labelClass?: string;
-  inputWrapperClass?: string;
-
-  inputValue?: string;
-  onInputValueChange?: React.ChangeEventHandler<HTMLSelectElement>;
-
-  [x:string]: any;
-}
 
 
 export const SelectInput: React.FC<ISelectInput> = (props) => {

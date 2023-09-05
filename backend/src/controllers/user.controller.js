@@ -4,11 +4,22 @@ const { returnError } = require("../utils/error.util");
 const { redisClient } = require("../utils/redis-store.util");
 const { sequelize } = require("../utils/database.util");
 const { databaseName } = require("../utils/variables.util");
+const UserCollection = require("../models/user.collection");
 
 
 async function getUserChatId(req, res, next) {
 
-  const userId = req.params['userId'];
+  try {
+    
+    const userId = req.params['userId'];
+    const userChatId = await UserCollection.find({ id: userId });
+    return res.status(200).json(userChatId[0]?._id);
+
+  } catch(error) {
+
+    console.error(error);
+    return next(error);
+  }
 }
 
 

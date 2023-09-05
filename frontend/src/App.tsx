@@ -1,176 +1,25 @@
-import { lazy, Suspense } from 'react';
+import { lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import './App.scss';
-import AsBroker from './components/features/auth/AsBroker';
-import LoggedInRequired from './components/features/auth/LoggedInRequired';
+import { SuspenseWrapper } from './components/common/suspense/SuspenseWrapper';
 import { AuthProvider } from './contexts/auth/AuthContext';
-import ForgetPasswordPage from './pages/ForgetPassword';
-import RegisterPage from './pages/RegisterPage';
-import ResetPasswordPage from './pages/ResetPassword';
-import ProtectedChatRoute from './components//features/auth/ProtectedChatRoute';
-const HomePage = lazy(() => import('./pages/HomePage'));
-const ProductListPage = lazy(() => import('./pages/ProductListPage'));
-const PostProductPage = lazy(() => import('./pages/PostProductPage'));
-const UpdateProductPage = lazy(() => import('./pages/UpdateProductPage'));
-const ProductDetailsPage = lazy(() => import('./pages/ProductDetailsPage'));
-const UserProfilePage = lazy(() => import('./pages/UserProfilePage'));
-const ChatPage = lazy(() => import('./pages/ChatPage'));
-// const AdminPage = lazy(() => import('./pages/AdminPage'));
-const Dashboard = lazy(
-  () => import('./components/features/dashboard/Dashboard')
-);
-const LoginPage = lazy(() => import('./pages/LoginPage'));
+import allRoutes from './routes/index.route';
+
 const NotFound = lazy(() => import('./pages/NotFound'));
 
-// fallback component
-export const SuspenseWrapper = ({ children, fallback = <></> }) => {
-  return <Suspense fallback={fallback}>{children}</Suspense>;
-};
+
 
 function App() {
   return (
     <BrowserRouter>
-      <SuspenseWrapper>
+      
         <AuthProvider>
           <Routes>
-            <Route
-              path='/'
-              element={
-                <SuspenseWrapper>
-                  <HomePage />
-                </SuspenseWrapper>
-              }
-            ></Route>
-            <Route
-              path='/post-product'
-              element={
-                <LoggedInRequired>
-                  <SuspenseWrapper>
-                    <PostProductPage />
-                  </SuspenseWrapper>
-                </LoggedInRequired>
-              }
-            ></Route>
-            <Route
-              path='/update-product/:productId'
-              element={
-                <LoggedInRequired>
-                  <SuspenseWrapper>
-                    <UpdateProductPage />
-                  </SuspenseWrapper>
-                </LoggedInRequired>
-              }
-            ></Route>
 
-            <Route
-              path='/product/:productId/:slug.htm'
-              element={
-                <SuspenseWrapper>
-                  <ProductDetailsPage />
-                </SuspenseWrapper>
-              }
-            ></Route>
-
-            {/* <Route
-              path='/product'
-              element={
-                <SuspenseWrapper>
-                  <ProductDetailsPage />
-                </SuspenseWrapper>
-              }
-            ></Route> */}
-
-            {/* type path param to query params */}
-            <Route
-              // path='/product-list/:type'
-              path='/product-list'
-              element={
-                <SuspenseWrapper>
-                  <ProductListPage />
-                </SuspenseWrapper>
-              }
-            ></Route>
-
-            {/* <Route
-              path='/chatroom'
-              element={
-                <LoggedInRequired>
-                  <SuspenseWrapper>
-                    <ChatPage />
-                  </SuspenseWrapper>
-                </LoggedInRequired>
-              }
-            ></Route> */}
-
-            {/* userId is last opened chat */}
-            <Route
-              path='/chat/:chatId?'
-              element={
-                <LoggedInRequired>
-                  <SuspenseWrapper>
-                    <ChatPage />
-                  </SuspenseWrapper>
-                </LoggedInRequired>
-              }
-            ></Route>
-
-            <Route
-              path='/login'
-              element={
-                <SuspenseWrapper>
-                  <LoginPage />
-                </SuspenseWrapper>
-              }
-            ></Route>
-            <Route
-              path='/register'
-              element={
-                <SuspenseWrapper>
-                  <RegisterPage />
-                </SuspenseWrapper>
-              }
-            ></Route>
-            <Route
-              path='/forget-password'
-              element={
-                <SuspenseWrapper>
-                  <ForgetPasswordPage />
-                </SuspenseWrapper>
-              }
-            ></Route>
-            <Route
-              path='/reset-password'
-              element={
-                <SuspenseWrapper>
-                  <ResetPasswordPage />
-                </SuspenseWrapper>
-              }
-            ></Route>
-            <Route
-              path='/user-profile/:userId'
-              element={
-                <LoggedInRequired>
-                  <SuspenseWrapper>
-                    <UserProfilePage />
-                  </SuspenseWrapper>
-                </LoggedInRequired>
-              }
-            ></Route>
-
-            {/* in need of a page that set role as broker */}
-            <Route
-              path='/dashboard'
-              element={
-                <LoggedInRequired>
-                  <AsBroker>
-                    <SuspenseWrapper>
-                      <Dashboard />
-                    </SuspenseWrapper>
-                  </AsBroker>
-                </LoggedInRequired>
-              }
-            ></Route>
+            {allRoutes.map((route, index) => (
+              <Route key={index} {...route} />
+            ))}
 
             <Route
               path='*'
@@ -180,9 +29,9 @@ function App() {
                 </SuspenseWrapper>
               }
             ></Route>
+
           </Routes>
         </AuthProvider>
-      </SuspenseWrapper>
     </BrowserRouter>
   );
 }

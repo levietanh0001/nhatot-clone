@@ -219,6 +219,7 @@ export function useDeleteUserProductById(currentPage=1) {
       console.error({ _error });
       queryClient.setQueryData(['getUserProducts', currentPage], context?.previousQueryData);
     },
+    
     // onSettled: (response, error, productId, context) => {
     //   // always refetch after error or success:
     //   console.log({ response, error, productId, context });

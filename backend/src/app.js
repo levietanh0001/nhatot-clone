@@ -190,7 +190,10 @@ sequelize
 
       // });
 
-      socket.on('one_one_chat_setup', (chatId) => {
+      console.log({ numClients: io.engine.clientsCount });
+
+      socket.on('join_one_one_chat', (chatId) => {
+        console.log(`joining room ${chatId}`);
         socket.join(chatId);
         socket.emit('one_one_chat_created', chatId);
       })

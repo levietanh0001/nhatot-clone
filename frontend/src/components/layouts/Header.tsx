@@ -2,7 +2,7 @@
 const Header = ({ children }) => {
   return (
     <>
-      <header
+      <div
         style={{
           display: 'flex',
           flexFlow: 'column nowrap',
@@ -15,7 +15,7 @@ const Header = ({ children }) => {
         }}
       >
         {children}
-      </header>
+      </div>
     </>
   );
 };

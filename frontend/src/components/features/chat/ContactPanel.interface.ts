@@ -1,4 +1,5 @@
 export interface IContactPanel {
-  userProfile?: any;
-  userChats: any[];
+  // userChats: any[];
+  contactInfoList: any[];
+  onContactClick: (chatId: string) => void;
 }

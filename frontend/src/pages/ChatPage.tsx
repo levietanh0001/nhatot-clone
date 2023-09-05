@@ -8,9 +8,8 @@ const ChatPage = () => {
       <Header>
         <TopNav />
       </Header>
-      <body>
-        <Chat />
-      </body>
+      
+      <Chat />
     </>
   );
 };

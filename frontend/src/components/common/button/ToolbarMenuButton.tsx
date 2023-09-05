@@ -1,8 +1,6 @@
+import { IToolbarMenuButton } from './ToolbarMenuButton.interface';
 import styles from './ToolbarMenuButton.module.scss';
 
-interface IToolbarMenuButton {
-  onClick: React.MouseEventHandler<HTMLDivElement>;
-}
 
 const ToolbarMenuButton: React.FC<IToolbarMenuButton> = (props) => {
 

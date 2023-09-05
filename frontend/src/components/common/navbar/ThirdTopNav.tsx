@@ -34,7 +34,8 @@ const ThirdTopNav = () => {
     isSearchResultsError,
     setFilteredResults
   );
-  useConsoleLogOnChange({ location, searchResults, error });
+  
+  // useConsoleLogOnChange({ location, searchResults, error });
 
   const handleSearchButtonClick = () => {};
 

@@ -3,6 +3,7 @@ const relativeTime = require('dayjs/plugin/relativeTime');
 dayjs.extend(relativeTime);
 
 export function timeAgo(datetime) {
+  
   return dayjs(datetime)
   .fromNow()
   .replace('minutes ago', 'phút trước')
@@ -11,6 +12,8 @@ export function timeAgo(datetime) {
   .replace('hour ago', 'giờ trước')
   .replace('days ago', 'ngày trước')
   .replace('a day ago', '1 ngày trước')
+  .replace('a month ago', '1 tháng trước')
+  .replace('a year ago', '1 năm trước')
   .replace('months ago', 'ngày trước')
   .replace('month ago', 'ngày trước')
   .replace('years ago', 'năm trước')

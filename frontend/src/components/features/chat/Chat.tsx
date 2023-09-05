@@ -1,180 +1,159 @@
 import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { useConnectSocket } from '~/api/socket.api';
-import { useGetUserProfile } from '~/api/user.api';
-import { useCreateOneOneChat, useGetUserChats } from '~/api/chat.api';
-import { useGetMessages, useSendOneOneMessageMutation } from '~/api/message.api';
-import styles from './Chat.module.scss';
-import { ChatPanel, HeaderCard, MessageBox } from './ChatPanel';
-import ContactPanel from './ContactPanel';
+import { useCreateOneOneChatQuery, useGetUserChats } from '~/api/chat.api';
+import {
+  useGetMessagesQuery,
+  useHandleReceiveMessages,
+  useSendOneOneMessageMutation,
+} from '~/api/message.api';
+import { useConnectSocket, useSetupOneOneChat } from '~/api/socket.api';
 import { AuthContext } from '~/contexts/auth/AuthContext';
-
-
-interface IMessage {
-  content: string;
-  origin: string;
-}
+import { IMessage } from './Chat.interface';
+import styles from './Chat.module.scss';
+import { ChatPanel } from './ChatPanel';
+import ContactPanel from './ContactPanel';
+import { useGetUserProfiles } from '~/api/user.api';
+import { UseQueryResult } from '@tanstack/react-query';
+import useGetContactsInfo, {
+  useJoinOneOneChat,
+  useSetMessagesOnFetch,
+  useSetOneOneChatIdOnCreate,
+} from './Chat.hook';
+import { useConsoleLogOnChange } from '~/hooks/utils.hook';
 
 const Chat = () => {
+  
+  // go to /chatroom/create?userId then redirect to /chat
+  // seeding userId for chat! / migration update userId for chat field
+  // set last active contact after choosing (set id)
 
   const params = useParams();
   const userId = params['userId'];
   const authContext = useContext(AuthContext);
   const user = authContext?.user;
+
+  const [currentReceiverId, setCurrentReceiverId] = useState(userId);
+  const [oneOneChatConnected, setOneOneChatConnected] =
+    useState<boolean>(false);
   const [inputMessage, setInputMessage] = useState<string>('');
-  const [userProfile, setUserProfile] = useState<any | null>(null);
   const [chatId, setChatId] = useState<string>('');
   const [messages, setMessages] = useState<IMessage[]>([]);
-  // const { data: userProfileData,  isLoading: isUserProfileLoading,  isError: isUserProfileError } = useGetUserProfile(userId, true);
-  const { data: userChats, isLoading: isUserChatsLoading, isError: isUserChatsError } = useGetUserChats();
+
+  // establish socket.io connection
+  const { socket, isConnected } = useConnectSocket();
+
+  // create and join user chat
+  const createOneOneChatMutation = useCreateOneOneChatQuery();
+
+  useEffect(() => {
+
+    if (isConnected && currentReceiverId) {
+      createOneOneChatMutation.mutate(currentReceiverId);
+    }
+
+    if (isConnected && socket && currentReceiverId) {
+      socket.on('one_one_chat_created', (chatId) => {
+        console.log('one one chat created with id = ' + chatId);
+        setOneOneChatConnected(true);
+      });
+    }
+  }, [isConnected, currentReceiverId]);
+
+  useSetOneOneChatIdOnCreate(createOneOneChatMutation, (chatId) => {
+    setChatId(chatId);
+  });
+  useJoinOneOneChat(chatId, socket);
+
+  // get messages of current chat
+  const getMessagesQueryResult = useGetMessagesQuery(chatId);
+  useSetMessagesOnFetch(getMessagesQueryResult, (data) => {
+    const fetchedMessages = data.map((item) => ({
+      content: item.content,
+      senderId: item.sender.id,
+    }));
+    setMessages(fetchedMessages);
+  });
+
+  const userChatsQueryResult = useGetUserChats();
+  const { contactInfoList, lastActiveUserId } = useGetContactsInfo(userChatsQueryResult);
+
+  useEffect(() => {
+
+    if(!currentReceiverId && lastActiveUserId) {
+      console.log('lastActiveUserId = ' + lastActiveUserId);
+      setCurrentReceiverId(lastActiveUserId);
+    }
+  }, [lastActiveUserId]);
+
   const sendOneOneMessageMutation = useSendOneOneMessageMutation();
-
-  const { socket, oneOneChatConnected } = useSetupOneOneChat(userId, chatId, setChatId);
-  useFetchMessages(chatId, setMessages);
-  useHandleReceiveMessages(socket, setMessages);
-
-  // useEffect(() => {
-
-  //   if(!isUserProfileLoading && !isUserProfileError) {
-  //     setUserProfile(userProfileData);
-  //   }
-
-  // }, [isUserProfileLoading, isUserProfileError]);
-
+  useHandleReceiveMessages(socket, (data) => {
+    console.log('received message ' + data);
+    setMessages((prev) => [...prev, { content: data, senderId: 'receiver' }]);
+  });
 
   const sendMessage = (message) => {
-
-    if(socket && inputMessage && oneOneChatConnected && chatId) {
+    if (socket && inputMessage && chatId && oneOneChatConnected) {
+      console.log(`sending message ${message}`);
       socket.emit('send_message', message, chatId);
-      
-      if(message) {
-        setMessages(prev => [...prev, { content: message, origin: user?.userId }]);
-        if(chatId) {
-          // 3. send message in database
-          sendOneOneMessageMutation.mutate({ chatId, message });
-        }
+
+      if (message) {
+        setMessages((prev) => [
+          ...prev,
+          { content: message, senderId: user?.userId },
+        ]);
+        sendOneOneMessageMutation.mutate({ chatId, message });
       }
     }
 
     setInputMessage('');
-  }
+  };
 
   const handleSendButtonClick = () => {
     sendMessage(inputMessage);
-  }
+  };
 
   const handleEnterKeyPress = (e: React.KeyboardEvent) => {
-    if(e.key === 'Enter') {
+    if (e.key === 'Enter') {
       e.preventDefault();
       sendMessage(inputMessage);
     }
-  }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputMessage(e.currentTarget.value);
-    // setInputMessage({ content: e.currentTarget.value, origin: 'self' });
+  };
+
+  const handleContactClick = (chatId: string) => {
+    console.log(`chosen contact with chatId = ` + chatId);
+    setChatId(chatId);
   }
+
+  // useConsoleLogOnChange({ chatId });
 
   return (
     <>
       <div className='container'>
         <div className={styles['inner-wrapper']}>
-          <ContactPanel 
-            userProfile={userProfile} 
-            userChats={userChats} 
-          />
+          {contactInfoList && (
+            <ContactPanel
+              contactInfoList={contactInfoList}
+              onContactClick={handleContactClick}
+            />
+          )}
 
           <ChatPanel
-            userProfile={userProfile}
             inputMessage={inputMessage}
+            messages={messages}
+            lastContactInfo={contactInfoList[0]} // [0] or [lastChosenId]
             handleInputChange={handleInputChange}
             handleSendButtonClick={handleSendButtonClick}
-            messages={messages}
             handleEnterKeyPress={handleEnterKeyPress}
           />
-
         </div>
       </div>
-
     </>
-  )
-}
+  );
+};
 
-
-function useSetupOneOneChat(userId, chatId, setChatId) {
-
-  const [oneOneChatConnected, setOneOneChatConnected] = useState<boolean>(false);
-  const { currentSocket: socket, connected, error: socketError } = useConnectSocket();
-  const mutation = useCreateOneOneChat();
-
-  useEffect(() => {
-
-    if(socket) {
-
-      // 2. on private chat created, set privateChatConnected to true
-      socket.on('one_one_chat_created', (chatId) => {
-        console.log('one one chat created ' + chatId);
-        setOneOneChatConnected(true);
-      });
-
-    }
-
-    if(socketError) {
-      console.log({ socketError });
-    }
-
-  }, [socket, socketError]);
-
-  useEffect(() => {
-    if(connected && userId) {
-      mutation.mutate(String(userId));
-    }
-  }, [connected, userId]);
-
-  useEffect(() => {
-    if(!mutation.isLoading && !mutation.error) {
-
-      // 1. setup chat room with chat id from data
-      // console.log({ fetchedChatId: mutation?.data?.data });
-      setChatId(mutation?.data?.data._id);
-
-      if(socket && chatId) {
-        socket.emit('one_one_chat_setup', chatId);
-      }
-    }
-  }, [socket, mutation.isLoading, chatId]);
-
-  return { socket, oneOneChatConnected };
-}
-
-
-function useFetchMessages(chatId, setMessages) {
-
-  const { data, isLoading, isError } = useGetMessages(chatId);
-
-  useEffect(() => {
-    if(!isLoading && !isError) {
-      const fetchedMessages = data.map(item => ({ content: item.content, origin: item.sender.id }));
-      setMessages(prev => [...prev, ...fetchedMessages]);
-    }
-  }, [isLoading, isError]);
-
-}
-
-function useHandleReceiveMessages(socket, setMessages) {
-  useEffect(() => {
-
-    if(socket) {
-      socket.on('receive_message', (message) => {
-        if(message) {
-          console.log('received' + message);
-          setMessages(prev => [...prev, { content: message, origin: 'other' }]);
-        }
-      });
-    }
-
-  }, [socket]);
-}
-
-export default Chat
+export default Chat;

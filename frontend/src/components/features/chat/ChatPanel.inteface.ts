@@ -1,20 +1,22 @@
 export interface IChatPanel {
-  userProfile: any;
+  userProfile?: any;
   inputMessage: string;
-  handleInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  handleSendButtonClick: () => void;
   messages: any[];
-  handleEnterKeyPress: (e: React.KeyboardEvent) => void;
+  lastContactInfo: any;
+  handleInputChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  handleSendButtonClick?: () => void;
+  handleEnterKeyPress?: (e: React.KeyboardEvent) => void;
 }
 
 export interface IHeaderCardProps {
-  userProfile: any;
+  userProfile?: any;
+  lastContactInfo: any;
 }
 
 export interface IMessageBoxProps {
-  input: string;
-  onInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  onSendButtonClick: () => void;
-  onEnterKeyPress: (e: any) => void;
+  inputMessage: string;
   messages: any[];
+  onInputChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onSendButtonClick?: () => void;
+  onEnterKeyPress?: (e: any) => void;
 }

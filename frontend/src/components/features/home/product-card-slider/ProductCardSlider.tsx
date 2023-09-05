@@ -11,6 +11,7 @@ import styles from './ProductCardSlider.module.scss';
 import ArrowBtn from './ArrowBtn';
 import { timeAgo } from '~/utils/date.util';
 import { convertToInternationalCurrencySystem } from '~/utils/number.util';
+import { IProductCardSliderProps } from './ProductCardSlider.interface';
 
 
 
@@ -172,15 +173,6 @@ Card.propTypes = {
   to: PropTypes.string
 }
 
-interface IProductCardSliderProps {
-  slides: any[];
-  type: string;
-  title?: string;
-  className?: string;
-  prevEl: string;
-  nextEl: string;
-  numMore: number;
-}
 
 
 export default ProductCardSlider;

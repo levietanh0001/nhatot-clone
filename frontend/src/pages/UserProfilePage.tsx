@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react';
-import { SuspenseWrapper } from '~/App';
+import { SuspenseWrapper } from '~/components/common/suspense/SuspenseWrapper';
 const Header = lazy(() => import('~/components/layouts/Header'));
 const TopNav = lazy(() => import('~/components/common/navbar'));
 const UserProfile = lazy(

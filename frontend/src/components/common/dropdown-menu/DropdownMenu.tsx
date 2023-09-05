@@ -2,17 +2,10 @@ import ClickAwayListener from '@mui/material/ClickAwayListener';
 import clsx from 'clsx';
 
 import styles from './DropdownMenu.module.scss';
+import { IDropdownMenu } from './DropdownMenu.interface';
 
 
-interface IDropdownMenu {
-  children?: React.ReactNode;
-  wrapperClass?: string;
-  menuBtnClass?: string;
-  menuContentClass?: string;
-  menuBtn?: JSX.Element;
-  show: boolean;
-  setShow: React.Dispatch<React.SetStateAction<boolean>>;
-}
+
 
 const DropdownMenu: React.FC<IDropdownMenu> = (props) => {
 

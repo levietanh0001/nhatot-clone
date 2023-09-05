@@ -5,7 +5,7 @@ const { loggedInRequired } = require('../middlewares/auth.middleware');
 
 const router = express.Router();
 
-router.get('/chatId/:userId', loggedInRequired, getUserChatId);
+router.get('/user-id-for-chat/:userId', getUserChatId);
 router.get('/others', loggedInRequired, getOtherUsers);
 // router.post('/', createUser);
 router.get('/products/count', loggedInRequired, getUserProductCount);
