@@ -136,6 +136,8 @@ async function createOneOneChat(req, res, next) {
     const currentChat = await ChatCollection.findOne({ _id: createdChat._id })
                                             .populate('users')
 
+    console.log('created chat with id = ' + currentChat._id);
+    
     return res.status(200).json(currentChat);
 
   } catch (error) {

@@ -1,11 +1,12 @@
 import { lazy } from 'react';
-import { SuspenseWrapper } from '~/components/common/suspense/SuspenseWrapper';
-const Header = lazy(() => import('~/components/layouts/Header'));
-const TopNav = lazy(() => import('~/components/common/navbar'));
+import { SuspenseWrapper } from '~/components/shared/suspense/SuspenseWrapper';
+const Header = lazy(() => import('~/components/shared/layouts/Header'));
+const TopNav = lazy(() => import('~/components/shared/navbar'));
 const Home = lazy(() => import('~/components/features/home/Home'));
-const Footer = lazy(() => import('~/components/layouts/Footer'));
-const AboutUs = lazy(() => import('~/components/common/footer/about-us/AboutUs'));
-
+const Footer = lazy(() => import('~/components/shared/layouts/Footer'));
+const AboutUs = lazy(
+  () => import('~/components/shared/footer/about-us/AboutUs')
+);
 
 const HomePage = () => {
   return (
@@ -15,7 +16,7 @@ const HomePage = () => {
           <TopNav />
         </Header>
       </SuspenseWrapper>
-      
+
       <SuspenseWrapper>
         <Home />
       </SuspenseWrapper>
@@ -28,6 +29,5 @@ const HomePage = () => {
     </>
   );
 };
-
 
 export default HomePage;

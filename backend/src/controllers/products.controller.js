@@ -396,7 +396,9 @@ async function getProducts(req, res, next) {
         return res.status(200).json(JSON.parse(cachedProducts));
       }
       
-      const products = await Product.findAll({ where, limit, offset, order: [[ 'updatedAt', 'DESC' ]] })
+      const products = await Product.findAll({ 
+        where, limit, offset, order: [[ 'updatedAt', 'DESC' ]] 
+      })
   
       if(!products) {
         return res.status(200).json([]);

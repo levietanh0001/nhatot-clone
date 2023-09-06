@@ -1,9 +1,10 @@
 import { useState } from 'react';
+
+import styles from './TopNav.module.scss';
 import FirstTopNav from './FirstTopNav';
 import SecondTopNav from './SecondTopNav';
 import ThirdTopNav from './ThirdTopNav';
 import ToolbarMenu from './ToolbarMenu';
-import styles from './TopNav.module.scss';
 
 const TopNav = () => {
 

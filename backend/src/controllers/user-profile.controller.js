@@ -1,60 +1,57 @@
+const path = require('path');
 const { QueryTypes } = require("sequelize");
 const UserProfile = require("../models/user-profile.model");
 const { sequelize } = require("../utils/database.util");
 const { databaseName } = require("../utils/variables.util");
 const { redisClient } = require("../utils/redis-store.util");
 const UserCollection = require("../models/user.collection");
+const { doesPathExist, deleteFileByPath } = require("../utils/file.util");
+const { uploadedImagesDir } = require("../utils/path.util");
 
 
-// async function getUserProfiles(req, res, next) {
+async function createAvatarImage(req, res, next) {
 
-//   try {
+  try {
+    const userId = req.user.id;
+    const avatarUrl = `${req.protocol}://${req.get('host')}/uploads/images/${req.file.filename}`;
     
-//     const userIds = req.params['userIds'];
+    const currentAvatarUrls = await sequelize.query(`
+      SELECT avatarUrl from ${databaseName}.user_profile
+      WHERE userId = :userId
+    `, { 
+      replacements: { userId }, type: QueryTypes.SELECT
+    });
 
-//     if(!Array.isArray(JSON.parse(userIds))) {
-//       return res.status(422).json({
-//         error: 'Invalid input',
-//         message: 'userIds array is invalid'
-//       })
-//     }
-  
-//     const sql = `
-//       SELECT ${databaseName}.user.id as userId, gender, rating, follower, following, respondToChat, address, phoneNumber, email, username, role, ${databaseName}.user.createdAt
-//       FROM ${databaseName}.user_profile INNER JOIN ${databaseName}.user on ${databaseName}.user_profile.userId = ${databaseName}.user.id
-//       WHERE userId = ?
-//       LIMIT 1
-//     `;
-  
-//     const userDoc = await UserCollection.findOne({ id: { $eq: userId } });
-//     let userChatId;
-//     if(userDoc) { 
-//       userChatId = userDoc._id;
-//     } else {
-//       userChatId = '';
-//     }
-  
-//     const cacheKey = `${sql}${userChatId}`;
-//     const cache = await redisClient.get(cacheKey);
-  
-//     if(cache) {
-//       return res.status(200).json(JSON.parse(cache));
-//     }
-  
-//     const userProfiles = await sequelize.query(sql, { replacements: { userIds }, type: QueryTypes.SELECT });
-//     const result = { ...userProfiles[0], userChatId };
-  
-//     await redisClient.setEx(cacheKey, 10, JSON.stringify(result));
-  
-//     return res.status(200).json(result);
+    const currentAvatarUrl = currentAvatarUrls[0].avatarUrl;
 
-//   } catch(error) {
+    // console.log({ currentAvatarUrl });
+    if(currentAvatarUrl) {
+      const imagePath = path.join(uploadedImagesDir, String(currentAvatarUrl).replace(`${req.protocol}://${req.get('host')}/uploads/images/`, ''));
+      if(doesPathExist(imagePath)) {
+        // console.log({ imagePath });
+        deleteFileByPath(imagePath);
+      }
+    }
 
-//     console.log(error);
-//     return next(error);
-//   }
+    const updatedUserProfile = await sequelize.query(`
+      UPDATE ${databaseName}.user_profile
+      SET avatarUrl = :avatarUrl
+      WHERE userId = :userId
+    `, { 
+      replacements: { avatarUrl, userId }, type: QueryTypes.UPDATE,
+      model: UserProfile, mapToModel: true, raw: true
+    });
 
-// }
+    console.log(updatedUserProfile);
+
+    return res.status(200).json(updatedUserProfile);
+
+  } catch(error) {
+
+    console.error(error);
+    return next(error);
+  }
+}
 
 
 async function getUserProfile(req, res, next) {
@@ -64,7 +61,12 @@ async function getUserProfile(req, res, next) {
     const userId = req.params['userId'];
   
     const sql = `
-      SELECT ${databaseName}.user.id as userId, gender, rating, follower, following, respondToChat, address, phoneNumber, email, username, role, ${databaseName}.user.createdAt
+      SELECT 
+            ${databaseName}.user.id as userId, 
+            gender, rating, follower, following, respondToChat, 
+            address, phoneNumber, email, username,avatarUrl,
+            ${databaseName}.user.role, 
+            ${databaseName}.user.createdAt
       FROM ${databaseName}.user_profile INNER JOIN ${databaseName}.user on ${databaseName}.user_profile.userId = ${databaseName}.user.id
       WHERE userId = :userId
       LIMIT 1
@@ -78,17 +80,17 @@ async function getUserProfile(req, res, next) {
       userChatId = '';
     }
   
-    const cacheKey = `${sql}${userChatId}`;
-    const cache = await redisClient.get(cacheKey);
+    // const cacheKey = `${sql}${userChatId}`;
+    // const cache = await redisClient.get(cacheKey);
   
-    if(cache) {
-      return res.status(200).json(JSON.parse(cache));
-    }
+    // if(cache) {
+    //   return res.status(200).json(JSON.parse(cache));
+    // }
   
     const userProfiles = await sequelize.query(sql, { replacements: { userId }, type: QueryTypes.SELECT });
     const result = { ...userProfiles[0], userChatId };
   
-    await redisClient.setEx(cacheKey, 10, JSON.stringify(result));
+    // await redisClient.setEx(cacheKey, 10, JSON.stringify(result));
   
     return res.status(200).json(result);
 
@@ -103,5 +105,5 @@ async function getUserProfile(req, res, next) {
 
 module.exports = {
   getUserProfile,
-  // getUserProfiles
+  createAvatarImage,
 }

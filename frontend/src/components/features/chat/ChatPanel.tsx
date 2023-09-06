@@ -15,7 +15,9 @@ export const ChatPanel: React.FC<IChatPanel> = (props) => {
     // userProfile,
     inputMessage,
     messages,
-    lastContactInfo,
+    // lastContactInfo,
+    currentContactInfo,
+    chatId,
     handleInputChange,
     handleSendButtonClick,
     handleEnterKeyPress,
@@ -23,20 +25,22 @@ export const ChatPanel: React.FC<IChatPanel> = (props) => {
 
   return (
     <div className={styles['chat-panel']}>
-      <HeaderCard lastContactInfo={lastContactInfo} />
+      <HeaderCard currentContactInfo={currentContactInfo} />
       <MessageBox
         inputMessage={inputMessage}
+        messages={messages}
+        chatId={chatId}
         onInputChange={handleInputChange}
         onSendButtonClick={handleSendButtonClick}
-        messages={messages}
         onEnterKeyPress={handleEnterKeyPress}
       />
     </div>
   );
 };
 
-export const HeaderCard: React.FC<IHeaderCardProps> = (props) => {
-  const { lastContactInfo } = props;
+
+const HeaderCard: React.FC<IHeaderCardProps> = (props) => {
+  const { currentContactInfo } = props;
 
   return (
     <div className={styles['header-card']}>
@@ -49,12 +53,12 @@ export const HeaderCard: React.FC<IHeaderCardProps> = (props) => {
         </span>
       </div>
       <div className={styles['card-body']}>
-        <div className={styles['user-name']}>{lastContactInfo?.username ?? ''}</div>
+        <div className={styles['user-name']}>{currentContactInfo?.username ?? ''}</div>
         <div className={styles['last-active']}>
           <span className={styles['status-icon']}></span>
           <span className={styles['time']}>{
-            lastContactInfo?.latestMessage?.createdAt
-            ? timeAgo(lastContactInfo?.latestMessage?.createdAt)
+            currentContactInfo?.latestMessage?.createdAt
+            ? timeAgo(currentContactInfo?.latestMessage?.createdAt)
             : ''
           }</span>
         </div>
@@ -71,11 +75,12 @@ export const HeaderCard: React.FC<IHeaderCardProps> = (props) => {
   );
 };
 
-let render = 0;
-export const MessageBox: React.FC<IMessageBoxProps> = (props) => {
+
+const MessageBox: React.FC<IMessageBoxProps> = (props) => {
   const {
     inputMessage,
     messages,
+    chatId,
     onInputChange,
     onSendButtonClick,
     onEnterKeyPress,
@@ -89,8 +94,12 @@ export const MessageBox: React.FC<IMessageBoxProps> = (props) => {
   const messagesStartRef = useRef<HTMLDivElement | null>(null);
   const prevScrollPos = useRef(0);
   const [scrollTopVisible, setScrollTopVisible] = useState<boolean>(false);
-  const [scrollBottomVisible, setScrollBottomVisible] =
-    useState<boolean>(false);
+  const [scrollBottomVisible, setScrollBottomVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    setScrollTopVisible(false);
+    setScrollBottomVisible(false);
+  }, [chatId]);
 
   useEffect(() => {
     const messagesEndElement = messagesEndRef.current;
@@ -115,8 +124,9 @@ export const MessageBox: React.FC<IMessageBoxProps> = (props) => {
           setScrollTopVisible(true);
           setScrollBottomVisible(false);
         } else if (
-          currentScrollPos < 20 &&
-          currentScrollPos < prevScrollPos.current
+          currentScrollPos <= 0 &&
+          currentScrollPos < prevScrollPos.current &&
+          messagesElement.scrollHeight > messagesElement.offsetHeight
         ) {
           setScrollTopVisible(false);
           setScrollBottomVisible(true);
@@ -135,7 +145,7 @@ export const MessageBox: React.FC<IMessageBoxProps> = (props) => {
         messagesElement.removeEventListener('scroll', toggleVisibility);
       }
     };
-  }, [scrollTopVisible]);
+  }, [scrollTopVisible, scrollBottomVisible]);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -162,11 +172,9 @@ export const MessageBox: React.FC<IMessageBoxProps> = (props) => {
     });
   };
 
-  render++;
-
   return (
     <div className={styles['message-box']}>
-      {/* {render} */}
+
       <div className={styles['messages']} ref={messagesRef}>
         <div ref={messagesStartRef}></div>
 
@@ -176,14 +184,7 @@ export const MessageBox: React.FC<IMessageBoxProps> = (props) => {
           })}
           onClick={handleScrollToTopClick}
         >
-          <svg
-            xmlns='http://www.w3.org/2000/svg'
-            height='1em'
-            viewBox='0 0 512 512'
-          >
-            {/*! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. */}
-            <path d='M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z' />
-          </svg>
+          <svg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 512 512'><path d='M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z' /></svg>
         </button>
 
         <ul>
@@ -212,17 +213,21 @@ export const MessageBox: React.FC<IMessageBoxProps> = (props) => {
           {/* {[...Array(50)].map((item, index) => (
             <li key={index}>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Asperiores, error non. Saepe amet officiis debitis expedita provident deserunt fuga id. Magni aspernatur ut tempore. Temporibus iste at ex soluta cum.</li>
           ))} */}
+
         </ul>
+
         {messages.length > 0 && (
           <button
             className={clsx(styles['scroll-to-bottom-btn'], {
               [styles['hidden']]: !scrollBottomVisible,
             })}
+            // style={{ top: messagesRef.current?.offsetHeight }}
             onClick={handleScrollToBottomClick}
           >
             <svg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 512 512'><path d='M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z' /></svg>
           </button>
         )}
+
         <div ref={messagesEndRef}></div>
       </div>
       <div className={styles['quick-messages']}>

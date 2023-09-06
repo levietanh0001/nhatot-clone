@@ -97,7 +97,7 @@ const ContactUser: React.FC<IContactUser> = (props) => {
           <button className={styles['chat']}>
             <span className={styles['chat-icon']}></span>
             <span className={styles['chat-with-user']}>
-              <Link to={`/chat/${userId}`}>Chat với người dùng</Link>
+              <Link to={`/create-chat/${userId}`}>Chat với người dùng</Link>
             </span>
           </button>
         </div>

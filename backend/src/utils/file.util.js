@@ -25,6 +25,6 @@ function doesPathExist(path) {
 module.exports = {
   deleteFileByPath,
   mkDirIfNotExists,
-  deleteFileByPathAsync,
+  // deleteFileByPathAsync,
   doesPathExist
 };

@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import productReducer from '~/features/products/productSlice';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import hardSet from 'redux-persist/es/stateReconciler/hardSet';
+import userProfileReducer from '~/features/products/userProfileSlice';
 
 
 // persisted reducers
@@ -41,6 +42,7 @@ const rootPersistConfig = {
 const rootReducer = combineReducers({
   // counter: persistedCounterReducer,
   product: productReducer,
+  userProfile: userProfileReducer,
   // counter: counterReducer,
   // lorem: loremReducer,
   // product: persistedPostProductReducer
@@ -61,6 +63,7 @@ export const store = configureStore({
     // counter: counterReducer,
     // lorem: loremReducer,
     product: productReducer,
+    userProfile: userProfileReducer,
   },
   // reducer: persistedReducer,
   devTools: !process.env.NODE_ENV.includes('prod'),

@@ -1,13 +1,13 @@
 import { lazy, useEffect } from 'react';
 import { useGetProductCount, useGetProducts } from '~/api/product.api';
-import { SuspenseWrapper } from '~/components/common/suspense/SuspenseWrapper';
+import { SuspenseWrapper } from '~/components/shared/suspense/SuspenseWrapper';
 const ProductCardSlider = lazy(() => import('~/components/features/home/product-card-slider/ProductCardSlider'));
 
 const ProductSliders = () => {
 
-  const { data: allProducts } = useGetProducts({ limit: 10, offset: 0 });
-  const { data: canbanProducts } = useGetProducts({ limit: 10, offset: 0, type: 'canban' });
-  const { data: chothueProducts } = useGetProducts({ limit: 10, offset: 0, type: 'chothue' });
+  const { data: allProducts } = useGetProducts({ limit: 20, offset: 0 });
+  const { data: canbanProducts } = useGetProducts({ limit: 20, offset: 0, type: 'canban' });
+  const { data: chothueProducts } = useGetProducts({ limit: 20, offset: 0, type: 'chothue' });
   const { data: allProductCount, isLoading: isAllProductCountLoading } = useGetProductCount();
   const { data: canbanProductCount, isLoading: isCanBanProductCountLoading } = useGetProductCount({ type: 'canban' });
   const { data: chothueProductCount, isLoading: isChoThueProductCountLoading } = useGetProductCount({ type: 'chothue' });

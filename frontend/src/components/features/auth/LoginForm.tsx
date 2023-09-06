@@ -8,7 +8,7 @@ import { AuthContext } from '~/contexts/auth/AuthContext';
 import jwtDecode from 'jwt-decode';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginFormSchema } from '~/schemas/auth';
-import FloatingLabelInput from '~/components/common/input/FloatingLabelInput';
+import FloatingLabelInput from '~/components/shared/input/FloatingLabelInput';
 import styles from './LoginForm.module.scss';
 
 type FormFieldValues = {
@@ -82,7 +82,7 @@ const LoginForm = () => {
       {/* {JSON.stringify(error)} */}
       <ToastContainer
         position='top-right'
-        hideProgressBar
+        // hideProgressBar
         theme='colored'
         autoClose={5000}
       />

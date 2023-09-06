@@ -1,4 +1,4 @@
-import { SuspenseWrapper } from "~/components/common/suspense/SuspenseWrapper";
+import { SuspenseWrapper } from "~/components/shared/suspense/SuspenseWrapper";
 import LoggedInRequired from "~/components/features/auth/LoggedInRequired";
 import UserProfilePage from "~/pages/UserProfilePage";
 

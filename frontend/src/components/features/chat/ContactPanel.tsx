@@ -1,61 +1,17 @@
 import ClickAwayListener from '@mui/material/ClickAwayListener';
-import styles from './ContactPanel.module.scss';
-import React, { useContext, useEffect, useState } from 'react';
-import { IContactPanel } from './ContactPanel.interface';
-import { AuthContext } from '~/contexts/auth/AuthContext';
-import { useGetUserProfiles } from '~/api/user.api';
-import { UseQueryResult } from '@tanstack/react-query';
-import {
-  useGetLatestChatMessages,
-  useGetMessagesQuery,
-} from '~/api/message.api';
+import React, { useState } from 'react';
 import { timeAgo } from '~/utils/date.util';
+import { IContactPanel } from './ContactPanel.interface';
+import styles from './ContactPanel.module.scss';
+
 
 const ContactPanel: React.FC<IContactPanel> = (props) => {
   const {
-    // userProfile,
-    // userChats,
     contactInfoList,
     onContactClick,
   } = props;
 
-  // const authContext = useContext(AuthContext);
-  // const user = authContext?.user;
-
   const [show, setShow] = useState<boolean>(false);
-
-  // // lift these up
-  // let recipientIds = [] as any[];
-  // let chatIds = [] as any[];
-  // let latestMessages = [] as any[];
-  // userChats.forEach(chat => {
-  //   const users = chat.users;
-  //   const recipient = users.filter(item => item.id !== user.userId);
-  //   recipientIds = [...recipientIds, recipient[0].id];
-  //   chatIds = [...chatIds, chat._id];
-  //   latestMessages = [...latestMessages, {
-  //     content: chat?.latestMessage?.content ?? '',
-  //     createdAt: chat?.latestMessage?.createdAt ?? ''
-  //   }];
-  // });
-
-  // const recipientProfiles = useGetUserProfiles(recipientIds) as UseQueryResult[];
-  // const recipientUsernames = recipientProfiles.map(item => {
-  //   if (!item.isLoading && !item.isError) {
-  //     return (item.data as any).username;
-  //   }
-  //   if (item.isError) {
-  //     return '';
-  //   }
-  // });
-
-  // const chatInfoList = recipientUsernames.map((username, index) => {
-  //   return {
-  //     chatId: chatIds[index],
-  //     username,
-  //     latestMessage: latestMessages[index]
-  //   }
-  // })
 
   return (
     <div className={styles['contact-panel']}>
@@ -97,9 +53,8 @@ const ContactPanel: React.FC<IContactPanel> = (props) => {
 
       <div className={styles['contacts']}>
         <ul>
-          {/* {JSON.stringify(userChats)} */}
           {contactInfoList.map((contactInfo, index) => (
-            <li key={index} onClick={() => onContactClick(contactInfo.chatId)}>
+            <li key={index} onClick={() => onContactClick(contactInfo)}>
               <div className={styles['contact-card']}>
                 <div className={styles['card-header']}>
                   <span className={styles['avatar']}>
@@ -129,10 +84,7 @@ const ContactPanel: React.FC<IContactPanel> = (props) => {
                 </div>
                 <div className={styles['card-footer']}>
                   <span className={styles['product-image']}>
-                    {/* <img
-                      src='https://cdn.chotot.com/0g-P9xck3F_3oG2U7eIS6QrCn5QbesNp0v2hjGgHviE/preset:listing/plain/55b5bb7e078e2200ea6d82a7daccb234-2830698562985958996.jpg'
-                      alt='product'
-                    /> */}
+                    
                   </span>
                 </div>
               </div>

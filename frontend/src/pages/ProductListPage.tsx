@@ -1,12 +1,12 @@
-import Ads from '~/components/common/ads/Ads';
-import Breadcrumb from '~/components/common/breadcrumb/Breadcrumb';
-import AboutUs from '~/components/common/footer/about-us/AboutUs';
-import TopNav from '~/components/common/navbar';
+import Ads from '~/components/shared/ads/Ads';
+import Breadcrumb from '~/components/shared/breadcrumb/Breadcrumb';
+import AboutUs from '~/components/shared/footer/about-us/AboutUs';
+import TopNav from '~/components/shared/navbar';
 import Filters from '~/components/features/product/product-filters/Filters';
 import ProductList from '~/components/features/product/product-list/ProductList';
-import ContentWithAdsLayout from '~/components/layouts/ContentWithAdsLayout';
-import Footer from '~/components/layouts/Footer';
-import Header from '~/components/layouts/Header';
+import ContentWithAdsLayout from '~/components/shared/layouts/ContentWithAdsLayout';
+import Footer from '~/components/shared/layouts/Footer';
+import Header from '~/components/shared/layouts/Header';
 
 const ProductListPage = () => {
   return (

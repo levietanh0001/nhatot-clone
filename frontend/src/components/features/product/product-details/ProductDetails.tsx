@@ -2,12 +2,13 @@ import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useHandleQueryError from '~/hooks/error-handling.hook';
-import ContentWithStickyBox from '~/components/layouts/ContentWithStickyBox';
+import ContentWithStickyBox from '~/components/shared/layouts/ContentWithStickyBox';
 import AboutProduct from './AboutProduct';
 import ContactUser from './ContactUser';
 import { useScrollToTop } from '~/hooks/pagination.hook';
 import { useGetProductById } from '~/api/product.api';
-import { useGetUserIdForChat, useGetUserProfile } from '~/api/user.api';
+import { useGetUserProfile } from '~/api/user-profile.api';
+
 
 const ProductDetails = () => {
   const { productId, slug } = useParams();
@@ -46,7 +47,7 @@ const ProductDetails = () => {
 
   useEffect(() => {
     if (!isUserProfileLoading) {
-      console.log({ userProfileData });
+      // console.log({ userProfileData });
       setUserProfile(userProfileData);
     }
   }, [isUserProfileLoading]);
@@ -57,7 +58,10 @@ const ProductDetails = () => {
         <ContentWithStickyBox
           content={<AboutProduct product={product} />}
           stickyBox={
-            <ContactUser userId={userId ? String(userId): ''} userProfile={userProfile} />
+            <ContactUser
+              userId={userId ? String(userId) : ''}
+              userProfile={userProfile}
+            />
           }
         />
       )}

@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import { SuspenseWrapper } from '~/components/common/suspense/SuspenseWrapper'
+import { SuspenseWrapper } from '~/components/shared/suspense/SuspenseWrapper'
 import ProductSliders from '~/components/features/product/product-sliders/ProductSliders';
 
 const TopCarousel = lazy(() => import('~/components/features/home/top-carousel/TopCarousel'));

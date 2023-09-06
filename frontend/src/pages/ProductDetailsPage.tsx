@@ -1,11 +1,9 @@
-import AboutUs from '~/components/common/footer/about-us/AboutUs';
-import Breadcrumb from '~/components/common/breadcrumb/Breadcrumb';
-import TopNav from '~/components/common/navbar';
-import ContactUser from '~/components/features/product/product-details/ContactUser';
 import ProductDetails from '~/components/features/product/product-details';
-import ContentWithStickyBox from '~/components/layouts/ContentWithStickyBox';
-import Footer from '~/components/layouts/Footer';
-import Header from '~/components/layouts/Header';
+import Breadcrumb from '~/components/shared/breadcrumb/Breadcrumb';
+import AboutUs from '~/components/shared/footer/about-us/AboutUs';
+import Footer from '~/components/shared/layouts/Footer';
+import Header from '~/components/shared/layouts/Header';
+import TopNav from '~/components/shared/navbar';
 
 const ProductDetailsPage = () => {
   return (
@@ -13,12 +11,10 @@ const ProductDetailsPage = () => {
       <Header>
         <TopNav />
       </Header>
-      <body>
-        <Breadcrumb />
-        <main>
-          <ProductDetails />
-        </main>
-      </body>
+      
+      <Breadcrumb />
+      <ProductDetails />
+
       <Footer>
         <AboutUs />
       </Footer>

@@ -30,14 +30,18 @@
     border-radius: 50%;
   }
 
-  & .avatar .status-icon {
+  & .avatar > img {
+    border-radius: 50%;
+  }
+
+  & .avatar .upload-avatar {
     position: absolute;
-    bottom: 5px;
-    right: 5px;
+    bottom: 0px;
+    right: 0px;
     z-index: 1;
 
-    width: 18px;
-    height: 18px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     border: 3px solid white;
     background-color: lightgray;

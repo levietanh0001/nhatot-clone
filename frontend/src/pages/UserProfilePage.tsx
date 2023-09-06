@@ -1,21 +1,11 @@
-import { Suspense, lazy } from 'react';
-import { SuspenseWrapper } from '~/components/common/suspense/SuspenseWrapper';
-const Header = lazy(() => import('~/components/layouts/Header'));
-const TopNav = lazy(() => import('~/components/common/navbar'));
-const UserProfile = lazy(
-  () => import('~/components/features/user-profile/UserProfile')
-);
-const Footer = lazy(() => import('~/components/layouts/Footer'));
-const AboutUs = lazy(
-  () => import('~/components/common/footer/about-us/AboutUs')
-);
+import { lazy } from 'react';
+import { SuspenseWrapper } from '~/components/shared/suspense/SuspenseWrapper';
+const Header = lazy(() => import('~/components/shared/layouts/Header'));
+const TopNav = lazy(() => import('~/components/shared/navbar'));
+const UserProfile = lazy(() => import('~/components/features/user-profile/UserProfile'));
+const Footer = lazy(() => import('~/components/shared/layouts/Footer'));
+const AboutUs = lazy(() => import('~/components/shared/footer/about-us/AboutUs'));
 
-// import AboutUs from '~/components/common/footer/about-us/AboutUs';
-// import TopNav from '~/components/common/navbar';
-// import UserCard from '~/components/user-profile/UserCard';
-// import UserProfile from '~/components/user-profile/UserProfile';
-// import Footer from '~/layouts/Footer';
-// import Header from '~/layouts/Header';
 
 const UserProfilePage = () => {
   return (
@@ -27,11 +17,7 @@ const UserProfilePage = () => {
       </SuspenseWrapper>
 
       <SuspenseWrapper>
-        <body>
-          <main>
-            <UserProfile />
-          </main>
-        </body>
+        <UserProfile />
       </SuspenseWrapper>
 
       <SuspenseWrapper>

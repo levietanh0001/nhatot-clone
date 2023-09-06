@@ -1,4 +1,4 @@
-import Modal from '~/components/common/modal';
+import Modal from '~/components/shared/modal';
 import { LoginContent } from '~/components/features/auth';
 
 

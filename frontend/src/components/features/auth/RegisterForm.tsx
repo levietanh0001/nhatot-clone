@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import styles from './RegisterForm.module.scss';
 import { registerFormSchema } from '~/schemas/auth';
 import { useNavigate } from 'react-router-dom';
-import FloatingLabelInput from '~/components/common/input/FloatingLabelInput';
+import FloatingLabelInput from '~/components/shared/input/FloatingLabelInput';
 import { AuthContext } from '~/contexts/auth/AuthContext';
 import { promiseWrapper } from '~/utils/function.util';
 import { FirebaseError } from 'firebase/app';
@@ -65,7 +65,7 @@ const RegisterForm = () => {
       {/* {JSON.stringify(error)} */}
       <ToastContainer
         position='top-right'
-        hideProgressBar
+        // hideProgressBar
         theme='colored'
         autoClose={5000}
       />

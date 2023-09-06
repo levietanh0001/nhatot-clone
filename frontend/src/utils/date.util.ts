@@ -2,6 +2,15 @@ const dayjs = require('dayjs');
 const relativeTime = require('dayjs/plugin/relativeTime');
 dayjs.extend(relativeTime);
 
+export function dateTimeToDateString(dt) {
+
+  if(typeof dt == 'string') {
+    return new Date(dt ?? '').toLocaleDateString('en-GB');
+  } else if(dt instanceof Date) {
+    return dt.toLocaleDateString('en-GB');
+  }
+}
+
 export function timeAgo(datetime) {
   
   return dayjs(datetime)
@@ -9,6 +18,7 @@ export function timeAgo(datetime) {
   .replace('minutes ago', 'phút trước')
   .replace('minute ago', 'phút trước')
   .replace('hours ago', 'giờ trước')
+  .replace('an hour ago', '1 giờ trước')
   .replace('hour ago', 'giờ trước')
   .replace('days ago', 'ngày trước')
   .replace('a day ago', '1 ngày trước')

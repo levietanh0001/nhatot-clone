@@ -111,10 +111,14 @@
   background-color: lightgray;
 
   & > ul {
-    padding-inline: 20px;
     list-style-type: none;
+
+    // height: 100%;
+    padding-inline: 20px;
     margin-top: 0;
     padding-top: 10px;
+    // margin-bottom: 0;
+
     & > li {
       margin-bottom: 5px;
     }
@@ -151,7 +155,9 @@
 
 .scroll-to-end-btn {
 
+  position: -webkit-sticky;
   position: sticky;
+
   // position: absolute;
 
   background-color: transparent;
@@ -189,6 +195,7 @@
 
 .scroll-to-bottom-btn {
   @extend .scroll-to-end-btn;
+  
   bottom: 0;
 
   &.hidden {

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { useCreateOneOneChatQuery, useGetUserChats } from '~/api/chat.api';
 import {
@@ -7,21 +7,21 @@ import {
   useHandleReceiveMessages,
   useSendOneOneMessageMutation,
 } from '~/api/message.api';
-import { useConnectSocket, useSetupOneOneChat } from '~/api/socket.api';
+import { useConnectSocket } from '~/api/socket.api';
 import { AuthContext } from '~/contexts/auth/AuthContext';
-import { IMessage } from './Chat.interface';
-import styles from './Chat.module.scss';
-import { ChatPanel } from './ChatPanel';
-import ContactPanel from './ContactPanel';
-import { useGetUserProfiles } from '~/api/user.api';
-import { UseQueryResult } from '@tanstack/react-query';
 import useGetContactsInfo, {
   useJoinOneOneChat,
   useSetMessagesOnFetch,
   useSetOneOneChatIdOnCreate,
 } from './Chat.hook';
-import { useConsoleLogOnChange } from '~/hooks/utils.hook';
+import { IMessage } from './Chat.interface';
+import styles from './Chat.module.scss';
+import { ChatPanel } from './ChatPanel';
+import ContactPanel from './ContactPanel';
 
+
+
+let reload = 0;
 const Chat = () => {
   
   // go to /chatroom/create?userId then redirect to /chat
@@ -29,16 +29,29 @@ const Chat = () => {
   // set last active contact after choosing (set id)
 
   const params = useParams();
-  const userId = params['userId'];
+  // const userId = params['userId'];
   const authContext = useContext(AuthContext);
   const user = authContext?.user;
+  const navigate = useNavigate();
 
-  const [currentReceiverId, setCurrentReceiverId] = useState(userId);
-  const [oneOneChatConnected, setOneOneChatConnected] =
-    useState<boolean>(false);
+  const [currentReceiverId, setCurrentReceiverId] = useState<string>('');
+  // const [currentReceiverId, setCurrentReceiverId] = useState(userId);
+  const [oneOneChatConnected, setOneOneChatConnected] = useState<boolean>(false);
   const [inputMessage, setInputMessage] = useState<string>('');
   const [chatId, setChatId] = useState<string>('');
   const [messages, setMessages] = useState<IMessage[]>([]);
+  const [currentContact, setCurrentContact] = useState<any | null>(null);
+
+  useEffect(() => {
+    if(localStorage.getItem('currentContact') === '') {
+      localStorage.setItem('currentContact', 'null');
+    }
+    setCurrentContact(JSON.parse(localStorage.getItem('currentContact') ?? 'null'));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('currentContact', JSON.stringify(currentContact));
+  }, [currentContact]);
 
   // establish socket.io connection
   const { socket, isConnected } = useConnectSocket();
@@ -66,7 +79,8 @@ const Chat = () => {
   useJoinOneOneChat(chatId, socket);
 
   // get messages of current chat
-  const getMessagesQueryResult = useGetMessagesQuery(chatId);
+  const getMessagesQueryResult = useGetMessagesQuery(currentContact?.chatId ?? chatId);
+  // const getMessagesQueryResult = useGetMessagesQuery(chatId);
   useSetMessagesOnFetch(getMessagesQueryResult, (data) => {
     const fetchedMessages = data.map((item) => ({
       content: item.content,
@@ -75,7 +89,10 @@ const Chat = () => {
     setMessages(fetchedMessages);
   });
 
-  const userChatsQueryResult = useGetUserChats();
+  const userChatsQueryResult = useGetUserChats(true);
+  useEffect(() => {
+    console.log({ userChatsData: userChatsQueryResult.data });
+  }, [userChatsQueryResult.data]);
   const { contactInfoList, lastActiveUserId } = useGetContactsInfo(userChatsQueryResult);
 
   useEffect(() => {
@@ -124,9 +141,10 @@ const Chat = () => {
     setInputMessage(e.currentTarget.value);
   };
 
-  const handleContactClick = (chatId: string) => {
-    console.log(`chosen contact with chatId = ` + chatId);
-    setChatId(chatId);
+  const handleContactClick = (contactInfo) => {
+    console.log(`chosen contact with chatId = ` + contactInfo.chatId);
+    setChatId(contactInfo.chatId);
+    setCurrentContact(contactInfo);
   }
 
   // useConsoleLogOnChange({ chatId });
@@ -145,7 +163,10 @@ const Chat = () => {
           <ChatPanel
             inputMessage={inputMessage}
             messages={messages}
-            lastContactInfo={contactInfoList[0]} // [0] or [lastChosenId]
+            // currentContactInfo={currentContact}
+            currentContactInfo={currentContact || contactInfoList[0]}
+            // lastContactInfo={contactInfoList[0]} // [0] or [lastChosenId]
+            chatId={chatId}
             handleInputChange={handleInputChange}
             handleSendButtonClick={handleSendButtonClick}
             handleEnterKeyPress={handleEnterKeyPress}

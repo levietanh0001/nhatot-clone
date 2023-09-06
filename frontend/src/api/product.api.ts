@@ -40,7 +40,7 @@ export function useGetProducts(criteria) {
       return data.data;
     },
     onSettled: (data) => {
-      console.log({ data });
+      // console.log({ data });
     }
   });
 }
@@ -74,7 +74,7 @@ export function usePaginateProducts(currentPage, productPerPage, filter) {
     offset: `${productPerPage * (currentPage - 1)}`,
   };
 
-  console.log({ criteria });
+  console.log({ paginateProductCriteria: criteria });
 
   return useGetProducts(criteria);
 }
@@ -109,7 +109,7 @@ export function useGetProductCount(options={}) {
   return useQuery({
     queryKey: ['getProductCount', options],
     queryFn: ({ signal }) => {
-      console.log({ options });
+      // console.log({ options });
       const params = new URLSearchParams({
         userId: (options as any)?.userId ?? '',
         ...options

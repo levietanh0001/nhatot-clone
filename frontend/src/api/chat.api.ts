@@ -1,19 +1,26 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { axiosPrivate } from '~/api/axios.api';
+
+
+// export function useGetCreatedChat() {
+//   return useQuery({
+//     queryKey: ['createdOneOneChat'],
+
+//   })
+// }
 
 export function useCreateOneOneChatQuery() {
 
-  const queryClient = useQueryClient();
-
+  const queryClient = new QueryClient();
   return useMutation({
     mutationKey: ['createOneOneChat'],
     mutationFn: (userId: string) => {
       return axiosPrivate.post('chat', { userId });
     },
-    onSuccess: (data) => {
-      // console.log({ data });
-      // queryClient.setQueryData(['createOneOneChat'], (old) => old);
-    }
+    // onSuccess: data => {
+    //   queryClient.setQueryData(['createdOneOneChat'], data);
+    // }
+
   });
 }
 
@@ -26,14 +33,14 @@ export function useGetUserChats(enabled = true) {
     keepPreviousData: true,
     refetchOnMount: true, // if component is mounted, refetch
     refetchOnWindowFocus: false,
-    // cacheTime: 10000, // by default 5 mins
-    staleTime: 2000,
+    cacheTime: 0, // by default 5 mins
+    staleTime: 0,
     select: (data) => {
       return data.data;
     },
     enabled,
-    // onSettled: (data) => {
-    //   console.log({ data });
-    // }
+    onSettled: (data) => {
+      console.log('fetching user chats');
+    }
   });
 }

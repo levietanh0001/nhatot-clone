@@ -217,4 +217,5 @@ export const {
   setVideoThumbnail,
 } = productSlice.actions;
 
+
 export default productReducer;

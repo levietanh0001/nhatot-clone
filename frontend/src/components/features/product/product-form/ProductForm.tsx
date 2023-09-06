@@ -45,10 +45,6 @@ const ProductForm = (props) => {
     onUserTypeSelect,
   } = props;
 
-  // useEffect(() => {
-  //   console.log({ uploadProduct: product });
-  // }, []);
-
   return (
     <Wrapper>
       <FormProvider {...form}>
@@ -135,7 +131,7 @@ const Wrapper = ({ children }) => {
       <div className='container'>
         <ToastContainer
           position='top-right'
-          hideProgressBar
+          // hideProgressBar
           theme='colored'
           autoClose={2000}
         />

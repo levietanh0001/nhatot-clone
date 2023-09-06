@@ -5,7 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthContext } from '~/contexts/auth/AuthContext';
 
-import FloatingLabelInput from '~/components/common/input/FloatingLabelInput';
+import FloatingLabelInput from '~/components/shared/input/FloatingLabelInput';
 import forgetPasswordFormSchema from '~/schemas/auth/forget-password-form.schema';
 import styles from './LoginForm.module.scss';
 
@@ -54,7 +54,7 @@ const ForgetPasswordForm = () => {
       {/* {JSON.stringify(error)} */}
       <ToastContainer
         position='top-right'
-        hideProgressBar
+        // hideProgressBar
         theme='colored'
         autoClose={5000}
       />

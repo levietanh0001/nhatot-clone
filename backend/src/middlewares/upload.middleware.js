@@ -8,6 +8,50 @@ const { returnError } = require("../utils/error.util");
 const { uploadDir } = require("../utils/variables.util");
 
 
+// function uploadAvatarImage(req, res, next) {
+
+//   const options = {
+//     storage: multer.diskStorage({
+//       destination: (req, file, cb) => {
+
+//         const dest = path.join(uploadDir, 'images');
+//         mkDirIfNotExists(dest);
+        
+//         cb(null, dest); // error = null, destination = 'uploads'
+//       },
+//       filename: (req, file, cb) => {
+//         req.imageName = new Date().toISOString() + '-' +
+//                         uuidv4().toString() + '-' +
+//                         file.originalname
+//         cb(null, req.imageName);
+//       }
+//     }),
+//     fileFilter: function(req, file, cb) {
+
+//       if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
+//         cb(null, true); // error = null, acceptFile = true
+//       } else {
+//         cb(null, false); // error = null, acceptFile = false
+//       }
+//     },
+//     limits: {
+//       fileSize: 5 * 1024 * 1024 // 5mb
+//     }
+//   }
+
+//   const uploads = multer({ ...options }).single('image');
+
+//   return uploads(req, res, (error) => {
+
+//     if(error) {
+//       returnError(res, 422, error);
+//     }
+
+//     return next();
+//   });
+
+// }
+
 function uploadSingleFile() {
 
   const fileStorage = multer.diskStorage({
@@ -223,20 +267,6 @@ module.exports = {
   uploadMultipleImages,
   uploadVideo,
   uploadImage,
-  uploadMedia
+  uploadMedia,
+  // uploadAvatarImage
 };
-
-
-// function uploadFile(req, res, next) {
-//     const upload = multer().single('yourFileNameHere');
-
-//     upload(req, res, function (err) {
-//         if (err instanceof multer.MulterError) {
-//             // A Multer error occurred when uploading.
-//         } else if (err) {
-//             // An unknown error occurred when uploading.
-//         }
-//         // Everything went fine. 
-//         next()
-//     })
-// }

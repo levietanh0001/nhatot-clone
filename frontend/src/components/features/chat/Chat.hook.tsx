@@ -1,6 +1,6 @@
 import { UseQueryResult } from '@tanstack/react-query';
 import { useContext, useEffect, useState } from 'react';
-import { useGetUserProfiles } from '~/api/user.api';
+import { useGetUserProfiles } from '~/api/user-profile.api';
 import { AuthContext } from '~/contexts/auth/AuthContext';
 
 // export const useCreateOneOneChat = (userId, socket, isConnected) => {
@@ -77,11 +77,11 @@ export const useGetContactsInfo = (userChatsQueryResult) => {
 
   useEffect(() => {
     if (!isUserChatsLoading && !isUserChatsError) {
+
       userChats.forEach((chat) => {
         const users = chat.users;
         const recipient = users.filter((item) => item.id !== user.userId);
 
-        // console.log({ firstUserID: recipient[0].id });
         setRecipientIds((prev) => [...prev, recipient[0].id]);
         setChatIds((prev) => [...prev, chat._id]);
         setLatestMessages((prev) => [
@@ -116,7 +116,7 @@ export const useGetContactsInfo = (userChatsQueryResult) => {
   });
 
   return { contactInfoList, lastActiveUserId: recipientIds[0] };
-  // return { contactInfoList, lastActiveUserId: recipientIds[0] };
+  
 };
 
 export default useGetContactsInfo;

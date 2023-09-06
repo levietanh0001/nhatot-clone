@@ -1,7 +1,7 @@
 import styles from './ProductLocation.module.scss';
 import clsx from 'clsx';
 
-import FloatingLabelInput from '~/components/common/input/FloatingLabelInput';
+import FloatingLabelInput from '~/components/shared/input/FloatingLabelInput';
 
 const ProductLocation = ({ product, onProjectNameChange, onAddressChange }) => {
   return (

@@ -96,24 +96,6 @@ const PostProduct = () => {
       console.error(error);
     }
   };
-  
-  // useEffect(() => {
-    
-  //     if(Object.entries(form.formState.errors).length > 0) {
-  //       window.scrollTo({ top: 10, behavior: 'smooth' });
-  //       toast.error('Vui lòng kiểm tra lại form');
-  //     }
-  
-  //     console.log({ productInputError: product.inputError });
-  //     for (const [key, value] of Object.entries(product.inputError)) {
-  //       if(value) {
-  //         window.scrollTo({ top: 10, behavior: 'smooth' });
-  //         toast.error('Vui lòng kiểm tra lại form');
-  //         break;
-  //       }
-  //     }
-    
-  // }, [product.inputError, form.formState.errors]);
 
   return (
     <ProductForm

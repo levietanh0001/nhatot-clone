@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
-import AboutUs from '~/components/common/footer/about-us/AboutUs';
-import TopNav from '~/components/common/navbar';
-import Footer from '~/components/layouts/Footer';
-import Header from '~/components/layouts/Header';
+import AboutUs from '~/components/shared/footer/about-us/AboutUs';
+import TopNav from '~/components/shared/navbar';
+import Footer from '~/components/shared/layouts/Footer';
+import Header from '~/components/shared/layouts/Header';
 
 const NotFound = () => {
   return (

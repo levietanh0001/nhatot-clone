@@ -2,6 +2,7 @@ import { SetStateAction } from "react";
 
 export interface IAuthContext {
   user: any | null;
+  userProfile: any | null;
   setUser: SetStateAction<any | null>;
   userData?: any | null;
   setUserData?: SetStateAction<any | null>;

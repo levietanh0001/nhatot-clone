@@ -1,5 +1,5 @@
 import React from 'react';
-import { SuspenseWrapper } from '~/components/common/suspense/SuspenseWrapper';
+import { SuspenseWrapper } from '~/components/shared/suspense/SuspenseWrapper';
 
 const ForgetPasswordPage = React.lazy(() => import('~/pages/ForgetPassword'));
 const LoginPage = React.lazy(() => import('~/pages/LoginPage'));

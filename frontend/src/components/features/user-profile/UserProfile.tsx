@@ -1,26 +1,29 @@
 import { lazy, useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import {
-  useDeleteUserProductById,
-  useGetFavoriteProductCount,
-  useGetProductCount,
-  useGetUserFavoriteProducts,
+import 'react-toastify/dist/ReactToastify.css';
+
+import styles from './UserProfile.module.scss';
+import { 
+  useDeleteUserProductById, 
+  useGetFavoriteProductCount, 
+  useGetProductCount, 
+  useGetUserFavoriteProducts, 
   useGetUserProducts,
 } from '~/api/product.api';
-import { useGetUserProfile } from '~/api/user.api';
 import { AuthContext } from '~/contexts/auth/AuthContext';
-import styles from './UserProfile.module.scss';
-import { SuspenseWrapper } from '~/components/common/suspense/SuspenseWrapper';
+import { SuspenseWrapper } from '~/components/shared/suspense/SuspenseWrapper';
+import { useGetUserProfile, useUploadAvatarImage } from '~/api/user-profile.api';
+import { useConsoleLogOnChange } from '~/hooks/utils.hook';
 
-const TopLeftSideCardLayout = lazy(
-  () => import('~/components/layouts/TopLeftSideCardLayout')
-);
+const TopLeftSideCardLayout = lazy(() => import('~/components/shared/layouts/TopLeftSideCardLayout'));
 const ProductListing = lazy(() => import('./ProductListing'));
 const UserCard = lazy(() => import('./UserCard'));
 const ProductsTab = lazy(() => import('./ProductsTab'));
 
+
 const UserProfile = () => {
+
   const { userId } = useParams();
   const [currentTab, setCurrentTab] = useState<string>('userProducts');
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -29,11 +32,10 @@ const UserProfile = () => {
   const authContext = useContext(AuthContext);
   const user = authContext?.user;
 
-  // refractor to remove userId from params
-  // pagination must handle multiple product pages
-  // set product count for user products and fav products (optimistic update?)
-  // currentPage as query key for both products
+  
   const { data: userProfile } = useGetUserProfile(userId, true);
+  useConsoleLogOnChange({ userProfile });
+  
   const {
     data: userProducts,
     isLoading: isUserProductsLoading,
@@ -62,6 +64,8 @@ const UserProfile = () => {
     userId,
     String(userId) === String(user?.userId)
   );
+
+  const uploadAvatarImageMutation = useUploadAvatarImage();
 
   useEffect(() => {
     console.log({ currentTab });
@@ -130,6 +134,19 @@ const UserProfile = () => {
     }
   }, [deleteUserProductById.isSuccess, deleteUserProductById.isError]);
 
+  useEffect(() => {
+
+    if(!uploadAvatarImageMutation.isLoading && uploadAvatarImageMutation.data) {
+      // console.log({ uploadedAvatarData: uploadAvatarImageMutation.data.data });
+      toast.success('Đã tải ảnh lên thành công');
+    }
+
+    if(uploadAvatarImageMutation.isError) {
+      toast.error('Chưa thể tải ảnh lên, vui lòng thử lại');
+    }
+
+  }, [uploadAvatarImageMutation.isLoading, uploadAvatarImageMutation.data]);
+
   const handleDeleteButtonClick = (productId) => {
     if (window.confirm('Bạn có chắc muốn xóa sản phẩm này?') === true) {
       deleteUserProductById.mutate(productId);
@@ -140,16 +157,27 @@ const UserProfile = () => {
     console.log({ favoriteProductId: productId });
   };
 
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+
+    const avatarImg = e.target.files?.[0];
+    // console.log({ avatarImg: e.target.files?.[0] });
+    if(avatarImg) {
+      uploadAvatarImageMutation.mutate(avatarImg);
+    } else {
+      alert('Chưa thể tải ảnh lên, vui lòng thử lại');
+    }
+  }
+
   return (
     <>
-      <ToastContainer
-        position='top-right'
-        hideProgressBar
-        theme='colored'
-        autoClose={5000}
-      />
-
       <SuspenseWrapper>
+        <ToastContainer
+          position='top-right'
+          // hideProgressBar
+          theme='colored'
+          autoClose={3000}
+        />
+
         <TopLeftSideCardLayout
           CardComponent={
             <SuspenseWrapper>
@@ -157,6 +185,7 @@ const UserProfile = () => {
                 userProfile={userProfile}
                 user={user}
                 userId={Number(userId)}
+                onAvatarChange={handleAvatarChange}
               />
             </SuspenseWrapper>
           }
@@ -177,10 +206,7 @@ const UserProfile = () => {
                   onFavoriteButtonClick={handleFavoriteButtonClick}
                   productCount={productCount}
                   currentPage={currentPage}
-                  onPageChange={(e, page) => {
-                    setCurrentPage(page);
-                    // sessionStorage.setItem('currentPage', JSON.stringify(page));
-                  }}
+                  onPageChange={(e, page) => setCurrentPage(page)}
                   user={user}
                   userId={Number(userId)}
                 />

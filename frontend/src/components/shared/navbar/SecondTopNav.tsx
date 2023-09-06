@@ -1,12 +1,12 @@
 import clsx from 'clsx';
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
 import { ToastContainer, toast } from 'react-toastify';
-import DropdownMenu from '~/components/common/dropdown-menu/DropdownMenu';
-import DropdownMenuItem from '~/components/common/dropdown-menu/DropdownMenuItem';
-import { AuthContext } from '~/contexts/auth/AuthContext';
+
 import styles from './SecondTopNav.module.scss';
+import { AuthContext } from '~/contexts/auth/AuthContext';
+import DropdownMenu from '~/components/shared/dropdown-menu/DropdownMenu';
+import DropdownMenuItem from '~/components/shared/dropdown-menu/DropdownMenuItem';
 import ToolbarMenuButton from '../button/ToolbarMenuButton';
 import { ISecondTopNav } from './Navbar.interface';
 
@@ -29,6 +29,7 @@ const SecondTopNav: React.FC<ISecondTopNav> = (props) => {
 };
 
 const Dropdown = () => {
+
   const authContext = useContext(AuthContext);
   const [photoUrl, setPhotoUrl] = useState<string>('');
   const [userName, setUserName] = useState<string>('');
@@ -36,24 +37,17 @@ const Dropdown = () => {
   const navigate = useNavigate();
 
   const user = authContext?.user;
-  // const userData = authContext?.userData;
+  const userProfile = authContext?.userProfile;
 
-  // useEffect(() => {
-  //   console.log({ user });
-  // }, [user]);
 
   if (user?.providerData) {
     setPhotoUrl(user?.providerData[0]['photoURL'] ?? '');
     setUserName(
       user?.providerData[0]['displayName'] ??
-        user?.providerData[0]['email'] ??
-        ''
+      user?.providerData[0]['email'] ??
+      ''
     );
   }
-
-  // if(user?.payload) {
-  //   console.log({ payload: user.payload });
-  // }
 
   const options = [
     {
@@ -61,12 +55,24 @@ const Dropdown = () => {
       label: `${user?.email}`,
       Icon: (
         <img
-          src='https://cdn.chotot.com/73TO65Il6h0sDADPUC1slh5Y1vS2PLWhtNQHi_jRmOQ/preset:uac/plain/d01e19fd5a0155b562cce3020725c41a-7b935f90d149c81e3a81f07cce1a9040332e6d90.jpg'
-          alt='userAvatar'
+          src={userProfile?.avatarUrl}
+          alt='avatar'
+          loading='lazy'
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = 'https://static.chotot.com/storage/marketplace/common/png/default_user.png';
+          }}
           height='30px'
           width='30px'
-          style={{borderRadius: '50%'}}
+          style={{ borderRadius: '50%' }}
         />
+        // <img
+        //   src='https://cdn.chotot.com/73TO65Il6h0sDADPUC1slh5Y1vS2PLWhtNQHi_jRmOQ/preset:uac/plain/d01e19fd5a0155b562cce3020725c41a-7b935f90d149c81e3a81f07cce1a9040332e6d90.jpg'
+        //   alt='userAvatar'
+        //   height='30px'
+        //   width='30px'
+        //   style={{borderRadius: '50%'}}
+        // />
       ),
       show: Boolean(user),
     },
@@ -173,7 +179,7 @@ const Dropdown = () => {
     >
       <ToastContainer
         position='top-right'
-        hideProgressBar
+        // hideProgressBar
         theme='colored'
         autoClose={2000}
       />

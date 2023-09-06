@@ -1,6 +1,6 @@
-import TopNav from '~/components/common/navbar';
+import TopNav from '~/components/shared/navbar';
 import PostProduct from '~/components/features/product/product-crud/PostProduct';
-import Header from '~/components/layouts/Header';
+import Header from '~/components/shared/layouts/Header';
 
 const PostProductPage = () => {
   return (
@@ -8,11 +8,9 @@ const PostProductPage = () => {
       <Header>
         <TopNav />
       </Header>
-      <body style={{ height: 'auto' }}>
-        <main>
-          <PostProduct />
-        </main>
-      </body>
+      <div style={{ height: 'auto' }}>
+        <PostProduct />
+      </div>
     </>
   );
 };

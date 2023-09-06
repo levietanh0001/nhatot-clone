@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { IDecodedToken } from '~/interfaces/jwt.interface';
 import dayjs from 'dayjs';
 import { IAuthContext } from './AuthContext.interface';
+import { useGetUserProfile } from '~/api/user-profile.api';
 
 
 
@@ -19,15 +20,11 @@ export const AuthContext = createContext<IAuthContext | null>(null);
 export const AuthProvider = ({ children }) => {
 
   const [user, setUser] = useState<any | null>(null);
-  const [userData, setUserData] = useState<any | null>(null);
+  const [userProfile, setUserProfile] = useState<any | null>(null);
   // const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [email, setEmail] = useState<string | null>(null);
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   console.log({ authenticated });
-  // }, [authenticated]);
 
   useEffect(() => {
 
@@ -45,8 +42,6 @@ export const AuthProvider = ({ children }) => {
         }
     
         const payload = await verifyAccessToken(accessToken, abortController.signal);
-  
-        // console.log({ payload });
         
         if(!payload) {
 
@@ -87,6 +82,19 @@ export const AuthProvider = ({ children }) => {
     }
 
   }, []);
+
+  const { 
+    data: userProfileData, 
+    isLoading: isUserProfileLoading
+  } = useGetUserProfile(user?.userId, !!user?.userId);
+
+  useEffect(() => {
+
+    if(!isUserProfileLoading && userProfileData) {
+      setUserProfile(userProfileData);
+    }
+
+  }, [isUserProfileLoading]);
 
   const getUserData = () => {
     return JSON.parse(String(localStorage.getItem('user')));
@@ -164,15 +172,12 @@ export const AuthProvider = ({ children }) => {
         'Content-Type': 'application/json'
       }
     });
-    // return sendPasswordResetEmail(auth, email);
+    
   }
 
   const updateUserEmail = (email) => {
 
 
-    // if(user) {
-    //   return updateEmail(user, email);
-    // }
   }
 
   const updateUserPassword = (newPassword, userId, resetToken) => {
@@ -187,9 +192,6 @@ export const AuthProvider = ({ children }) => {
       }
     });
 
-    // if(user) {
-    //   return updatePassword(user, password);
-    // }
   }
 
   const redirectToLoginPage = (loginUrl='/login') => {
@@ -202,9 +204,8 @@ export const AuthProvider = ({ children }) => {
 
   const value = {
     user,
+    userProfile,
     setUser,
-    // authenticated,
-    // setAuthenticated,
     registerUser,
     loginUser,
     logoutUser,

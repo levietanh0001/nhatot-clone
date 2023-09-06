@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import styles from './ProductCategory.module.scss';
-import { SelectInput, SelectOption } from '~/components/common/input/SelectInput';
+import { SelectInput, SelectOption } from '~/components/shared/input/SelectInput';
 import { useController, useFormContext } from 'react-hook-form';
 
 const ProductCategory = (props) => {
