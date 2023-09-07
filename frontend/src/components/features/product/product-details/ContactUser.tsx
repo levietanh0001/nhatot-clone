@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { IContactUser } from './ContactUser.interface';
 import styles from './ContactUser.module.scss';
+import Image from '~/components/shared/image/Image';
+import { placeholderImageSrc } from '~/utils/variables.util';
 
 const ContactUser: React.FC<IContactUser> = (props) => {
   const { userId: userId, userProfile } = props;
@@ -13,11 +15,21 @@ const ContactUser: React.FC<IContactUser> = (props) => {
     <div className={styles['wrapper']}>
       <div className={styles['user-card']}>
         <div className={styles['user-avatar']}>
-          <img
+          <Image
+            width='46px'
+            height='46px'
+            alt={'avatar'}
+            lazyLoading={true}
+            src={userProfile?.avatarUrl}
+            variant='circular'
+            fallbackImageUrl={placeholderImageSrc}
+            reserverSpace={true}
+          />
+          {/* <img
             src='https://cdn.chotot.com/73TO65Il6h0sDADPUC1slh5Y1vS2PLWhtNQHi_jRmOQ/preset:uac/plain/d01e19fd5a0155b562cce3020725c41a-7b935f90d149c81e3a81f07cce1a9040332e6d90.jpg'
             decoding='async'
             data-nimg='intrinsic'
-          />
+          /> */}
         </div>
         <div className={styles['user-info']}>
           <div className={styles['card-header']}>
@@ -34,10 +46,13 @@ const ContactUser: React.FC<IContactUser> = (props) => {
           <div className={styles['card-body']}>
             <div className={styles['user-type-wrapper']}>
               <span className={styles['user-icon']}>
-                <img
+                {userProfile?.role === 'moigioi' && (
+                  <img width={15} src="https://static.chotot.com/storage/chotot-icons/next/pro.svg" alt="Môi giới" />
+                )}
+                {/* <img
                   src='https://static.chotot.com/storage/default_images/pty/private-pty-icon.svg'
                   alt='https://static.chotot.com/storage/default_images/pty/private-pty-icon.svg'
-                />
+                /> */}
               </span>
               <span className={styles['user-type']}>
                 {String(userProfile?.role ?? '')

@@ -12,6 +12,12 @@ const ProductSliders = () => {
   const { data: canbanProductCount, isLoading: isCanBanProductCountLoading } = useGetProductCount({ type: 'canban' });
   const { data: chothueProductCount, isLoading: isChoThueProductCountLoading } = useGetProductCount({ type: 'chothue' });
 
+  // useEffect(() => {
+  //   if(!isFetching) {
+  //     console.log({ allProducts })
+  //   }
+  // }, [isFetching]);
+
   return (
     <>
       <SuspenseWrapper>

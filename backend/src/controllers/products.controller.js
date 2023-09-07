@@ -333,16 +333,20 @@ async function getProducts(req, res, next) {
         return res.status(200).json(JSON.parse(cachedProducts));
       }
 
+      // inner join with user profile? separate queries for getting user profile
       const sql = `
-        SELECT *, match(projectName, address, postTitle) against (:q) as relevanceScore
+        SELECT *, 
+        MATCH(projectName, base.address, postTitle) 
+        AGAINST (:q) AS relevanceScore
         FROM (
           SELECT *, CONCAT(projectName, ' ', address, ' ', postTitle) as result
-          FROM nhatot.product
+          FROM ${databaseName}.product
         ) base
+        INNER JOIN ${databaseName}.user_profile on base.userId = ${databaseName}.user_profile.userId
         WHERE
-          match (projectName, address, postTitle) against (:q) > 0
-            and category like :category
-            and type like :type
+          MATCH (projectName, base.address, postTitle) against (:q) > 0
+                and category like :category
+                and type like :type
         ORDER BY relevanceScore DESC
         LIMIT :limit
         OFFSET :offset
@@ -386,7 +390,6 @@ async function getProducts(req, res, next) {
       delete filterCriteria['limit'];
       delete filterCriteria['offset'];
       
-  
       const where = { ...filterCriteria };
   
       const cacheKey = { ...where, limit, offset };
@@ -396,31 +399,59 @@ async function getProducts(req, res, next) {
         return res.status(200).json(JSON.parse(cachedProducts));
       }
       
-      const products = await Product.findAll({ 
-        where, limit, offset, order: [[ 'updatedAt', 'DESC' ]] 
+      // const products = await Product.findAll({ 
+      //   where, limit, offset, order: [[ 'updatedAt', 'DESC' ]] 
+      // });
+      
+      const sql = `
+        SELECT 
+                product.id, product_thumbnail.imageUrl as thumbnailImageUrl, type, category, 
+                projectName, product.address, numBedrooms, numBathrooms,
+                area, price, postTitle, slug,
+                description, userType, product.createdAt, product.updatedAt,
+                product.userId, username, avatarUrl
+        FROM ${databaseName}.product
+        INNER JOIN ${databaseName}.user on product.userId = user.id
+        INNER JOIN ${databaseName}.user_profile on product.userId = user_profile.userId
+        INNER JOIN ${databaseName}.product_thumbnail on product.id = product_thumbnail.productId
+        WHERE
+            category like :category and 
+            type like :type
+        ORDER BY product.createdAt DESC
+        LIMIT :limit
+        OFFSET :offset
+      `;
+
+      const products = await sequelize.query(sql, { 
+        replacements: { limit, offset, category: category ?? '%', type: type ?? '%' }, 
+        type: QueryTypes.SELECT
       })
-  
+
       if(!products) {
         return res.status(200).json([]);
       }
+
+      await redisClient.setEx(`getProducts:${Object.values(cacheKey)}`, 10, JSON.stringify(products));    
   
-      const productIdList = products.map(product => product.id);
-      const productThumbnailImages = productIdList.map(async (productId) => {
-        return ProductThumbnail.findOne({ where: { productId } });
-      })
+      return res.status(200).json(products);
   
-      const productThumbnailImageList = await Promise.all(productThumbnailImages);
+      // const productIdList = products.map(product => product.id);
+      // const productThumbnailImages = productIdList.map(async (productId) => {
+      //   return ProductThumbnail.findOne({ where: { productId } });
+      // })
   
-      const productInfo = productThumbnailImageList.map((thumbnailImage, index) => {
-        return {
-          ...products[index].dataValues,
-          thumbnailImageUrl: thumbnailImage?.imageUrl
-        }
-      });
+      // const productThumbnailImageList = await Promise.all(productThumbnailImages);
   
-      await redisClient.setEx(`getProducts:${Object.values(cacheKey)}`, 10, JSON.stringify(productInfo));    
+      // const productInfo = productThumbnailImageList.map((thumbnailImage, index) => {
+      //   return {
+      //     ...products[index].dataValues,
+      //     thumbnailImageUrl: thumbnailImage?.imageUrl
+      //   }
+      // });
   
-      return res.status(200).json(productInfo);
+      // await redisClient.setEx(`getProducts:${Object.values(cacheKey)}`, 10, JSON.stringify(productInfo));    
+  
+      // return res.status(200).json(productInfo);
     }
 
   } catch(error) {

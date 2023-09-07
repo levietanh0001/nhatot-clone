@@ -72,11 +72,12 @@
 }
 
 .card-media {
-  width: 169px;
+  // width: 169px;
+  // height: 169px;
   height: 169px;
   width: 100%;
   
-  & img {
+  & > img {
     object-fit: cover;
     object-position: center;
   }

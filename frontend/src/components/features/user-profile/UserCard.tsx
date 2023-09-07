@@ -31,19 +31,21 @@ const UserCard: FC<IUserCard> = (props) => {
               />
             )}
             {!userProfile?.avatarUrl && <img alt='Avatar' src='https://static.chotot.com/storage/marketplace/common/png/default_user.png' />}
-            <label
-              htmlFor='upload-avatar'
-              className={styles['upload-avatar']} 
-            >
-              <input
-                id='upload-avatar'
-                type='file'
-                accept='image/*'
-                hidden
-                onChange={onAvatarChange}
-              />
-              <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 25' fill='currentColor' aria-hidden='true' className='w-4 h-4'><path d='M12 16.676a3 3 0 100-6 3 3 0 000 6z' /><path d='M20.25 7.676h-2.766c-.14 0-.315-.091-.45-.235l-1.216-1.919a.727.727 0 00-.065-.086c-.42-.49-.987-.76-1.597-.76H9.844c-.61 0-1.177.27-1.597.76a.729.729 0 00-.065.086L6.967 7.444c-.104.114-.25.235-.404.235v-.375a.75.75 0 00-.75-.75H4.688a.75.75 0 00-.75.75v.375H3.75a2.252 2.252 0 00-2.25 2.25v8.997a2.252 2.252 0 002.25 2.25h16.5a2.252 2.252 0 002.25-2.25v-9a2.252 2.252 0 00-2.25-2.25zM12 18.176a4.5 4.5 0 110-9 4.5 4.5 0 010 9z' /></svg>
-            </label>
+            {userProfile?.userId === user?.userId && (
+              <label
+                htmlFor='upload-avatar'
+                className={styles['upload-avatar']} 
+              >
+                <input
+                  id='upload-avatar'
+                  type='file'
+                  accept='image/*'
+                  hidden
+                  onChange={onAvatarChange}
+                />
+                <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 25' fill='currentColor' aria-hidden='true' className='w-4 h-4'><path d='M12 16.676a3 3 0 100-6 3 3 0 000 6z' /><path d='M20.25 7.676h-2.766c-.14 0-.315-.091-.45-.235l-1.216-1.919a.727.727 0 00-.065-.086c-.42-.49-.987-.76-1.597-.76H9.844c-.61 0-1.177.27-1.597.76a.729.729 0 00-.065.086L6.967 7.444c-.104.114-.25.235-.404.235v-.375a.75.75 0 00-.75-.75H4.688a.75.75 0 00-.75.75v.375H3.75a2.252 2.252 0 00-2.25 2.25v8.997a2.252 2.252 0 002.25 2.25h16.5a2.252 2.252 0 002.25-2.25v-9a2.252 2.252 0 00-2.25-2.25zM12 18.176a4.5 4.5 0 110-9 4.5 4.5 0 010 9z' /></svg>
+              </label>
+            )}
           </span>
           <button>
             <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 25' fill='currentColor' aria-hidden='true' className='h-6 w-6 text-gray-900'><path d='M11.99 11.145a1.78 1.78 0 100 3.562 1.78 1.78 0 100-3.563zM4.781 11.145a1.78 1.78 0 10-.001 3.56 1.78 1.78 0 00.001-3.56zM19.219 11.145a1.78 1.78 0 10-.002 3.56 1.78 1.78 0 00.002-3.56z' /></svg>

@@ -2,7 +2,7 @@ import { lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import './App.scss';
-import { SuspenseWrapper } from './components/common/suspense/SuspenseWrapper';
+import { SuspenseWrapper } from './components/shared/suspense/SuspenseWrapper';
 import { AuthProvider } from './contexts/auth/AuthContext';
 import allRoutes from './routes/index.route';
 

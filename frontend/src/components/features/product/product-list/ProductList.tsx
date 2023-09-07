@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FilterBoard from '~/components/features/product/product-filters/FilterBoard';
 import UserTypeTabs from '~/components/features/product/user-type-tabs/UserTypeTabs';
@@ -26,7 +26,7 @@ const ProductList = () => {
   const authContext = useContext(AuthContext);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [numPages, setNumPages] = useState<number | null>(null);
-  const [gridView, setGridView] = useState<boolean>(false);
+  const [gridView, setGridView] = useState<boolean>(() => localStorage.getItem('gridView') === 'true'? true: false);
   const [favoriteProductIds, setFavoriteProductIds] = useState<any[]>([]);
   const navigate = useNavigate();
 
@@ -49,6 +49,10 @@ const ProductList = () => {
   // useConsoleLogOnChange({ productCount });
   // useConsoleLogOnChange({ q });
   // useConsoleLogOnChange({ queryParams: queryParams.toString() });
+
+  useEffect(() => {
+    localStorage.setItem('gridView', String(gridView));
+  },[gridView]);
 
   const handleCategoryChange = (value) => {
 
@@ -92,7 +96,7 @@ const ProductList = () => {
     }
   }
 
-  render++;
+  
 
   return (
     <>
@@ -117,9 +121,7 @@ const ProductList = () => {
         setCurrentPage={setCurrentPage}
         numPages={numPages}
         setNumPages={setNumPages}
-        onFavoriteButtonClick={(id) => {
-          updateFavoriteList(id, favoriteProductIds, setFavoriteProductIds, authContext)
-        }}
+        onFavoriteButtonClick={(id) => updateFavoriteList(id, favoriteProductIds, setFavoriteProductIds, authContext)}
         onPageChange={(event, page) => {
           setCurrentPage(page);
           sessionStorage.setItem('currentPage', JSON.stringify(page));

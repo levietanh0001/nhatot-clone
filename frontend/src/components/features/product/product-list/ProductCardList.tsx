@@ -9,6 +9,7 @@ import { timeAgo } from '~/utils/date.util';
 import { convertToInternationalCurrencySystem } from '~/utils/number.util';
 import { placeholderImageSrc } from '~/utils/variables.util';
 import styles from './ProductCardList.module.scss';
+import Image from '~/components/shared/image/Image';
 dayjs.extend(relativeTime);
 
 
@@ -97,11 +98,23 @@ const ProductCardList = (props) => {
                       >
                         {product.postTitle}
                       </div>
+                      <div 
+                        style={{
+                          color: 'gray',
+                          // marginLeft: 'auto',
+                          marginTop: '5px',
+                          // marginBottom: '5px'
+                        }}
+                      >{timeAgo(product?.updatedAt)}</div>
                       <div
                         className={clsx(styles['card-content'], {
                           [styles['grid-view']]: isGridView,
                         })}
                       >
+                        <div className={styles['price']}>
+                          {String(convertToInternationalCurrencySystem(product.price))}
+                          {product?.type === 'chothue' && '/tháng'}
+                        </div>
                         <div className={styles['description']}>
                           <span className={styles['area']}>
                             {product?.area ?? ''} m
@@ -112,10 +125,7 @@ const ProductCardList = (props) => {
                           &middot;
                           <span>{product?.numBathrooms ?? ''} WC</span>
                         </div>
-                        <div className={styles['price']}>
-                          {String(convertToInternationalCurrencySystem(product.price))}
-                          {product?.type === 'chothue' && '/tháng'}
-                        </div>
+                        
                         <div className={styles['address']}>
                           {product?.address}
                         </div>
@@ -135,7 +145,17 @@ const ProductCardList = (props) => {
                         >
                           <div className={styles['text']}>
                             <span className={styles['person-icon']}>
-                              {product?.userType === 'moigioi' ? (
+                              <Image
+                                width='20px'
+                                height='20px'
+                                alt={'avatar'}
+                                lazyLoading={true}
+                                src={product?.avatarUrl}
+                                variant='circular'
+                                fallbackImageUrl={placeholderImageSrc}
+                                reserverSpace={true}
+                              />
+                              {/* {product?.userType === 'moigioi' ? (
                                 <img
                                   src='https://static.chotot.com/storage/icons/owner/pro.svg'
                                   alt='Môi giới'
@@ -152,14 +172,12 @@ const ProductCardList = (props) => {
                                 >
                                   <path d='M406.5 399.6C387.4 352.9 341.5 320 288 320H224c-53.5 0-99.4 32.9-118.5 79.6C69.9 362.2 48 311.7 48 256C48 141.1 141.1 48 256 48s208 93.1 208 208c0 55.7-21.9 106.2-57.5 143.6zm-40.1 32.7C334.4 452.4 296.6 464 256 464s-78.4-11.6-110.5-31.7c7.3-36.7 39.7-64.3 78.5-64.3h64c38.8 0 71.2 27.6 78.5 64.3zM256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-272a40 40 0 1 1 0-80 40 40 0 1 1 0 80zm-88-40a88 88 0 1 0 176 0 88 88 0 1 0 -176 0z' />
                                 </svg>
-                              )}
+                              )} */}
                             </span>
-                            &nbsp;&sdot;&nbsp;
-                            <span>{product?.userType}</span>
-                            &nbsp;&sdot;&nbsp;
-                            <span>
-                              {timeAgo(product?.updatedAt)}
-                            </span>
+                            &nbsp;&nbsp;
+                            <span>{product?.username}</span>
+                            {product?.userType === 'moigioi'? <>&nbsp;&middot;&nbsp;môi giới</>: ''}
+                            {/* <span>{timeAgo(product?.updatedAt)}</span> */}
                           </div>
                         </div>
                       </div>
