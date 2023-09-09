@@ -1,7 +1,7 @@
 import React from 'react';
-import { SuspenseWrapper } from '~/components/shared/suspense/SuspenseWrapper';
-import AsBroker from '~/components/features/auth/AsBroker';
 import LoggedInRequired from '~/components/features/auth/LoggedInRequired';
+import { SuspenseWrapper } from '~/components/ui/suspense/SuspenseWrapper';
+
 const Dashboard = React.lazy(() => import('~/components/features/dashboard/Dashboard'));
 
 const dashboardRoutes = [
@@ -9,11 +9,9 @@ const dashboardRoutes = [
     path: '/dashboard',
     element: (
       <LoggedInRequired>
-        {/* <AsBroker> */}
-          <SuspenseWrapper>
-            <Dashboard />
-          </SuspenseWrapper>
-        {/* </AsBroker> */}
+        <SuspenseWrapper>
+          <Dashboard />
+        </SuspenseWrapper>
       </LoggedInRequired>
 
     )

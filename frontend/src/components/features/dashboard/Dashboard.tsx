@@ -3,8 +3,8 @@ import { useState } from "react";
 import { AiOutlineMenu, AiOutlineSearch, AiOutlineBell } from "react-icons/ai";
 
 import styles from "./Dashboard.module.scss";
-import ToggleThemeButton from "~/components/shared/navbar/ToggleThemeButton";
-import Avatar from "~/components/shared/avatar/Avatar";
+import ToggleThemeButton from "~/components/ui/navbar/ToggleThemeButton";
+import Avatar from "~/components/ui/avatar/Avatar";
 import SidebarAccordionMenu from "./SidebarAccordionMenu";
 import SearchModal from './SearchModal';
 

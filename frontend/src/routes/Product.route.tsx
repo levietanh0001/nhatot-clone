@@ -1,11 +1,11 @@
 import React from 'react';
-import { SuspenseWrapper } from '~/components/shared/suspense/SuspenseWrapper';
+import { SuspenseWrapper } from '~/components/ui/suspense/SuspenseWrapper';
 import LoggedInRequired from '~/components/features/auth/LoggedInRequired';
 
-const PostProductPage = React.lazy(() => import('~/pages/PostProductPage'));
-const ProductDetailsPage = React.lazy(() => import('~/pages/ProductDetailsPage'));
-const ProductListPage = React.lazy(() => import('~/pages/ProductListPage'));
-const UpdateProductPage = React.lazy(() => import('~/pages/UpdateProductPage'));
+const PostProductPage = React.lazy(() => import('~/pages/PostProduct.page'));
+const ProductDetailsPage = React.lazy(() => import('~/pages/ProductDetails.page'));
+const ProductListPage = React.lazy(() => import('~/pages/ProductList.page'));
+const UpdateProductPage = React.lazy(() => import('~/pages/UpdateProduct.page'));
 
 
 const productRoutes = [

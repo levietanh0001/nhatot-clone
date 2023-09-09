@@ -17,9 +17,9 @@ import {
   setProductProperties,
   setProductVideo,
   setVideoThumbnail,
-} from '~/features/products/productSlice';
-import { createProduct, updateProduct } from '~/features/products/productThunks';
-import postProductFormSchema from '~/schemas/post-product/post-product-form-schema';
+} from '~/features/products/product.slice';
+import { createProduct, updateProduct } from '~/features/products/product.thunk';
+import postProductFormSchema from '~/schemas/post-product/post-product-form.schema';
 import { sanitizeBigIntString } from '~/utils/number.util';
 import ProductForm from '~/components/features/product/product-form';
 import { useQuery } from '@tanstack/react-query';

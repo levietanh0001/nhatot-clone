@@ -1,7 +1,7 @@
 import { UseQueryResult } from '@tanstack/react-query';
 import { useContext, useEffect, useState } from 'react';
 import { useGetUserProfiles } from '~/api/user-profile.api';
-import { AuthContext } from '~/contexts/auth/AuthContext';
+import { AuthContext } from '~/contexts/auth/Auth.context';
 
 // export const useCreateOneOneChat = (userId, socket, isConnected) => {
 //   useEffect(() => {

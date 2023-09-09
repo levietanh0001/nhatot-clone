@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 import dayjs from 'dayjs';
 import jwtDecode from 'jwt-decode';
 import { IDecodedToken } from '~/interfaces/jwt.interface';
-import { getNewAccessAndRefreshTokens } from '~/utils/cryptography';
+import { getNewAccessAndRefreshTokens } from '~/utils/cryptography.util';
 import { backendBaseUrl } from '~/utils/variables.util';
 
 export const axiosPublic = axios.create({

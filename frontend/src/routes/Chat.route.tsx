@@ -1,7 +1,7 @@
-import { SuspenseWrapper } from "~/components/shared/suspense/SuspenseWrapper";
+import { SuspenseWrapper } from "~/components/ui/suspense/SuspenseWrapper";
 import LoggedInRequired from "~/components/features/auth/LoggedInRequired";
 import CreateChat from "~/components/features/chat/CreateChat";
-import ChatPage from "~/pages/ChatPage";
+import ChatPage from "~/pages/Chat.page";
 
 const chatRoutes = [
   {

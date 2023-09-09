@@ -2,9 +2,9 @@ import dayjs from "dayjs";
 import { default as jwtDecode, default as jwt_decode } from "jwt-decode";
 import { useContext, useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { AuthContext } from '~/contexts/auth/AuthContext';
+import { AuthContext } from '~/contexts/auth/Auth.context';
 import { IDecodedToken } from "~/interfaces/jwt.interface";
-import { getNewTokens } from '~/utils/cryptography';
+import { getNewTokens } from '~/utils/cryptography.util';
 
 
 // if access token expires, refresh token

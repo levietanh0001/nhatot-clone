@@ -1,7 +1,7 @@
 import clsx from 'clsx';
+import { SelectInput, SelectOption } from '~/components/ui/input/SelectInput';
 import styles from './ProductCategory.module.scss';
-import { SelectInput, SelectOption } from '~/components/shared/input/SelectInput';
-import { useController, useFormContext } from 'react-hook-form';
+
 
 const ProductCategory = (props) => {
   const { product, onCategoryChange, name } = props;

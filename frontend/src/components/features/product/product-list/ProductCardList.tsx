@@ -9,7 +9,7 @@ import { timeAgo } from '~/utils/date.util';
 import { convertToInternationalCurrencySystem } from '~/utils/number.util';
 import { placeholderImageSrc } from '~/utils/variables.util';
 import styles from './ProductCardList.module.scss';
-import Image from '~/components/shared/image/Image';
+import Image from '~/components/ui/image/Image';
 dayjs.extend(relativeTime);
 
 

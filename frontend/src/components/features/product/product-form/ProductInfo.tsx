@@ -1,8 +1,8 @@
-import FloatingLabelInput from '~/components/shared/input/FloatingLabelInput';
+import FloatingLabelInput from '~/components/ui/input/FloatingLabelInput';
 import {
   SelectInput,
   SelectOption,
-} from '~/components/shared/input/SelectInput';
+} from '~/components/ui/input/SelectInput';
 import {
   formatNumberWithCommas
 } from '~/utils/number.util';

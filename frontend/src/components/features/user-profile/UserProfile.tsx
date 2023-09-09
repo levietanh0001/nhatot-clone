@@ -11,12 +11,12 @@ import {
   useGetUserFavoriteProducts, 
   useGetUserProducts,
 } from '~/api/product.api';
-import { AuthContext } from '~/contexts/auth/AuthContext';
-import { SuspenseWrapper } from '~/components/shared/suspense/SuspenseWrapper';
+import { AuthContext } from '~/contexts/auth/Auth.context';
+import { SuspenseWrapper } from '~/components/ui/suspense/SuspenseWrapper';
 import { useGetUserProfile, useUploadAvatarImage } from '~/api/user-profile.api';
 import { useConsoleLogOnChange } from '~/hooks/utils.hook';
 
-const TopLeftSideCardLayout = lazy(() => import('~/components/shared/layouts/TopLeftSideCardLayout'));
+const TopLeftSideCardLayout = lazy(() => import('~/components/ui/layouts/TopLeftSideCardLayout'));
 const ProductListing = lazy(() => import('./ProductListing'));
 const UserCard = lazy(() => import('./UserCard'));
 const ProductsTab = lazy(() => import('./ProductsTab'));
@@ -35,7 +35,8 @@ const UserProfile = () => {
   
   const { data: userProfile } = useGetUserProfile(userId, true);
   useConsoleLogOnChange({ userProfile });
-  
+    
+
   const {
     data: userProducts,
     isLoading: isUserProductsLoading,

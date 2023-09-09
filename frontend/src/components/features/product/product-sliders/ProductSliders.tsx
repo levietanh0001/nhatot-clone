@@ -1,6 +1,6 @@
 import { lazy, useEffect } from 'react';
 import { useGetProductCount, useGetProducts } from '~/api/product.api';
-import { SuspenseWrapper } from '~/components/shared/suspense/SuspenseWrapper';
+import { SuspenseWrapper } from '~/components/ui/suspense/SuspenseWrapper';
 const ProductCardSlider = lazy(() => import('~/components/features/home/product-card-slider/ProductCardSlider'));
 
 const ProductSliders = () => {

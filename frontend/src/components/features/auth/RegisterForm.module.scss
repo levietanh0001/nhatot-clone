@@ -15,7 +15,11 @@
 }
 
 .password-input {
+
   position: relative;
+
+  & .field-input{
+  }
 
   & .show-password {
     position: absolute;

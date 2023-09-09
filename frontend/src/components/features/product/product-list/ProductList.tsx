@@ -1,16 +1,17 @@
 import { AxiosError } from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import FilterBoard from '~/components/features/product/product-filters/FilterBoard';
-import UserTypeTabs from '~/components/features/product/user-type-tabs/UserTypeTabs';
-import { AuthContext } from '~/contexts/auth/AuthContext';
+
+import { AuthContext } from '~/contexts/auth/Auth.context';
 import { updateFavoriteList, usePopulateFavoritelist } from '~/api/favorite-list.api';
 import { useScrollToTopOnPageChange, useSetAvailablePages, useSetCurrentPage } from '~/hooks/pagination.hook';
 import { useGetProductCount, usePaginateProducts } from '~/api/product.api';
 import ProductCardList from './ProductCardList';
+import UserTypeTabs from './UserTypeTabs';
+import FilterBoard from './FilterBoard';
 
 
-let render = 0;
+// let render = 0;
 // const pageSize = 9;
 const productPerPage = 20;
 

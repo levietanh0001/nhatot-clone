@@ -1,12 +1,12 @@
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { IContactUser } from './ContactUser.interface';
-import styles from './ContactUser.module.scss';
-import Image from '~/components/shared/image/Image';
+import Image from '~/components/ui/image/Image';
 import { placeholderImageSrc } from '~/utils/variables.util';
+import styles from './ContactUser.module.scss';
+import { IContactUser } from './product-details.interface';
 
-const ContactUser: React.FC<IContactUser> = (props) => {
+const ContactUser: FC<IContactUser> = (props) => {
   const { userId: userId, userProfile } = props;
   const phoneNumber = userProfile?.phoneNumber ?? '';
   const [showPhone, setShowPhone] = useState<boolean>(false);

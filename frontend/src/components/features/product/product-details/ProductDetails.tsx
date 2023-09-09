@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useHandleQueryError from '~/hooks/error-handling.hook';
-import ContentWithStickyBox from '~/components/shared/layouts/ContentWithStickyBox';
+import ContentWithStickyBox from '~/components/ui/layouts/ContentWithStickyBox';
 import AboutProduct from './AboutProduct';
 import ContactUser from './ContactUser';
 import { useScrollToTop } from '~/hooks/pagination.hook';

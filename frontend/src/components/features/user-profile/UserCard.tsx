@@ -1,7 +1,7 @@
 import { Rating } from '@mui/material';
 import { FC } from 'react';
 import { dateTimeToDateString } from '~/utils/date.util';
-import { IUserCard } from './UserCard.interface';
+import { IUserCard } from './user-profile.interface';
 import styles from './UserCard.module.scss';
 
 

@@ -1,7 +1,7 @@
 
 import { useContext } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { AuthContext } from '~/contexts/auth/AuthContext';
+import { AuthContext } from '~/contexts/auth/Auth.context';
 import { backendBaseUrl } from '~/utils/variables.util';
 
 

@@ -1,4 +1,4 @@
-import FloatingLabelInput from '~/components/shared/input/FloatingLabelInput';
+import FloatingLabelInput from '~/components/ui/input/FloatingLabelInput';
 import styles from './PostDetails.module.scss';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';

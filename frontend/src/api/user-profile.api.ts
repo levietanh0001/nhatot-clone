@@ -1,7 +1,7 @@
 import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosPrivate, axiosPublic } from "./axios.api";
 import { useContext } from "react";
-import { AuthContext } from "~/contexts/auth/AuthContext";
+import { AuthContext } from "~/contexts/auth/Auth.context";
 
 
 export function useUploadAvatarImage() {

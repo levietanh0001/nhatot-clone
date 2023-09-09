@@ -1,10 +1,11 @@
-import { ILinkCardProps } from '~/components/features/home/Home.interface';
+import { ILinkCardProps } from '~/components/features/home/home.interface';
 import styles from './CongCu.module.scss';
+import { FC } from 'react';
 
 
 
 
-const LinkCard: React.FC<ILinkCardProps> = ({ children, className, href }) => {
+const LinkCard: FC<ILinkCardProps> = ({ children, className, href }) => {
   return (
     <a href={href}>
       <div className={className}>
@@ -14,7 +15,7 @@ const LinkCard: React.FC<ILinkCardProps> = ({ children, className, href }) => {
   );
 };
 
-// const Badge: React.FC<IBadgeProps> = ({ children, className }) => {
+// const Badge: FC<IBadgeProps> = ({ children, className }) => {
 //   return (
 //     <span className={className}>{children}</span>
 //   );

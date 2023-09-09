@@ -1,19 +1,22 @@
 import jwt_decode from "jwt-decode";
 import { useContext, useEffect, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { AuthContext } from '~/contexts/auth/AuthContext';
-import { getNewTokens } from '~/utils/cryptography';
+import { AuthContext } from '~/contexts/auth/Auth.context';
+import { getNewTokens } from '~/utils/cryptography.util';
 
 
-const LoggedInRequired = ({ children, redirectPath='/login' }) => {
+const LoggedInRequired = (props) => {
+
+  const { 
+    children, 
+    redirectPath='/login',
+  } = props;
 
   const authContext = useContext(AuthContext);
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [checking, setChecking] = useState<boolean>(true);
 
   useEffect(() => {
-
-    // console.log('logged in checking');
 
     const abortController = new AbortController();
 

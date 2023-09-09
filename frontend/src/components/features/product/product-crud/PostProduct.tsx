@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { RootState, useAppDispatch } from '~/app/store';
+import ProductForm from '~/components/features/product/product-form';
 import {
   addProductImage,
   removeImageByIndex,
@@ -17,11 +18,11 @@ import {
   setProductProperties,
   setProductVideo,
   setVideoThumbnail,
-} from '~/features/products/productSlice';
-import { createProduct } from '~/features/products/productThunks';
-import postProductFormSchema from '~/schemas/post-product/post-product-form-schema';
+} from '~/features/products/product.slice';
+import { createProduct } from '~/features/products/product.thunk';
+import postProductFormSchema from '~/schemas/post-product/post-product-form.schema';
 import { sanitizeBigIntString } from '~/utils/number.util';
-import ProductForm from '~/components/features/product/product-form';
+
 
 const PostProduct = () => {
   const formId = useId();

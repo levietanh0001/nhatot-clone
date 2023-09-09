@@ -5,26 +5,26 @@ const { buildSchema } = require('graphql');
 module.exports = buildSchema(`
 
     type User {
-        id: ID!
-        email: String!
+      id: ID!
+      email: String!
     }
 
     input UserInputData {
-        email: String!
-        password: String!
+      email: String!
+      password: String!
     }
 
     type Mutation {
-        createUser(userInput: UserInputData): User!
+      createUser(userInput: UserInputData): User!
     }
 
     type Query {
-        hello: String
+      hello: String
     }
 
     schema {
-        query: Query
-        mutation: Mutation
+      query: Query
+      mutation: Mutation
     }
 `);
 

@@ -1,10 +1,10 @@
 import React from 'react';
-import { SuspenseWrapper } from '~/components/shared/suspense/SuspenseWrapper';
+import { SuspenseWrapper } from '~/components/ui/suspense/SuspenseWrapper';
 
-const ForgetPasswordPage = React.lazy(() => import('~/pages/ForgetPassword'));
-const LoginPage = React.lazy(() => import('~/pages/LoginPage'));
-const RegisterPage = React.lazy(() => import('~/pages/RegisterPage'));
-const ResetPasswordPage = React.lazy(() => import('~/pages/ResetPassword'));
+const ForgetPasswordPage = React.lazy(() => import('~/pages/ForgetPassword.page'));
+const LoginPage = React.lazy(() => import('~/pages/Login.page'));
+const RegisterPage = React.lazy(() => import('~/pages/Register.page'));
+const ResetPasswordPage = React.lazy(() => import('~/pages/ResetPassword.page'));
 
 
 const authRoutes = [

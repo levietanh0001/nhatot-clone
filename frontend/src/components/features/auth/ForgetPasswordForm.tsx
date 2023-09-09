@@ -3,9 +3,9 @@ import { useContext, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { AuthContext } from '~/contexts/auth/AuthContext';
+import { AuthContext } from '~/contexts/auth/Auth.context';
 
-import FloatingLabelInput from '~/components/shared/input/FloatingLabelInput';
+import FloatingLabelInput from '~/components/ui/input/FloatingLabelInput';
 import forgetPasswordFormSchema from '~/schemas/auth/forget-password-form.schema';
 import styles from './LoginForm.module.scss';
 

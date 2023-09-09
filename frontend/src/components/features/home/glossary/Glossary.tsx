@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { FC, useState } from 'react';
 import styles from './Glossary.module.scss';
 
-const Glossary: React.FC = () => {
+const Glossary: FC = () => {
 
   const [expand, setExpand] = useState<boolean>(false);
 

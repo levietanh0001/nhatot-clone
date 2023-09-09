@@ -321,6 +321,7 @@ async function getProducts(req, res, next) {
     const offset = Number.parseInt(req.query['offset']) || 0;
     const type = req.query['type'];
     const category = req.query['category'];
+    const userId = req.query['userId'];
 
     console.log({ category, type });
     
@@ -347,6 +348,7 @@ async function getProducts(req, res, next) {
           MATCH (projectName, base.address, postTitle) against (:q) > 0
                 and category like :category
                 and type like :type
+                and base.userId like :userId
         ORDER BY relevanceScore DESC
         LIMIT :limit
         OFFSET :offset
@@ -355,7 +357,9 @@ async function getProducts(req, res, next) {
       const products = await sequelize.query(
         sql, 
         { 
-          replacements: { q: `%${q}%`, limit, offset, category: category ?? '%', type: type ?? '%' }, 
+          replacements: { 
+            q: `%${q}%`, limit, offset, category: category ?? '%', type: type ?? '%', userId: userId ?? '%'
+          }, 
           type: QueryTypes.SELECT
         }
       );
@@ -416,14 +420,17 @@ async function getProducts(req, res, next) {
         INNER JOIN ${databaseName}.product_thumbnail on product.id = product_thumbnail.productId
         WHERE
             category like :category and 
-            type like :type
+            type like :type and
+            product.userId like :userId
         ORDER BY product.createdAt DESC
         LIMIT :limit
         OFFSET :offset
       `;
 
       const products = await sequelize.query(sql, { 
-        replacements: { limit, offset, category: category ?? '%', type: type ?? '%' }, 
+        replacements: { 
+          limit, offset, category: category ?? '%', type: type ?? '%', userId: userId ?? '%'
+        }, 
         type: QueryTypes.SELECT
       })
 

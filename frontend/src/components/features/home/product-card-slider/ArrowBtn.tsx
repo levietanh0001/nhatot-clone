@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { IArrowBtn } from "./ProductCardSlider.interface";
+import { IArrowBtn } from "./product-card-slider.interface";
 
 
 const ArrowBtn = forwardRef<HTMLButtonElement, IArrowBtn>(

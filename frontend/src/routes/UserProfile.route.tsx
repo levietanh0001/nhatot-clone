@@ -1,6 +1,6 @@
-import { SuspenseWrapper } from "~/components/shared/suspense/SuspenseWrapper";
+import { SuspenseWrapper } from "~/components/ui/suspense/SuspenseWrapper";
 import LoggedInRequired from "~/components/features/auth/LoggedInRequired";
-import UserProfilePage from "~/pages/UserProfilePage";
+import UserProfilePage from "~/pages/UserProfile.page";
 
 const userRoutes = [
   {

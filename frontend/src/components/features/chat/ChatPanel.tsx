@@ -1,8 +1,8 @@
 import clsx from 'clsx';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 import { AiOutlineSend } from 'react-icons/ai';
 import styles from './ChatPanel.module.scss';
-import { AuthContext } from '~/contexts/auth/AuthContext';
+import { AuthContext } from '~/contexts/auth/Auth.context';
 import {
   IChatPanel,
   IHeaderCardProps,
@@ -10,7 +10,7 @@ import {
 } from './ChatPanel.inteface';
 import { timeAgo } from '~/utils/date.util';
 
-export const ChatPanel: React.FC<IChatPanel> = (props) => {
+export const ChatPanel: FC<IChatPanel> = (props) => {
   const {
     // userProfile,
     inputMessage,
@@ -39,7 +39,7 @@ export const ChatPanel: React.FC<IChatPanel> = (props) => {
 };
 
 
-const HeaderCard: React.FC<IHeaderCardProps> = (props) => {
+const HeaderCard: FC<IHeaderCardProps> = (props) => {
   const { currentContactInfo } = props;
 
   return (
@@ -76,7 +76,7 @@ const HeaderCard: React.FC<IHeaderCardProps> = (props) => {
 };
 
 
-const MessageBox: React.FC<IMessageBoxProps> = (props) => {
+const MessageBox: FC<IMessageBoxProps> = (props) => {
   const {
     inputMessage,
     messages,

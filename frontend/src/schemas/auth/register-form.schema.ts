@@ -1,14 +1,12 @@
-import { number, object, ref, string } from 'yup';
+import { object, ref, string } from 'yup';
 
 const passwordMinChar = 6;
 
 const registerFormSchema = object({
-  userName:
-    string(),
   email:
     string()
-    .required('Email không thể trống')
-    .email('Email không hợp lệ'),
+    .email('Email không hợp lệ')
+    .required('Email không thể trống'),
   password: 
     string()
     .required('Mật khẩu không thể trống')
@@ -22,6 +20,8 @@ const registerFormSchema = object({
     string()
     .required('Xác nhận mật khẩu không thể trống') 
     .oneOf<any>([ref('password'), null], 'Xác nhận mật khẩu phải khớp với mật khẩu'),
+  userName:
+    string(),
 });
 
 export default registerFormSchema;

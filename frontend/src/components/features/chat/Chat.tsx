@@ -8,13 +8,13 @@ import {
   useSendOneOneMessageMutation,
 } from '~/api/message.api';
 import { useConnectSocket } from '~/api/socket.api';
-import { AuthContext } from '~/contexts/auth/AuthContext';
+import { AuthContext } from '~/contexts/auth/Auth.context';
 import useGetContactsInfo, {
   useJoinOneOneChat,
   useSetMessagesOnFetch,
   useSetOneOneChatIdOnCreate,
 } from './Chat.hook';
-import { IMessage } from './Chat.interface';
+import { IMessage } from './chat.interface';
 import styles from './Chat.module.scss';
 import { ChatPanel } from './ChatPanel';
 import ContactPanel from './ContactPanel';

@@ -1,11 +1,11 @@
 import ClickAwayListener from '@mui/material/ClickAwayListener';
-import React, { useState } from 'react';
+import { FC, useState } from 'react';
 import { timeAgo } from '~/utils/date.util';
-import { IContactPanel } from './ContactPanel.interface';
 import styles from './ContactPanel.module.scss';
+import { IContactPanel } from './chat.interface';
 
 
-const ContactPanel: React.FC<IContactPanel> = (props) => {
+const ContactPanel: FC<IContactPanel> = (props) => {
   const {
     contactInfoList,
     onContactClick,
