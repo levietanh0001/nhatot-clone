@@ -4,13 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import styles from './UserProfile.module.scss';
-import { 
-  useDeleteUserProductById, 
-  useGetFavoriteProductCount, 
-  useGetProductCount, 
-  useGetUserFavoriteProducts, 
-  useGetUserProducts,
-} from '~/api/product.api';
+import { useDeleteUserProductById, useGetFavoriteProductCount, useGetProductCount, useGetUserFavoriteProducts, useGetUserProducts } from '~/api/product.api';
 import { AuthContext } from '~/contexts/auth/Auth.context';
 import { SuspenseWrapper } from '~/components/ui/suspense/SuspenseWrapper';
 import { useGetUserProfile, useUploadAvatarImage } from '~/api/user-profile.api';

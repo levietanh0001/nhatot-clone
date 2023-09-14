@@ -1,7 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { axiosPublic } from "./axios.api";
-
-
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { axiosPrivate, axiosPublic } from './axios.api';
 
 export function useGetUserIdForChat(userId) {
   return useQuery({
@@ -17,6 +15,34 @@ export function useGetUserIdForChat(userId) {
     select: (data) => {
       return data.data;
     },
-    enabled: !!userId
+    enabled: !!userId,
+  });
+}
+
+export function useRevokeUsersRefreshTokensMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['revokeUserRefreshToken'],
+    mutationFn: (userIds: string[]) => {
+      return axiosPrivate.put(`/admin/user/revoke-refresh-token`, { userIds });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(['all-user-profiles']);
+    },
+  });
+}
+
+export function useVerifyUsersMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['verifyUser'],
+    mutationFn: (userIds: string[]) => {
+      return axiosPrivate.put(`/admin/user/verify`, { userIds });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(['all-user-profiles']);
+    },
   });
 }

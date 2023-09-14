@@ -35,6 +35,7 @@ const favoriteListRouter = require('./routes/favorite-list.route');
 const userRouter = require('./routes/user.route');
 const chatRouter = require('./routes/chat.route');
 const messageRouter = require('./routes/message.route');
+const adminRouter = require('./routes/admin.route');
 // const firebaseRouter = require('./routes/firebase-auth.route');
 const errorsService = require('./controllers/errors.controller');
 
@@ -52,7 +53,7 @@ const userProfileRouter = require('./routes/user-profile.route');
 // const { extractAccessTokenFromRequest, verifyAccessTokenAsync } = require('./utils/cryptography.util');
 const ProductThumbnail = require('./models/product-thumbnail');
 const VideoThumbnail = require('./models/video-thumbnail');
-const connectToMongoDB = require('./utils/database.mongo.util');
+const { connectToMongoDB } = require('./utils/database.mongo.util');
 const UserCollection = require('./models/user.collection');
 
 
@@ -142,6 +143,7 @@ app.use('/user-profile', userProfileRouter);
 app.use('/favorite-list', favoriteListRouter);
 app.use('/chat', chatRouter);
 app.use('/message', messageRouter);
+app.use('/admin', adminRouter);
 
 // error handling
 app.use(errorsService.handle404);

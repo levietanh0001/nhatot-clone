@@ -3,7 +3,7 @@ const express = require('express');
 
 const { getProducts, getProductById, getProductCount, searchProducts, createProduct, createProductVideo, createVideoThumbnail, deleteProductById, updateProductById, updateProductVideo, updateVideoThumbnail } = require('../controllers/products.controller');
 const { uploadMultipleFiles, uploadProduct, uploadMultipleImages, uploadVideo, uploadImage } = require('../middlewares/upload.middleware');
-const { authRequired, loggedInRequired } = require('../middlewares/auth.middleware');
+const { authRequired, loggedInRequired, adminOnly } = require('../middlewares/auth.middleware');
 const { validateCreateProduct, validateUpdateProduct, validateGetProduct, validateSearchProducts } = require('../validators/products.validator');
 
 

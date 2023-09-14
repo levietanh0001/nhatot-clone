@@ -1,0 +1,61 @@
+.language-btn,
+.notification-btn {
+  display: flex;
+  align-items: center;
+
+  border: 0;
+  padding: 0;
+
+  background-color: transparent;
+
+  & .icon-wrapper {
+    padding: 7px;
+    border-radius: 50%;
+
+    fill: white;
+
+    &:hover {
+      background-color: rgba(231, 227, 252, 0.08);
+    }
+  }
+
+  & svg {
+    vertical-align: middle;
+    width: 25px;
+    height: 25px;
+    color: white;
+  }
+}
+
+.actions {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+
+  & .action {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+@media (max-width: 576px) {
+
+
+}
+
+
+@media (max-width: 420px) {
+
+  .actions {
+
+    gap: 0;
+    & .language-btn,
+    & .notification-btn,
+    & .toggle-theme-btn {
+      display: none;
+    }
+  }
+
+}

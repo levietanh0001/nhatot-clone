@@ -1,4 +1,4 @@
-const { override, useBabelRc, adjustStyleLoaders } = require('customize-cra');
+const { override, useBabelRc, adjustStyleLoaders, addWebpackAlias } = require('customize-cra');
 const glob = require('glob');
 const path = require('path');
 
@@ -41,6 +41,10 @@ const isProd = process.env.NODE_ENV.includes('prod');
 module.exports = override(
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useBabelRc(),
+  // addWebpackAlias({
+  //   '~': path.resolve(__dirname, './src'),
+  //   '@styles': path.resolve(__dirname, './src/styles'),
+  // }),
   isProd ? addWebpackPlugins : null,
   isProd ? disableChunking : null,
   isProd ? cssLoader : null

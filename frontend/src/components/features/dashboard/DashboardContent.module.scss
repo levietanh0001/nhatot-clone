@@ -1,0 +1,63 @@
+
+.wrapper {
+  height: 100%;
+}
+
+.global-filter {
+
+  margin-bottom: 10px;
+
+  & > input {
+    background-color: darkgray;
+    width: 100%;
+  }
+}
+
+.table-wrapper {
+  width: 100%;
+  height: 65vh;
+  overflow: scroll;
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.table {
+  color: lightgray;
+
+  & input {
+    background-color: darkgray;
+  }
+
+  & .table-head {
+    
+    & > tr > th {
+      background-color: #131313;
+    }
+  }
+}
+
+
+.pagination {
+
+  width: 100%;
+  text-align: right;
+
+  & > .current-page {
+    color: white;
+  }
+
+  & > .go-to-page {
+    color: white;
+
+    & > input {
+      text-align: center;
+      height: 10px;
+      width: 50px;
+    }
+  }
+
+  & > .page-size {
+  }
+
+}
+

@@ -45,6 +45,25 @@ export function useGetProducts(criteria) {
   });
 }
 
+export function useGetAllProducts() {
+
+  return useQuery({
+    queryKey: ['getAllProducts'],
+    queryFn: ({ signal }) => {
+      return axiosPrivate.get(`/admin/products`, { signal });
+    },
+    keepPreviousData: true,
+    refetchOnMount: true, // if component is mounted, refetch
+    refetchOnWindowFocus: false,
+    cacheTime: 0, // by default 5 mins
+    staleTime: 0,
+    select: (data) => {
+      return data.data;
+    },
+    
+  });
+}
+
 export function usePaginateProducts(currentPage, productPerPage, filter) {
 
   const q = filter?.q;

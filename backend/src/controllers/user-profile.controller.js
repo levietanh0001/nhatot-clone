@@ -7,6 +7,11 @@ const { redisClient } = require("../utils/redis-store.util");
 const UserCollection = require("../models/user.collection");
 const { doesPathExist, deleteFileByPath } = require("../utils/file.util");
 const { uploadedImagesDir } = require("../utils/path.util");
+const { mongoConn } = require('../utils/database.mongo.util');
+const { default: mongoose } = require('mongoose');
+
+
+
 
 
 async function createAvatarImage(req, res, next) {
@@ -63,7 +68,7 @@ async function getUserProfile(req, res, next) {
     const sql = `
       SELECT 
             ${databaseName}.user.id as userId, 
-            gender, rating, follower, following, respondToChat, 
+            gender, rating, follower, following, respondToChat, isVerified,
             address, phoneNumber, email, username,avatarUrl,
             ${databaseName}.user.role, 
             ${databaseName}.user.createdAt
@@ -103,7 +108,42 @@ async function getUserProfile(req, res, next) {
 }
 
 
+async function getAllUserProfiles(req, res, next) {
+
+  try {
+  
+    const limit = req.query['limit'];
+    const offset = req.query['offset'];
+
+    const sql = `
+      SELECT 
+            ${databaseName}.user.id as userId,
+            gender, rating, follower, following, respondToChat, isVerified,
+            address, phoneNumber, email, username,avatarUrl,
+            ${databaseName}.user.role, ${databaseName}.user.createdAt, ${databaseName}.user.refreshToken
+      FROM ${databaseName}.user_profile 
+      INNER JOIN ${databaseName}.user ON ${databaseName}.user_profile.userId = user.id
+    `;
+    
+    const userProfiles = await sequelize.query(
+      sql, 
+      { replacements: { limit, offset }, 
+      type: QueryTypes.SELECT }
+    );
+  
+    return res.status(200).json(userProfiles);
+
+  } catch(error) {
+
+    console.log(error);
+    return next(error);
+  }
+
+}
+
+
 module.exports = {
   getUserProfile,
   createAvatarImage,
+  getAllUserProfiles
 }

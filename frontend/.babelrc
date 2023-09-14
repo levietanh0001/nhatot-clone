@@ -2,8 +2,16 @@
   "plugins": [
     ["module-resolver", {
       "alias": {
-        "~": "./src"
+        "~": "./src",
+        "@styles": "./src/styles"
       }
     }]
+    // [
+    //   "babel-plugin-root-import",
+    //   {
+    //     "rootPathSuffix": "src"
+    //   }
+    // ]
+    
   ]
 }

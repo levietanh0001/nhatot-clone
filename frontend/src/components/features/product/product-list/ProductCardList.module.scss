@@ -180,7 +180,9 @@
 
 .card-content.grid-view {
 
-
+  & .price {
+    margin-top: 5px;
+  }
 }
 
 .superscript {
@@ -215,7 +217,8 @@
     }
 
     & > .text {
-            
+      
+      flex: 1;
       font-size: 0.75rem;
 
       display: flex;
@@ -245,6 +248,14 @@
     color: gray;
 
     & > .text {
+
+      & > .username {
+        display: inline-block;
+        width: 100px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: clip;
+      }
 
       // font-size: 0.75rem;
 

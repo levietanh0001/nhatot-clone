@@ -98,14 +98,7 @@ const ProductCardList = (props) => {
                       >
                         {product.postTitle}
                       </div>
-                      <div 
-                        style={{
-                          color: 'gray',
-                          // marginLeft: 'auto',
-                          marginTop: '5px',
-                          // marginBottom: '5px'
-                        }}
-                      >{timeAgo(product?.updatedAt)}</div>
+                      
                       <div
                         className={clsx(styles['card-content'], {
                           [styles['grid-view']]: isGridView,
@@ -115,6 +108,7 @@ const ProductCardList = (props) => {
                           {String(convertToInternationalCurrencySystem(product.price))}
                           {product?.type === 'chothue' && '/tháng'}
                         </div>
+
                         <div className={styles['description']}>
                           <span className={styles['area']}>
                             {product?.area ?? ''} m
@@ -132,6 +126,10 @@ const ProductCardList = (props) => {
                         <div className={styles['project-name']}>
                           {product?.projectName}
                         </div>
+                        {/* <div className={styles['updated-date']}>
+                          {timeAgo(product?.updatedAt)}
+                        </div> */}
+
                       </div>
                       <div
                         className={clsx(styles['card-footer'], {
@@ -175,9 +173,13 @@ const ProductCardList = (props) => {
                               )} */}
                             </span>
                             &nbsp;&nbsp;
-                            <span>{product?.username}</span>
-                            {product?.userType === 'moigioi'? <>&nbsp;&middot;&nbsp;môi giới</>: ''}
-                            {/* <span>{timeAgo(product?.updatedAt)}</span> */}
+                            <span className={styles['username']}>{product?.username}</span>
+                            {/* {product?.userType === 'moigioi'? <>&nbsp;&middot;&nbsp;môi giới</>: ''} */}
+                            &nbsp;&nbsp;
+                            <div className={styles['updated-date']}>
+                              {timeAgo(product?.updatedAt)}
+                            </div>
+
                           </div>
                         </div>
                       </div>

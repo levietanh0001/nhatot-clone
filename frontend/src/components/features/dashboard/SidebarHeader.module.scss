@@ -1,0 +1,31 @@
+.header {
+  // background-color: gold;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  & .logo {
+    flex: 1;
+    height: 100%;
+    padding-inline: 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transition: ease 300ms;
+  }
+
+  & .logo.hide-logo {
+    display: none;
+  }
+
+  & img {
+    width: 140px;
+    height: 35px;
+    object-fit: cover;
+  }
+}

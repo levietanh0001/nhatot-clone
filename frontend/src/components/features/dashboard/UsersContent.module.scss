@@ -1,0 +1,40 @@
+
+.title {
+  font-size: 1.5rem;
+
+}
+
+.user-avatar {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+
+.revoke-action {
+
+  padding: 10px;
+  cursor: pointer;
+  background-color: red;
+  border: 0;
+  border-radius: 4px;
+  text-align: center;
+
+  & > svg {
+    vertical-align: middle;
+    fill: white;
+  }
+}
+
+.verify-action {
+  padding: 10px;
+  cursor: pointer;
+  background-color: green;
+  border: 0;
+  border-radius: 4px;
+  text-align: center;
+
+  & > svg {
+    vertical-align: middle;
+    fill: white;
+  }
+}

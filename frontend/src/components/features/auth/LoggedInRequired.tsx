@@ -64,6 +64,7 @@ const LoggedInRequired = (props) => {
     checkLoggedIn();
 
     return () => {
+      setLoggedIn(false);
       abortController.abort();
     }
 

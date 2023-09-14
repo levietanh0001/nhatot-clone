@@ -11,6 +11,7 @@ const UserCard: FC<IUserCard> = (props) => {
   const rating = userProfile?.rating ?? '';
   const joinDate = dateTimeToDateString(userProfile?.createdAt);
 
+
   return (
     <div className={styles['card-wrapper']}>
       <div className={styles['background-image']}>
@@ -21,7 +22,7 @@ const UserCard: FC<IUserCard> = (props) => {
           <span className={styles['avatar']}>
             {userProfile?.avatarUrl && (
               <img 
-                src={userProfile?.avatarUrl} 
+                src={userProfile?.avatarUrl}
                 alt='avatar'
                 loading='lazy'
                 onError={(e) => {
@@ -92,7 +93,7 @@ const UserCard: FC<IUserCard> = (props) => {
             <div className={styles['stats-line']}>
               <span><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 25' aria-hidden='true' fill='currentColor'><path fillRule='evenodd' d='M16.704 9.271a.8.8 0 01-.027 1.131l-5.503 5.25a.8.8 0 01-1.105 0l-2.747-2.625a.8.8 0 111.106-1.157l2.194 2.097 4.951-4.722a.8.8 0 011.131.026z' clipRule='evenodd' /><path fillRule='evenodd' d='M12 3.873a8.2 8.2 0 100 16.4 8.2 8.2 0 000-16.4zm-9.8 8.2c0-5.412 4.388-9.8 9.8-9.8 5.413 0 9.8 4.388 9.8 9.8 0 5.413-4.387 9.8-9.8 9.8-5.412 0-9.8-4.387-9.8-9.8z' clipRule='evenodd' /></svg></span>
 
-              <span>Đã xác thực: </span>
+              <span>Đã xác thực: {Number(userProfile?.isVerified) === 1? 'OK': 'Chưa xác thực'}</span>
 
               </div>
               <div className={styles['stats-line']}>

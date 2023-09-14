@@ -73,3 +73,23 @@ export function useGetUserProfiles(userIds: any[]) {
 
   })
 }
+
+
+export function useGetAllUserProfiles() {
+
+  return useQuery({
+    queryKey: ['all-user-profiles'],
+    queryFn: ({ signal }) => {
+      return axiosPrivate.get(`/admin/user-profile`, { signal })
+    },
+    keepPreviousData: true,
+    refetchOnMount: true, // if component is mounted, refetch
+    refetchOnWindowFocus: false,
+    cacheTime: 0, // by default 5 mins
+    staleTime: 0,
+    select: (data) => {
+      return data.data;
+    },
+    
+  })
+}

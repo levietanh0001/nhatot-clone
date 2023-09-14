@@ -17,4 +17,4 @@ const connectToMongoDB = async () => {
   }
 }
 
-module.exports = connectToMongoDB;
+module.exports = { connectToMongoDB, mongoConn: mongoose.connection };

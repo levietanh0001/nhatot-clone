@@ -19,20 +19,20 @@ const Modal = (props) => {
     show,
     onModalClose,
     onClickAway = () => null,
+    // onKeyPress = () => null,
     children,
   } = props;
 
   useEffect(() => {
+    
+    // if (show) {
+    //   document.body.style.overflow = 'hidden';
+    //   document.body.style.paddingRight = '15px';
+    // } else {
+    //   document.body.style.overflow = 'unset';
+    //   document.body.style.paddingRight = '0';
+    // }
 
-    if (show) {
-      document.body.style.overflow = 'hidden';
-      document.body.style.paddingRight = '15px';
-      // document.body.style.position = 'fixed';
-    } else {
-      document.body.style.overflow = 'unset';
-      document.body.style.paddingRight = '0';
-      // document.body.style.position = 'unset';
-    }
   }, [show]);
 
   if (!show) {

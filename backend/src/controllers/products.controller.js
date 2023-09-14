@@ -775,6 +775,29 @@ async function deleteProductById(req, res, next) {
 }
 
 
+async function getAllProducts(req, res, next) {
+
+  try {
+
+    const products = await sequelize.query(`
+      SELECT *, ${databaseName}.product_thumbnail.imageUrl as thumbnailImageUrl
+      FROM ${databaseName}.product
+      INNER JOIN ${databaseName}.product_thumbnail on product.id = product_thumbnail.productId
+      ORDER BY ${databaseName}.product.createdAt DESC
+
+    `, { type: QueryTypes.SELECT });
+
+    return res.status(200).json(products);
+
+  } catch(error) {
+
+    console.error(error);
+    return next(error);
+  }
+
+}
+
+
 module.exports = {
   createProduct,
   createProductVideo,
@@ -782,6 +805,7 @@ module.exports = {
   createVideoThumbnail,
   updateVideoThumbnail,
   getProducts,
+  getAllProducts,
   searchProducts,
   getProductCount,
   getProductById,

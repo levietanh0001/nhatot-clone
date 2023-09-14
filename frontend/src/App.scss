@@ -30,10 +30,6 @@ html {
   --toggle-theme-btn-border-color: var(--black);
 }
 
-body {
-  
-}
-
 .container {
   width: 100%;
   max-width: 992px;
@@ -41,6 +37,15 @@ body {
   text-align: center;
   box-sizing: border-box;
 }
+
+// .skeleton-container {
+//   height: 250px;
+//   width: 100%;
+//   max-width: 992px;
+//   margin: 0 auto;
+//   text-align: center;
+//   box-sizing: border-box;
+// }
 
 .header-bottom-spacer {
   display: block;
@@ -96,3 +101,6 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+.hidden {
+  display: none;
+}

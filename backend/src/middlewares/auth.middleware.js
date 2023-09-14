@@ -26,32 +26,43 @@ const { redisClient } = require('../utils/redis-store.util');
 
 async function adminOnly(req, res, next) {
 
-  const token = extractAccessTokenFromRequest(req);
-  const payload = await verifyAccessTokenAsync(token);
+  try {
 
-  if (!payload) {
-    errorsService.throwError(403, 'Unauthorized', 'Invalid access token');
+    // const token = extractAccessTokenFromRequest(req);
+    // const payload = await verifyAccessTokenAsync(token);
+  
+    // if (!payload) {
+    //   errorsService.throwError(403, 'Unauthorized', 'Invalid access token');
+    // }
+  
+    // const currentUser = await User.findByPk(payload.userId);
+  
+    // if(!currentUser) {
+  
+    //   return res.status(403).json({
+    //     code: 'USER_NOT_FOUND',
+    //     message: 'Current user is not found'
+    //   });
+    // }
+    
+    const currentUser = req.user;
+
+    if (currentUser.role !== 'admin') {
+  
+      return res.status(403).json({
+        code: 'USER_NOT_ADMIN',
+        message: 'Current user is not admin'
+      });
+    }
+  
+    return next();
+
+  } catch(error) {
+
+    console.error(error);
+    return next(error);
   }
-
-  const currentUser = await User.findByPk(payload.userId);
-
-  if(!currentUser) {
-
-    return res.status(403).json({
-      code: 'USER_NOT_FOUND',
-      message: 'Current user is not found'
-    });
-  }
-
-  if (currentUser.role !== 'admin') {
-
-    return res.status(403).json({
-      code: 'USER_NOT_ADMIN',
-      message: 'Current user is not admin'
-    });
-  }
-
-  next();
+  
 }
 
 async function loggedInRequired(req, res, next) {

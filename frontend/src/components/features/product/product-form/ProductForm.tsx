@@ -1,18 +1,16 @@
+import PropTypes from 'prop-types';
 import { FormProvider } from 'react-hook-form';
 import { ToastContainer } from 'react-toastify';
-import PropTypes from 'prop-types';
 
-import styles from './ProductForm.module.scss';
 import ActionButtons from './ActionButtons';
-import EmptyState from './EmptyState';
 import PostDetails from './PostDetails';
 import ProductCategory from './ProductCategory';
+import styles from './ProductForm.module.scss';
 import ProductInfo from './ProductInfo';
 import ProductLocation from './ProductLocation';
 import ProductType from './ProductType';
 import UploadMedia from './Upload';
 import UserType from './UserType';
-import { useEffect } from 'react';
 
 const ProductForm = (props) => {
   const {

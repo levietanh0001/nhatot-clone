@@ -49,6 +49,7 @@ async function register(req, res, next) {
       role: email === process.env.ADMIN_EMAIL ? 'admin' : 'canhan'
     });
 
+    
     // // update userName in UserProfile
     // const userProfile = await createdUser.createUser_profile();
     // userProfile.username = userName;
@@ -56,7 +57,12 @@ async function register(req, res, next) {
 
     const createdUserEmail = createdUser['email'];
     const createdUserId = createdUser['id'];
-
+    
+    await sequelize.query(`
+      INSERT INTO ${databaseName}.user_profile
+      SET userId=${createdUser.id}, createdAt=current_timestamp(), updatedAt=current_timestamp()
+    `);
+    
     const token = await createAccessTokenAsync({ createdUserEmail });
 
     const verifyRegisterUrl = await constructUrlWithQueryParamsAsync(
@@ -259,15 +265,14 @@ async function logout(req, res, next) {
 
     // blacklist access token
     await redisClient.set(`BL_${user.id}`, accessToken, 'EX', process.env.ACCESS_TOKEN_LIFE_SPAN);
-    // await redisClient.set(`BL_${payload.userId}`, accessToken, 'EX', process.env.ACCESS_TOKEN_LIFE_SPAN);
 
     // remove refresh token from whitelist
     const currentUser = await User.findByPk(user.id);
-    // const currentUser = await User.findByPk(payload.userId);
+
     currentUser.refreshToken = '';
     await currentUser.save();
 
-    res
+    return res
       .status(200)
       .json({ message: 'Successfully logged out' });
 
@@ -277,6 +282,84 @@ async function logout(req, res, next) {
 
 }
 
+
+async function revokeRefreshToken(req, res, next) {
+
+  try {
+
+    const userIds = req.body['userIds'];
+    console.log('revoke refesh tokens', { userIds });
+
+    await sequelize.query(`
+      UPDATE ${databaseName}.user
+      SET refreshToken = ''
+      WHERE id in (:userIds)
+    `, { replacements: { userIds }, type: QueryTypes.UPDATE });
+
+    return res
+      .status(200)
+      .json({ userIds, message: 'Successfully revoked refresh tokens' });
+
+  } catch (error) {
+
+    console.error(error);
+    return next(error);
+  }
+
+}
+
+
+
+async function verifyUser(req, res, next) {
+
+  try {
+    
+    const userIds = req.body['userIds'];
+
+    await sequelize.query(`
+      UPDATE ${databaseName}.user
+      SET isVerified = true
+      WHERE id in (:userIds)
+    `, { replacements: { userIds }, type: QueryTypes.UPDATE });
+
+    res
+      .status(200)
+      .json({ userIds, message: 'Successfully verify users' });
+
+  } catch (error) {
+
+    console.error(error);
+    return next(error);
+  }
+
+}
+
+
+async function banUser(req, res, next) {
+
+  try {
+
+    // const userId = req.body['userId'];
+
+    // await sequelize.query(`
+    //   UPDATE ${databaseName}.user
+    //   SET refreshToken = ''
+    //   WHERE id = :userId
+    // `, { replacements: { userId }, type: QueryTypes.UPDATE });
+
+    // // const currentUser = await User.findByPk(userId);
+    // // currentUser.refreshToken = '';
+    // // await currentUser.save();
+
+    // res
+    //   .status(200)
+    //   .json({ message: 'Successfully logged out' });
+
+  } catch (error) {
+    return next(error);
+  }
+
+}
 
 function authDetails(req, res, next) {
 
@@ -494,6 +577,9 @@ async function resetPassword(req, res, next) {
 module.exports = {
   login,
   logout,
+  revokeRefreshToken,
+  verifyUser,
+  banUser,
   register,
   verifyRegister,
   refresh,

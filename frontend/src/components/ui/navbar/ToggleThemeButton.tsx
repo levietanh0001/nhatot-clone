@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import styles from "./ToggleThemeButton.module.scss";
 import { FaRegSun, FaRegMoon } from 'react-icons/fa';
+import clsx from "clsx";
 
 
-const ToggleThemeButton = () => {
+const ToggleThemeButton = (props) => {
+
+  const { buttonClassName } = props;
+  
   const [darkTheme, setDarkTheme] = useState<boolean>(() =>
     localStorage.getItem("darkTheme") === "true" ? true : false
   );
@@ -37,7 +41,7 @@ const ToggleThemeButton = () => {
   return (
     <>
       <button 
-        className={styles["toggle-theme-btn"]}
+        className={clsx(buttonClassName, styles["toggle-theme-btn"])}
         onClick={handleToggleTheme}
       >
         <span className={styles["icon-wrapper"]}>

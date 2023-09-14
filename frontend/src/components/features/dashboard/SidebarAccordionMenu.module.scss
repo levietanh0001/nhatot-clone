@@ -1,19 +1,20 @@
 .accordion-menu {
-  & ul {
-    list-style-type: none;
 
-    & li:hover {
-      background-color: #181818;
-    }
+  overflow-y: scroll;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  
+  & > ul {
+    list-style-type: none;
   }
 
   & a {
     text-decoration: none;
     color: whitesmoke;
-
-    &:hover {
-      background-color: var(--orange-800);
-    }
   }
 
   & span {
@@ -22,7 +23,9 @@
 }
 
 .accordion-menu-item {
+
   width: 100%;
+  cursor: pointer;
 
   & .children-wrapper {
     height: 0;
@@ -30,13 +33,18 @@
     transition: height 300ms ease;
   }
 
-  // & .children-wrapper.open {
-  //   height: auto;
-  // }
+  & .children-wrapper > * {
+    padding-left: 40px;
+    background-color: #252525;
+    box-shadow: 0 0 3px 0 rgba(0 0 0 / 80%);
 
-  & a {
-    display: block;
-    padding: 15px;
+    transition: background-color 100ms ease-in-out;
 
+    &:active {
+      background-color: var(--orange-900);
+    }
   }
+  
 }
+
+
