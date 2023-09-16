@@ -1,30 +1,29 @@
-import { Skeleton } from '@mui/material';
+import { Paper, Skeleton } from '@mui/material';
 import { GridColDef } from '@mui/x-data-grid';
 import { useMemo, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useGetAllUserProfiles } from '~/api/user-profile.api';
 
-import styles from './UsersContent.module.scss';
+import styles from './UsersDashboardContent.module.scss';
 import {
   useRevokeUsersRefreshTokensMutation,
   useVerifyUsersMutation,
 } from '~/api/user.api';
 import { toastNotification } from '~/utils/react-toastify.util';
 import { placeholderImageSrc } from '~/utils/variables.util';
-import DashboardContent from './DashboardContent';
+import MUIDataGrid from '~/components/ui/datagrid/MUIDatagrid';
+// import DashboardContent from './DashboardContent';
 // import { useConsoleLogOnChange } from '~/hooks/utils.hook';
 
-
-
-const UsersContent = () => {
-
+const UsersDashboardContent = () => {
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const { data, error, isLoading, isError } = useGetAllUserProfiles();
   const userData = useMemo(() => data, [data]);
 
   const verifyUsersMutation = useVerifyUsersMutation();
-  const revokeUsersRefreshTokensMutation = useRevokeUsersRefreshTokensMutation();
+  const revokeUsersRefreshTokensMutation =
+    useRevokeUsersRefreshTokensMutation();
 
   const columns: GridColDef[] = [
     { field: 'userId', headerName: 'userId', width: 20 },
@@ -55,7 +54,13 @@ const UsersContent = () => {
             className={styles['verify-action']}
             onClick={(e) => handleVerifyUser(e, params)}
           >
-            <svg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 448 512'><path d='M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z' /></svg>
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              height='1em'
+              viewBox='0 0 448 512'
+            >
+              <path d='M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z' />
+            </svg>
           </button>
         );
       },
@@ -70,7 +75,13 @@ const UsersContent = () => {
             className={styles['revoke-action']}
             onClick={(e) => handleRevokeUserClick(e, params)}
           >
-            <svg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 512 512'><path d='M367.2 412.5L99.5 144.8C77.1 176.1 64 214.5 64 256c0 106 86 192 192 192c41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3C434.9 335.9 448 297.5 448 256c0-106-86-192-192-192c-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z' /></svg>
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              height='1em'
+              viewBox='0 0 512 512'
+            >
+              <path d='M367.2 412.5L99.5 144.8C77.1 176.1 64 214.5 64 256c0 106 86 192 192 192c41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3C434.9 335.9 448 297.5 448 256c0-106-86-192-192-192c-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z' />
+            </svg>
           </button>
         );
       },
@@ -90,41 +101,60 @@ const UsersContent = () => {
     { field: 'phoneNumber', headerName: 'phoneNumber', width: 150 },
     { field: 'role', headerName: 'role', width: 70 },
     { field: 'createdAt', headerName: 'createdAt', width: 160 },
-
   ];
 
   const handleRevokeUserClick = (e, params) => {
-
     e.preventDefault();
     e.stopPropagation();
 
-    // console.log('revoke user clicked');
-    revokeUsersRefreshTokensMutation
-      .mutate(selectedRows.length > 0? selectedRows: [params.row.userId], {
-        onSuccess: () => {
-          toastNotification('Vô hiệu refresh token người dùng thành công', 'success');
-        },
-        onError: () => {
-          toastNotification(`Có lỗi xảy ra: ${JSON.stringify(revokeUsersRefreshTokensMutation.error)}`, 'error');
+    if(window.confirm('Vô hiệu refresh token của người dùng này?')) {
+
+      // console.log('revoke user clicked');
+      revokeUsersRefreshTokensMutation.mutate(
+        selectedRows.length > 0 ? selectedRows : [params.row.userId],
+        {
+          onSuccess: () => {
+            toastNotification(
+              'Vô hiệu refresh token người dùng thành công',
+              'success'
+            );
+          },
+          onError: () => {
+            toastNotification(
+              `Có lỗi xảy ra: ${JSON.stringify(
+                revokeUsersRefreshTokensMutation.error
+              )}`,
+              'error'
+            );
+          },
         }
-      });
-  
+      );
+    }
+    
   };
 
   const handleVerifyUser = (e, params) => {
-
     e.preventDefault();
     e.stopPropagation();
 
-    // console.log('verify user clicked');
-    verifyUsersMutation.mutate(selectedRows.length > 0? selectedRows: [params.row.userId], {
-      onSuccess: () => {
-        toastNotification('Xác nhận người dùng thành công', 'success');
-      },
-      onError: () => {
-        toastNotification(`Có lỗi xảy ra: ${JSON.stringify(verifyUsersMutation.error)}`, 'error');
-      }
-    });
+    if(window.confirm('Xác nhận người dùng?')) {
+      
+      // console.log('verify user clicked');
+      verifyUsersMutation.mutate(
+        selectedRows.length > 0 ? selectedRows : [params.row.userId],
+        {
+          onSuccess: () => {
+            toastNotification('Xác nhận người dùng thành công', 'success');
+          },
+          onError: () => {
+            toastNotification(
+              `Có lỗi xảy ra: ${JSON.stringify(verifyUsersMutation.error)}`,
+              'error'
+            );
+          },
+        }
+      );
+    }
 
   };
 
@@ -136,11 +166,7 @@ const UsersContent = () => {
 
   return (
     <>
-      <ToastContainer
-        position='top-right'
-        theme='colored'
-        autoClose={3000}
-      />
+      <ToastContainer position='top-right' theme='colored' autoClose={3000} />
 
       <h1 className={styles['title']}>Users List</h1>
       {isLoading && (
@@ -154,18 +180,28 @@ const UsersContent = () => {
       )}
 
       {isError && <p>{JSON.stringify(error)}</p>}
-      {userData && (
-        <DashboardContent
-          data={userData}
-          columns={columns}
-          rows={userData}
-          idField='userId'
-          onRowSelectionModelChange={handleRowsSelect}
-        />
-      )}
 
+      {userData && (
+        <Paper
+          elevation={3}
+          sx={{
+            padding: '20px',
+            backgroundColor: '#202020',
+            minHeight: '100%',
+            borderRadius: '12px',
+          }}
+        >
+          <MUIDataGrid
+            data={userData}
+            columns={columns}
+            rows={userData}
+            idField='userId'
+            onRowSelectionModelChange={handleRowsSelect}
+          />
+        </Paper>
+      )}
     </>
   );
 };
 
-export default UsersContent;
+export default UsersDashboardContent;

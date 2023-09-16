@@ -1,14 +1,15 @@
-import { DataGrid, GridCellEditStopParams, GridCellEditStopReasons, GridColDef, GridToolbar, GridValueGetterParams, MuiEvent } from '@mui/x-data-grid';
+import { DataGrid, GridCellEditStopParams, GridCellEditStopReasons, GridToolbar, GridValueGetterParams, MuiEvent } from '@mui/x-data-grid';
 
-import styles from './MUIDatagrid.module.scss';
-import { FC, useEffect } from 'react';
-import IMUIDatagrid from './MUIDatagrid.interface';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
-import IconButton from '@mui/material/IconButton';
-import Box from '@mui/material/Box';
-import { useTheme } from "@mui/material/styles";
-import LastPageIcon from "@mui/icons-material/LastPage";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
+import LastPageIcon from "@mui/icons-material/LastPage";
+import { AlertProps } from '@mui/material/Alert';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import { useTheme } from "@mui/material/styles";
+import { FC, useCallback, useState } from 'react';
+import IMUIDatagrid from './MUIDatagrid.interface';
+import styles from './MUIDatagrid.module.scss';
 
 // import Box from '@mui/material/Box';
 // import { useDemoData } from '@mui/x-data-grid-generator';
@@ -17,14 +18,25 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 // const VISIBLE_FIELDS = ['name', 'rating', 'country', 'dateCreated', 'isAdmin'];
 
 
-const MUIDatagrid: FC<IMUIDatagrid> = (props) => {
+const MUIDatagrid = (props) => {
   
-  const { data, columns, rows, onRowSelectionModelChange, idField } = props;
+  const { 
+    data, 
+    columns, 
+    rows, 
+    idField,
+    onRowSelectionModelChange, 
+    processRowUpdate,
+    onProcessRowUpdateError=() => null,
+
+    ...rest
+  } = props;
 
   return (
     <>
       {/* {JSON.stringify(data)} */}
       <div className={styles['datagrid-wrapper']}>
+
         <DataGrid
           className={styles['datagrid']}
           checkboxSelection
@@ -42,6 +54,9 @@ const MUIDatagrid: FC<IMUIDatagrid> = (props) => {
             }
           }}
 
+          processRowUpdate={processRowUpdate}
+          onProcessRowUpdateError={onProcessRowUpdateError}
+
           // pagination
           // componentsProps={{
           //   pagination: {
@@ -50,7 +65,7 @@ const MUIDatagrid: FC<IMUIDatagrid> = (props) => {
           // }}
 
           initialState={{
-            ...data.initialState,
+            ...data?.initialState,
             pagination: { 
               paginationModel: { pageSize: 20 },
             },
@@ -58,7 +73,6 @@ const MUIDatagrid: FC<IMUIDatagrid> = (props) => {
           pageSizeOptions={[10, 20, 30, 50]}
 
           getRowId={(row: any) => row[idField]}
-          // getRowId={(row: any) => row.id}
           slots={{ toolbar: GridToolbar }}
           slotProps={{
             toolbar: {
@@ -69,7 +83,10 @@ const MUIDatagrid: FC<IMUIDatagrid> = (props) => {
               ActionsComponent: TablePaginationActions
             }
           }}
+
+          {...rest}
         />
+
       </div>
     </>
   );

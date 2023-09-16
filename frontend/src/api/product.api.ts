@@ -253,6 +253,50 @@ export function useDeleteUserProductById(currentPage=1) {
 }
 
 
+export function useDeleteProductsMutation() {
+
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['deleteProducts'],
+    mutationFn: (productIds: string[]) => {
+
+      return axiosPrivate.delete(`/admin/products`, { data: { productIds } });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(['getAllProducts']);
+    },
+
+  });
+}
+
+
+interface IUpdateProductParams {
+  productId: string | number;
+  newProduct: any;
+}
+
+export function useUpdateProductByIdMutation() {
+
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['updateProductById'],
+    mutationFn: (args: IUpdateProductParams) => {
+
+      console.log({ args });
+      const { productId, newProduct } = args;
+      return axiosPrivate.put(`/admin/products/${productId}`, { newProduct });
+    },
+    onSettled: (data, error) => {
+      // console.log({ data, error });
+      queryClient.invalidateQueries(['getAllProducts']);
+    },
+
+  });
+}
+
+
 export function useGetUserFavoriteProducts(currentPage=1, enabled=false) {
   return useQuery({
     queryKey: ['getUserFavoriteProducts', currentPage],

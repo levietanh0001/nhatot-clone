@@ -570,6 +570,87 @@ async function getProductById(req, res, next) {
   
 }
 
+
+async function updateProductById2(req, res, next) {
+
+  try {
+
+    const productId = req.params['productId'];
+    const newProduct = req.body['newProduct'];
+    
+    delete newProduct['id'];
+    delete newProduct['productId'];
+    delete newProduct['userId'];
+    delete newProduct['slug'];
+    delete newProduct['userType'];
+    delete newProduct['createdAt'];
+    delete newProduct['updatedAt'];
+    delete newProduct['imageUrl'];
+
+    const currentProducts = await sequelize.query(`
+      SELECT * from ${databaseName}.product
+      WHERE id = :productId
+    `, { replacements: { productId }, type: QueryTypes.SELECT });
+
+    const currentProduct = currentProducts[0];
+
+    if(!currentProduct) {
+      return res.status(404).json({
+        code: 'PRODUCT_NOT_FOUND',
+        message: 'No product is found with provided id'
+      });
+    }
+
+    const { 
+      type, category, projectName, address, numBedrooms, numBathrooms, 
+      balconDirection, mainDoorDirection, legalDocsStatus, furnitureStatus, 
+      area, price, deposit, postTitle, description 
+    } = newProduct;
+
+    await sequelize.query(`
+      UPDATE ${databaseName}.product
+      SET 
+        type = :type,
+        category = :category,
+        projectName = :projectName,
+        address = :address,
+        numBedrooms = :numBedrooms,
+        numBathrooms = :numBathrooms,
+        balconDirection = :balconDirection,
+        mainDoorDirection = :mainDoorDirection,
+        legalDocsStatus = :legalDocsStatus,
+        furnitureStatus = :furnitureStatus,
+        area = :area,
+        price = :price,
+        deposit = :deposit,
+        postTitle = :postTitle,
+        description = :description
+
+      WHERE id = :productId
+    `, { 
+      replacements: { type, category, projectName, address, numBedrooms, numBathrooms, balconDirection, mainDoorDirection, legalDocsStatus, furnitureStatus, area, price, deposit, postTitle, description, productId },
+      type: QueryTypes.UPDATE, 
+      // model: Product, mapToModel: true, raw: true
+    });
+
+    const updatedProduct = await sequelize.query(`
+      SELECT * from ${databaseName}.product
+      WHERE id = :productId
+    `, { replacements: { productId }, type: QueryTypes.SELECT });
+
+    console.log({ updatedProduct });
+
+    return res.status(200).json(updatedProduct);
+
+  } catch(error) {
+
+    console.error(error);
+    return next(error);
+  }
+
+}
+
+
 async function updateProductById(req, res, next) {
 
   try {
@@ -745,6 +826,44 @@ async function updateProductById(req, res, next) {
 }
 
 
+async function deleteProducts(req, res, next) {
+
+  try {
+
+    const productIds = req.body['productIds'];
+
+    const result = await sequelize.query(`
+      DELETE FROM ${databaseName}.product
+      WHERE id in (:productIds)
+    `, { replacements: { productIds }, type: QueryTypes.DELETE });
+
+    return res.status(200).json(result);
+
+
+    // const currentProducts = await req.user.getProducts({ where: { id: productId } });
+    // if(currentProducts.length === 0) {
+    //   return res.status(422).json({
+    //     code: 'PRODUCT_NOT_FOUND',
+    //     message: 'User does not have such product'
+    //   });  
+    // }
+
+    // const currentProduct = await Product.findByPk(productId);
+    // const product = await currentProduct.destroy();
+    // const count = await Product.count();
+    // // const result = await sequelize.query(`DELETE FROM nhatot.product WHERE (id = :productId)`, { replacements: { productId } });
+  
+    // return res.status(200).json({ product, count });
+    
+  } catch(error) {
+
+    console.error(error);
+    return next(error);
+  }
+  
+}
+
+
 async function deleteProductById(req, res, next) {
 
   try {
@@ -810,5 +929,7 @@ module.exports = {
   getProductCount,
   getProductById,
   updateProductById,
+  updateProductById2,
   deleteProductById,
+  deleteProducts
 };

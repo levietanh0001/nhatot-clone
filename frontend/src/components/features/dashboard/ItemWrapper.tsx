@@ -13,6 +13,10 @@ const ItemWrapper = (props) => {
     href,
     isTitle,
     Icon = <svg xmlns="http://www.w3.org/2000/svg" height="0.75em" viewBox="0 0 512 512">{/*! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. */}<path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" /></svg>,
+    expand=false,
+    currentItem,
+    label,
+    wrapperClassName='',
     ...rest
   } = props;
 
@@ -20,17 +24,22 @@ const ItemWrapper = (props) => {
   const collapseSidebar = dashboardContext?.collapseSidebar;
   const linkRef = useRef<HTMLAnchorElement | null>(null);
 
-  const handleIconClick = () => {
+  const handleItemClick = () => {
     linkRef.current?.click();
   }
 
   return (
     <>
-      <div className={styles['wrapper']}>
+      <div 
+        className={clsx(styles['wrapper'], wrapperClassName, { 
+          [styles['expand']]: currentItem !== label
+        })}
+        onClick={handleItemClick}
+      >
 
         {Icon && 
           <span
-            onClick={handleIconClick}
+            // onClick={handleIconClick}
             className={clsx(styles['icon'], {
               [styles['sidebar-collapse']]: collapseSidebar
             })}

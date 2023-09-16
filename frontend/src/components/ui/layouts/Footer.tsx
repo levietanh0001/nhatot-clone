@@ -4,12 +4,12 @@ const Footer = ({ children }) => {
     <footer>
       <div
         style={{
-          paddingTop: "15px",
-          paddingInline: "10px",
-          backgroundColor: "var(--secondary-background-color)",
+          paddingTop: '15px',
+          paddingInline: '10px',
+          backgroundColor: 'var(--secondary-background-color)',
         }}
       >
-        <div className="container">{children}</div>
+        <div className='container'>{children}</div>
       </div>
     </footer>
   );

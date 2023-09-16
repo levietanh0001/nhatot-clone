@@ -8,6 +8,7 @@
   height: 40px;
 }
 
+
 .add-product {
 
   display: inline-block;
@@ -32,3 +33,20 @@
   }
 
 }
+
+.delete-action {
+
+  display: inline-block;
+  background-color: transparent;
+  border: 0;
+
+  & > svg {
+    fill: red;
+  }
+
+  &:hover {
+    scale: 1.1;
+  }
+}
+
+

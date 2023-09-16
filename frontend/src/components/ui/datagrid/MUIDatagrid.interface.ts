@@ -5,5 +5,8 @@ export default interface IMUIDatagrid {
   columns: any;
   rows: any;
   idField: string;
+  editMode?: string;
   onRowSelectionModelChange?: ((rowSelectionModel: GridRowSelectionModel, details: GridCallbackDetails<any>) => void) | undefined
+  processRowUpdate?: ((newRow: any, oldRow: any) => any) | undefined;
+  onProcessRowUpdateError?: ((error: any) => void) | undefined;
 }

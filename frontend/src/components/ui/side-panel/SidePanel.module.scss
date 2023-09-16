@@ -13,8 +13,8 @@
   bottom: 0;
   z-index: 2;
 
-  transition: translate 300ms;
-  translate: -200px 0;
+  transition: translate 500ms ease;
+  translate: -1000px 0;
 
   &.opened {
     translate: 0;

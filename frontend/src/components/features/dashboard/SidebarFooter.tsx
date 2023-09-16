@@ -10,9 +10,9 @@ const SidebarFooter = () => {
 
   return (
     <>
-      {!dashboardContext?.collapseSidebar && (
-        <div className={styles['footer']}>&copy; 2023 - <br/>William Le Admin Dashboard</div>
-      )}
+      {/* {!dashboardContext?.collapseSidebar && (
+        <div className={styles['footer']}>&copy; 2023, <br/>William Le Admin Dashboard</div>
+      )} */}
     </>
   )
 }

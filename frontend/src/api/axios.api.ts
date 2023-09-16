@@ -28,7 +28,6 @@ export const axiosPrivate = axios.create({
   timeout: 5000, // allowed time for an open request before being canceled (milliseconds)
   headers: {
     'Content-Type': 'application/json',
-    // 'Authorization': `Bearer ${accessToken}`
   },
 }) as AxiosInstance;
 

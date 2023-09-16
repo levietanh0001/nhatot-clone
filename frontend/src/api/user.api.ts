@@ -28,7 +28,7 @@ export function useRevokeUsersRefreshTokensMutation() {
       return axiosPrivate.put(`/admin/user/revoke-refresh-token`, { userIds });
     },
     onSettled: () => {
-      queryClient.invalidateQueries(['all-user-profiles']);
+      queryClient.invalidateQueries(['getAllUserProfiles']);
     },
   });
 }
@@ -42,7 +42,7 @@ export function useVerifyUsersMutation() {
       return axiosPrivate.put(`/admin/user/verify`, { userIds });
     },
     onSettled: () => {
-      queryClient.invalidateQueries(['all-user-profiles']);
+      queryClient.invalidateQueries(['getAllUserProfiles']);
     },
   });
 }

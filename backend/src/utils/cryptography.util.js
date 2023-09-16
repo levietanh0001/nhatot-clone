@@ -50,12 +50,12 @@ function verifyAccessTokenAsync(token, ignoreExpiration = false) {
 
   return new Promise((resolve, reject) => {
 
-    console.log({ token });
+    // console.log({ token });
     if(!token || token === 'undefined' || token === 'null') {
       resolve(null);
       return;
     }
-    console.log({ token });
+    // console.log({ token });
 
     const payload = jwt.verify(token, accessPublicKey, { algorithm: 'RS256', ignoreExpiration });
 

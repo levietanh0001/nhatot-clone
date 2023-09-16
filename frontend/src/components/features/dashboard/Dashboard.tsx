@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { DashboardContext } from '~/contexts/dashboard/Dashboard.context';
@@ -24,10 +24,16 @@ const Dashboard = () => {
         <Appbar />
 
         <div className={styles['content-wrapper']}>
-          <Outlet />
+          <div className={styles['content-body']}>
+            <Outlet />
+          </div>
+          <div className={styles['content-footer']}>
+            &copy; 2023, William Le Admin Dashboard, nhatot clone
+          </div>
         </div>
 
       </div>
+
     </div>
   );
 };

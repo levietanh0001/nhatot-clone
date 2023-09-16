@@ -78,7 +78,7 @@ export function useGetUserProfiles(userIds: any[]) {
 export function useGetAllUserProfiles() {
 
   return useQuery({
-    queryKey: ['all-user-profiles'],
+    queryKey: ['getAllUserProfiles'],
     queryFn: ({ signal }) => {
       return axiosPrivate.get(`/admin/user-profile`, { signal })
     },

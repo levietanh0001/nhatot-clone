@@ -40,7 +40,7 @@ const LoggedInRequired = (props) => {
         const refreshToken = localStorage.getItem('refreshToken');
         const newTokens = await getNewTokens(refreshToken, abortController.signal);
 
-        console.log({ newTokens });
+        // console.log({ newTokens });
 
         if(!newTokens) {
           setLoggedIn(false);

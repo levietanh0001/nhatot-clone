@@ -4,8 +4,8 @@ const express = require('express');
 const { adminOnly, loggedInRequired } = require('../middlewares/auth.middleware');
 const { getAllUserProfiles } = require('../controllers/user-profile.controller');
 const { revokeRefreshToken, verifyUser } = require('../controllers/auth.controller');
-const { getAllProducts } = require('../controllers/products.controller');
-const { validateGetProduct } = require('../validators/products.validator');
+const { getAllProducts, deleteProducts, updateProductById, updateProductById2 } = require('../controllers/products.controller');
+const { validateGetProduct, validateUpdateProduct } = require('../validators/products.validator');
 // const productsController = require('../services/products');
 // const productsValidator = require('../validators/products');
 // const { validateCreateProduct, validateUpdateProduct } = require('../validators/products.validator');
@@ -20,6 +20,10 @@ router.get('/products', loggedInRequired, adminOnly, validateGetProduct(), getAl
 
 router.put('/user/revoke-refresh-token', loggedInRequired, adminOnly, revokeRefreshToken);
 router.put('/user/verify', loggedInRequired, adminOnly, verifyUser);
+
+router.put('/products/:productId', loggedInRequired, adminOnly, validateUpdateProduct(), updateProductById2);
+router.delete('/products', loggedInRequired, adminOnly, deleteProducts);
+
 // router.put('/user/ban', loggedInRequired, adminOnly, banUser);
 
 

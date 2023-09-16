@@ -22,29 +22,3 @@
   }
 }
 
-.accordion-menu-item {
-
-  width: 100%;
-  cursor: pointer;
-
-  & .children-wrapper {
-    height: 0;
-    overflow: hidden;
-    transition: height 300ms ease;
-  }
-
-  & .children-wrapper > * {
-    padding-left: 40px;
-    background-color: #252525;
-    box-shadow: 0 0 3px 0 rgba(0 0 0 / 80%);
-
-    transition: background-color 100ms ease-in-out;
-
-    &:active {
-      background-color: var(--orange-900);
-    }
-  }
-  
-}
-
-
