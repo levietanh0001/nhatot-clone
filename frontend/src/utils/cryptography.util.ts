@@ -1,5 +1,5 @@
 import axios from "axios";
-import { backendBaseUrl } from "./variables.util";
+import { backendBaseUrl } from "./constants.util";
 
 
 async function getNewTokens(refreshToken, signal) {

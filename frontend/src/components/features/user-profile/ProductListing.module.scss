@@ -1,9 +1,4 @@
-@mixin text-collapse($num-line: 1) {
-  display: -webkit-box;
-  -webkit-line-clamp: $num-line;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
+@import '@styles/scss/_typography';
 
 
 .wrapper {
@@ -70,7 +65,7 @@
 }
 
 
-.favorite-btn {
+.edit-btn {
 
   position: absolute;
   right: 10px;
@@ -106,7 +101,7 @@
   transition: scale 300ms;
 
   & > svg {
-    fill: white;
+    fill: red;
   }
 
   &:hover {

@@ -2,9 +2,9 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 
 import AdminOnly from '~/components/features/auth/AdminOnly';
-import HomeDashboardContent from '~/components/features/dashboard/HomeDashboardContent';
-import ProductsDashboardContent from '~/components/features/dashboard/ProductsDashboardContent';
-import UsersDashboardContent from '~/components/features/dashboard/UsersDashboardContent';
+import HomeDashboardContent from '~/components/features/dashboard/dashboard-content/HomeDashboardContent';
+import ProductsDashboardContent from '~/components/features/dashboard/dashboard-content/ProductsDashboardContent';
+import UsersDashboardContent from '~/components/features/dashboard/dashboard-content/UsersDashboardContent';
 import { SuspenseWrapper } from '~/components/ui/suspense/SuspenseWrapper';
 import { DashboardProvider } from '~/contexts/dashboard/Dashboard.context';
 

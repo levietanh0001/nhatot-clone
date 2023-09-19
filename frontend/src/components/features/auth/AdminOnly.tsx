@@ -1,11 +1,11 @@
 import dayjs from 'dayjs';
 import jwtDecode from 'jwt-decode';
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { axiosPrivate } from '~/api/axios.api';
+import { axiosPrivate } from '@api/axios.api';
 import { IDecodedToken } from '~/interfaces/jwt.interface';
 import { getNewTokens } from '~/utils/cryptography.util';
+
 
 const AdminOnly = (props) => {
 

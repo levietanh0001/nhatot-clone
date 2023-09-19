@@ -14,6 +14,7 @@ import MUIStyledEngineProvider from './providers/MUIStyledEngine.provider';
 import { store } from './app/store';
 import { isProductionMode } from './global/constants.global';
 import { persistor } from './app/store';
+import { TopLoadingBarProvider } from './contexts/top-loading-bar/TopLoadingBar.context';
 
 const NotFound = lazy(() => import('./pages/NotFound.page'));
 
@@ -22,16 +23,18 @@ function AppWrapper({ children }) {
 
   return (
     <MUIStyledEngineProvider>
-      <ReactReduxProvider store={store}>
-        {/* delay the rendering of our app’s UI until the persisted data is available in the Redux store */}
-        {/* <PersistGate loading={null} persistor={persistor}></PersistGate> */}
-        <TanstackQueryClientProvider client={queryClient}>
-          {children}
-          {!isProductionMode && (
-            <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
-          )}
-        </TanstackQueryClientProvider>
-      </ReactReduxProvider>
+      <TopLoadingBarProvider>
+        <ReactReduxProvider store={store}>
+          {/* delay the rendering of our app’s UI until the persisted data is available in the Redux store */}
+          {/* <PersistGate loading={null} persistor={persistor}></PersistGate> */}
+          <TanstackQueryClientProvider client={queryClient}>
+            {children}
+            {!isProductionMode && (
+              <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
+            )}
+          </TanstackQueryClientProvider>
+        </ReactReduxProvider>
+      </TopLoadingBarProvider>
     </MUIStyledEngineProvider>
   );
 }
@@ -40,22 +43,23 @@ function App() {
   return (
     <AppWrapper>
       <BrowserRouter>
-        <AuthProvider>
-          <Routes>
-            {allRoutes.map((route, index) => (
-              <Route key={index} {...route} />
-            ))}
+          <AuthProvider>
+            <Routes>
+              {allRoutes.map((route, index) => (
+                <Route key={index} {...route} />
+              ))}
 
-            <Route
-              path='*'
-              element={
-                <SuspenseWrapper>
-                  <NotFound />
-                </SuspenseWrapper>
-              }
-            ></Route>
-          </Routes>
-        </AuthProvider>
+              <Route
+                path='*'
+                element={
+                  <SuspenseWrapper>
+                    <NotFound />
+                  </SuspenseWrapper>
+                }
+              ></Route>
+            </Routes>
+          </AuthProvider>
+        
       </BrowserRouter>
     </AppWrapper>
   );

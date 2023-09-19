@@ -34,15 +34,15 @@ const UpdateProduct = () => {
   const product = useSelector((state: RootState) => state.product);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { productId } = useParams();
+  const { productId, slug } = useParams();
   const [formValues, setFormValues] = useState<any | null>(null);
-  const [hasProduct, setHasProduct] = useState<boolean>(false);
+  // const [hasProduct, setHasProduct] = useState<boolean>(false);
 
   const { data, error, isLoading, isError } = useQuery({
     queryKey: ['product', productId],
     queryFn: ({ signal }) => {
 
-      return axiosPrivate.get(`/products/${productId}`, { signal });
+      return axiosPrivate.get(`/products/${productId}/${slug}`, { signal });
     },
     select: (data) => {
       return data.data;
@@ -53,7 +53,7 @@ const UpdateProduct = () => {
 
   useEffect(() => {
 
-    console.log({ productId });
+    // console.log({ productId });
 
     return () => {
       console.log('reset states');
@@ -94,7 +94,8 @@ const UpdateProduct = () => {
         images: data.imageUrls.filter(imageUrl => imageUrl !== ''),
         videoThumbnailUrl: data.videoThumbnailUrl
       }));
-      setHasProduct(true);
+
+      // setHasProduct(true);
     }
 
   }, [data]);
@@ -113,13 +114,31 @@ const UpdateProduct = () => {
   }, [error]);
 
   useEffect(() => {
-    if (product.productCreated) {
-      toast.success('Đăng tải thành công');
+
+    let timeoutId;
+
+    if (product.productUpdated) {
+
+      console.log('product updated');
+      toast.success('Cập nhật thành công');
+
+      timeoutId = setTimeout(() => {
+        navigate(`/product/${productId}/${slug}.htm`);
+      }, 2000);
     }
+
     if (product.inputError.image) {
       toast.error(product.inputError.image);
     }
-  }, [product.productCreated, product.inputError.image]);
+
+    return () => {
+
+      if(timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    }
+
+  }, [product.productUpdated, product.inputError.image]);
 
   const form = useForm({
     mode: 'onTouched',
@@ -144,6 +163,7 @@ const UpdateProduct = () => {
   const { handleSubmit } = form;
 
   const onSubmit = async (data, e) => {
+
     e.preventDefault();
 
     try {
@@ -170,7 +190,7 @@ const UpdateProduct = () => {
 
   return (
     <>
-      {hasProduct && ( 
+      {data && ( 
         <ProductForm
           form={form}
           formId={formId}

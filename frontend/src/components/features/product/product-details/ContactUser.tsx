@@ -1,13 +1,16 @@
 import clsx from 'clsx';
-import { FC, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Image from '~/components/ui/image/Image';
-import { placeholderImageSrc } from '~/utils/variables.util';
+import { placeholderImageSrc } from '~/utils/constants.util';
 import styles from './ContactUser.module.scss';
 import { IContactUser } from './product-details.interface';
+import { AuthContext } from '~/contexts/auth/Auth.context';
 
 const ContactUser: FC<IContactUser> = (props) => {
-  const { userId: userId, userProfile } = props;
+
+  const authContext = useContext(AuthContext);
+  const { userId, userProfile } = props;
   const phoneNumber = userProfile?.phoneNumber ?? '';
   const [showPhone, setShowPhone] = useState<boolean>(false);
 
@@ -109,12 +112,17 @@ const ContactUser: FC<IContactUser> = (props) => {
               </span>
             </button>
           )}
-          <button className={styles['chat']}>
-            <span className={styles['chat-icon']}></span>
-            <span className={styles['chat-with-user']}>
-              <Link to={`/create-chat/${userId}`}>Chat với người dùng</Link>
-            </span>
-          </button>
+
+          {String(authContext?.user?.userId) !== String(userId) && (
+            <button className={styles['chat']}>
+              <span className={styles['chat-icon']}></span>
+              <span className={styles['chat-with-user']}>
+                <Link to={`/create-chat/${userId}`}>Chat với người dùng</Link>
+              </span>
+            </button>
+
+          )}
+
         </div>
       </div>
       <div className={styles['contact-admin']}>

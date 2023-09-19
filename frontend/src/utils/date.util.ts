@@ -13,21 +13,25 @@ export function dateTimeToDateString(dt) {
 
 export function timeAgo(datetime) {
   
-  return dayjs(datetime)
-  .fromNow()
-  .replace('minutes ago', 'phút trước')
-  .replace('minute ago', 'phút trước')
-  .replace('hours ago', 'giờ trước')
-  .replace('an hour ago', '1 giờ trước')
-  .replace('hour ago', 'giờ trước')
-  .replace('days ago', 'ngày trước')
-  .replace('a day ago', '1 ngày trước')
-  .replace('a month ago', '1 tháng trước')
-  .replace('a year ago', '1 năm trước')
-  .replace('months ago', 'ngày trước')
-  .replace('month ago', 'ngày trước')
-  .replace('years ago', 'năm trước')
-  .replace('year ago', 'năm trước')
+  try {
+    return dayjs(datetime)
+    .fromNow()
+    .replace('minutes ago', 'phút trước')
+    .replace('minute ago', 'phút trước')
+    .replace('hours ago', 'giờ trước')
+    .replace('an hour ago', '1 giờ trước')
+    .replace('hour ago', 'giờ trước')
+    .replace('days ago', 'ngày trước')
+    .replace('a day ago', '1 ngày trước')
+    .replace('a month ago', '1 tháng trước')
+    .replace('a year ago', '1 năm trước')
+    .replace('months ago', 'ngày trước')
+    .replace('month ago', 'ngày trước')
+    .replace('years ago', 'năm trước')
+    .replace('year ago', 'năm trước')
+  } catch(error) {
+    return '';
+  }
 }
 
 // export function timeAgo(time) {

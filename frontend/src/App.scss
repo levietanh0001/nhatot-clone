@@ -1,6 +1,7 @@
 @import 'normalize.css';
 @import './styles/scss/index';
 
+
 :root {
   --app-background-color: #f4f4f4;
   --secondary-background-color: white;
@@ -13,6 +14,7 @@
 html {
   background-color: var(--app-background-color);
   margin-left: 0;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 // .App {

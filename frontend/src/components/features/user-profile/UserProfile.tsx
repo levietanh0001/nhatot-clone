@@ -1,5 +1,5 @@
 import { lazy, useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -25,7 +25,7 @@ const UserProfile = () => {
   const [productCount, setProductCount] = useState<number | null>();
   const authContext = useContext(AuthContext);
   const user = authContext?.user;
-
+  const navigate = useNavigate();
   
   const { data: userProfile } = useGetUserProfile(userId, true);
   useConsoleLogOnChange({ userProfile });
@@ -152,6 +152,10 @@ const UserProfile = () => {
     console.log({ favoriteProductId: productId });
   };
 
+  const handleEditButtonClick = (productId, slug) => {
+    navigate(`/update-product/${productId}/${slug}`);
+  }
+
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 
     const avatarImg = e.target.files?.[0];
@@ -198,7 +202,8 @@ const UserProfile = () => {
                 <ProductListing
                   products={products}
                   onDeleteButtonClick={handleDeleteButtonClick}
-                  onFavoriteButtonClick={handleFavoriteButtonClick}
+                  // onFavoriteButtonClick={handleFavoriteButtonClick}
+                  onEditButtonClick={handleEditButtonClick}
                   productCount={productCount}
                   currentPage={currentPage}
                   onPageChange={(e, page) => setCurrentPage(page)}

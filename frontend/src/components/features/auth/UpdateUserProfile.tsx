@@ -1,8 +1,7 @@
-
 import { useContext } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { AuthContext } from '~/contexts/auth/Auth.context';
-import { backendBaseUrl } from '~/utils/variables.util';
+import { backendBaseUrl } from '~/utils/constants.util';
 
 
 const UpdateUserProfile = ({ children, redirectPath='/login' }) => {

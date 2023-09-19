@@ -17,6 +17,8 @@ const ItemWrapper = (props) => {
     currentItem,
     label,
     wrapperClassName='',
+    id='',
+    onItemClick=() => null,
     ...rest
   } = props;
 
@@ -26,13 +28,14 @@ const ItemWrapper = (props) => {
 
   const handleItemClick = () => {
     linkRef.current?.click();
+    onItemClick(id);
   }
 
   return (
     <>
       <div 
         className={clsx(styles['wrapper'], wrapperClassName, { 
-          [styles['expand']]: currentItem !== label
+          [styles['chosen']]: currentItem === id
         })}
         onClick={handleItemClick}
       >
@@ -50,27 +53,13 @@ const ItemWrapper = (props) => {
           ref={linkRef}
           className={clsx({
             [styles['link-item']]: !isTitle,
-            [styles['title-item']]: isTitle
+            [styles['title-item']]: isTitle,
           })}
           to={href}
           {...rest}
         >
           {!collapseSidebar && <>{children}</>}
         </Link>
-
-        {/* {!collapseSidebar && !isTitle && (
-          <Link className={styles['link-item']} to={href} {...rest}>
-            {Icon && <span className={styles['icon']}>{Icon}</span>}
-            {children}
-          </Link>
-        )}
-
-        {!collapseSidebar && isTitle && (
-          <span className={styles['title-item']} {...rest}>
-            {Icon && <span className={styles['icon']}>{Icon}</span>}
-            {children}
-          </span>
-        )} */}
 
       </div>
 

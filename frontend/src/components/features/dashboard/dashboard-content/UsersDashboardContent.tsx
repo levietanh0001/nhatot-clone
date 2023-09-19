@@ -1,6 +1,6 @@
 import { Paper, Skeleton } from '@mui/material';
 import { GridColDef } from '@mui/x-data-grid';
-import { useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useGetAllUserProfiles } from '~/api/user-profile.api';
@@ -11,15 +11,18 @@ import {
   useVerifyUsersMutation,
 } from '~/api/user.api';
 import { toastNotification } from '~/utils/react-toastify.util';
-import { placeholderImageSrc } from '~/utils/variables.util';
+import { placeholderImageSrc } from '~/utils/constants.util';
 import MUIDataGrid from '~/components/ui/datagrid/MUIDatagrid';
-// import DashboardContent from './DashboardContent';
-// import { useConsoleLogOnChange } from '~/hooks/utils.hook';
+import { TopLoadingBarContext, useTopLoadingBar } from '~/contexts/top-loading-bar/TopLoadingBar.context';
+
 
 const UsersDashboardContent = () => {
+
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const { data, error, isLoading, isError } = useGetAllUserProfiles();
   const userData = useMemo(() => data, [data]);
+
+  useTopLoadingBar(isLoading);
 
   const verifyUsersMutation = useVerifyUsersMutation();
   const revokeUsersRefreshTokensMutation =

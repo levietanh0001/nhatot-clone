@@ -46,3 +46,20 @@ export function useVerifyUsersMutation() {
     },
   });
 }
+
+export function useGetUserCountByGroup() {
+  return useQuery({
+    queryKey: ['getUserCountByGroup'],
+    queryFn: ({ signal }) => {
+      return axiosPrivate.get(`/admin/users/count-by-group`, { signal });
+    },
+    keepPreviousData: false,
+    refetchOnMount: true, // if component is mounted, refetch
+    refetchOnWindowFocus: false,
+    cacheTime: 0, // by default 5 mins
+    staleTime: 0,
+    select: (data) => {
+      return data.data;
+    },
+  });
+}

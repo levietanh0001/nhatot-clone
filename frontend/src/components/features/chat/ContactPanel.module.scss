@@ -1,9 +1,6 @@
-@mixin text-collapse($num-line: 1) {
-  display: -webkit-box;
-  -webkit-line-clamp: $num-line;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
+@import '@styles/scss/_typography';
+
+
 
 @mixin shortener() {
   overflow: hidden;

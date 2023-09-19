@@ -1,17 +1,14 @@
 {
   "plugins": [
     ["module-resolver", {
+      "root": ["./"],
       "alias": {
         "~": "./src",
-        "@styles": "./src/styles"
+        "@components": "./src/components",
+        "@api": "./src/api",
+        "@utils": "./src/utils",
       }
     }]
-    // [
-    //   "babel-plugin-root-import",
-    //   {
-    //     "rootPathSuffix": "src"
-    //   }
-    // ]
     
   ]
 }

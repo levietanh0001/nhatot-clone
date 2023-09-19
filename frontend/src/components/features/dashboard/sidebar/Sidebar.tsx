@@ -28,11 +28,13 @@ const Sidebar = () => {
   return (
     <div className={styles['sidebar']}>
 
-      {width < 420 && (
+      {width < 992 && (
         <SidePanel
           show={!dashboardContext?.collapseSidebar}
           onCloseButtonClick={() => dashboardContext?.setCollapseSidebar(true)}
-        />
+        >
+          <SidebarAccordionMenu />
+        </SidePanel>
       )}
 
       <SidebarHeader />

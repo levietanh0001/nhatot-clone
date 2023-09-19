@@ -33,15 +33,19 @@ export function convertToInternationalCurrencySystem(labelValue) {
 
   // Nine Zeroes for Billions
 
-  const strippedNumber = (Math.abs(Number(labelValue)));
-  const formatted = strippedNumber >= 1.0e+9
-  ? removeTrailingZeroes((strippedNumber / 1.0e+9).toFixed(2)) + " tỷ"
-  : strippedNumber >= 1.0e+6
-  ? removeTrailingZeroes((strippedNumber / 1.0e+6).toFixed(2)) + " triệu"
-  : strippedNumber >= 1.0e+3
-  ? removeTrailingZeroes((strippedNumber / 1.0e+3).toFixed(2)) + " nghìn"
-  : removeTrailingZeroes(strippedNumber);
-
-  return String(formatted).replace('.', ',').replace(',00', '');
+  try {
+    const strippedNumber = (Math.abs(Number(labelValue)));
+    const formatted = strippedNumber >= 1.0e+9
+    ? removeTrailingZeroes((strippedNumber / 1.0e+9).toFixed(2)) + " tỷ"
+    : strippedNumber >= 1.0e+6
+    ? removeTrailingZeroes((strippedNumber / 1.0e+6).toFixed(2)) + " triệu"
+    : strippedNumber >= 1.0e+3
+    ? removeTrailingZeroes((strippedNumber / 1.0e+3).toFixed(2)) + " nghìn"
+    : removeTrailingZeroes(strippedNumber);
+  
+    return String(formatted).replace('.', ',').replace(',00', '');
+  } catch(error) {
+    return '';
+  }
 
 }

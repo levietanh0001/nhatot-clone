@@ -112,11 +112,39 @@ async function getUserProductCount(req, res, next) {
 }
 
 
+async function getUserCountByGroup(req, res, next) {
+
+  try {
+
+    const userCounts = await sequelize.query(`
+      SELECT role, count(id) as total FROM ${databaseName}.user
+      GROUP BY ${databaseName}.user.role
+      UNION SELECT 'all', count(id) from ${databaseName}.user;
+
+    `, { type: QueryTypes.SELECT });
+
+    const result = userCounts.reduce((total, current) => {
+      return { ...total, [current.role]: current.total }
+    }, {});
+
+    return res.status(200).json(result);
+
+  } catch(error) {
+
+    console.error(error);
+    return next(error);
+  }
+
+}
+
+
+
 
 
 module.exports = {
   createUser,
   getUserProductCount,
   getOtherUsers,
-  getUserChatId
+  getUserChatId,
+  getUserCountByGroup
 }

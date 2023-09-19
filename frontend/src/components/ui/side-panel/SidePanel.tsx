@@ -1,7 +1,8 @@
 import clsx from 'clsx';
 import { FC } from 'react';
-import styles from './SidePanel.module.scss';
+
 import ISidePanel from './SidePanel.interface';
+import styles from './SidePanel.module.scss';
 
 
 
@@ -9,7 +10,8 @@ const SidePanel: FC<ISidePanel> = (props) => {
 
   const { 
     show,
-    onCloseButtonClick
+    onCloseButtonClick,
+    children
   } = props;
 
   return (
@@ -19,12 +21,7 @@ const SidePanel: FC<ISidePanel> = (props) => {
         onClick={onCloseButtonClick}
       ></div>
       <div className={clsx(styles['wrapper'], { [styles['opened']]: show } )}>
-        <ul>
-          {/* <li><ToolbarMenuButton onClick={onCloseButtonClick} /></li> */}
-          <li>Lorem, ipsum</li>
-          <li>Lorem, ipsum</li>
-          <li>Lorem, ipsum</li>
-        </ul>
+        {children}
       </div>
     </>
   )

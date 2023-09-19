@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 
 // fallback component
-export const SuspenseWrapper = ({ children, fallback = <h1>Loading...</h1> }) => {
+export const SuspenseWrapper = ({ children, fallback = <></> }) => {
   return <Suspense fallback={fallback}>{children}</Suspense>;
 };

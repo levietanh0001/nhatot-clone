@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 import styles from './Card.module.scss';
 import Image from '~/components/ui/image/Image';
-import { placeholderImageSrc } from "~/utils/variables.util";
+import { placeholderImageSrc } from "~/utils/constants.util";
 import { convertToInternationalCurrencySystem } from "~/utils/number.util";
 import { timeAgo } from "~/utils/date.util";
 import { FC } from "react";

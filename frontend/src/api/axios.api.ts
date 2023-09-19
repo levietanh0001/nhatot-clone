@@ -3,7 +3,8 @@ import dayjs from 'dayjs';
 import jwtDecode from 'jwt-decode';
 import { IDecodedToken } from '~/interfaces/jwt.interface';
 import { getNewAccessAndRefreshTokens } from '~/utils/cryptography.util';
-import { backendBaseUrl } from '~/utils/variables.util';
+import { backendBaseUrl } from '~/utils/constants.util';
+
 
 export const axiosPublic = axios.create({
   baseURL: backendBaseUrl,

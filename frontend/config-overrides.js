@@ -5,6 +5,7 @@ const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const PurgecssPlugin = require('purgecss-webpack-plugin');
 
+
 const addWebpackPlugins = (config, env) => {
   config.plugins.push(
     new UglifyJsPlugin({
@@ -32,6 +33,8 @@ const cssLoader = adjustStyleLoaders(({ use }) => {
       loader.loader = require.resolve('style-loader');
       loader.options = {};
     }
+    loader.loader = require.resolve('sass-loader');
+    // loader.loader = require.resolve('css-loader');
   });
 });
 
@@ -41,10 +44,9 @@ const isProd = process.env.NODE_ENV.includes('prod');
 module.exports = override(
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useBabelRc(),
-  // addWebpackAlias({
-  //   '~': path.resolve(__dirname, './src'),
-  //   '@styles': path.resolve(__dirname, './src/styles'),
-  // }),
+  addWebpackAlias({
+    '@styles': path.resolve(__dirname, './src/styles'),
+  }),
   isProd ? addWebpackPlugins : null,
   isProd ? disableChunking : null,
   isProd ? cssLoader : null

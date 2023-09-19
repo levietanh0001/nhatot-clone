@@ -113,7 +113,7 @@ const ProductForm = (props) => {
 
             <ActionButtons formId={formId} />
 
-            {JSON.stringify({ errors: form.formState.errors, values: form.getValues().projectName })}
+            {/* {JSON.stringify({ errors: form.formState.errors, values: form.getValues().projectName })} */}
             {/* {JSON.stringify({ errors: form.formState.errors, values: form.getValues() })} */}
             {/* {!product.value.category && <EmptyState />} */}
           </form>

@@ -917,6 +917,45 @@ async function getAllProducts(req, res, next) {
 }
 
 
+async function getProductCountByGroup(req, res, next) {
+
+  try {
+
+    const productCountByCategory = await sequelize.query(`
+      SELECT category, count(id) as total FROM ${databaseName}.product
+      GROUP BY product.category
+    `, { type: QueryTypes.SELECT });
+
+    const productCountByType = await sequelize.query(`
+      SELECT type, count(id) as total FROM ${databaseName}.product
+      GROUP BY product.type
+    `, { type: QueryTypes.SELECT });
+
+    const allProductsCount = await sequelize.query(`
+      SELECT count(id) as total FROM ${databaseName}.product
+    `, { type: QueryTypes.SELECT });
+
+    const result1 = productCountByCategory.reduce((total, current) => {
+      return { ...total, [current.category]: current.total }
+    }, {});
+
+    const result2 = productCountByType.reduce((total, current) => {
+      return { ...total, [current.type]: current.total }
+    }, {});
+
+    return res.status(200).json({
+      category: { ...result1 }, type: { ...result2 }, all: allProductsCount[0].total
+    });
+
+  } catch(error) {
+
+    console.error(error);
+    return next(error);
+  }
+
+}
+
+
 module.exports = {
   createProduct,
   createProductVideo,
@@ -927,6 +966,7 @@ module.exports = {
   getAllProducts,
   searchProducts,
   getProductCount,
+  getProductCountByGroup,
   getProductById,
   updateProductById,
   updateProductById2,

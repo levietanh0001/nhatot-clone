@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useGetUserProfile } from '~/api/user-profile.api';
 import { IDecodedToken } from '~/interfaces/jwt.interface';
 import { getNewTokens, verifyAccessToken } from '~/utils/cryptography.util';
-import { backendBaseUrl } from '~/utils/variables.util';
+import { backendBaseUrl } from '~/utils/constants.util';
 import { IAuthContext } from './auth.context.interface';
 
 

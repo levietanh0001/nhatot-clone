@@ -27,6 +27,7 @@ const Appbar = () => {
 
       <span className={styles['title']}>Admin Dashboard</span>
 
+      {/* fuse.js */}
       <AppbarSearchBox />
       <AppbarActionButtons />
 

@@ -4,8 +4,9 @@ const express = require('express');
 const { adminOnly, loggedInRequired } = require('../middlewares/auth.middleware');
 const { getAllUserProfiles } = require('../controllers/user-profile.controller');
 const { revokeRefreshToken, verifyUser } = require('../controllers/auth.controller');
-const { getAllProducts, deleteProducts, updateProductById, updateProductById2 } = require('../controllers/products.controller');
+const { getAllProducts, deleteProducts, updateProductById, updateProductById2, getProductCountByGroup } = require('../controllers/products.controller');
 const { validateGetProduct, validateUpdateProduct } = require('../validators/products.validator');
+const { getUserCountByGroup } = require('../controllers/user.controller');
 // const productsController = require('../services/products');
 // const productsValidator = require('../validators/products');
 // const { validateCreateProduct, validateUpdateProduct } = require('../validators/products.validator');
@@ -17,6 +18,9 @@ const router = express.Router();
 
 router.get('/user-profile', loggedInRequired, adminOnly, getAllUserProfiles);
 router.get('/products', loggedInRequired, adminOnly, validateGetProduct(), getAllProducts);
+router.get('/users/count-by-group', loggedInRequired, adminOnly, getUserCountByGroup);
+router.get('/products/count-by-group', loggedInRequired, adminOnly, getProductCountByGroup);
+
 
 router.put('/user/revoke-refresh-token', loggedInRequired, adminOnly, revokeRefreshToken);
 router.put('/user/verify', loggedInRequired, adminOnly, verifyUser);

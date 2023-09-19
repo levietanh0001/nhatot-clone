@@ -39,9 +39,9 @@ export function useGetProducts(criteria) {
     select: (data) => {
       return data.data;
     },
-    onSettled: (data) => {
-      // console.log({ data });
-    }
+    // onSettled: (data) => {
+    //   // console.log({ data });
+    // }
   });
 }
 
@@ -333,4 +333,22 @@ export function useAddProductToFavoriteList(productId) {
     },
 
   })
+}
+
+
+export function useGetProductCountByGroup() {
+  return useQuery({
+    queryKey: ['getProductCountByGroup'],
+    queryFn: ({ signal }) => {
+      return axiosPrivate.get(`/admin/products/count-by-group`, { signal });
+    },
+    keepPreviousData: false,
+    refetchOnMount: true, // if component is mounted, refetch
+    refetchOnWindowFocus: false,
+    cacheTime: 0, // by default 5 mins
+    staleTime: 0,
+    select: (data) => {
+      return data.data;
+    },
+  });
 }

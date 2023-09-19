@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -15,8 +15,9 @@ import { GridColDef, GridRowModel } from '@mui/x-data-grid';
 import { useDeleteProductsMutation, useGetAllProducts, useUpdateProductByIdMutation } from '~/api/product.api';
 import MUIDataGrid from '~/components/ui/datagrid/MUIDatagrid';
 import { toastNotification } from '~/utils/react-toastify.util';
-import { placeholderImageSrc } from '~/utils/variables.util';
+import { placeholderImageSrc } from '~/utils/constants.util';
 import styles from './ProductsDashboardContent.module.scss';
+import { TopLoadingBarContext, useTopLoadingBar } from '~/contexts/top-loading-bar/TopLoadingBar.context';
 
 
 const useFakeMutation = () => {
@@ -54,6 +55,8 @@ const ProductsDashboardContent = () => {
   const { data, error, isLoading, isError } = useGetAllProducts();
   const productData = useMemo(() => data, [data]);
 
+  useTopLoadingBar(isLoading);
+  
   // const mutateRow = useFakeMutation();
   const updateProductByIdMutation = useUpdateProductByIdMutation();
   const deleteProductsMutation = useDeleteProductsMutation();

@@ -3,38 +3,51 @@ import { useContext } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { DashboardContext } from '~/contexts/dashboard/Dashboard.context';
-import Appbar from './Appbar';
+import Appbar from './appbar/Appbar';
 import styles from './Dashboard.module.scss';
-import Sidebar from './Sidebar';
+import Sidebar from './sidebar/Sidebar';
+import LoadingBar from 'react-top-loading-bar';
+import { TopLoadingBarContext } from '~/contexts/top-loading-bar/TopLoadingBar.context';
 
 
 const Dashboard = () => {
 
   const dashboardContext = useContext(DashboardContext);
+  const topLoadingBarContext = useContext(TopLoadingBarContext);
 
   return (
-    <div
-      className={clsx(styles['sliding-sidebar-layout'], {
-        [styles['retract-sidebar']]: dashboardContext?.collapseSidebar,
-      })}
-    >
-      <Sidebar />
+    <>
+      <LoadingBar 
+        color='#FF7C05'
+        progress={topLoadingBarContext?.progress} 
+        onLoaderFinished={() => topLoadingBarContext?.setProgress(0)} 
+      />
 
-      <div className={styles['main']}>
-        <Appbar />
+      <div
+        className={clsx(styles['sliding-sidebar-layout'], {
+          [styles['retract-sidebar']]: dashboardContext?.collapseSidebar,
+        })}
+      >
 
-        <div className={styles['content-wrapper']}>
-          <div className={styles['content-body']}>
-            <Outlet />
+        <Sidebar />
+
+        <div className={styles['main']}>
+
+          <Appbar />
+
+          <div className={styles['content-wrapper']}>
+            <div className={styles['content-body']}>
+              <Outlet />
+            </div>
+            <div className={styles['content-footer']}>
+              &copy; 2023, William Le Admin Dashboard, nhatot clone
+            </div>
           </div>
-          <div className={styles['content-footer']}>
-            &copy; 2023, William Le Admin Dashboard, nhatot clone
-          </div>
+
         </div>
 
       </div>
-
-    </div>
+    </>
   );
 };
 
