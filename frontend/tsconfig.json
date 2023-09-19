@@ -13,6 +13,7 @@
     "downlevelIteration": true,
     "lib": ["dom", "dom.iterable", "es6"],
     "sourceMap": true,
+    // "inlineSourceMap": true,
     "allowJs": true,
     "rootDir": "src",
     "skipLibCheck": true,

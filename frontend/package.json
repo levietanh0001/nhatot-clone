@@ -67,7 +67,7 @@
     "purgecss-webpack-plugin": "5.0.0",
     "react-app-rewired": "2.2.1",
     "sass": "1.63.4",
-    "sass-loader": "13.3.2",
+    "sass-loader": "^13.3.2",
     "source-map-explorer": "2.5.3",
     "style-loader": "3.3.3",
     "ts-jest": "29.1.1",
@@ -76,8 +76,8 @@
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "start": "NODE_ENV=dev && GENERATE_SOURCEMAP=true && react-app-rewired start",
-    "build": "NODE_ENV=prod && react-app-rewired build",
+    "start": "NODE_ENV=dev GENERATE_SOURCEMAP=false react-app-rewired start",
+    "build": "NODE_ENV=prod GENERATE_SOURCEMAP=true react-app-rewired build",
     "test": "jest",
     "eject": "react-app-rewired eject",
     "serve": "serve -s build"

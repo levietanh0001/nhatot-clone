@@ -4,9 +4,9 @@
 .product-card-list {
   list-style-type: none;
 
-  & > li {
-    position: relative;
-  }
+  // & > li {
+  //   position: relative;
+  // }
 }
 
 .product-card-list.grid-view {
@@ -91,13 +91,19 @@
 }
 
 .card-media {
-  flex: 0;
+
+  flex: 0 0 128px;
+  height: auto;
+
+  position: relative;
 
   & > img {
     object-fit: cover;
     object-position: center;
     width: 128px;
     height: 128px;
+    // width: 128px;
+    // height: 128px;
   }
 }
 
@@ -293,8 +299,8 @@
   height: 30px;
 
   position: absolute;
-  right: 15px;
-  top: -40px;
+  right: 5px;
+  bottom: 5px;
 
 }
 
