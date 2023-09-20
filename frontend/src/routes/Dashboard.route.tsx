@@ -8,8 +8,11 @@ import UsersDashboardContent from '~/components/features/dashboard/dashboard-con
 import { SuspenseWrapper } from '~/components/ui/suspense/SuspenseWrapper';
 import { DashboardProvider } from '~/contexts/dashboard/Dashboard.context';
 
-const Dashboard = React.lazy(
-  () => import('~/components/features/dashboard/Dashboard')
+// const Dashboard = React.lazy(
+//   () => import('~/components/features/dashboard/Dashboard')
+// );
+const DashboardPage = React.lazy(
+  () => import('~/pages/Dashboard.page')
 );
 
 const dashboardRoutes = [
@@ -19,16 +22,16 @@ const dashboardRoutes = [
       <AdminOnly>
         <DashboardProvider>
           <SuspenseWrapper>
-            <Dashboard />
+            <DashboardPage />
           </SuspenseWrapper>
         </DashboardProvider>
       </AdminOnly>
     ),
     children: (
       <>
-        <Route path='' element={<AdminOnly><HomeDashboardContent /></AdminOnly>} />
-        <Route path='users' element={<AdminOnly><UsersDashboardContent /></AdminOnly>} />
-        <Route path='products' element={<AdminOnly><ProductsDashboardContent /></AdminOnly>} />
+        <Route path='' element={<AdminOnly><SuspenseWrapper><HomeDashboardContent /></SuspenseWrapper></AdminOnly>} />
+        <Route path='users' element={<AdminOnly><SuspenseWrapper><UsersDashboardContent /></SuspenseWrapper></AdminOnly>} />
+        <Route path='products' element={<AdminOnly><SuspenseWrapper><ProductsDashboardContent /></SuspenseWrapper></AdminOnly>} />
       </>
     ),
   },
