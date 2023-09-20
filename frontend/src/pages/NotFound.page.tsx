@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
-import AboutUs from '~/components/ui/footer/about-us/AboutUs';
-import TopNav from '~/components/ui/navbar/TopNav';
-import Footer from '~/components/ui/layouts/Footer';
-import Header from '~/components/ui/layouts/Header';
+import AboutUs from '@/components/footer/about-us/AboutUs';
+import TopNav from '@/components/navbar/TopNav';
+import Footer from '@/components/layouts/Footer';
+import Header from '@/components/layouts/Header';
+
 
 const NotFound = () => {
   return (

@@ -1,12 +1,11 @@
-import { SuspenseWrapper } from '~/components/ui/suspense/SuspenseWrapper';
-import LoggedInRequired from '~/components/features/auth/LoggedInRequired';
+import { SuspenseWrapper } from '@/components/suspense/SuspenseWrapper';
+import LoggedInRequired from '@/features/auth/components/LoggedInRequired';
 import { lazy } from 'react';
 
-const PostProductPage = lazy(() => import('~/pages/PostProduct.page'));
-const ProductDetailsPage = lazy(() => import('~/pages/ProductDetails.page'));
-const ProductListPage = lazy(() => import('~/pages/ProductList.page'));
-const UpdateProductPage = lazy(() => import('~/pages/UpdateProduct.page'));
-
+const PostProductPage = lazy(() => import('@/pages/PostProduct.page'));
+const ProductDetailsPage = lazy(() => import('@/pages/ProductDetails.page'));
+const ProductListPage = lazy(() => import('@/pages/ProductList.page'));
+const UpdateProductPage = lazy(() => import('@/pages/UpdateProduct.page'));
 
 const productRoutes = [
   {
@@ -17,7 +16,7 @@ const productRoutes = [
           <PostProductPage />
         </SuspenseWrapper>
       </LoggedInRequired>
-    )
+    ),
   },
   {
     path: '/update-product/:productId/:slug',
@@ -27,16 +26,24 @@ const productRoutes = [
           <UpdateProductPage />
         </SuspenseWrapper>
       </LoggedInRequired>
-    )
+    ),
   },
   {
     path: '/product/:productId/:slug.htm',
-    element: <SuspenseWrapper><ProductDetailsPage /></SuspenseWrapper>
+    element: (
+      <SuspenseWrapper>
+        <ProductDetailsPage />
+      </SuspenseWrapper>
+    ),
   },
   {
     path: '/product-list',
-    element: <SuspenseWrapper><ProductListPage /></SuspenseWrapper>
+    element: (
+      <SuspenseWrapper>
+        <ProductListPage />
+      </SuspenseWrapper>
+    ),
   },
-]
+];
 
 export default productRoutes;

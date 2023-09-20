@@ -1,5 +1,5 @@
-import { Link, Outlet } from 'react-router-dom';
-import Dashboard from '~/components/features/dashboard/Dashboard';
+import Dashboard from '@/features/dashboard/components/Dashboard';
+
 
 const AdminPage = () => {
   return (

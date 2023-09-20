@@ -1,13 +1,12 @@
-import { Paper } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
 import { lazy } from 'react';
-import Home from '~/components/features/home/Home';
-import { SuspenseWrapper } from '~/components/ui/suspense/SuspenseWrapper';
-const Header = lazy(() => import('~/components/ui/layouts/Header'));
-const TopNav = lazy(() => import('~/components/ui/navbar/TopNav'));
-// const Home = lazy(() => import('~/components/features/home/Home'));
-const Footer = lazy(() => import('~/components/ui/layouts/Footer'));
-const AboutUs = lazy(() => import('~/components/ui/footer/about-us/AboutUs'));
+import { SuspenseWrapper } from '@/components/suspense/SuspenseWrapper';
+import Home from '@/features/home/components/Home';
+const Header = lazy(() => import('@/components/layouts/Header'));
+const TopNav = lazy(() => import('@/components/navbar/TopNav'));
+const Footer = lazy(() => import('@/components/layouts/Footer'));
+const AboutUs = lazy(() => import('@/components/footer/about-us/AboutUs'));
+
 
 const HomePage = () => {
   return (

@@ -5,14 +5,13 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { PersistGate } from 'redux-persist/integration/react';
 
 import './App.scss';
-import { SuspenseWrapper } from './components/ui/suspense/SuspenseWrapper';
+import { SuspenseWrapper } from './components/suspense/SuspenseWrapper';
 import { AuthProvider } from './contexts/auth/Auth.context';
 import allRoutes from './routes/index.route';
 import TanstackQueryClientProvider from './providers/TanstackQueryClient.provider';
 import ReactReduxProvider from './providers/ReactRedux.provider';
 import MUIStyledEngineProvider from './providers/MUIStyledEngine.provider';
 import { store } from './app/store';
-import { isProductionMode } from './global/constants.global';
 import { persistor } from './app/store';
 import { TopLoadingBarProvider } from './contexts/top-loading-bar/TopLoadingBar.context';
 
@@ -29,7 +28,7 @@ function AppWrapper({ children }) {
           {/* <PersistGate loading={null} persistor={persistor}></PersistGate> */}
           <TanstackQueryClientProvider client={queryClient}>
             {children}
-            {!isProductionMode && (
+            {!process.env.NODE_ENV?.includes('prod') && (
               <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
             )}
           </TanstackQueryClientProvider>

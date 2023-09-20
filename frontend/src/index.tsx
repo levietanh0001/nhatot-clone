@@ -1,12 +1,11 @@
 import ReactDOM from 'react-dom';
 import App from './App';
-import { isProductionMode } from './global/constants.global';
 
 
 // const isProductionMode = process.env.NODE_ENV?.includes('prod');
 
 // disable logging in production
-if (isProductionMode) {
+if (process.env.NODE_ENV?.includes('prod')) {
   console.log = () => { }
   console.error = () => { }
   console.debug = () => { }

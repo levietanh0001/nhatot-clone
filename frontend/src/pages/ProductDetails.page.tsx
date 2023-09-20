@@ -1,9 +1,10 @@
-import ProductDetails from '~/components/features/product/product-details';
-import Breadcrumb from '~/components/ui/breadcrumb/Breadcrumb';
-import AboutUs from '~/components/ui/footer/about-us/AboutUs';
-import Footer from '~/components/ui/layouts/Footer';
-import Header from '~/components/ui/layouts/Header';
-import TopNav from '~/components/ui/navbar/TopNav';
+import ProductDetails from '@/features/product/components/product-details';
+import Breadcrumb from '@/components/breadcrumb/Breadcrumb';
+import AboutUs from '@/components/footer/about-us/AboutUs';
+import Footer from '@/components/layouts/Footer';
+import Header from '@/components/layouts/Header';
+import TopNav from '@/components/navbar/TopNav';
+
 
 const ProductDetailsPage = () => {
   return (

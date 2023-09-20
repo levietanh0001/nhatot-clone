@@ -1,8 +1,10 @@
-import { PageRegisterContent } from '~/components/features/auth';
-import AuthLayout from '~/components/ui/layouts/AuthLayout';
+import { PageRegisterContent } from '@/features/auth/components';
+import AuthLayout from '@/components/layouts/AuthLayout';
+
 
 const RegisterPage = () => {
   return <AuthLayout AuthComp={<PageRegisterContent />} />;
 };
+
 
 export default RegisterPage;

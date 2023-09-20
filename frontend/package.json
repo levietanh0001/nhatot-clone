@@ -78,8 +78,8 @@
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "NODE_ENV=dev && GENERATE_SOURCEMAP=true && react-app-rewired start",
     "build": "NODE_ENV=prod && react-app-rewired build",
-    "test": "jest",
     "eject": "react-app-rewired eject",
+    "test": "jest",
     "serve": "serve -s build"
   },
   "eslintConfig": {

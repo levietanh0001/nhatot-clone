@@ -1,19 +1,15 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 
-import AdminOnly from '~/components/features/auth/AdminOnly';
-import HomeDashboardContent from '~/components/features/dashboard/dashboard-content/HomeDashboardContent';
-import ProductsDashboardContent from '~/components/features/dashboard/dashboard-content/ProductsDashboardContent';
-import UsersDashboardContent from '~/components/features/dashboard/dashboard-content/UsersDashboardContent';
-import { SuspenseWrapper } from '~/components/ui/suspense/SuspenseWrapper';
-import { DashboardProvider } from '~/contexts/dashboard/Dashboard.context';
+import { SuspenseWrapper } from '@/components/suspense/SuspenseWrapper';
+import AdminOnly from '@/features/auth/components/AdminOnly';
+import HomeDashboardContent from '@/features/dashboard/components/dashboard-content/HomeDashboardContent';
+import ProductsDashboardContent from '@/features/dashboard/components/dashboard-content/ProductsDashboardContent';
+import UsersDashboardContent from '@/features/dashboard/components/dashboard-content/UsersDashboardContent';
+import { DashboardProvider } from '@/features/dashboard/contexts/Dashboard.context';
 
-// const Dashboard = React.lazy(
-//   () => import('~/components/features/dashboard/Dashboard')
-// );
-const DashboardPage = React.lazy(
-  () => import('~/pages/Dashboard.page')
-);
+
+const DashboardPage = React.lazy(() => import('@/pages/Dashboard.page'));
 
 const dashboardRoutes = [
   {
@@ -29,9 +25,36 @@ const dashboardRoutes = [
     ),
     children: (
       <>
-        <Route path='' element={<AdminOnly><SuspenseWrapper><HomeDashboardContent /></SuspenseWrapper></AdminOnly>} />
-        <Route path='users' element={<AdminOnly><SuspenseWrapper><UsersDashboardContent /></SuspenseWrapper></AdminOnly>} />
-        <Route path='products' element={<AdminOnly><SuspenseWrapper><ProductsDashboardContent /></SuspenseWrapper></AdminOnly>} />
+        <Route
+          path=''
+          element={
+            <AdminOnly>
+              <SuspenseWrapper>
+                <HomeDashboardContent />
+              </SuspenseWrapper>
+            </AdminOnly>
+          }
+        />
+        <Route
+          path='users'
+          element={
+            <AdminOnly>
+              <SuspenseWrapper>
+                <UsersDashboardContent />
+              </SuspenseWrapper>
+            </AdminOnly>
+          }
+        />
+        <Route
+          path='products'
+          element={
+            <AdminOnly>
+              <SuspenseWrapper>
+                <ProductsDashboardContent />
+              </SuspenseWrapper>
+            </AdminOnly>
+          }
+        />
       </>
     ),
   },

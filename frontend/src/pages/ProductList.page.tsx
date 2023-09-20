@@ -1,12 +1,12 @@
-import Ads from '~/components/ui/ads/Ads';
-import Breadcrumb from '~/components/ui/breadcrumb/Breadcrumb';
-import AboutUs from '~/components/ui/footer/about-us/AboutUs';
-import TopNav from '~/components/ui/navbar/TopNav';
-import Footer from '~/components/ui/layouts/Footer';
-import Header from '~/components/ui/layouts/Header';
-import ProductList from '~/components/features/product/product-list/ProductList';
-import ContentWithAdsLayout from '~/components/ui/layouts/ContentWithAdsLayout';
-import Filters from '~/components/features/product/product-list/Filters';
+import Ads from '@/components/ads/Ads';
+import Breadcrumb from '@/components/breadcrumb/Breadcrumb';
+import AboutUs from '@/components/footer/about-us/AboutUs';
+import ContentWithAdsLayout from '@/components/layouts/ContentWithAdsLayout';
+import Footer from '@/components/layouts/Footer';
+import Header from '@/components/layouts/Header';
+import TopNav from '@/components/navbar/TopNav';
+import Filters from '@/features/product/components/product-list/Filters';
+import ProductList from '@/features/product/components/product-list/ProductList';
 
 
 const ProductListPage = () => {

@@ -1,7 +1,7 @@
 import React from 'react';
-import { SuspenseWrapper } from '~/components/ui/suspense/SuspenseWrapper';
+import { SuspenseWrapper } from '@/components/suspense/SuspenseWrapper';
 
-const HomePage = React.lazy(() => import('~/pages/Home.page'));
+const HomePage = React.lazy(() => import('@/pages/Home.page'));
 
 const homeRoutes = [
   {

@@ -1,7 +1,7 @@
 import { User, UserCredential, createUserWithEmailAndPassword, fetchSignInMethodsForEmail, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateEmail, updatePassword } from 'firebase/auth';
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { auth } from '~/firebase';
-import { backendBaseUrl } from '~/utils/constants.util';
+import { auth } from '@/firebase';
+import { backendBaseUrl } from '@/utils/constants.util';
 
 
 interface IAuthContext {

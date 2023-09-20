@@ -1,6 +1,7 @@
-import { SuspenseWrapper } from "~/components/ui/suspense/SuspenseWrapper";
-import LoggedInRequired from "~/components/features/auth/LoggedInRequired";
-import UserProfilePage from "~/pages/UserProfile.page";
+import { SuspenseWrapper } from '@/components/suspense/SuspenseWrapper';
+import LoggedInRequired from '@/features/auth/components/LoggedInRequired';
+import UserProfilePage from '@/pages/UserProfile.page';
+
 
 const userRoutes = [
   {
@@ -11,8 +12,9 @@ const userRoutes = [
           <UserProfilePage />
         </SuspenseWrapper>
       </LoggedInRequired>
-    )
-  }
-]
+    ),
+  },
+];
+
 
 export default userRoutes;

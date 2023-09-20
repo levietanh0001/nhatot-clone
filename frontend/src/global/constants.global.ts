@@ -1,1 +1,0 @@
-export const isProductionMode = process.env.NODE_ENV?.includes('prod');

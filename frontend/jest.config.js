@@ -92,7 +92,8 @@ const config = {
   "moduleNameMapper": {
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",
     "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
-    '^~(.*)$': '<rootDir>/src/$1',
+    "^@/(.*)$": "<rootDir>/src/$1",
+    // '^~(.*)$': '<rootDir>/src/$1',
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
@@ -126,7 +127,7 @@ const config = {
   // restoreMocks: false,
 
   // The root directory that Jest should scan for tests and modules within
-  // rootDir: undefined,
+  rootDir: './',
 
   // A list of paths to directories that Jest should use to search for files in
   roots: [
@@ -207,6 +208,13 @@ const config = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
+
+  globals: {
+    "ts-jest": {
+      isolatedModules: true
+    }
+  }
 };
+
 
 module.exports = config;

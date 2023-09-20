@@ -5,11 +5,10 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import hardSet from 'redux-persist/es/stateReconciler/hardSet';
 import { logger } from 'redux-logger';
 
-import counterReducer from '~/features/counter/counter.slice';
-import loremReducer from '~/features/lorem/lorem.slice';
-import productReducer from '~/features/products/product.slice';
-import userProfileReducer from '~/features/products/user-profile.slice';
-
+import counterReducer from '@/features/counter/counter.slice';
+import loremReducer from '@/features/lorem/lorem.slice';
+import productReducer from '@/features/product/product.slice';
+import userProfileReducer from '@/features/user-profile/user-profile.slice';
 
 // persisted reducers
 const persistedPostProductReducer = persistReducer(
@@ -51,6 +50,5 @@ const persistedReducer = persistReducer<ReturnType<typeof rootReducer>>(
   rootPersistConfig,
   rootReducer
 );
-
 
 export default rootReducer;

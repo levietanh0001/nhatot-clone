@@ -1,6 +1,6 @@
-import TopNav from '~/components/ui/navbar/TopNav';
-import PostProduct from '~/components/features/product/product-crud/PostProduct';
-import Header from '~/components/ui/layouts/Header';
+import TopNav from '@/components/navbar/TopNav';
+import PostProduct from '@/features/product/components/product-crud/PostProduct';
+import Header from '@/components/layouts/Header';
 
 const PostProductPage = () => {
   return (

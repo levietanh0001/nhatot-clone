@@ -1,7 +1,8 @@
-import { SuspenseWrapper } from "~/components/ui/suspense/SuspenseWrapper";
-import LoggedInRequired from "~/components/features/auth/LoggedInRequired";
-import CreateChat from "~/components/features/chat/CreateChat";
-import ChatPage from "~/pages/Chat.page";
+import { SuspenseWrapper } from '@/components/suspense/SuspenseWrapper';
+import LoggedInRequired from '@/features/auth/components/LoggedInRequired';
+import CreateChat from '@/features/chat/components/CreateChat';
+import ChatPage from '@/pages/Chat.page';
+
 
 const chatRoutes = [
   {
@@ -24,7 +25,7 @@ const chatRoutes = [
       </LoggedInRequired>
     ),
   },
+];
 
-]
 
 export default chatRoutes;

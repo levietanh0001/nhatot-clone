@@ -1,8 +1,10 @@
-import { PageResetPasswordContent } from '~/components/features/auth/Auth';
-import AuthLayout from '~/components/ui/layouts/AuthLayout';
+import { PageResetPasswordContent } from '@/features/auth/components/Auth';
+import AuthLayout from '@/components/layouts/AuthLayout';
+
 
 const ResetPasswordPage = () => {
   return <AuthLayout AuthComp={<PageResetPasswordContent />} />;
 };
+
 
 export default ResetPasswordPage;

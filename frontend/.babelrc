@@ -3,10 +3,11 @@
     ["module-resolver", {
       "root": ["./"],
       "alias": {
-        "~": "./src",
-        "@components": "./src/components",
-        "@api": "./src/api",
-        "@utils": "./src/utils",
+        "@": "./src"
+        // "~": "./src",
+        // "@components": "./src/components",
+        // "@api": "./src/api",
+        // "@utils": "./src/utils"
       }
     }]
     
