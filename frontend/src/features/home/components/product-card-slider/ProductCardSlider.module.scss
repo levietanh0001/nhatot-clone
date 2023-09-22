@@ -1,0 +1,41 @@
+@import '@styles/scss/_typography';
+
+
+.wrapper {
+  margin-top: 7px;
+  padding-inline: 7px;
+
+  background-color: var(--secondary-background-color);
+}
+
+.title {
+  @include text-collapse;
+
+  text-align: left;
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
+  padding: 15px 7px;
+}
+
+.more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+
+  padding: 15px 0;
+
+  // color: var(--app-secondary-text-color);
+  color: var(--blue-900);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+
+  & .more-icon {
+    & > svg {
+      vertical-align: middle;
+      fill: var(--blue-900);
+    }
+  }
+}

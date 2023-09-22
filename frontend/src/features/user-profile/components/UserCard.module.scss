@@ -1,0 +1,152 @@
+
+.card-wrapper {
+  background-color: var(--secondary-background-color);
+  width: 320px;
+  // height: 400px;
+  height: auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  border-radius: 12px;
+}
+
+.user-details {
+  padding: 15px;
+}
+
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 7px;
+
+  & .avatar {
+    margin-top: -60px;
+    position: relative;
+
+    border: 3px solid white;
+    border-radius: 50%;
+  }
+
+  & .avatar > img {
+    border-radius: 50%;
+  }
+
+  & .avatar .upload-avatar {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    z-index: 1;
+
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 3px solid white;
+    background-color: lightgray;
+  }
+
+  & .avatar img {
+    vertical-align: middle;
+    width: 92px;
+    height: 92px;
+  }
+
+  & button {
+    width: 40px;
+    height: 32px;
+    border: 0;
+  }
+}
+
+.user-name {
+  text-align: left;
+  font-size: 1.125rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  margin-bottom: 7px;
+}
+
+.rating {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  margin-bottom: 5px;
+}
+
+.follow {
+  text-align: left;
+  margin-bottom: 7px;
+  font-size: 0.875rem;
+
+  & .follower-count, & .following-count {
+    font-weight: 600;
+  }
+
+  & .separator {
+    border-right: 1px solid gray;
+    margin-inline: 12px;
+  }
+}
+
+.follow-btn {
+  width: 100%;
+  padding: 10px 15px;
+  border: 0;
+  border-radius: 4px;  
+  margin-bottom: 7px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+
+  background-color: var(--orange-800);
+  color: white;
+  font-weight: bold;
+
+  & > span > svg {
+    vertical-align: middle;
+    fill: white;
+  }
+}
+
+.stats {
+  text-align: left;
+  font-size: 0.875rem;
+  color: gray;
+
+  & svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+
+  & .stats-line:not(:last-child) {
+    margin-bottom: 5px;
+  }
+}
+
+@media (max-width: 992px) {
+
+  .follow-btn {
+    display: none;
+  }
+
+  .card-wrapper {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+  }
+
+}
+
+@media (max-width: 576px) {
+
+  .user-details {
+    margin-inline: 15px;  
+  }
+}

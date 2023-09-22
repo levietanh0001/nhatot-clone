@@ -1,0 +1,39 @@
+.accordion-menu-item {
+
+  width: 100%;
+  cursor: pointer;
+
+  & > .item-wrapper {
+    background-color: #171717;
+  }
+
+  & .children-wrapper {
+    height: 0;
+    overflow: hidden;
+    transition: height 300ms ease;
+  }
+
+  & .children-wrapper > * {
+
+    transition: background-color 100ms ease-in-out;
+
+    &:active {
+      // background-color: var(--orange-900);
+      background-color: black;
+    }
+  }
+  
+  & .expand-icon {
+
+    transition: rotate 300ms ease;
+
+    &.expand {
+      rotate: 90deg;
+    }
+  }
+
+  & .expand-icon > svg {
+    fill: white;
+  }
+}
+

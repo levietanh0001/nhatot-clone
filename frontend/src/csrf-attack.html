@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- <a href="http://localhost:3000/">Go to homepage</a> -->
+
+  <!-- <form id="csrf-form" action="http://localhost:4000/api/auth/login" method="POST">
+    <input type="text" name="email" value="lewilliam0001@gmail.com">
+    <input type="text" name="password" value="123321">
+    <button type="submit">Submit</button>
+  </form> -->
+  
+  <button type="submit" id="csrf-btn">Test CSRF</button>
+
+  <script>
+    // const csrfForm = document.querySelector('#csrf-form');
+    // csrfForm.addEventListener('click', event => {
+      
+    // })
+
+    const csrfBtn = document.querySelector('#csrf-btn');
+    csrfBtn.addEventListener('click', async (event) => {
+      console.log('btn clicked');
+
+      const loginData = await fetch('http://localhost:4000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+
+      console.log(await loginData.json());
+
+      const refreshData = await fetch('http://localhost:4000/api/auth/refresh', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+
+      console.log(await refreshData.json());
+    });
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,52 @@
+.title {
+  font-size: 1.5rem;
+}
+
+.product-thumbnail {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+
+
+.add-product {
+
+  display: inline-block;
+  margin-bottom: 15px;
+
+  & > button {
+    color: white;
+    font-weight: bold;
+    background-color: var(--green-700);
+    border-radius: 7px;
+    padding: 13px 10px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+
+    & > span > svg {
+      fill: white;
+      vertical-align: middle;
+    }
+  }
+
+}
+
+.delete-action {
+
+  display: inline-block;
+  background-color: transparent;
+  border: 0;
+
+  & > svg {
+    fill: red;
+  }
+
+  &:hover {
+    scale: 1.1;
+  }
+}
+
+

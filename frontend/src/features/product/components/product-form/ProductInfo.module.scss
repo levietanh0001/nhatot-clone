@@ -1,0 +1,23 @@
+.title {
+  margin: 0;
+  margin-bottom: 10px;
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.product-details {
+
+  & .options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+  
+    margin-bottom: 10px;
+  }
+
+  & .post {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}

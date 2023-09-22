@@ -1,0 +1,61 @@
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.preview {
+  flex: 1 0 auto;
+
+  & button {
+    width: 100%;
+    padding: 12px 10px;
+    border: 1px solid var(--orange-500);
+    border-radius: 4px;
+
+    color: var(--orange-500);
+    background-color: transparent;
+
+    font-size: 1.125rem;
+    font-weight: 600;
+
+    &:hover {
+      background-color: var(--orange-300);
+      color: white;
+    }
+
+    &:active {
+      translate: 1px 1px;
+    }
+  }
+}
+
+.post-btn {
+  flex: 1 0 auto;
+
+  & button {
+    width: 100%;
+    padding: 12px 10px;
+    border: 1px solid var(--orange-500);
+    border-radius: 4px;
+
+    background-color: var(--orange-500);
+    color: white;
+
+    font-size: 1.125rem;
+    font-weight: 600;
+    
+    &:hover {
+      background-color: var(--orange-300);
+      color: white;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:active {
+      translate: 1px 1px;
+    }
+  }
+}

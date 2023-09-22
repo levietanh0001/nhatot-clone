@@ -1,0 +1,13 @@
+.toolbar-menu-btn {
+  display: none;
+}
+
+@media (max-width: 420px) {
+
+  .toolbar-menu-btn {
+    display: initial;
+    flex: 1;
+    text-align: left;
+  }
+
+}

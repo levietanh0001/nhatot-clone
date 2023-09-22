@@ -1,0 +1,166 @@
+.add-media-size {
+  width: 103px;
+  height: 88px;
+}
+
+.media {
+  flex: 0 0 319px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  text-align: left;
+}
+
+.file-upload {
+  height: 250px;
+  width: 100%;
+  padding: 15px;
+  margin-top: 10px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+
+  background-color: var(--app-background-color);
+  border: 1px dashed var(--orange-800);
+
+  cursor: pointer;
+}
+
+.upload-icons {
+  position: relative;
+}
+
+.plus-icon {
+  position: absolute;
+  right: -10px;
+  top: -10px;
+}
+
+.image-upload, .video-upload {
+  @extend .add-media-size;
+}
+
+.upload-requirements {
+  font-size: 0.75rem;
+  
+  color: grey;
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  & p {
+    margin: 0;
+  }
+}
+
+
+
+.add-media {
+  @extend .add-media-size;
+
+  display: inline-block;
+  border: 1px dashed var(--orange-800);
+
+  background-color: #f4f4f4;
+
+  position: relative;
+
+  cursor: pointer;
+
+  & .add-content svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    fill: var(--orange-800);
+  }
+
+  & .add-label {
+    position: absolute;
+
+  }
+}
+
+
+.media-list {
+
+  display: flex;
+  flex-flow: row wrap;
+  column-gap: 5px;
+  justify-content: flex-start;
+  align-items: center;
+
+  & ul {
+    list-style-type: none;
+    display: contents;
+  }
+
+  & ul li {
+    position: relative;
+  }
+
+  & li > img {
+    @extend .add-media-size;
+
+    object-fit: cover;
+    object-position: center;
+  }
+
+  & li .clear-btn {
+    cursor: pointer;
+
+    position: absolute;
+    top: 0px;
+    right: 0px;
+
+    background-color: gray;
+    border: 0;
+
+    color: lightgray;
+  }
+}
+
+.image-list, .video-list {
+  @extend .media-list;
+}
+
+.video-thumbnail {
+  position: relative;
+
+  & > img {
+    @extend .add-media-size;
+  }
+}
+
+.play-icon {
+  & svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    fill: white;
+
+  }
+}
+
+.error {
+  margin: 7px 0 0 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: red;
+}
+
+@media (max-width: 768px) {
+  .media {
+    order: 1;
+  }
+}

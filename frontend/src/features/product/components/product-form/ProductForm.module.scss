@@ -1,0 +1,86 @@
+.outer-wrapper {
+  margin-top: 0;
+}
+
+.inner-wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  
+  padding: 15px;
+
+  background-color: var(--secondary-background-color);
+}
+
+.title {
+  margin: 0;
+
+  font-size: 1rem;
+  font-weight: 600;
+
+  &::selection {
+    background-color: var(--red);
+    color: white;
+  }
+}
+
+.help {
+  font-size: 0.875rem;
+  color: gray;
+  margin-bottom: 0;
+}
+
+.details {
+  flex: 1;
+  
+  & form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  
+    text-align: left;
+  }
+}
+
+.select-input {
+  width: 100%;
+  padding: 10px;
+
+  // border: 3px solid #f4f4f4;
+  border: 1px solid gray;
+  border-radius: 4px;
+  background-color: var(--secondary-background-color);
+  color: black;
+
+  // remove default dropdown icon
+  -moz-appearance: none; /* Firefox */
+  -webkit-appearance: none; /* Safari and Chrome */
+  appearance: none;
+
+  &:focus {
+    outline: 0;
+  }
+}
+
+.product-location {
+
+  & .title {
+    font-size: 1.125rem;
+    margin: 0;
+    margin-bottom: 10px;
+  }
+
+  & .project-name {
+    margin-bottom: 10px;
+  }
+
+  & .product-address input {
+    // @extend .select-input;
+  }
+}
+
+@media (max-width: 768px) {
+  .inner-wrapper {
+    flex-direction: column;
+  }
+}

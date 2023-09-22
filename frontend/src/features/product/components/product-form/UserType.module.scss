@@ -1,0 +1,40 @@
+.user-role-wrapper {
+
+  margin-bottom: 10px;
+  
+  & .title {
+    margin: 0;
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 1.25rem;
+  }
+}
+
+.user-role {
+
+  & ul {
+    list-style-type: none;
+
+    display: flex;
+    gap: 7px;
+    margin: 0;
+
+    & li button {
+      flex-shrink: 0;
+      padding: 7px 10px;
+      border: 0;
+      background-color: #f4f4f4;
+      border-radius: 16px;
+      cursor: pointer;
+
+      &:focus {
+        outline: 2px solid var(--orange-500);
+      }
+    }
+  }
+}
+.active {
+  background-color: var(--yellow-300) !important;
+  color: var(--red-300) !important;
+  border: 1px solid var(--yellow-300) !important;
+}

@@ -1,0 +1,45 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      // "~/*": ["src/*"],
+      "@/*": ["src/*"],
+      "@components/*": ["src/components/*"],
+      "@api/*": ["src/api/*"],
+      "@utils/*": ["src/utils/*"],
+    },
+    "outDir": "build/dist",
+    "module": "commonjs",
+    "target": "ES5",
+    "downlevelIteration": true,
+    "lib": ["dom", "dom.iterable", "es6"],
+    "sourceMap": true,
+    "allowJs": true,
+    "rootDir": "src",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    // "noUnusedLocals": false,
+    "strict": true,
+    "noImplicitAny": false,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    // "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    "isolatedModules": false
+  },
+  "include": ["src"],
+  "exclude": [
+    "node_modules",
+    "build",
+    "scripts",
+    "acceptance-tests",
+    "webpack",
+    "jest",
+    "src/setupTests.ts"
+  ]
+}

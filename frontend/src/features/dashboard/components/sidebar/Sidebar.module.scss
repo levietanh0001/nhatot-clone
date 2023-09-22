@@ -1,0 +1,25 @@
+
+.sidebar {
+
+  grid-area: sidebar;
+
+  height: 100vh;
+  height: 100dvh;
+
+  background-color: #202020;
+
+  display: grid;
+  grid-template-rows: 60px 1fr 120px;
+
+  overflow-y: scroll;
+  overscroll-behavior: contain;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+

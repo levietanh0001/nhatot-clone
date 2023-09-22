@@ -1,0 +1,36 @@
+.wrapper {
+  background-color: var(--secondary-background-color);
+}
+
+@media (max-width: 992px) {
+  .inner-wrapper {
+    width: 700px;
+    margin: auto;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .inner-wrapper {
+    width: 570px;
+  }
+
+}
+
+@media (max-width: 576px) {
+
+  .inner-wrapper {
+    width: 100%;
+    padding: 30px;
+    padding-bottom: 0;
+  }
+}
+
+@media (max-width: 576px) {
+
+  .inner-wrapper {
+    padding: 10px;
+    padding-bottom: 0;
+    padding-top: 0;
+  }
+}

@@ -1,0 +1,57 @@
+.inner-wrapper {
+  background-color: var(--secondary-background-color);
+  padding: 15px;
+}
+
+
+.options {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+
+  font-size: 0.875rem;
+}
+
+.option {
+  flex-basis: 100px;
+
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  gap: 5px;
+
+  cursor: pointer;
+
+  & .icon-wrapper {
+    background-color: var(--app-background-color);
+    padding: 7px 10px;
+    border-radius: 50%;
+    
+    &:hover {
+      background-color: var(--orange-800);
+    }
+
+    & > .image-placeholder {
+      display: inline-block;
+      width: 36px;
+      height: 36px;
+    }
+
+    & > .image-placeholder > svg {
+      vertical-align: middle;
+      height: 100%;
+      width: 100%;
+      fill: black;
+    }
+  }
+
+  & > img {
+    width: 36px;
+    height: 36px;
+  }
+
+}
+
+.icon-wrapper.active {
+  background-color: var(--orange-800);
+}

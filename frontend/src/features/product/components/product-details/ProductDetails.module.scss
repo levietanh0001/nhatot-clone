@@ -1,0 +1,124 @@
+.product-details {
+  text-align: left;
+  background-color: var(--app-background-color);
+}
+
+.title {
+  font-size: 1.125rem;
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.card {
+  padding: 15px;
+  margin-bottom: 10px;
+  background-color: var(--secondary-background-color);
+}
+
+.product-overview {
+  @extend .card;
+}
+
+.product-features {
+  @extend .card;
+}
+
+.product-description {
+  @extend .card;
+}
+
+.product-location {
+  @extend .card;
+}
+
+.subheading {
+  display: flex;
+  justify-content: space-between;
+
+  & .area-price {
+    flex: 0.7;
+  }
+
+  & .actions {
+    flex: 0.3;
+
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.share, .save-post {
+
+  & img {
+    vertical-align: middle;
+    margin-right: 5px;
+  }
+}
+
+.area-price {
+
+  margin-bottom: 10px;
+
+  & .price {
+    color: red;
+  }
+
+  & .area {
+    color: gray;
+  }
+}
+
+.overview {
+  color: gray;
+  font-size: 0.875rem;
+
+  & > * {
+    margin-bottom: 10px;
+  }
+
+  & img {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 5px;
+  }
+
+  & .see-project {
+    color: var(--blue-900);
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+
+  & .see-more a {
+    color: var(--blue-700);
+    font-size: 0.875rem;
+    text-decoration: none;
+  }
+}
+
+.features {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  
+  & img {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 5px;
+  }
+  
+  & .feature {
+    flex-basis: 50%;
+    margin-bottom: 15px;
+    font-size: 0.875rem;
+  }
+}
+
+.product-description {
+  & .description {
+    overflow-wrap: break-word;
+    text-align: justify;
+    white-space: pre-line;
+  }
+}

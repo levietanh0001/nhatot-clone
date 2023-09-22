@@ -1,0 +1,13 @@
+.inner-wrapper {
+  display: flex;
+  height: calc(100vh - 143px);
+  margin-top: 15px;
+}
+
+.contact-panel {
+  flex: 0.35;
+}
+
+.chat-panel {
+  flex: 0.65;
+}

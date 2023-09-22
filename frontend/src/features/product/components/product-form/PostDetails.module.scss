@@ -1,0 +1,25 @@
+.title {
+  margin: 0;
+  margin-bottom: 10px;
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.post {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.product-description-wrapper {
+
+  & textarea {
+    padding-top: 20px !important;
+  }
+}
+
+.expand {
+  & textarea:focus {
+    height: 250px;
+  }
+}
