@@ -8,9 +8,11 @@ const path = require('path');
 
 
 // load environment variables
-const dotenvConfig = require('dotenv').config('../.env');
+const envPath = path.join(__dirname, '..', `.env${process.env.NODE_ENV.includes('prod')? '.prod': ''}`);
+const dotenvConfig = require('dotenv').config({ path: envPath });
 const dotenvExpand = require('dotenv-expand')
-dotenvExpand.expand(dotenvConfig);
+const envConfig = dotenvExpand.expand(dotenvConfig);
+console.log({ envPath, envConfig });
 
 
 // import graphql package
