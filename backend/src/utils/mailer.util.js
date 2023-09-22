@@ -1,7 +1,6 @@
 const nodemailer = require('nodemailer');
 const { createAccessTokenAsync } = require('./cryptography.util');
 const { constructUrlWithQueryParamsAsync } = require('./url.util');
-// require('dotenv').config('../../.env');
 
 
 function sendConfimationEmail(recipientEmail, confirmationUrl, purpose='để xác nhận email của bạn') {

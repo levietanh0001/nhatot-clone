@@ -1,9 +1,6 @@
-const dotenvConfig = require('dotenv').config('../../.env');
-const dotenvExpand = require('dotenv-expand')
-dotenvExpand.expand(dotenvConfig);
 const redis = require('redis');
 
-const REDIS_HOST = process.env.NODE_ENV === 'prod'? process.env.REDIS_HOST: 'localhost'
+const REDIS_HOST = process.env.NODE_ENV.includes('prod')? process.env.REDIS_HOST: 'localhost'
 
 const redisClient = redis.createClient({
   url: `redis://:redis_pass@${REDIS_HOST}:6379`
