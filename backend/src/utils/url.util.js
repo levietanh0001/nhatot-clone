@@ -1,4 +1,4 @@
-// require('dotenv').config('../../.env');
+
 
 const baseUrl = process.env.BASE_URL;
 
