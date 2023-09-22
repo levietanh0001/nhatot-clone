@@ -11,10 +11,9 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     
     const productIds = await queryInterface.sequelize.query(`
-        SELECT id from nhatot.product order by RAND()
-      `, { type: QueryTypes.SELECT });
+      SELECT id from nhatot.product order by RAND()
+    `, { type: QueryTypes.SELECT });
     const productIdList = productIds.map(item => item.id);
-    console.log(productIdList);
 
     let productImages = [];
     productIdList.forEach(productId => {
@@ -26,11 +25,7 @@ module.exports = {
           updatedAt: new Date(),    
         }]
       })
-    })
-
-    // console.log({ productImagesLength: productImages.length });
-    
-    // throw new Error();
+    });
 
     await queryInterface.bulkInsert('product_image', productImages, {});
   },
