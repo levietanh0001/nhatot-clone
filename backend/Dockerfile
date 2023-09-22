@@ -1,26 +1,25 @@
 # FROM node:16.20.0 AS base
-FROM node:16.20.0-alpine3.17
+FROM node:16.20.0-alpine3.17 as base
 
 WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install --only=production
+RUN npm install --only=production --omit=dev
 
 COPY . .
 
-# FROM node:16.20.0-alpine3.17
+RUN npm prune --production
 
-# WORKDIR /app
+FROM node:16.20.0-alpine3.17
+# FROM gcr.io/distroless/nodejs16-debian11
 
-# COPY package*.json ./
+ENV NODE_ENV=production
 
-# RUN npm install --only=production
+WORKDIR /app
 
-# COPY --from=base /app ./
+COPY --from=base /app ./
 
 EXPOSE 4000
-
-CMD [ "npm", "start" ] 
 
 
