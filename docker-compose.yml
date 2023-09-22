@@ -52,7 +52,8 @@ services:
       - backend_redis-data:/data
 
   backend:
-    container_name: nhatot-backend
+    image: williamle0001/nhatot-clone:nhatot-backend
+    # container_name: williamle0001/nhatot-clone:nhatot-backend
     restart: always
     build:
       context: ./backend
