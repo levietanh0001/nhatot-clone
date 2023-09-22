@@ -6,7 +6,7 @@ import ChatPage from '@/pages/Chat.page';
 
 const chatRoutes = [
   {
-    path: '/chat/:userId?',
+    path: '/chat',
     element: (
       <LoggedInRequired>
         <SuspenseWrapper>

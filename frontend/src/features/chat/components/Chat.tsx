@@ -28,11 +28,11 @@ const Chat = () => {
   // seeding userId for chat! / migration update userId for chat field
   // set last active contact after choosing (set id)
 
-  const params = useParams();
+  // const params = useParams();
   // const userId = params['userId'];
   const authContext = useContext(AuthContext);
   const user = authContext?.user;
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const [currentReceiverId, setCurrentReceiverId] = useState<string>('');
   // const [currentReceiverId, setCurrentReceiverId] = useState(userId);

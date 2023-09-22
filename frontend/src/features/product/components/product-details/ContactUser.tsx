@@ -50,9 +50,9 @@ const ContactUser: FC<IContactUser> = (props) => {
           <div className={styles['card-body']}>
             <div className={styles['user-type-wrapper']}>
               <span className={styles['user-icon']}>
-                {userProfile?.role === 'moigioi' && (
+                {userProfile?.role === 'moigioi' ? (
                   <img width={15} src="https://static.chotot.com/storage/chotot-icons/next/pro.svg" alt="Môi giới" />
-                )}
+                ): <>•</>}
                 {/* <img
                   src='https://static.chotot.com/storage/default_images/pty/private-pty-icon.svg'
                   alt='https://static.chotot.com/storage/default_images/pty/private-pty-icon.svg'

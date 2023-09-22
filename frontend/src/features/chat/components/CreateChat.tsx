@@ -22,7 +22,7 @@ const CreateChat = () => {
 
   useEffect(() => {
 
-    if(!createOneOneChatMutation.isLoading && !createOneOneChatMutation.isError) {
+    if(createOneOneChatMutation.data) {
       navigate('/chat', { replace: true });
     }
 
