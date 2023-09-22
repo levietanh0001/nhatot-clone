@@ -51,19 +51,20 @@ services:
     volumes:
       - backend_redis-data:/data
 
-  # backend:
-  #   container_name: nhatot-backend
-  #   build:
-  #     context: ./backend
-  #     dockerfile: Dockerfile
-  #   command: npm start
-  #   ports:
-  #     - "4000:4000"
-  #   depends_on:
-  #     - nginx
-  #     - mysql
-  #     - redis
-  #     - mongo
+  backend:
+    container_name: nhatot-backend
+    restart: always
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: npm run prod
+    ports:
+      - "4000:4000"
+    depends_on:
+      # - nginx
+      - mysql
+      - redis
+      - mongo
       
   # frontend:
   #   container_name: nhatot-frontend
