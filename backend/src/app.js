@@ -8,7 +8,7 @@ const path = require('path');
 
 
 // load environment variables
-const envPath = path.join(__dirname, '..', `.env${process.env.NODE_ENV.includes('prod')? '.prod': ''}`);
+const envPath = path.join(__dirname, '..', `.env${process.env.NODE_ENV.includes('prod')? '.prod': '.dev'}`);
 const dotenvConfig = require('dotenv').config({ path: envPath });
 const dotenvExpand = require('dotenv-expand')
 const envConfig = dotenvExpand.expand(dotenvConfig);
