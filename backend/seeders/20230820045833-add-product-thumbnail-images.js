@@ -26,10 +26,6 @@ module.exports = {
       }]
     })
 
-    // console.log({ productImagesLength: productImages.length });
-    
-    // throw new Error();
-
     await queryInterface.bulkInsert('product_thumbnail', productThumbnails, {});
   },
 

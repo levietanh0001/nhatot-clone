@@ -10,6 +10,9 @@ const UserProfile = sequelize.define('user_profile', {
     allowNull: false,
     primaryKey: true,
   },
+  avatarUrl: {
+    type: Sequelize.TEXT,
+  },
   gender: {
     ...asOneOf(['', 'male', 'female'])
   },
@@ -25,9 +28,6 @@ const UserProfile = sequelize.define('user_profile', {
   respondToChat: {
     ...asNonNegativeFloat()
   },
-  // isVerified: {
-  //   ...asBoolean(defaultValue = false)
-  // },
   address: {
     ...asString(minChar = 0, maxChar = 255)
   },
