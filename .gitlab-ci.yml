@@ -3,6 +3,7 @@ stages:
   - build
   - deploy
 
+
 cache:
   paths:
     - node_modules/
@@ -22,10 +23,12 @@ build:
     - docker build -t williamle0001/nhatot-clone:nhatot-backend ./backend
     - docker push williamle0001/nhatot-clone:nhatot-backend
 
+
 deploy:
   stage: deploy
   before_script:
     - chmod 400 $SSH_KEY
+
 
   script:
     # - ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@207.148.126.202 "docker login -u $REGISTRY_USER -p \"$REGISTRY_PASS\" && echo successfully logged into docker"
