@@ -17,6 +17,7 @@ const sequelize = new Sequelize(
   {
     dialect: 'mysql',
     host: '207.148.126.202',
+    port: '3306',
     // host: '127.0.0.1',
     // host: process.env.NODE_ENV.includes('prod')? process.env.MYSQL_HOST: 'localhost',
     sync: true,
