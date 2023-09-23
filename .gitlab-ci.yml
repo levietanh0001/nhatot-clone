@@ -31,9 +31,9 @@ deploy:
   script:
     # - ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@207.148.126.202 "docker login -u $REGISTRY_USER -p \"$REGISTRY_PASS\" && echo successfully logged into docker"
     - ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@207.148.126.202 "
-      docker login -u $REGISTRY_USER -p \"$REGISTRY_PASS\" &&
+      docker login -u $REGISTRY_USER -p \"$REGISTRY_PASS\"
       docker volume create mysql_data
-      docker run -v mysql_data:/var/lib/mysql -v mysql-initdb:/docker-entrypoint-initdb.d/init.sql --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD mysql:8.0
+      docker run -v mysql_data:/var/lib/mysql --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD mysql:8.0
       docker volume create mongo_data
       docker run -v mongo_data:/data/db --name mongo -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME -e MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD mongo:6.0
       docker volume create redis_data
