@@ -21,20 +21,12 @@ build:
     - docker compose build
     - docker push williamle0001/nhatot-clone:nhatot-backend
     # - docker build -t williamle0001/nhatot-clone:nhatot-backend ./backend
+  when: manual
 
 deploy:
   stage: deploy
   before_script:
-    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
-    - eval $(ssh-agent -s)
-    - echo "$ID_RSA" | tr -d '\r' | ssh-add -
-    - mkdir -p ~/.ssh
-    - touch ~/.ssh/config
-    - touch ~/.ssh/known_hosts
-    - chmod -R 400 ~/.ssh
-
-  # before_script:
-    # - chmod 400 $SSH_KEY
+    - chmod 400 $SSH_KEY
 
   script:
     - ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@207.148.126.202 "
