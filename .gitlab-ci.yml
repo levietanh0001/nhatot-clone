@@ -1,0 +1,30 @@
+
+stages:
+  - build
+  # - deploy
+
+cache:
+  paths:
+    - node_modules/
+
+
+build:
+  image: docker:23.0.3
+  services:
+    - docker:23.0.3-dind
+  stage: build
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  before_script:
+    - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
+  script:
+    - docker compose build
+    - docker push williamle0001/nhatot-clone:nhatot-backend
+    # - docker build -t williamle0001/nhatot-clone:nhatot-backend ./backend
+
+# deploy:
+#   stage: deploy
+#   # script: 
+#     # - echo "Define your deployment script!"
+#   environment: production
+#   when: manual
