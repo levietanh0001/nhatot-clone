@@ -1,19 +1,5 @@
 version: "3.8"
 services:
-  # nginx:
-  #   image: nginx:alpine
-  #   container_name: nginx
-  #   restart: always
-  #   ports:
-  #     - "80:80"
-  #     # - "80:4000"
-  #     - "443:443"
-  #   command: nginx -g "daemon off;"
-  #   volumes:
-  #     - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-  #     - ./nginx/conf.d:/etc/nginx/conf.d
-  #     - ./nginx/hosts:/etc/hosts
-  #     - ./frontend/build:/var/www/html
 
   mysql: # shell into container: docker exec -it af1046f4563b bash
     image: mysql:8.0
@@ -24,7 +10,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - global_mysql-data:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
       - mysql-initdb:/docker-entrypoint-initdb.d/init.sql
 
   mongo:
@@ -37,7 +23,7 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
-      - global_mongo-data:/data/db
+      - mongo-data:/data/db
       - mongo-conf:/etc/mongo
       - mongo-configdb:/data/configdb
 
@@ -49,11 +35,11 @@ services:
       - "6379:6379"
     command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASS}
     volumes:
-      - backend_redis-data:/data
+      - redis-data:/data
 
   backend:
     image: williamle0001/nhatot-clone:nhatot-backend
-    # container_name: williamle0001/nhatot-clone:nhatot-backend
+    container_name: nhatot-backend
     restart: always
     build:
       context: ./backend
@@ -62,31 +48,6 @@ services:
     ports:
       - "4000:4000"
     depends_on:
-      # - nginx
       - mysql
       - redis
       - mongo
-      
-  # frontend:
-  #   container_name: nhatot-frontend
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - nginx
-        
-
-volumes:
-  global_mysql-data:
-    external: true
-  global_mongo-data:
-    external: true
-  backend_redis-data:
-    external: true
-  # mysql-data:
-  mysql-initdb:
-  # mongo-data:
-  mongo-conf:
-  mongo-configdb:

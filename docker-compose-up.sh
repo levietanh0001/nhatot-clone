@@ -1,1 +1,1 @@
-env $(cat ./backend/.env.prod && cat ./frontend/.env) docker-compose up --build
+env $(cat ./backend/.env.prod && cat ./frontend/.env) docker-compose -f ./docker-compose.dev.yml up --build
