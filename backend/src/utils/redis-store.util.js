@@ -3,8 +3,8 @@ const redis = require('redis');
 const REDIS_HOST = process.env.NODE_ENV.includes('prod')? process.env.REDIS_HOST: 'localhost'
 
 const redisClient = redis.createClient({
-  url: `redis://:redis_pass@127.0.0.1:6379`,
-  // url: `redis://:redis_pass@207.148.126.202:6379`,
+  // url: `redis://:redis_pass@127.0.0.1:6379`,
+  url: `redis://:redis_pass@207.148.126.202:6379`,
   
   // url: `redis://207.148.126.202:6379`,
   // username: 'default',
