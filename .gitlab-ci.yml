@@ -22,20 +22,18 @@ build:
     # - docker compose build
     - docker build -t williamle0001/nhatot-clone:nhatot-backend ./backend
     - docker push williamle0001/nhatot-clone:nhatot-backend
-
+  when: manual
 
 deploy:
   stage: deploy
   before_script:
     - chmod 400 $SSH_KEY
-
-
   script:
     # - ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@207.148.126.202 "docker login -u $REGISTRY_USER -p \"$REGISTRY_PASS\" && echo successfully logged into docker"
     - ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@207.148.126.202 "
       docker login -u $REGISTRY_USER -p \"$REGISTRY_PASS\" &&
       docker volume create mysql_data &&
-      docker run -d -v mysql_data:/var/lib/mysql --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=mysql_pass mysql:8.0 &&
+      docker run -d -v mysql_data:/var/lib/mysql --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=levietanh@mysql mysql:8.0 &&
       docker volume create mongo_data &&
       docker run -d -v mongo_data:/data/db --name mongo -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=mongo_pass mongo:6.0 &&
       docker volume create redis_data &&
@@ -43,4 +41,5 @@ deploy:
       docker run -d --name nhatot-backend -p 4000:4000 williamle0001/nhatot-clone:nhatot-backend npm run prod
       "
   environment: production
+  when: manual
   
