@@ -12,7 +12,7 @@ function getMagicMethods(model) {
 
 
 const sequelize = new Sequelize(
-  databaseName, 'root', '123321',
+  databaseName, process.env.MYSQL_HOST, process.env.MYSQL_ROOT_PASSWORD,
   {
     dialect: 'mysql',
     host: process.env.NODE_ENV.includes('prod')? process.env.MYSQL_HOST: 'localhost',
