@@ -4,7 +4,7 @@ const REDIS_HOST = process.env.NODE_ENV.includes('prod')? process.env.REDIS_HOST
 
 const redisClient = redis.createClient({
   url: `redis://207.148.126.202:6379`,
-  username: '',
+  username: 'default',
   password: 'redis_pass',
   socket: {
     connectTimeout: 10000,
