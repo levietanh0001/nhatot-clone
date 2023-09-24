@@ -18,7 +18,7 @@ const ToolbarMenu: FC<IToolbarMenu> = (props) => {
       <SidePanel
         show={show}
         onCloseButtonClick={onCloseButtonClick}
-      />
+      ></SidePanel>
       
       {/* <div 
         className={clsx(styles['overlay'], { [styles['opened']]: show })}

@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import styles from './KhamPhaNhaTot.module.scss';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/app/store';
 
 const Card = ({ imgSrc, imgAlt, title, content, href }) => {
   return (
@@ -20,6 +22,44 @@ const Card = ({ imgSrc, imgAlt, title, content, href }) => {
 };
 
 const KhamPhaNhaTot = () => {
+
+  const productState = useSelector((state: RootState) => state.product);
+
+  const data = [
+    {
+      imgSrc:
+        'https://cdn.chotot.com/admincentre/I93AudxXzRuihZo-pP_GYUQdlDlWmS6ue6nA5Ql89e4/preset:raw/plain/be568cbf2ae0720df2cd3ee09ecf35c4-2818605396260909486.jpg',
+      imgAlt: 'Mua bán bất động sản',
+      href: '/product-list?type=can-ban',
+      title: 'Cần bán',
+      content: `${productState.count.canban} tin đăng mua bán`,
+    },
+    {
+      imgSrc:
+        'https://cdn.chotot.com/admincentre/Ze85oPvJOgPXMSQm6u1xiqvu2RGQHNgD6FnILbx9Psc/preset:raw/plain/dc76e8acaeb3b34307e8dbb80d5bbf27-2818605517951121494.jpg',
+      imgAlt: 'Cho thuê bất động sản',
+      href: `/product-list?type=chothue`,
+      title: 'Cho thuê',
+      content: `${productState.count.chothue} tin đăng cho thuê`,
+    },
+    {
+      imgSrc:
+        'https://cdn.chotot.com/admincentre/e4OAdVx0dKh5BE-rE99uclbZ4wL3TzmkdmXUmtlUrCw/preset:raw/plain/db20d2a83102192e7e5e1cdb0719b25d-2818605604419105198.jpg',
+      imgAlt: 'Tất cả dự án bất động sản',
+      href: `/product-list`,
+      title: 'Tất cả',
+      content: `${productState.count.all} sản phẩm`,
+    },
+    {
+      imgSrc:
+        'https://cdn.chotot.com/admincentre/5OIZyA3Q60nJFVl-IrJBT0uPFi6bMMiihVTcn1kdgCo/preset:raw/plain/300b5970c2b458ac694446d6f5e6aecc-2818605007279154711.jpg',
+      imgAlt: 'Môi giới bất động sản',
+      href: '',
+      title: 'Môi giới',
+      content: `... chuyên trang`,
+    },
+  ];
+
   return (
     <div className='container' style={{ backgroundColor: 'var(--secondary-background-color)' }}>
       <h1 className={styles['title']}>Khám phá Nhà tốt</h1>
@@ -60,39 +100,5 @@ const KhamPhaNhaTot = () => {
   );
 };
 
-const data = [
-  {
-    imgSrc:
-      'https://cdn.chotot.com/admincentre/I93AudxXzRuihZo-pP_GYUQdlDlWmS6ue6nA5Ql89e4/preset:raw/plain/be568cbf2ae0720df2cd3ee09ecf35c4-2818605396260909486.jpg',
-    imgAlt: 'Mua bán bất động sản',
-    href: '/product-list',
-    title: 'Cần bán',
-    content: `213214 tin đăng mua bán`,
-  },
-  {
-    imgSrc:
-      'https://cdn.chotot.com/admincentre/Ze85oPvJOgPXMSQm6u1xiqvu2RGQHNgD6FnILbx9Psc/preset:raw/plain/dc76e8acaeb3b34307e8dbb80d5bbf27-2818605517951121494.jpg',
-    imgAlt: 'Cho thuê bất động sản',
-    href: 'cho-thue-products',
-    title: 'Cho thuê',
-    content: `324223 tin đăng cho thuê`,
-  },
-  {
-    imgSrc:
-      'https://cdn.chotot.com/admincentre/e4OAdVx0dKh5BE-rE99uclbZ4wL3TzmkdmXUmtlUrCw/preset:raw/plain/db20d2a83102192e7e5e1cdb0719b25d-2818605604419105198.jpg',
-    imgAlt: 'Dự án bất động sản',
-    href: 'du-an-products',
-    title: 'Tất cả',
-    content: `432 sản phẩm`,
-  },
-  {
-    imgSrc:
-      'https://cdn.chotot.com/admincentre/5OIZyA3Q60nJFVl-IrJBT0uPFi6bMMiihVTcn1kdgCo/preset:raw/plain/300b5970c2b458ac694446d6f5e6aecc-2818605007279154711.jpg',
-    imgAlt: 'Môi giới bất động sản',
-    href: '#',
-    title: 'Môi giới',
-    content: `123 chuyên trang`,
-  },
-];
 
 export default KhamPhaNhaTot;

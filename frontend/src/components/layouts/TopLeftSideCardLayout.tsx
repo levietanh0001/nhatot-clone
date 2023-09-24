@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import styles from './TopLeftSideCardLayout.module.scss';
 
 const TopLeftSideCardLayout = ({ CardComponent, ContentComponent }) => {
@@ -16,9 +15,9 @@ const TopLeftSideCardLayout = ({ CardComponent, ContentComponent }) => {
   );
 }
 
-TopLeftSideCardLayout.propTypes = {
-  CardComponent: PropTypes.element,
-  ContentComponent: PropTypes.element,
-}
+// TopLeftSideCardLayout.propTypes = {
+//   CardComponent: PropTypes.element,
+//   ContentComponent: PropTypes.element,
+// }
 
 export default TopLeftSideCardLayout
