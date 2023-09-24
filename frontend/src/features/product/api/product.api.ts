@@ -314,8 +314,8 @@ export function useGetUserFavoriteProducts(currentPage=1, enabled=false) {
     keepPreviousData: true,
     refetchOnMount: true, // if component is mounted, refetch
     refetchOnWindowFocus: false,
-    // cacheTime: 10000, // by default 5 mins
-    staleTime: 5000,
+    cacheTime: 0, // by default 5 mins
+    staleTime: 0,
     select: (data) => {
       return data.data;
     },

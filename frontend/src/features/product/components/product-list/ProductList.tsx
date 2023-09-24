@@ -9,6 +9,7 @@ import { useScrollToTopOnPageChange, useSetAvailablePages, useSetCurrentPage } f
 import FilterBoard from './FilterBoard';
 import ProductCardList from './ProductCardList';
 import UserTypeTabs from './UserTypeTabs';
+import { useTopLoadingBar } from '@/contexts/top-loading-bar/TopLoadingBar.context';
 
 
 // let render = 0;
@@ -36,11 +37,13 @@ const ProductList = () => {
     currentPage, 
     productPerPage, 
     { type: type ?? '', category: category ?? '', userType: userType ?? '', q: q ?? '' }
-  );
-  usePopulateFavoritelist(setFavoriteProductIds);
-
+    );
+    usePopulateFavoritelist(setFavoriteProductIds);
+    
   // handle product pages
-  const { data: productCount } = useGetProductCount();
+  const { data: productCount, isLoading: isProductCountLoading } = useGetProductCount();
+  useTopLoadingBar(isLoading || isProductCountLoading);
+
   useSetCurrentPage(setCurrentPage);
   useScrollToTopOnPageChange(currentPage);
   useSetAvailablePages(productCount, productPerPage, setNumPages);
@@ -87,9 +90,9 @@ const ProductList = () => {
     navigate(0);
   }
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
+  // if (isLoading) {
+  //   return <p>Loading...</p>;
+  // }
 
   if (isError) {
     if (error instanceof AxiosError || error instanceof Error) {

@@ -1,4 +1,4 @@
-import { lazy } from 'react';
+import { lazy, useContext } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -14,6 +14,7 @@ import MUIStyledEngineProvider from './providers/MUIStyledEngine.provider';
 import { store } from './app/store';
 import { persistor } from './app/store';
 import { TopLoadingBarProvider } from './contexts/top-loading-bar/TopLoadingBar.context';
+
 
 const NotFound = lazy(() => import('./pages/NotFound.page'));
 
@@ -39,8 +40,10 @@ function AppWrapper({ children }) {
 }
 
 function App() {
+  
   return (
     <AppWrapper>
+
       <BrowserRouter>
           <AuthProvider>
             <Routes>

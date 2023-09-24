@@ -1,7 +1,7 @@
-import Skeleton from '@mui/material/Skeleton';
-import { lazy } from 'react';
 import { SuspenseWrapper } from '@/components/suspense/SuspenseWrapper';
 import Home from '@/features/home/components/Home';
+import Skeleton from '@mui/material/Skeleton';
+import { lazy } from 'react';
 const Header = lazy(() => import('@/components/layouts/Header'));
 const TopNav = lazy(() => import('@/components/navbar/TopNav'));
 const Footer = lazy(() => import('@/components/layouts/Footer'));
@@ -11,6 +11,7 @@ const AboutUs = lazy(() => import('@/components/footer/about-us/AboutUs'));
 const HomePage = () => {
   return (
     <>
+      
       <SuspenseWrapper fallback={
         <div className='container'>
           <Skeleton height='143px' width='100%' />

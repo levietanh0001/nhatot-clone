@@ -7,6 +7,7 @@ import useHandleQueryError from '@/hooks/error-handling.hook';
 import { useScrollToTop } from '@/hooks/pagination.hook';
 import AboutProduct from './AboutProduct';
 import ContactUser from './ContactUser';
+import { useTopLoadingBar } from '@/contexts/top-loading-bar/TopLoadingBar.context';
 
 
 
@@ -35,6 +36,7 @@ const ProductDetails = () => {
   //   isLoading: isUserIdForChatLoading,
   //   isError: isUserIdForChatError,
   // } = useGetUserIdForChat(userId);
+  useTopLoadingBar(isUserProfileLoading || isProductLoading);
 
   useHandleQueryError(isProductError, productError);
   useHandleQueryError(isUserProfileError, userProfileError);

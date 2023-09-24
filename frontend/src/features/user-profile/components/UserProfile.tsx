@@ -15,6 +15,7 @@ import { AuthContext } from '@/contexts/auth/Auth.context';
 import { SuspenseWrapper } from '@/components/suspense/SuspenseWrapper';
 import { useGetUserProfile, useUploadAvatarImage } from '@/features/user-profile/api/user-profile.api';
 import { useConsoleLogOnChange } from '@/hooks/utils.hook';
+import { useTopLoadingBar } from '@/contexts/top-loading-bar/TopLoadingBar.context';
 const TopLeftSideCardLayout = lazy(() => import('@/components/layouts/TopLeftSideCardLayout'));
 const ProductListing = lazy(() => import('./ProductListing'));
 const UserCard = lazy(() => import('./UserCard'));
@@ -64,6 +65,21 @@ const UserProfile = () => {
     userId,
     String(userId) === String(user?.userId)
   );
+
+  useTopLoadingBar(
+    isUserProductsLoading || 
+    isUserProductCountLoading 
+    // isFavoriteProductsLoading || 
+    // isFavoriteProductCountLoading
+  );
+
+  console.log({
+    enabled: String(userId) === String(user?.userId),
+    isUserProductsLoading,
+    isUserProductCountLoading,
+    isFavoriteProductsLoading,
+    isFavoriteProductCountLoading,
+  })
 
   const uploadAvatarImageMutation = useUploadAvatarImage();
 

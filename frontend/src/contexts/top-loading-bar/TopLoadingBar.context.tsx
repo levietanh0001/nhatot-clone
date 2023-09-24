@@ -17,7 +17,7 @@ export const TopLoadingBarProvider = (props) => {
 }
 
 
-export const useTopLoadingBar = (isLoading) => {
+export const useTopLoadingBar = (isLoading: boolean) => {
 
   const topLoadingBarContext = useContext(TopLoadingBarContext);
   
@@ -30,4 +30,7 @@ export const useTopLoadingBar = (isLoading) => {
     }
 
   }, [isLoading]);
+
+
+  
 }

@@ -1,6 +1,6 @@
+import { SuspenseWrapper } from '@/components/suspense/SuspenseWrapper';
 import Skeleton from '@mui/material/Skeleton';
 import { lazy } from 'react';
-import { SuspenseWrapper } from '@/components/suspense/SuspenseWrapper'
 
 import ProductSliders from '@/features/product/components/product-sliders/ProductSliders';
 const TopCarousel = lazy(() => import('@/features/home/components/top-carousel/TopCarousel'));

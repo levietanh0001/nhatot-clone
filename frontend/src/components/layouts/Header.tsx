@@ -1,7 +1,18 @@
+import { TopLoadingBarContext } from "@/contexts/top-loading-bar/TopLoadingBar.context";
+import { useContext } from "react";
+import LoadingBar from "react-top-loading-bar";
 
 const Header = ({ children }) => {
+
+  const topLoadingBarContext = useContext(TopLoadingBarContext);
+
   return (
     <>
+      <LoadingBar 
+        color='#FF7C05'
+        progress={topLoadingBarContext?.progress} 
+        onLoaderFinished={() => topLoadingBarContext?.setProgress(0)}
+      />
       <div
         style={{
           display: 'flex',

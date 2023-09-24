@@ -3,14 +3,17 @@ import { useGetProductCount, useGetProducts } from '@/features/product/api/produ
 import ProductCardSlider from '@/features/home/components/product-card-slider/ProductCardSlider';
 import { RootState, useAppDispatch } from '@/app/store';
 import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { setProductCount } from '@/features/product/product.slice';
+import { TopLoadingBarContext, useTopLoadingBar } from '@/contexts/top-loading-bar/TopLoadingBar.context';
+import LoadingBar from 'react-top-loading-bar';
 
 
 const ProductSliders = () => {
 
   const productState = useSelector((state: RootState) => state.product);
   const dispatch = useAppDispatch();
+
   const { data: allProducts, isLoading: isAllProductsLoading } = useGetProducts({ limit: 20, offset: 0 });
   const { data: canbanProducts, isLoading: isCanbanProductsLoading } = useGetProducts({ limit: 20, offset: 0, type: 'canban' });
   const { data: chothueProducts, isLoading: isChothueProductsLoading } = useGetProducts({ limit: 20, offset: 0, type: 'chothue' });
@@ -34,8 +37,18 @@ const ProductSliders = () => {
 
   }, [allProductCount, canbanProductCount, chothueProductCount]);
 
+  useTopLoadingBar(
+    isAllProductsLoading ||
+    isCanbanProductsLoading ||
+    isChothueProductsLoading ||
+    isAllProductCountLoading ||
+    isCanBanProductCountLoading ||
+    isChoThueProductCountLoading
+  )
+
   return (
     <>
+
       {isAllProductsLoading && isAllProductCountLoading && (
         <div className='container'>
           <Skeleton sx={{ height: '350px', width: '100%', marginBottom: '10px', borderRadius: '12px' }} variant='rectangular' />
