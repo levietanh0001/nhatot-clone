@@ -10,8 +10,8 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - mysql-data:/var/lib/mysql
-      - mysql-initdb:/docker-entrypoint-initdb.d/init.sql
+      - mysql_data:/var/lib/mysql
+      # - mysql-initdb:/docker-entrypoint-initdb.d/init.sql
 
   mongo:
     image: mongo:6.0
@@ -23,9 +23,7 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
-      - mongo-data:/data/db
-      - mongo-conf:/etc/mongo
-      - mongo-configdb:/data/configdb
+      - mongo_data:/data/db
 
   redis:
     image: redis:7.0-alpine
@@ -37,7 +35,7 @@ services:
       - REDIS_PASS=${REDIS_PASS}
     command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASS}
     volumes:
-      - redis-data:/data
+      - redis_data:/data
 
   backend:
     # image: williamle0001/nhatot-clone:nhatot-backend
@@ -63,5 +61,12 @@ services:
       - "3000:80"
     depends_on:
       - backend
-    
+
+volumes:
+  mysql_data:
+    external: true
+  mongo_data:
+    external: true
+  redis_data:
+    external: true
     
