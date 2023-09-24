@@ -1,16 +1,38 @@
 import Skeleton from '@mui/material/Skeleton';
 import { useGetProductCount, useGetProducts } from '@/features/product/api/product.api';
 import ProductCardSlider from '@/features/home/components/product-card-slider/ProductCardSlider';
+import { RootState, useAppDispatch } from '@/app/store';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { setProductCount } from '@/features/product/product.slice';
 
 
 const ProductSliders = () => {
 
+  const productState = useSelector((state: RootState) => state.product);
+  const dispatch = useAppDispatch();
   const { data: allProducts, isLoading: isAllProductsLoading } = useGetProducts({ limit: 20, offset: 0 });
   const { data: canbanProducts, isLoading: isCanbanProductsLoading } = useGetProducts({ limit: 20, offset: 0, type: 'canban' });
   const { data: chothueProducts, isLoading: isChothueProductsLoading } = useGetProducts({ limit: 20, offset: 0, type: 'chothue' });
   const { data: allProductCount, isLoading: isAllProductCountLoading } = useGetProductCount();
   const { data: canbanProductCount, isLoading: isCanBanProductCountLoading } = useGetProductCount({ type: 'canban' });
   const { data: chothueProductCount, isLoading: isChoThueProductCountLoading } = useGetProductCount({ type: 'chothue' });
+
+  useEffect(() => {
+
+    if(allProductCount) {
+      dispatch(setProductCount({ type: 'all', count: allProductCount }));
+    }
+
+    if(canbanProductCount) {
+      dispatch(setProductCount({ type: 'canban', count: canbanProductCount }));
+    }
+
+    if(chothueProductCount) {
+      dispatch(setProductCount({ type: 'chothue', count: chothueProductCount }));
+    }
+
+  }, [allProductCount, canbanProductCount, chothueProductCount]);
 
   return (
     <>
@@ -35,7 +57,7 @@ const ProductSliders = () => {
       {allProducts && allProductCount && (
         <ProductCardSlider
           slides={allProducts ?? []}
-          numMore={allProductCount}
+          numMore={productState.count.all}
           type='latest'
           title='Mới nhất'
           className='latest-products-carousel'
@@ -47,7 +69,7 @@ const ProductSliders = () => {
       {canbanProducts && canbanProductCount && (
         <ProductCardSlider
           slides={canbanProducts ?? []}
-          numMore={canbanProductCount}
+          numMore={productState.count.canban}
           type='can-ban'
           title='Cần bán bất động sản'
           className='can-ban-products-carousel'
@@ -59,7 +81,7 @@ const ProductSliders = () => {
       {chothueProducts && chothueProductCount && (
         <ProductCardSlider
           slides={chothueProducts ?? []}
-          numMore={chothueProductCount}
+          numMore={productState.count.chothue}
           type='cho-thue'
           title='Cho thuê bất động sản'
           className='cho-thue-products-carousel'

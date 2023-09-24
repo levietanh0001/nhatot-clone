@@ -37,6 +37,11 @@ const initialState: IInitialProductState = {
   inputError: {},
   // imageError: '',
   videoError: '',
+  count: {
+    all: 0,
+    canban: 0,
+    chothue: 0
+  }
 };
 
 const productSlice = createSlice({
@@ -122,6 +127,11 @@ const productSlice = createSlice({
     resetAllProductProperties: () => {
       return initialState;
     },
+    setProductCount: (state, action: { payload: { type?: 'canban' | 'chothue' | 'all'; count: number } }) => {
+      if(action.payload?.type) {
+        state.count[action.payload?.type] = action.payload?.count;
+      }
+    }
   },
   extraReducers: (builder) => {
     // async reducers
@@ -209,6 +219,7 @@ export const {
   setVideoError,
   setProductVideo,
   setVideoThumbnail,
+  setProductCount
 } = productSlice.actions;
 
 

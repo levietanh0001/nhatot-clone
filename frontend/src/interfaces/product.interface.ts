@@ -65,6 +65,11 @@ export interface IInitialProductState {
   inputError: any;
   // imageError: string;
   videoError: string;
+  count: {
+    all: number;
+    canban: number;
+    chothue: number;
+  }
 }
 
 export interface IProductForm {
