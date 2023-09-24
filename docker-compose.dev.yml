@@ -47,6 +47,8 @@ services:
     restart: always
     ports:
       - "6379:6379"
+    environment:
+      - REDIS_PASS=${REDIS_PASS}
     command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASS}
     volumes:
       - backend_redis-data:/data
@@ -67,15 +69,15 @@ services:
       - redis
       - mongo
       
-  # frontend:
-  #   container_name: nhatot-frontend
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - nginx
+  frontend:
+    container_name: nhatot-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
         
 
 volumes:
