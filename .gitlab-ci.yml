@@ -3,6 +3,7 @@ stages:
   - build
   - deploy
 
+
 cache:
   paths:
     - node_modules/
@@ -18,24 +19,27 @@ build:
   before_script:
     - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
   script:
-    - docker compose build
+    # - docker compose build
+    - docker build -t williamle0001/nhatot-clone:nhatot-backend ./backend
     - docker push williamle0001/nhatot-clone:nhatot-backend
-    # - docker build -t williamle0001/nhatot-clone:nhatot-backend ./backend
   when: manual
 
 deploy:
   stage: deploy
   before_script:
     - chmod 400 $SSH_KEY
-
   script:
     # - ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@207.148.126.202 "docker login -u $REGISTRY_USER -p \"$REGISTRY_PASS\" && echo successfully logged into docker"
     - ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@207.148.126.202 "
       docker login -u $REGISTRY_USER -p \"$REGISTRY_PASS\" &&
-      docker run -v mysql-data:/var/lib/mysql -v mysql-initdb:/docker-entrypoint-initdb.d/init.sql --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD mysql:8.0 &&
-      docker run -v mongo-data:/data/db -v mongo-conf:/etc/mongo -v mongo-configdb:/data/configdb --name mongo -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME -e MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD mongo:6.0 &&
-      docker run -v redis-data:/data --name redis -p 6379:6379 redis:7.0-alpine redis-server --save 20 1 --loglevel warning --requirepass $REDIS_PASS &&
-      docker run --name nhatot-backend -p 4000:4000 williamle0001/nhatot-clone:nhatot-backend npm run prod
+      docker volume create mysql_data &&
+      docker run -d -v mysql_data:/var/lib/mysql --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=levietanh@mysql mysql:8.0 &&
+      docker volume create mongo_data &&
+      docker run -d -v mongo_data:/data/db --name mongo -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=mongo_pass mongo:6.0 &&
+      docker volume create redis_data &&
+      docker run -d -v redis_data:/data --name redis -p 6379:6379 redis:7.0-alpine redis-server --save 20 1 --loglevel warning --requirepass redis_pass &&
+      docker run -d --name nhatot-backend -p 4000:4000 williamle0001/nhatot-clone:nhatot-backend npm run prod
       "
   environment: production
+  when: manual
   
