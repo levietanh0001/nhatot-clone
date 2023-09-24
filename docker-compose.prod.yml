@@ -40,7 +40,7 @@ services:
       - redis-data:/data
 
   backend:
-    image: williamle0001/nhatot-clone:nhatot-backend
+    # image: williamle0001/nhatot-clone:nhatot-backend
     container_name: nhatot-backend
     restart: always
     build:
