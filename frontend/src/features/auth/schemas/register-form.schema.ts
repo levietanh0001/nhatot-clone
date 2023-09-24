@@ -3,6 +3,8 @@ import { object, ref, string } from 'yup';
 const passwordMinChar = 6;
 
 const registerFormSchema = object({
+  userName:
+    string(),
   email:
     string()
     .email('Email không hợp lệ')
@@ -20,8 +22,6 @@ const registerFormSchema = object({
     string()
     .required('Xác nhận mật khẩu không thể trống') 
     .oneOf<any>([ref('password'), null], 'Xác nhận mật khẩu phải khớp với mật khẩu'),
-  userName:
-    string(),
 });
 
 export default registerFormSchema;

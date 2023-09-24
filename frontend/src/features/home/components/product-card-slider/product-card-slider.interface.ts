@@ -1,19 +1,22 @@
-import { CSSProperties } from "react";
+import { CSSProperties, ReactNode } from "react";
 
 
 export interface ICard {
   product: any;
 }
 
-export interface IconBaseProps extends React.SVGAttributes<SVGElement> {
-  children?: React.ReactNode;
-  size?: string | number;
-  color?: string;
-  title?: string;
-}
+// export interface IconBaseProps extends React.SVGAttributes<SVGElement> {
+//   children?: ReactNode;
+//   size?: string | number;
+//   color?: string;
+//   title?: string;
+//   key?: any;
+//   props: any;
+// }
 
 export interface IArrowBtn {
-  IconComp: IconBaseProps;
+  // IconComp: IconBaseProps;
+  IconComp: any;
   className?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   style?: CSSProperties

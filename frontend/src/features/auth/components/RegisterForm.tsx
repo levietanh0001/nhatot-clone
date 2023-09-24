@@ -9,11 +9,11 @@ import { AuthContext } from '@/contexts/auth/Auth.context';
 import styles from './RegisterForm.module.scss';
 import { registerFormSchema } from '@/features/auth/schemas';
 
-type FormFieldValues = {
-  userName: string | undefined;
-  email: string;
-  password: string;
-  confirmPassword: string;
+type FormFieldValues = { 
+  userName?: string; 
+  email: string; 
+  confirmPassword?: any; 
+  password: string; 
 };
 
 const RegisterForm = () => {

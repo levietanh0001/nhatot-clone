@@ -77,7 +77,7 @@ const FloatingLabelInput = (props) => {
       </div>
 
       <div className={clsx(styles['field-footer'], footerClass)}>
-        {errors?.[name] && <p className={styles['error']}>{errors?.[name]?.message}</p>}
+        {errors?.[name] && <p className={styles['error']}>{errors?.[name]?.message?.toString()}</p>}
       </div>
 
     </div>
