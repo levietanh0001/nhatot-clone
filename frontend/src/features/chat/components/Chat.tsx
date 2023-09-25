@@ -54,7 +54,7 @@ const Chat = () => {
   }, [currentContact]);
 
   // establish socket.io connection
-  const { socket, isConnected } = useConnectSocket();
+  const { socket, isConnected } = useConnectSocket(process.env.NODE_ENV?.includes('prod')? { backendUrl: 'http://207.148.126.202:4000' }: {});
 
   // create and join user chat
   const createOneOneChatMutation = useCreateOneOneChatQuery();
