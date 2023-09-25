@@ -72,3 +72,5 @@ frontend/.env
 backend/nhatot-clone-firebase-adminsdk-azt57-bbfe738662.json
 backend/.ignore
 frontend/.ignore
+
+backend/nhatot-dump.sql
