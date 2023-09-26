@@ -8,7 +8,9 @@ A clone of the existing nhatot.com website
 
 ### Step 1. Run build script:
 
-**Notes** The frontend container might need some minutes to finish starting the development server
+**Notes** 
+- The frontend container might need some minutes to finish starting the development server.
+- Please patiently wait for all containers to go up without any errors!
 
 #### Linux
 
