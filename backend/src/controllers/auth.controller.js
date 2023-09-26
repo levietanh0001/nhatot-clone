@@ -79,6 +79,8 @@ async function register(req, res, next) {
     return mailer.sendConfimationEmail(recipientEmail = createdUserEmail, confirmationUrl = verifyRegisterUrl);
 
   } catch (error) {
+    
+    console.error(error);
     return next(error);
   }
 
