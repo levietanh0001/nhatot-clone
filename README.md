@@ -19,8 +19,8 @@ http://levietanh0001.site/
 #### Linux
 
 ```
-chmod +x ./dev-up-build.sh
-./dev-up-build.sh
+chmod +x ./scripts/dev-up-build.sh
+./scripts/dev-up-build.sh
 ```
 
 #### Windows
@@ -35,8 +35,8 @@ dotenv -p ./.env.dev && docker compose -f ./docker-compose.dev.yml up --build
 #### Linux
 
 ```
-chmod +x ./seed.sh
-./seed.sh
+chmod +x ./scripts/seed.sh
+./scripts/seed.sh
 ```
 
 #### Windows
