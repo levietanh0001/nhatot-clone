@@ -1,7 +1,76 @@
-node_modules
+# Exclude node_modules and npm-debug.log
+node_modules/
 npm-debug.log
-build
-.dockerignore
-**/.git
-**/.DS_Store
-**/node_modules
+
+# Exclude build and other development-related files
+build/
+coverage/
+*.log
+.DS_Store
+.env
+
+# Exclude version control system files
+.git
+.gitignore
+
+# Exclude any editor-specific files or directories
+.vscode/
+.idea/
+
+# Exclude any temporary or cache files
+*.swp
+*.swo
+*.swn
+*.swm
+*.swl
+*.swk
+*.swh
+*.swg
+*.swf
+*.swa
+*.swx
+*.swv
+*.swt
+*.swo
+*.swn
+*.swm
+*.swl
+*.swk
+*.swh
+*.swg
+*.swf
+*.swa
+*.swx
+*.swv
+*.swt
+*.swp
+*.swm
+*.swl
+*.swk
+*.swh
+*.swg
+*.swf
+*.swa
+*.swx
+*.swv
+*.swt
+*.swo
+*.swn
+*.swm
+*.swl
+*.swk
+*.swh
+*.swg
+*.swf
+*.swa
+*.swx
+*.swv
+*.swt
+
+// node_modules
+// npm-debug.log
+// build
+// .dockerignore
+// **/.git
+// **/.DS_Store
+// **/node_modules

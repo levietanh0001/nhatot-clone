@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { useGetUserProfile } from '@/features/user-profile/api/user-profile.api';
 import { IDecodedToken } from '@/interfaces/jwt.interface';
 import { getNewTokens, verifyAccessToken } from '@/utils/cryptography.util';
-import { backendBaseUrl } from '@/utils/constants.util';
 import { IAuthContext } from './auth.context.interface';
 
 
@@ -107,7 +106,7 @@ export const AuthProvider = ({ children }) => {
 
   const registerUser = async (email, password, confirmPassword, userName) => {  
 
-    const response = await fetch(new URL('auth/register', backendBaseUrl), {
+    const response = await fetch(new URL('auth/register', process.env.REACT_APP_BACKEND_BASE_URL), {
       method: 'POST',
       body: JSON.stringify({
         userName,
@@ -128,7 +127,7 @@ export const AuthProvider = ({ children }) => {
 
   const loginUser = async (email, password) => {
 
-    const response = await fetch(new URL('auth/login', backendBaseUrl), {
+    const response = await fetch(new URL('auth/login', process.env.REACT_APP_BACKEND_BASE_URL), {
       method: 'POST',
       body: JSON.stringify({
         email,
@@ -152,7 +151,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('refreshToken');
     setUser(null);
 
-    return fetch(new URL('auth/logout', backendBaseUrl), {
+    return fetch(new URL('auth/logout', process.env.REACT_APP_BACKEND_BASE_URL), {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`
@@ -163,7 +162,7 @@ export const AuthProvider = ({ children }) => {
 
   const resetUserPassword = (email) => {
 
-    return fetch(new URL('auth/reset-password-email', backendBaseUrl), {
+    return fetch(new URL('auth/reset-password-email', process.env.REACT_APP_BACKEND_BASE_URL), {
       method: 'POST',
       body: JSON.stringify({ email }),
       headers: {
@@ -182,7 +181,7 @@ export const AuthProvider = ({ children }) => {
 
     console.log({ newPassword, userId, resetToken });
     
-    return fetch(new URL('auth/reset-password', backendBaseUrl), {
+    return fetch(new URL('auth/reset-password', process.env.REACT_APP_BACKEND_BASE_URL), {
       method: 'POST',
       body: JSON.stringify({ newPassword, userId, resetToken }),
       headers: {

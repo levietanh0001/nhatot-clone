@@ -7,12 +7,12 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 
 
-// load environment variables
-const envPath = path.join(__dirname, '..', `.env${process.env.NODE_ENV.includes('prod')? '.prod': '.dev'}`);
-const dotenvConfig = require('dotenv').config({ path: envPath });
-const dotenvExpand = require('dotenv-expand')
-const envConfig = dotenvExpand.expand(dotenvConfig);
-console.log({ envPath, envConfig });
+// // load environment variables
+// const envPath = path.join(__dirname, '..', `.env${process.env.NODE_ENV.includes('prod')? '.prod': '.dev'}`);
+// const dotenvConfig = require('dotenv').config({ path: envPath });
+// const dotenvExpand = require('dotenv-expand')
+// const envConfig = dotenvExpand.expand(dotenvConfig);
+// console.log({ envPath, envConfig });
 
 
 // import graphql package

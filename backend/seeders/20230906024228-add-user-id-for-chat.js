@@ -1,7 +1,6 @@
 'use strict';
 
 const { QueryTypes } = require('sequelize');
-const { databaseName } = require('../src/utils/variables.util');
 const UserCollection = require('../src/models/user.collection');
 const connectToMongoDB = require('../src/utils/database.mongo.util');
 const mongoose = require('mongoose');
@@ -12,7 +11,7 @@ module.exports = {
 
     try {
       const userIdList = await queryInterface.sequelize.query(`
-        SELECT id from ${databaseName}.user
+        SELECT id from ${process.env.MYSQL_DATABASE_NAME}.user
       `, { type: QueryTypes.SELECT });
   
       const userIds = userIdList.map(userId => {

@@ -2,18 +2,34 @@ const { override, useBabelRc, adjustStyleLoaders, addWebpackAlias } = require('c
 const glob = require('glob');
 const path = require('path');
 
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 // const PurgecssPlugin = require('purgecss-webpack-plugin');
 
 
 const addWebpackPlugins = (config, env) => {
   config.plugins.push(
-    new UglifyJsPlugin({
+    // new UglifyJsPlugin({
+    //   sourceMap: true,
+    //   uglifyOptions: {
+    //     compress: { unused: true, dead_code: true } 
+    //   },
+    // }),
+    new TerserPlugin({
       sourceMap: true,
-      uglifyOptions: {
-        compress: { unused: true, dead_code: true } 
+      terserOptions: {
+        compress: {
+          unused: true,
+          dead_code: true,
+          // drop_console: true,
+          // drop_debugger: true,
+        },
+        output: {
+          comments: false
+        }
       },
-    })
+
+    }),
   );
   // config.plugins.push(new PurgecssPlugin({
   //   paths: glob.sync(`${path.join(__dirname, 'build')}/*`)

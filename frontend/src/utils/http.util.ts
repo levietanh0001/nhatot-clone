@@ -3,11 +3,11 @@ import dayjs from 'dayjs';
 import jwtDecode from 'jwt-decode';
 import { IDecodedToken } from '@/interfaces/jwt.interface';
 import { getNewAccessAndRefreshTokens } from '@/utils/cryptography.util';
-import { backendBaseUrl } from '@/utils/constants.util';
+
 
 
 export const axiosPublic = axios.create({
-  baseURL: backendBaseUrl,
+  baseURL: process.env.REACT_APP_BACKEND_BASE_URL,
   timeout: 5000, // allowed time for an open request before being canceled (milliseconds)
   headers: {
     'Content-Type': 'application/json',
@@ -25,7 +25,7 @@ axiosPublic.interceptors.request.use(function (config) {
 
 
 export const axiosPrivate = axios.create({
-  baseURL: backendBaseUrl,
+  baseURL: process.env.REACT_APP_BACKEND_BASE_URL,
   timeout: 5000, // allowed time for an open request before being canceled (milliseconds)
   headers: {
     'Content-Type': 'application/json',

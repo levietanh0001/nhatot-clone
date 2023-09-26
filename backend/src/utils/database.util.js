@@ -12,16 +12,19 @@ function getMagicMethods(model) {
 
 
 const sequelize = new Sequelize(
-  databaseName, process.env.MYSQL_USER, process.env.MYSQL_ROOT_PASSWORD,
+  // databaseName, process.env.MYSQL_USER, process.env.MYSQL_ROOT_PASSWORD,
   // 'nhatot', 'root', '123321',
   // databaseName, process.env.MYSQL_HOST, process.env.MYSQL_ROOT_PASSWORD,
   {
     dialect: 'mysql',
     host: process.env.MYSQL_HOST,
+    username: process.env.MYSQL_USER,
+    password: process.env.MYSQL_ROOT_PASSWORD,
+    database: process.env.MYSQL_DATABASE_NAME,
+    port: `${process.env.MYSQL_PORT}`,
     // host: 'mysql',
     // host: process.env.MYSQL_HOST,
     // host: '207.148.126.202',
-    port: '3306',
     // host: '127.0.0.1',
     // host: process.env.NODE_ENV.includes('prod')? process.env.MYSQL_HOST: 'localhost',
     sync: true,
@@ -37,11 +40,14 @@ const sequelize = new Sequelize(
 );
 
 
-sequelize.authenticate().then(() => {
-  console.log('connected to mysql');
-}).catch((error) => {
-  console.error('Unable to connect to the database: ', error);
-});
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('connected to mysql');
+  })
+  .catch((error) => {
+    console.error('Unable to connect to the database: ', error);
+  });
 
 
 module.exports = {

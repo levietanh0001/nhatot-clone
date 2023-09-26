@@ -13,13 +13,13 @@ const { toLowerCaseNonAccentVietnamese } = require('../src/utils/text.util');
 module.exports = {
   async up (queryInterface, Sequelize) {
 
-    const userIds = await queryInterface.sequelize.query(`SELECT id from nhatot.user`, { type: QueryTypes.SELECT });
+    const userIds = await queryInterface.sequelize.query(`SELECT id from ${process.env.MYSQL_DATABASE_NAME}.user`, { type: QueryTypes.SELECT });
     
 
     // console.log({ id: randomOption(userIds).id });
     // throw new Error();
 
-    const products = [...Array(10000)].map((item) => {
+    const products = [...Array(1000)].map((item) => {
 
       const randomCategory = randomOption(['canhochungcu', 'nhao', 'khac']);
       const randomType = randomOption(['canban', 'chothue']);

@@ -5,8 +5,9 @@
   "main": "src/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "NODE_ENV=dev nodemon src/app.js",
-    "prod": "NODE_ENV=prod node src/app.js"
+    "start": "env-cmd -f ./env/.env.dev nodemon src/app.js",
+    "prod": "env-cmd -f ./env/.env.prod node src/app.js",
+    "seed": "npx sequelize-cli db:seed:all"
   },
   "keywords": [],
   "author": "",
@@ -38,6 +39,7 @@
   "devDependencies": {
     "@faker-js/faker": "8.0.2",
     "chai": "4.3.7",
+    "env-cmd": "10.1.0",
     "mocha": "10.2.0",
     "sequelize-cli": "6.6.1"
   },

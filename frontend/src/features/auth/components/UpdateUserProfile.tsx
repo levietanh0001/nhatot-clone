@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { AuthContext } from '@/contexts/auth/Auth.context';
-import { backendBaseUrl } from '@/utils/constants.util';
 
 
 const UpdateUserProfile = ({ children, redirectPath='/login' }) => {
@@ -32,7 +31,7 @@ const UpdateUserProfile = ({ children, redirectPath='/login' }) => {
     return <Navigate to='/' replace />;
   }
 
-  fetch(new URL('api/user', backendBaseUrl), {
+  fetch(new URL('api/user', process.env.REACT_APP_BACKEND_BASE_URL), {
     method: 'POST'
   })
     .then(response => response.json())

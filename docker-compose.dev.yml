@@ -5,31 +5,40 @@ services:
     image: mysql:8.0
     container_name: mysql
     restart: always
+    # env_file:
+    #   - ./backend/env/.env.dev
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE_NAME=${MYSQL_DATABASE_NAME}
     ports:
       - "3306:3306"
     volumes:
-      - global_mysql-data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      # - global_mysql-data:/var/lib/mysql
       # - mysql-initdb:/docker-entrypoint-initdb.d/init.sql
 
   mongo:
     image: mongo:6.0
     container_name: mongo
     restart: always
+    # env_file:
+    #   - ./backend/env/.env.dev
     ports:
       - "27017:27017"
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
-      - global_mongo-data:/data/db
+      - mongo_data:/data/db
       # - mongo-conf:/etc/mongo
       # - mongo-configdb:/data/configdb
 
   redis:
     image: redis:7.0-alpine
     container_name: redis
+    # env_file:
+    #   - ./backend/env/.env.dev
     restart: always
     ports:
       - "6379:6379"
@@ -37,40 +46,59 @@ services:
       - REDIS_PASS=${REDIS_PASS}
     command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASS}
     volumes:
-      - backend_redis-data:/data
+      - redis_data:/data
+      # - backend_redis-data:/data
 
   backend:
     container_name: nhatot-backend
     restart: always
     build:
       context: ./backend
-      dockerfile: Dockerfile
-    command: npm run prod
+      dockerfile: Dockerfile.dev
+    command: npm start
     ports:
       - "4000:4000"
     depends_on:
       - mysql
       - redis
       - mongo
-      
+
   frontend:
     container_name: nhatot-frontend
     build:
       context: ./frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
+    command: npm start
     ports:
-      - "3000:80"
+      - "3000:3000"
     depends_on:
       - backend
+
+  # frontend:
+  #   container_name: nhatot-frontend
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:80"
+  #   depends_on:
+  #     - backend
         
 
 volumes:
-  global_mysql-data:
+  mysql_data:
     external: true
-  global_mongo-data:
+  mongo_data:
     external: true
-  backend_redis-data:
+  redis_data:
     external: true
+      
+  # global_mysql-data:
+  #   external: true
+  # global_mongo-data:
+  #   external: true
+  # backend_redis-data:
+  #   external: true
   # mysql-initdb:
   # mongo-conf:
   # mongo-configdb:

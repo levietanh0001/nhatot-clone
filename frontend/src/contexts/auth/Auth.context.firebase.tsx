@@ -1,7 +1,6 @@
 import { User, UserCredential, createUserWithEmailAndPassword, fetchSignInMethodsForEmail, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateEmail, updatePassword } from 'firebase/auth';
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { auth } from '@/firebase';
-import { backendBaseUrl } from '@/utils/constants.util';
 
 
 interface IAuthContext {
@@ -31,7 +30,7 @@ export const AuthProvider = ({ children }) => {
   // // useeffect whenever currentUser.emailVerified changes, fetch request to create new user
   // useEffect(() => {
     
-  //   fetch(new URL('api/user', backendBaseUrl), {
+  //   fetch(new URL('api/user', process.env.REACT_APP_BACKEND_BASE_URL), {
   //     method: 'POST',
   //     body: JSON.stringify({
   //       email: email,

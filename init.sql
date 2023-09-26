@@ -1,0 +1,1 @@
+CREATE DATABASE if not exists '${CUSTOM_VARIABLE}'

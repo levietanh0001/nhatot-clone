@@ -5,13 +5,16 @@ const { QueryTypes } = require('sequelize');
 
 const { randomInRange, randomOption } = require('../src/utils/random.util');
 const { getValueFromQueryResult } = require('../src/utils/query.util');
+const { sequelize } = require('../src/utils/database.util');
+// const UserProfile = require('../src/models/user-profile.model')(sequelize);
+
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
 
     const numUsers = await queryInterface.sequelize.query(`
-      SELECT count(*) from nhatot.user;
+      SELECT count(*) from ${process.env.MYSQL_DATABASE_NAME}.user;
     `, { type: QueryTypes.SELECT} );
     
     const userCount = getValueFromQueryResult(numUsers);
@@ -19,7 +22,7 @@ module.exports = {
     console.log(userCount);
     
     const userIds = await queryInterface.sequelize.query(`
-        SELECT id, email from nhatot.user
+        SELECT id, email from ${process.env.MYSQL_DATABASE_NAME}.user
       `, { type: QueryTypes.SELECT });
     const userList = userIds.map(item => {
       return {
@@ -46,6 +49,16 @@ module.exports = {
         userId: user.id
       }
     ))
+
+    // console.log(queryInterface.sequelize.models);
+    // throw new Error();
+
+    await Promise.all(userProfiles.map(async (userProfile) => {
+      await queryInterface.sequelize.query(`
+        INSERT IGNORE INTO ${process.env.MYSQL_DATABASE_NAME}.user_profile (gender, rating, follower, following, respondToChat, address, phoneNumber, updatedAt, createdAt, userId)
+        VALUES (:gender, :rating, :follower, :following, :respondToChat, :address, :phoneNumber, :updatedAt, :createdAt, :userId)
+      `, { replacements: { ...userProfile }, type: QueryTypes.INSERT })
+    }));
 
     await queryInterface.bulkInsert('user_profile', userProfiles);
 

@@ -29,7 +29,7 @@ function AppWrapper({ children }) {
           {/* <PersistGate loading={null} persistor={persistor}></PersistGate> */}
           <TanstackQueryClientProvider client={queryClient}>
             {children}
-            {!process.env.NODE_ENV?.includes('prod') && (
+            {!process.env?.NODE_ENV?.includes('prod') && (
               <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
             )}
           </TanstackQueryClientProvider>

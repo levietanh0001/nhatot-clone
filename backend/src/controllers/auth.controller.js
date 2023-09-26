@@ -46,7 +46,8 @@ async function register(req, res, next) {
       username: userName,
       email: email,
       password: hashedPassword,
-      role: email === process.env.ADMIN_EMAIL ? 'admin' : 'canhan'
+      role: process.env.ADMIN_EMAILS?.includes(email) ? 'admin' : 'canhan'
+      // role: email === process.env.ADMIN_EMAIL ? 'admin' : 'canhan'
     });
 
     
@@ -171,7 +172,8 @@ async function login(req, res, next) {
       userId,
       username: user.username,
       email: user.email,
-      role: email === process.env.ADMIN_EMAIL ? 'admin' : broker ? 'broker' : 'canhan'
+      role: process.env.ADMIN_EMAILS?.includes(email) ? 'admin' : broker ? 'broker' : 'canhan'
+      // role: email === process.env.ADMIN_EMAILS ? 'admin' : broker ? 'broker' : 'canhan'
     };
 
     const accessToken = await createAccessTokenAsync(payload);

@@ -11,7 +11,7 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     
     const productIds = await queryInterface.sequelize.query(`
-      SELECT id from nhatot.product order by RAND()
+      SELECT id from ${process.env.MYSQL_DATABASE_NAME}.product order by RAND()
     `, { type: QueryTypes.SELECT });
     const productIdList = productIds.map(item => item.id);
 

@@ -1,0 +1,20 @@
+FROM node:16.20.0-alpine3.17 as base
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+FROM node:16.20.0-alpine3.17
+
+WORKDIR /app
+
+COPY --from=base /app ./
+
+EXPOSE 4000
+
+# CMD ['redis-server', '--save', '20 1', '--loglevel', 'warning', '--requirepass', '$REDIS_PASS']
+
