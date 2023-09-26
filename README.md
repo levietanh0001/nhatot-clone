@@ -4,27 +4,44 @@
 A clone of the existing nhatot.com website
 
 
-# How To Run This Project With Docker and Compose
+## How To Run This Project With Docker and Compose
 
-
-1. Run build script:
+Step 1. Run build script:
 
 **Notes** The frontend container might need some minutes to finish starting the development server
+
+### Linux
 
 ```
 chmod +x ./dev-up-build.sh
 ./dev-up-build.sh
 ```
 
-2. Seeding:
+### Windows
+
+```
+npm install -g dotenv
+dotenv -p ./.env.dev && docker compose -f ./docker-compose.dev.yml up --build
+```
+
+Step 2. Seeding:
+
+### Linux
 
 ```
 chmod +x ./seed.sh
 ./seed.sh
 ```
 
-3. Go to localhost:3000
+### Windows
 
-4. Login as admin with the following credentials
+```
+cd ./backend
+dotenv -p ../.env.dev && npm run seed
+```
+
+Step 3. Go to localhost:3000
+
+Step 4. Login as admin with the following credentials
 - email: admin@admin.com
 - password: admin_password
