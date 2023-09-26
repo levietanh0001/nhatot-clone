@@ -104,14 +104,27 @@ const LoginForm = () => {
           />
 
           <div className={styles['password-input']}>
-            <FloatingLabelInput
+            {/* <FloatingLabelInput
               label='Password'
               name='password'
               type={showPassword? 'text': 'password'}
               inputValue={password}
               onInputValueChange={(event) => setPassword(event.target.value)}
               autoComplete='current-password'
+            /> */}
+            <FloatingLabelInput
+              label='Password'
+              name='password'
+              type={showPassword? 'text':'password'}
+              inputValue={password}
+              onInputValueChange={(event) => setPassword(event.target.value)}
+              autoComplete='current-password'
+              required
+              showInputValue={showPassword}
+              onShowInputValueClick={() => setShowPassword((prev) => !prev)}
+              showHideInput
             />
+
             {/* <span 
               className={styles['show-password']}
               onClick={() => setShowPassword((prev) => !prev)}
