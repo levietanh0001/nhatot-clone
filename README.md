@@ -1,7 +1,7 @@
 
 # About Project
 
-A clone of the existing nhatot.com website
+A clone of the existing https://www.nhatot.com/ website
 
 # Demo 
 
