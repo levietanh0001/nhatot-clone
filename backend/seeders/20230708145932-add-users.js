@@ -40,8 +40,8 @@ module.exports = {
       userList = [...users, {
         email: 'admin@admin.com',
         username: 'admin_user',
-        password: 'admin_password',
-        realPassword: bcrypt.hashSync('admin_password', 12),
+        realPassword: 'admin_password',
+        password: bcrypt.hashSync('admin_password', 12),
         isVerified: 1,
         role: 'admin',
         createdAt: new Date(),

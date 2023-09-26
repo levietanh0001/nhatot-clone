@@ -24,3 +24,7 @@ chmod +x ./seed.sh
 ```
 
 3. Go to localhost:3000
+
+4. Login as admin with the following credentials
+- email: admin@admin.com
+- password: admin_password
