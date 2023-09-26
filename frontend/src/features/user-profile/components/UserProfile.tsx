@@ -73,13 +73,13 @@ const UserProfile = () => {
     // isFavoriteProductCountLoading
   );
 
-  console.log({
-    enabled: String(userId) === String(user?.userId),
-    isUserProductsLoading,
-    isUserProductCountLoading,
-    isFavoriteProductsLoading,
-    isFavoriteProductCountLoading,
-  })
+  // console.log({
+  //   enabled: String(userId) === String(user?.userId),
+  //   isUserProductsLoading,
+  //   isUserProductCountLoading,
+  //   isFavoriteProductsLoading,
+  //   isFavoriteProductCountLoading,
+  // })
 
   const uploadAvatarImageMutation = useUploadAvatarImage();
 
@@ -230,6 +230,7 @@ const UserProfile = () => {
                   onPageChange={(e, page) => setCurrentPage(page)}
                   user={user}
                   userId={Number(userId)}
+                  currentTab={currentTab}
                 />
               </div>
             </SuspenseWrapper>
