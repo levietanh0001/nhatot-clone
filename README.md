@@ -10,7 +10,7 @@ http://levietanh0001.site/
 
 ## How To Run This Project With Docker and Compose
 
-### Step 1. Run build script:
+### Step 1. Run build script
 
 **Notes** 
 - The frontend container might need some minutes to finish starting the development server.
@@ -41,7 +41,7 @@ npm start
 ```
 
 
-### Step 3. Seeding:
+### Step 3. Seeding
 
 Open new terminal tab:
 #### Linux
