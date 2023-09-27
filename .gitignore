@@ -66,7 +66,7 @@ backend/.env
 frontend/.env
 .env
 backend/src/uploads
-frontend/.env
+frontend/.env.prod
 
 
 backend/nhatot-clone-firebase-adminsdk-azt57-bbfe738662.json
