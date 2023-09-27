@@ -119,7 +119,7 @@ export function useSearchProducts(options = {}) {
   });
 }
 
-export function useGetProductCount(options = {}) {
+export function useGetProductCount(options: any = { enabled: true }) {
   return useQuery({
     queryKey: ['getProductCount', options],
     queryFn: ({ signal }) => {
@@ -137,6 +137,7 @@ export function useGetProductCount(options = {}) {
     select: (data) => {
       return data.data;
     },
+    enabled: options?.enabled
   });
 }
 

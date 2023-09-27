@@ -211,7 +211,8 @@ const ProductCardList = (props) => {
             </li>
           ))}
       </ul>
-
+      
+      {/* {JSON.stringify(numPages)} */}
       <Pagination
         className={styles['pagination']}
         page={currentPage}

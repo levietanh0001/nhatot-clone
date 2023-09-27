@@ -186,7 +186,7 @@ const UploadVideo = (props) => {
     onVideoChange, 
     onVideoRemove, 
     onVideoThumbnailCreate,
-    onVideoThumbnailUrlCreate
+    onVideoThumbnailUrlCreate=()=>null
   } = props;
   const [thumbnailUrl, setThumbnailUrl] = useState<string>('');
 

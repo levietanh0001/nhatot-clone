@@ -43,12 +43,23 @@ const ProductList = () => {
   usePopulateFavoritelist(setFavoriteProductIds);
     
   // handle product pages
-  const { data: productCount, isLoading: isProductCountLoading } = useGetProductCount();
+  const { data: productCount, isLoading: isProductCountLoading } = useGetProductCount({ enabled: true });
   useTopLoadingBar(isLoading || isProductCountLoading);
 
   useSetCurrentPage(setCurrentPage);
   useScrollToTopOnPageChange(currentPage);
-  useSetAvailablePages(productCount, productPerPage, setNumPages);
+  // useSetAvailablePages(productCount, productPerPage, setNumPages);
+
+  useEffect(() => {
+    if(productCount && productPerPage) {
+      setNumPages(Math.ceil(Number(productCount) / productPerPage));
+    }
+
+  }, [productCount, productPerPage]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, []);
 
   // logging
   useConsoleLogOnChange({ products });
