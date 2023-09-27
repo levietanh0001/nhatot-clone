@@ -20,7 +20,7 @@ module.exports = {
   
       // console.log({ userIds });
   
-      await mongoose.connect(process.env.MONGO_URI || 'mongodb://root:123321@localhost:27017/nhatot?authSource=admin');
+      await mongoose.connect(process.env.MONGO_URI_SEED);
       const connection = mongoose.connection;
   
       const createdUsers = await Promise.all(userIds.map(async (userId) => {

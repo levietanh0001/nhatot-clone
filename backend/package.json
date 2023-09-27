@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "env-cmd -f ./env/.env.dev nodemon src/app.js",
     "prod": "env-cmd -f ./env/.env.prod node src/app.js",
-    "seed": "env-cmd -f ./env/.env.prod npx sequelize-cli db:seed:all"
+    "seed": "env-cmd -f ./env/.env.prod npx sequelize-cli db:seed:all --env production"
   },
   "keywords": [],
   "author": "",
