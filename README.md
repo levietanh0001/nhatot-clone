@@ -47,8 +47,8 @@ Open new terminal tab:
 #### Linux
 
 ```
-chmod +x ./bin/seed.sh
-./bin/seed.sh
+chmod +x ./bin/seed-dev.sh
+./bin/seed-dev.sh
 ```
 
 #### Windows
