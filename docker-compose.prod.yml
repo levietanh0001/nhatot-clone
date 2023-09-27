@@ -43,7 +43,7 @@ services:
     restart: always
     build:
       context: ./backend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     command: npm run prod
     ports:
       - "4000:4000"
