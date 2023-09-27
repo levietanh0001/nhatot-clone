@@ -54,13 +54,22 @@ module.exports = {
     // throw new Error();
 
     await Promise.all(userProfiles.map(async (userProfile) => {
-      await queryInterface.sequelize.query(`
-        INSERT IGNORE INTO ${process.env.MYSQL_DATABASE_NAME}.user_profile (gender, rating, follower, following, respondToChat, address, phoneNumber, updatedAt, createdAt, userId)
-        VALUES (:gender, :rating, :follower, :following, :respondToChat, :address, :phoneNumber, :updatedAt, :createdAt, :userId)
-      `, { replacements: { ...userProfile }, type: QueryTypes.INSERT })
+      const results = await queryInterface.sequelize.query(`
+        SELECT * from ${process.env.MYSQL_DATABASE_NAME}.user_profile
+        WHERE user_profile.userId = :userId
+      `, { type: QueryTypes.SELECT, replacements: { userId: userProfile.userId } });
+      
+      if(!results[0]) {
+        await queryInterface.sequelize.query(`
+          INSERT IGNORE INTO ${process.env.MYSQL_DATABASE_NAME}.user_profile (gender, rating, follower, following, respondToChat, address, phoneNumber, updatedAt, createdAt, userId)
+          VALUES (:gender, :rating, :follower, :following, :respondToChat, :address, :phoneNumber, :updatedAt, :createdAt, :userId)
+        `, { replacements: { ...userProfile }, type: QueryTypes.INSERT })
+      }
+
     }));
 
-    await queryInterface.bulkInsert('user_profile', userProfiles);
+
+    // await queryInterface.bulkInsert('user_profile', userProfiles);
 
   },
 
