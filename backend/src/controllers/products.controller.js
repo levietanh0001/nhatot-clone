@@ -334,16 +334,23 @@ async function getProducts(req, res, next) {
         return res.status(200).json(JSON.parse(cachedProducts));
       }
 
-      // inner join with user profile? separate queries for getting user profile
       const sql = `
-        SELECT *, 
+        SELECT base.productId as id,
+               product_thumbnail.imageUrl as thumbnailImageUrl, 
+               base.type, base.category, 
+               base.projectName, base.address, base.numBedrooms, base.numBathrooms,
+               base.area, base.price, base.postTitle, base.slug,
+               base.description, base.userType, base.createdAt, base.updatedAt,
+               base.userId, user.username, user_profile.avatarUrl,
         MATCH(projectName, base.address, postTitle) 
         AGAINST (:q) AS relevanceScore
         FROM (
-          SELECT *, CONCAT(projectName, ' ', address, ' ', postTitle) as result
+          SELECT *, product.id as productId, CONCAT(projectName, ' ', address, ' ', postTitle) as result
           FROM ${databaseName}.product
         ) base
+        INNER JOIN ${databaseName}.user on base.userId = user.id
         INNER JOIN ${databaseName}.user_profile on base.userId = ${databaseName}.user_profile.userId
+        INNER JOIN ${databaseName}.product_thumbnail on base.id = product_thumbnail.productId
         WHERE
           MATCH (projectName, base.address, postTitle) against (:q) > 0
                 and category like :category
@@ -368,23 +375,9 @@ async function getProducts(req, res, next) {
         return res.status(200).json([]);
       }
 
-      const productIdList = products.map(product => product.id);
-      const productThumbnailImages = productIdList.map(async (productId) => {
-        return ProductThumbnail.findOne({ where: { productId } });
-      })
-  
-      const productThumbnailImageList = await Promise.all(productThumbnailImages);
-  
-      const productInfo = productThumbnailImageList.map((thumbnailImage, index) => {
-        return {
-          ...products[index],
-          thumbnailImageUrl: thumbnailImage?.imageUrl
-        }
-      });
+      await redisClient.setEx(`getProducts:${Object.values(cacheKey)}`, 10, JSON.stringify(products));
 
-      await redisClient.setEx(`getProducts:${Object.values(cacheKey)}`, 10, JSON.stringify(productInfo));
-
-      return res.status(200).json(productInfo);
+      return res.status(200).json(products);
 
     }
 
@@ -472,7 +465,7 @@ async function searchProducts(req, res, next) {
     const sql = `
       SELECT type, category, projectName, postTitle, address FROM (
         SELECT *, CONCAT(projectName, ' ', postTitle, ' ', address) as result
-        FROM nhatot.product
+        FROM ${databaseName}.product
       ) base
       WHERE 
         lower(result) like lower(:query)
@@ -830,7 +823,7 @@ async function deleteProducts(req, res, next) {
     // const currentProduct = await Product.findByPk(productId);
     // const product = await currentProduct.destroy();
     // const count = await Product.count();
-    // // const result = await sequelize.query(`DELETE FROM nhatot.product WHERE (id = :productId)`, { replacements: { productId } });
+    // // const result = await sequelize.query(`DELETE FROM ${databaseName}.product WHERE (id = :productId)`, { replacements: { productId } });
   
     // return res.status(200).json({ product, count });
     
@@ -860,7 +853,7 @@ async function deleteProductById(req, res, next) {
     const currentProduct = await Product.findByPk(productId);
     const product = await currentProduct.destroy();
     const count = await Product.count();
-    // const result = await sequelize.query(`DELETE FROM nhatot.product WHERE (id = :productId)`, { replacements: { productId } });
+    // const result = await sequelize.query(`DELETE FROM ${databaseName}.product WHERE (id = :productId)`, { replacements: { productId } });
   
     return res.status(200).json({ product, count });
     
