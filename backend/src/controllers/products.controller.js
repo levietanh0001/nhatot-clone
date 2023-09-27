@@ -403,12 +403,8 @@ async function getProducts(req, res, next) {
         return res.status(200).json(JSON.parse(cachedProducts));
       }
       
-      // const products = await Product.findAll({ 
-      //   where, limit, offset, order: [[ 'updatedAt', 'DESC' ]] 
-      // });
-      
       const sql = `
-        SELECT 
+        SELECT
                 product.id, product_thumbnail.imageUrl as thumbnailImageUrl, type, category, 
                 projectName, product.address, numBedrooms, numBathrooms,
                 area, price, postTitle, slug,
@@ -442,23 +438,6 @@ async function getProducts(req, res, next) {
   
       return res.status(200).json(products);
   
-      // const productIdList = products.map(product => product.id);
-      // const productThumbnailImages = productIdList.map(async (productId) => {
-      //   return ProductThumbnail.findOne({ where: { productId } });
-      // })
-  
-      // const productThumbnailImageList = await Promise.all(productThumbnailImages);
-  
-      // const productInfo = productThumbnailImageList.map((thumbnailImage, index) => {
-      //   return {
-      //     ...products[index].dataValues,
-      //     thumbnailImageUrl: thumbnailImage?.imageUrl
-      //   }
-      // });
-  
-      // await redisClient.setEx(`getProducts:${Object.values(cacheKey)}`, 10, JSON.stringify(productInfo));    
-  
-      // return res.status(200).json(productInfo);
     }
 
   } catch(error) {
