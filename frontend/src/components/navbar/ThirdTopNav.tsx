@@ -40,8 +40,11 @@ const ThirdTopNav = () => {
   const handleSearchButtonClick = () => {};
 
   const handleSearchResultClick = (result) => {
+    console.log({ result });
     // const type = result?.type === 'chothue' ? 'cho-thue' : result?.type === 'canban' ? 'can-ban' : 'latest';
-    const q = result?.projectName + result?.address;
+    const q = result?.projectName + ' ' + result?.address + ' ' + result?.postTitle;
+
+    // console.log({ q });
     navigate(
       {
         pathname: `/product-list`,

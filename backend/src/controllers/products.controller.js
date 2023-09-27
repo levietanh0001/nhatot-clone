@@ -356,6 +356,9 @@ async function getProducts(req, res, next) {
                 and category like :category
                 and type like :type
                 and base.userId like :userId
+                or :q like concat('%', projectName, '%')
+                or :q like concat('%', base.address, '%')
+                or :q like concat('%', postTitle, '%')
         ORDER BY relevanceScore DESC
         LIMIT :limit
         OFFSET :offset
