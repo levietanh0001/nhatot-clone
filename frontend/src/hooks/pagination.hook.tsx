@@ -12,7 +12,7 @@ export function useSetCurrentPage(setCurrentPage, sessionKey='currentPage') {
 
 export function useScrollToTopOnPageChange(currentPage) {
   useEffect(() => {
-    window.scrollTo({ top: 10, behavior: 'smooth' });
+    window.scrollTo({ top: 400, behavior: 'smooth' });
   }, [currentPage]);
 }
 
