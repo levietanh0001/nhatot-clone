@@ -1,17 +1,18 @@
 version: "3.8"
 services:
 
-  mysql: # shell into container: docker exec -it af1046f4563b bash
+  mysql:
     image: mysql:8.0
     container_name: mysql
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE_NAME=${MYSQL_DATABASE_NAME}
     ports:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      # - mysql-initdb:/docker-entrypoint-initdb.d/init.sql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
   mongo:
     image: mongo:6.0
@@ -38,7 +39,6 @@ services:
       - redis_data:/data
 
   backend:
-    # image: williamle0001/nhatot-clone:nhatot-backend
     container_name: nhatot-backend
     restart: always
     build:
@@ -53,12 +53,10 @@ services:
       - mongo
 
   frontend:
+    image: williamle0001/nhatot-frontend:latest
     container_name: nhatot-frontend
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
     ports:
-      - "3000:80"
+      - "80:80"
     depends_on:
       - backend
 
