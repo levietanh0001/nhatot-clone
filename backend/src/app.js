@@ -72,16 +72,16 @@ ProductImage.belongsTo(Product, { constraints: true, onDelete: 'CASCADE', foreig
 Product.hasMany(ProductVideo, { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: true } });
 ProductVideo.belongsTo(Product, { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: true } });
 
-Product.hasOne(ProductThumbnail, { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: true } });
+Product.hasOne(ProductThumbnail, { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: false, unique: true } });
 ProductThumbnail.belongsTo(Product, { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: true } });
 
-Product.hasOne(VideoThumbnail, { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: true } });
+Product.hasOne(VideoThumbnail, { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: false, unique: true } });
 VideoThumbnail.belongsTo(Product, { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: true } });
 
-User.hasOne(FavoriteList, { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: true } });
+User.hasOne(FavoriteList, { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: false, unique: true } });
 FavoriteList.belongsTo(User, { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: true } });
 
-User.hasOne(UserProfile, { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: false, unique: 'unique_user_id' } });
+User.hasOne(UserProfile, { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: false, unique: true } });
 UserProfile.belongsTo(User, { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: true } });
 
 
