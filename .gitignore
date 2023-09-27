@@ -74,3 +74,4 @@ backend/.ignore
 frontend/.ignore
 
 backend/nhatot-dump.sql
+.env.prod
