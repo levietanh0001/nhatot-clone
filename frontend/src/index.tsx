@@ -1,4 +1,5 @@
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
+import { createRoot } from "react-dom/client";
 import App from './App';
 
 
@@ -11,11 +12,13 @@ if (process.env.NODE_ENV?.includes('prod')) {
   console.debug = () => { }
 }
 
+const root = createRoot(document.getElementById("root") as Element);
+root.render(<App />);
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('root')
-);
+// ReactDOM.render(
+//   <App />,
+//   document.getElementById('root')
+// );
 
 // ReactDOM.render(
 //   <MUIStyledEngineProvider>
