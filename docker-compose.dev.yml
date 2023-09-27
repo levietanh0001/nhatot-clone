@@ -1,12 +1,10 @@
 version: "3.8"
 services:
 
-  mysql: # shell into container: docker exec -it af1046f4563b bash
+  mysql:
     image: mysql:8.0
     container_name: mysql
     restart: always
-    # env_file:
-    #   - ./backend/env/.env.dev
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE_NAME=${MYSQL_DATABASE_NAME}
@@ -15,20 +13,11 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-      # - global_mysql-data:/var/lib/mysql
-      # - mysql-initdb:/docker-entrypoint-initdb.d/init.sql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   mongo:
     image: mongo:6.0
     container_name: mongo
     restart: always
-    # env_file:
-    #   - ./backend/env/.env.dev
     ports:
       - "27017:27017"
     environment:
@@ -36,20 +25,10 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
       - mongo_data:/data/db
-      # - mongo-conf:/etc/mongo
-      # - mongo-configdb:/data/configdb
-    healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh mongo:27017/test --quiet
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 40s
 
   redis:
     image: redis:7.0-alpine
     container_name: redis
-    # env_file:
-    #   - ./backend/env/.env.dev
     restart: always
     ports:
       - "6379:6379"
@@ -58,59 +37,6 @@ services:
     command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASS}
     volumes:
       - redis_data:/data
-      # - backend_redis-data:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
-  backend:
-    container_name: backend
-    restart: always
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.dev
-    command: npm start
-    ports:
-      - "4000:4000"
-    # deploy:
-    #   replicas: 3
-    #   # resources:
-    #   #   limits:
-    #   #     cpus: '0.3' 
-    #   #     memory: '400M'
-    #   restart_policy:
-    #     condition: on-failure
-    depends_on:
-      redis:
-        condition: service_healthy
-      mongo:
-        condition: service_healthy
-      mysql:
-        condition: service_healthy
-
-  # frontend:
-  #   container_name: nhatot-frontend
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile.dev
-  #   command: npm start
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - backend
-  
-
-  # frontend:
-  #   container_name: nhatot-frontend
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "3000:80"
-  #   depends_on:
-  #     - backend
         
 
 volumes:
@@ -120,13 +46,3 @@ volumes:
     external: true
   redis_data:
     external: true
-      
-  # global_mysql-data:
-  #   external: true
-  # global_mongo-data:
-  #   external: true
-  # backend_redis-data:
-  #   external: true
-  # mysql-initdb:
-  # mongo-conf:
-  # mongo-configdb:

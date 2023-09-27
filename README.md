@@ -53,8 +53,17 @@ cd ./frontend
 npm start
 ```
 
-### Step 4. Go to localhost:3000
+### Step 4. Start Express App
 
-### Step 5. Login as admin with the following credentials
+Open new terminal tab:
+
+```
+cd ./backend
+npm start
+```
+
+### Step 5. Go to localhost:3000
+
+### Step 6. Login as admin with the following credentials
 - email: admin@admin.com
 - password: admin_password
