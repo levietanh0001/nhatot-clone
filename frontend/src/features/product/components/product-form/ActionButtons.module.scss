@@ -33,7 +33,7 @@
 .post-btn {
   flex: 1 0 auto;
 
-  & button {
+  & > button {
     width: 100%;
     padding: 12px 10px;
     border: 1px solid var(--orange-500);
@@ -44,10 +44,11 @@
 
     font-size: 1.125rem;
     font-weight: 600;
+
+    transition: scale 300ms ease;
     
     &:hover {
-      background-color: var(--orange-300);
-      color: white;
+      scale: 1.02;
     }
 
     &:focus {
@@ -57,5 +58,11 @@
     &:active {
       translate: 1px 1px;
     }
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
   }
 }

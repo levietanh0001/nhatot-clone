@@ -3,7 +3,7 @@ import styles from './ActionButtons.module.scss';
 
 const ActionButtons = (props) => {
 
-  const { formId } = props;
+  const { formId, disabledSubmitBtn } = props;
 
   return (
     <div className={styles['action-buttons']}>
@@ -11,7 +11,7 @@ const ActionButtons = (props) => {
         <button type='button'>Xem trước</button>
       </div>
       <div className={styles['post-btn']}>
-        <button form={formId} type='submit'>Đăng tin</button>
+        <button form={formId} type='submit' disabled={disabledSubmitBtn}>Đăng tin</button>
       </div>
     </div>
   )

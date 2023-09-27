@@ -1,8 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { axiosPrivate, axiosPublic } from '@/utils/http.util';
 
-
-export function useGetProductById(productId, slug) {
+export function useGetProductByIdAndSlug(productId, slug) {
   return useQuery({
     queryKey: ['getProductsById', productId, slug],
     queryFn: ({ signal }) => {
@@ -24,7 +23,6 @@ export function useGetProductById(productId, slug) {
 }
 
 export function useGetProducts(criteria) {
-
   return useQuery({
     queryKey: ['getProducts', criteria],
     queryFn: ({ signal }) => {
@@ -46,7 +44,6 @@ export function useGetProducts(criteria) {
 }
 
 export function useGetAllProducts() {
-
   return useQuery({
     queryKey: ['getAllProducts'],
     queryFn: ({ signal }) => {
@@ -60,15 +57,14 @@ export function useGetAllProducts() {
     select: (data) => {
       return data.data;
     },
-    
   });
 }
 
 export function usePaginateProducts(currentPage, productPerPage, filter) {
-
   const q = filter?.q;
   const type = filter?.type;
-  const productType = type === 'can-ban' ? 'canban' : type === 'cho-thue' ? 'chothue' : '';
+  const productType =
+    type === 'can-ban' ? 'canban' : type === 'cho-thue' ? 'chothue' : '';
   const category = filter?.category;
   const userType = filter?.userType;
 
@@ -76,15 +72,15 @@ export function usePaginateProducts(currentPage, productPerPage, filter) {
   Object.entries(filter).forEach(([key, value]) => {
     temp = {
       ...temp,
-      ...(key) && { [String(key)]: value },
+      ...(key && { [String(key)]: value }),
     };
   });
-  
+
   temp = {
-    ...(category) && { category },
-    ...(userType) && { userType },
-    ...(productType) && { type: productType },
-    ...(q) && { q },
+    ...(category && { category }),
+    ...(userType && { userType }),
+    ...(productType && { type: productType }),
+    ...(q && { q }),
   };
 
   const criteria = {
@@ -98,18 +94,17 @@ export function usePaginateProducts(currentPage, productPerPage, filter) {
   return useGetProducts(criteria);
 }
 
-export function useSearchProducts(options={}) {
-
+export function useSearchProducts(options = {}) {
   const { query, type, category } = options as any;
 
   return useQuery({
     queryKey: ['searchProducts', query, type, category],
     enabled: !!query,
     queryFn: ({ signal }) => {
-      const params = new URLSearchParams({ 
-        query: query ?? ''
-        // type, 
-        // category 
+      const params = new URLSearchParams({
+        query: query ?? '',
+        // type,
+        // category
       });
       return axiosPublic.get(`/products/search`, { params, signal });
     },
@@ -124,14 +119,14 @@ export function useSearchProducts(options={}) {
   });
 }
 
-export function useGetProductCount(options={}) {
+export function useGetProductCount(options = {}) {
   return useQuery({
     queryKey: ['getProductCount', options],
     queryFn: ({ signal }) => {
       // console.log({ options });
       const params = new URLSearchParams({
         userId: (options as any)?.userId ?? '',
-        ...options
+        ...options,
       });
       return axiosPublic.get('/products/count', { params, signal });
     },
@@ -141,19 +136,22 @@ export function useGetProductCount(options={}) {
     staleTime: 0,
     select: (data) => {
       return data.data;
-    }
-  })
+    },
+  });
 }
 
-export function useGetFavoriteProductCount(userId, enabled=false) {
+export function useGetFavoriteProductCount(userId, enabled = false) {
   return useQuery({
     queryKey: ['getFavoriteProductCount'],
     queryFn: ({ signal }) => {
       const params = new URLSearchParams({
-        userId
+        userId,
         // userId: (options as any)?.userId
       });
-      return axiosPrivate.get('favorite-list/products/count', { params, signal });
+      return axiosPrivate.get('favorite-list/products/count', {
+        params,
+        signal,
+      });
     },
     keepPreviousData: true,
     refetchOnMount: true, // if component is mounted, refetch
@@ -162,19 +160,18 @@ export function useGetFavoriteProductCount(userId, enabled=false) {
     select: (data) => {
       return data.data;
     },
-    enabled
-  })
+    enabled,
+  });
 }
 
-export function useGetUserProducts(userId, currentPage=1) {
+export function useGetUserProducts(userId, currentPage = 1) {
   return useQuery({
     queryKey: ['getUserProducts', currentPage],
     queryFn: ({ signal }) => {
-
       const productPerPage = 9;
       const limit = `${productPerPage}`;
       const offset = `${productPerPage * (currentPage - 1)}`;
-      const params = new URLSearchParams({ 
+      const params = new URLSearchParams({
         userId: String(userId),
         limit: String(limit),
         offset: String(offset),
@@ -192,9 +189,7 @@ export function useGetUserProducts(userId, currentPage=1) {
   });
 }
 
-
-export function useDeleteUserProductById(currentPage=1) {
-  
+export function useDeleteUserProductById(currentPage = 1) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ['deleteUserProductById'],
@@ -203,18 +198,22 @@ export function useDeleteUserProductById(currentPage=1) {
     },
     // when mutate is called
     onMutate: async (productId) => {
-
       await queryClient.cancelQueries(['getUserProducts', currentPage]);
-      
+
       // snapshot the previous value
-      const previousQueryData = queryClient.getQueryData(['getUserProducts', currentPage]) as any;
-      
-      if(previousQueryData) {
+      const previousQueryData = queryClient.getQueryData([
+        'getUserProducts',
+        currentPage,
+      ]) as any;
+
+      if (previousQueryData) {
         // optimistically update to the new value
         queryClient.setQueryData(['getUserProducts', currentPage], {
           ...previousQueryData,
-          data: [...previousQueryData.data.filter((item) => item.id !== productId)]
-        })
+          data: [
+            ...previousQueryData.data.filter((item) => item.id !== productId),
+          ],
+        });
       }
 
       // // optimistically update to the new value
@@ -228,7 +227,7 @@ export function useDeleteUserProductById(currentPage=1) {
       //   console.log({ optimisticData });
       //   return optimisticData
       // })
-      
+
       console.log({ previousQueryData });
 
       // return a context object with the snapshotted value
@@ -236,40 +235,37 @@ export function useDeleteUserProductById(currentPage=1) {
     },
     onError: (_error, productId, context) => {
       console.error({ _error });
-      queryClient.setQueryData(['getUserProducts', currentPage], context?.previousQueryData);
+      queryClient.setQueryData(
+        ['getUserProducts', currentPage],
+        context?.previousQueryData
+      );
     },
-    
+
     // onSettled: (response, error, productId, context) => {
     //   // always refetch after error or success:
     //   console.log({ response, error, productId, context });
-      
+
     //   const data = queryClient.getQueryData(['getUserProducts']);
     //   console.log({ data });
     //   queryClient.invalidateQueries(['getUserProducts']);
-      
+
     // },
-    
   });
 }
 
-
 export function useDeleteProductsMutation() {
-
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ['deleteProducts'],
     mutationFn: (productIds: string[]) => {
-
       return axiosPrivate.delete(`/admin/products`, { data: { productIds } });
     },
     onSettled: () => {
       queryClient.invalidateQueries(['getAllProducts']);
     },
-
   });
 }
-
 
 interface IUpdateProductParams {
   productId: string | number;
@@ -277,13 +273,11 @@ interface IUpdateProductParams {
 }
 
 export function useUpdateProductByIdMutation() {
-
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ['updateProductById'],
     mutationFn: (args: IUpdateProductParams) => {
-
       console.log({ args });
       const { productId, newProduct } = args;
       return axiosPrivate.put(`/admin/products/${productId}`, { newProduct });
@@ -292,19 +286,17 @@ export function useUpdateProductByIdMutation() {
       // console.log({ data, error });
       queryClient.invalidateQueries(['getAllProducts']);
     },
-
   });
 }
 
-
-export function useGetUserFavoriteProducts(currentPage=1, enabled=false) {
+export function useGetUserFavoriteProducts(currentPage = 1, enabled = false) {
   return useQuery({
     queryKey: ['getUserFavoriteProducts', currentPage],
     queryFn: ({ signal }) => {
       const productPerPage = 9;
       const limit = `${productPerPage}`;
       const offset = `${productPerPage * (currentPage - 1)}`;
-      const params = new URLSearchParams({ 
+      const params = new URLSearchParams({
         limit: String(limit),
         offset: String(offset),
       });
@@ -319,22 +311,17 @@ export function useGetUserFavoriteProducts(currentPage=1, enabled=false) {
     select: (data) => {
       return data.data;
     },
-    enabled
-  })
+    enabled,
+  });
 }
 
 export function useAddProductToFavoriteList(productId) {
-
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ['addProductToFavoriteList'],
-    mutationFn: async (productId) => {
-
-    },
-
-  })
+    mutationFn: async (productId) => {},
+  });
 }
-
 
 export function useGetProductCountByGroup() {
   return useQuery({

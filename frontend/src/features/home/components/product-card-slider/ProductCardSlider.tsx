@@ -10,6 +10,7 @@ import ArrowBtn from './ArrowBtn';
 import Card from './Card';
 import { IProductCardSliderProps } from './product-card-slider.interface';
 import styles from './ProductCardSlider.module.scss';
+import { useConsoleLogOnChange } from '@/hooks/utils.hook';
 
 
 const ProductCardSlider: FC<IProductCardSliderProps> = (props) => {

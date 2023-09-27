@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { axiosPrivate } from '@/utils/http.util';
+import { useQuery } from '@tanstack/react-query';
 
 
 export function addProductToFavoriteList(favoriteProductId) {
@@ -102,4 +103,23 @@ export const usePopulateFavoritelist = (setFavoriteProductIds) => {
       controller.abort();
     };
   }, []);
+}
+
+
+export function useGetUserFavoriteList() {
+  return useQuery({
+    queryKey: ['getUserFavoriteList'],
+    queryFn: ({ signal }) => {
+
+      return axiosPrivate.get(`/favorite-list`, { signal });
+    },
+    // keepPreviousData: true,
+    refetchOnMount: true, // if component is mounted, refetch
+    refetchOnWindowFocus: false,
+    cacheTime: 0, // by default 5 mins
+    staleTime: 0,
+    select: (data) => {
+      return data.data;
+    },
+  });
 }

@@ -47,7 +47,6 @@ const ThirdTopNav = () => {
         pathname: `/product-list`,
         // pathname: `/product-list/${type}`,
         search: createSearchParams({ q }).toString(),
-        
       },
       {
         // state, // pass data from one route to another

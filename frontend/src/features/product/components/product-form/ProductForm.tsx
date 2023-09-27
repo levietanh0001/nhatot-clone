@@ -41,6 +41,7 @@ const ProductForm = (props) => {
     onPostTitleChange,
     onPostDescriptionChange,
     onUserTypeSelect,
+    disabledSubmitBtn
   } = props;
 
   return (
@@ -111,7 +112,7 @@ const ProductForm = (props) => {
               onUserTypeSelect={onUserTypeSelect}
             />
 
-            <ActionButtons formId={formId} />
+            <ActionButtons formId={formId} disabledSubmitBtn={disabledSubmitBtn} />
 
             {/* {JSON.stringify({ errors: form.formState.errors, values: form.getValues().projectName })} */}
             {/* {JSON.stringify({ errors: form.formState.errors, values: form.getValues() })} */}
@@ -139,34 +140,34 @@ const Wrapper = ({ children }) => {
   );
 };
 
-ProductForm.propTypes = {
-  formId: PropTypes.string,
-  form: PropTypes.object,
-  onFormSubmit: PropTypes.func,
-  product: PropTypes.object,
-  onImageChange: PropTypes.func,
-  onImagesChange: PropTypes.func,
-  onImageRemove: PropTypes.func,
-  onVideoChange: PropTypes.func,
-  onVideoRemove: PropTypes.func,
-  onVideoThumbnailCreate: PropTypes.func,
-  onVideoThumbnailUrlCreate: PropTypes.func,
-  onCategoryChange: PropTypes.func,
-  onProductTypeSelect: PropTypes.func,
-  onAddressChange: PropTypes.func,
-  onProjectNameChange: PropTypes.func,
-  onNumBedRoomsChange: PropTypes.func,
-  onNumBathroomsChange: PropTypes.func,
-  onBalconDirectionChange: PropTypes.func,
-  onMainDirectionChange: PropTypes.func,
-  onLegalDocsStatusChange: PropTypes.func,
-  onFurnitureStatusChange: PropTypes.func,
-  onAreaChange: PropTypes.func,
-  onPriceChange: PropTypes.func,
-  onDepositChange: PropTypes.func,
-  onPostTitleChange: PropTypes.func,
-  onPostDescriptionChange: PropTypes.func,
-  onUserTypeSelect: PropTypes.func,
-};
+// ProductForm.propTypes = {
+//   formId: PropTypes.string,
+//   form: PropTypes.object,
+//   onFormSubmit: PropTypes.func,
+//   product: PropTypes.object,
+//   onImageChange: PropTypes.func,
+//   onImagesChange: PropTypes.func,
+//   onImageRemove: PropTypes.func,
+//   onVideoChange: PropTypes.func,
+//   onVideoRemove: PropTypes.func,
+//   onVideoThumbnailCreate: PropTypes.func,
+//   onVideoThumbnailUrlCreate: PropTypes.func,
+//   onCategoryChange: PropTypes.func,
+//   onProductTypeSelect: PropTypes.func,
+//   onAddressChange: PropTypes.func,
+//   onProjectNameChange: PropTypes.func,
+//   onNumBedRoomsChange: PropTypes.func,
+//   onNumBathroomsChange: PropTypes.func,
+//   onBalconDirectionChange: PropTypes.func,
+//   onMainDirectionChange: PropTypes.func,
+//   onLegalDocsStatusChange: PropTypes.func,
+//   onFurnitureStatusChange: PropTypes.func,
+//   onAreaChange: PropTypes.func,
+//   onPriceChange: PropTypes.func,
+//   onDepositChange: PropTypes.func,
+//   onPostTitleChange: PropTypes.func,
+//   onPostDescriptionChange: PropTypes.func,
+//   onUserTypeSelect: PropTypes.func,
+// };
 
 export default ProductForm;

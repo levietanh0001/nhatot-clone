@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -22,12 +22,14 @@ import {
 import { createProduct } from '@/features/product/product.thunk';
 import { sanitizeBigIntString } from '@/utils/number.util';
 import postProductFormSchema from '../../schemas/post-product-form.schema';
+import { AuthContext } from '@/contexts/auth/Auth.context';
 
 const PostProduct = () => {
   const formId = useId();
   const product = useSelector((state: RootState) => state.product);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
 
   useEffect(() => {
     console.log({ inputError: product.inputError });
@@ -39,7 +41,13 @@ const PostProduct = () => {
 
   useEffect(() => {
     if (product.productCreated) {
-      toast.success('Đăng tải thành công');
+      // toast.success('Đăng tải thành công');
+      const userId = authContext?.user?.userId;
+      if(userId) {
+        navigate(`/user-profile/${userId}`, { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
     }
   }, [product.productCreated]);
 
@@ -95,6 +103,7 @@ const PostProduct = () => {
 
   return (
     <ProductForm
+      disabledSubmitBtn={product.loading}
       form={form}
       formId={formId}
       onFormSubmit={handleSubmit(onSubmit)}

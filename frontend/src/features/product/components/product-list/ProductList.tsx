@@ -10,6 +10,8 @@ import FilterBoard from './FilterBoard';
 import ProductCardList from './ProductCardList';
 import UserTypeTabs from './UserTypeTabs';
 import { useTopLoadingBar } from '@/contexts/top-loading-bar/TopLoadingBar.context';
+import { useConsoleLogOnChange } from '@/hooks/utils.hook';
+// import { useConsoleLogOnChange } from '@/hooks/utils.hook';
 
 
 // let render = 0;
@@ -38,7 +40,7 @@ const ProductList = () => {
     productPerPage, 
     { type: type ?? '', category: category ?? '', userType: userType ?? '', q: q ?? '' }
     );
-    usePopulateFavoritelist(setFavoriteProductIds);
+  usePopulateFavoritelist(setFavoriteProductIds);
     
   // handle product pages
   const { data: productCount, isLoading: isProductCountLoading } = useGetProductCount();
@@ -49,7 +51,7 @@ const ProductList = () => {
   useSetAvailablePages(productCount, productPerPage, setNumPages);
 
   // logging
-  // useConsoleLogOnChange({ products });
+  useConsoleLogOnChange({ products });
   // useConsoleLogOnChange({ productCount });
   // useConsoleLogOnChange({ q });
   // useConsoleLogOnChange({ queryParams: queryParams.toString() });

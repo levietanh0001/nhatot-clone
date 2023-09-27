@@ -7,6 +7,7 @@ import { useContext, useEffect } from 'react';
 import { setProductCount } from '@/features/product/product.slice';
 import { TopLoadingBarContext, useTopLoadingBar } from '@/contexts/top-loading-bar/TopLoadingBar.context';
 import LoadingBar from 'react-top-loading-bar';
+import { useConsoleLogOnChange } from '@/hooks/utils.hook';
 
 
 const ProductSliders = () => {
@@ -45,6 +46,8 @@ const ProductSliders = () => {
     isCanBanProductCountLoading ||
     isChoThueProductCountLoading
   )
+
+  useConsoleLogOnChange({ allProducts, canbanProducts, chothueProducts });
 
   return (
     <>

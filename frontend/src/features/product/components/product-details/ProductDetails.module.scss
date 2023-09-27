@@ -3,10 +3,59 @@
   background-color: var(--app-background-color);
 }
 
-.title {
-  font-size: 1.125rem;
-  margin: 0;
+.product-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 10px;
+}
+
+.title {
+  flex: 1 0 auto;
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.actions {
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+
+  & > * > svg, & > * > img {
+    height: 1.25rem;
+  }
+
+  & .share, & .favorite-btn {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+  
+    & > img {
+      vertical-align: middle;
+    }
+  
+  }
+  
+  & .favorite-btn {
+
+    & > svg {
+      transition: scale 300ms ease;
+    }
+
+    & > svg:hover {
+      cursor: pointer;
+      // scale: 1.2;
+    }
+
+  }
+
+  & .share {
+    cursor: not-allowed;
+  }
 }
 
 .card {
@@ -34,30 +83,17 @@
 .subheading {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 10px;
 
   & .area-price {
     flex: 0.7;
   }
 
-  & .actions {
-    flex: 0.3;
-
-    display: flex;
-    justify-content: space-between;
-  }
-}
-
-.share, .save-post {
-
-  & img {
-    vertical-align: middle;
-    margin-right: 5px;
-  }
 }
 
 .area-price {
 
-  margin-bottom: 10px;
+  // margin-bottom: 10px;
 
   & .price {
     color: red;
