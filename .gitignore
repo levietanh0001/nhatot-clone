@@ -76,3 +76,4 @@ frontend/.ignore
 backend/nhatot-dump.sql
 .env.prod
 *.prod
+backend/config/config.json
