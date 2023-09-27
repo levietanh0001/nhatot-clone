@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:16.20-alpine
 
 ENV NODE_ENV development
 
@@ -15,7 +15,7 @@ COPY . .
 ENV PORT=3000
 
 
-# FROM node:16 AS base
+# FROM node:16.20 AS base
 # WORKDIR /app
 # COPY package.json /app/package.json
 # # COPY package-lock.json /app/package-lock.json

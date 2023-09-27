@@ -1,8 +1,8 @@
-FROM node:16 AS base
+FROM node:16.20 AS base
 WORKDIR /app
 COPY package.json /app/package.json
 COPY package-lock.json /app/package-lock.json
-RUN npm i --force --save-exact
+RUN npm i
 COPY . /app
 ENV PORT=3000
 
