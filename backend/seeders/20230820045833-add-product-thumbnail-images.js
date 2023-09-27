@@ -14,19 +14,41 @@ module.exports = {
         SELECT id from ${process.env.MYSQL_DATABASE_NAME}.product order by RAND()
       `, { type: QueryTypes.SELECT });
     const productIdList = productIds.map(item => item.id);
-    console.log(productIdList);
+    // console.log(productIdList);
 
-    let productThumbnails = [];
-    productIdList.forEach(productId => {
-      productThumbnails = [...productThumbnails, {
+    // let productThumbnails = [];
+    // productIdList.forEach(productId => {
+    //   productThumbnails = [...productThumbnails, {
+    //     imageUrl: faker.image.urlLoremFlickr({ category: 'city' }),
+    //     productId,
+    //     createdAt: new Date(),
+    //     updatedAt: new Date(),    
+    //   }]
+    // })
+
+    const productThumbnails = productIdList.map(productId => {
+      return {
         imageUrl: faker.image.urlLoremFlickr({ category: 'city' }),
         productId,
         createdAt: new Date(),
         updatedAt: new Date(),    
-      }]
+      }
     })
 
-    await queryInterface.bulkInsert('product_thumbnail', productThumbnails, {});
+    await Promise.all(productThumbnails.map(async (productThumbnail) => {
+      
+      await queryInterface.sequelize.query(`
+        INSERT IGNORE INTO ${process.env.MYSQL_DATABASE_NAME}.product_thumbnail (
+          imageUrl, productId, createdAt, updatedAt
+        ) VALUES (
+          :imageUrl, :productId, :createdAt, :updatedAt
+        )
+      `, { replacements: { ...productThumbnail }, type: QueryTypes.INSERT });
+
+    }));
+
+
+    // await queryInterface.bulkInsert('product_thumbnail', productThumbnails, {});
   },
 
   async down (queryInterface, Sequelize) {
