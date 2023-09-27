@@ -18,6 +18,7 @@ http://levietanh0001.site/
 
 #### Linux
 
+Open new terminal tab:
 ```
 chmod +x ./bin/dev-up-build.sh
 ./bin/dev-up-build.sh
@@ -30,7 +31,7 @@ npm install -g dotenv
 dotenv -p ./.env.dev && docker compose -f ./docker-compose.dev.yml up --build
 ```
 
-### Step 2. Start Express App
+### Step 2. Start Express Server
 
 Open new terminal tab:
 
@@ -42,6 +43,7 @@ npm start
 
 ### Step 3. Seeding:
 
+Open new terminal tab:
 #### Linux
 
 ```
@@ -58,6 +60,7 @@ dotenv -p ../.env.dev && npm run seed
 
 ### Step 4. Start React App
 
+Open new terminal tab:
 ```
 cd ./frontend
 npm start
