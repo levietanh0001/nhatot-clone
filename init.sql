@@ -1,1 +1,1 @@
-CREATE DATABASE if not exists '${CUSTOM_VARIABLE}'
+CREATE DATABASE if not exists nhatot

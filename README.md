@@ -19,8 +19,8 @@ http://levietanh0001.site/
 #### Linux
 
 ```
-chmod +x ./scripts/dev-up-build.sh
-./scripts/dev-up-build.sh
+chmod +x ./bin/dev-up-build.sh
+./bin/dev-up-build.sh
 ```
 
 #### Windows
@@ -35,8 +35,8 @@ dotenv -p ./.env.dev && docker compose -f ./docker-compose.dev.yml up --build
 #### Linux
 
 ```
-chmod +x ./scripts/seed.sh
-./scripts/seed.sh
+chmod +x ./bin/seed.sh
+./bin/seed.sh
 ```
 
 #### Windows
@@ -46,8 +46,15 @@ cd ./backend
 dotenv -p ../.env.dev && npm run seed
 ```
 
-### Step 3. Go to localhost:3000
+### Step 3. Start React App
 
-### Step 4. Login as admin with the following credentials
+```
+cd ./frontend
+npm start
+```
+
+### Step 4. Go to localhost:3000
+
+### Step 5. Login as admin with the following credentials
 - email: admin@admin.com
 - password: admin_password
