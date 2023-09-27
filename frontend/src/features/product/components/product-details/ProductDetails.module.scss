@@ -1,3 +1,5 @@
+@import '@styles/scss/_typography';
+
 .product-details {
   text-align: left;
   background-color: var(--app-background-color);
@@ -11,9 +13,11 @@
 }
 
 .title {
-  flex: 1 0 auto;
+  flex: 1 0 100px;
   font-size: 1.25rem;
   margin: 0;
+
+  @include text-collapse(2);
 }
 
 .actions {

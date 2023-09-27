@@ -30,7 +30,17 @@ npm install -g dotenv
 dotenv -p ./.env.dev && docker compose -f ./docker-compose.dev.yml up --build
 ```
 
-### Step 2. Seeding:
+### Step 2. Start Express App
+
+Open new terminal tab:
+
+```
+cd ./backend
+npm start
+```
+
+
+### Step 3. Seeding:
 
 #### Linux
 
@@ -46,19 +56,10 @@ cd ./backend
 dotenv -p ../.env.dev && npm run seed
 ```
 
-### Step 3. Start React App
+### Step 4. Start React App
 
 ```
 cd ./frontend
-npm start
-```
-
-### Step 4. Start Express App
-
-Open new terminal tab:
-
-```
-cd ./backend
 npm start
 ```
 
