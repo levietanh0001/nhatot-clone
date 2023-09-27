@@ -66,11 +66,14 @@ backend/.env
 frontend/.env
 .env
 backend/src/uploads
-frontend/.env
-**/.env.prod
+frontend/.env.prod
+
 
 backend/nhatot-clone-firebase-adminsdk-azt57-bbfe738662.json
 backend/.ignore
 frontend/.ignore
 
 backend/nhatot-dump.sql
+.env.prod
+*.prod
+backend/config/config.json
