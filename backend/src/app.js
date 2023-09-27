@@ -101,7 +101,7 @@ app.use(cors({
   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'X-Access-Token', 'Authorization'],
   credentials: true,
   methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
-  origin: [process.env.FRONTEND_ORIGIN, 'http://localhost:3000', 'http://127.0.0.1:3000'],
+  origin: [process.env.FRONTEND_ORIGIN, 'http://localhost:3000', 'http://127.0.0.1:3000', 'http://levietanh0001.site', 'http://207.148.126.202'],
   preflightContinue: true,
   maxAge: 86400
 }));
@@ -164,7 +164,7 @@ sequelize
     const io = require('socket.io')(server, {
       pingTimeOut: 60000, // close connection after 60s of inactivity (user not sending anything)
       cors: {
-        origin: ['http://localhost:3000']
+        origin: ['http://localhost:3000', 'http://levietanh0001.site', 'http://207.148.126.202']
       },
     });
 
