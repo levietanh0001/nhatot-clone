@@ -81,7 +81,7 @@ VideoThumbnail.belongsTo(Product, { constraints: true, onDelete: 'CASCADE', fore
 User.hasOne(FavoriteList, { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: true } });
 FavoriteList.belongsTo(User, { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: true } });
 
-User.hasOne(UserProfile, { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: true } });
+User.hasOne(UserProfile, { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: false, unique: 'unique_user_id' } });
 UserProfile.belongsTo(User, { constraints: true, onDelete: 'CASCADE', foreignKey: { allowNull: true } });
 
 
