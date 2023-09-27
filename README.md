@@ -66,7 +66,9 @@ cd ./frontend
 npm start
 ```
 
-### Step 5. Go to localhost:3000
+### Step 5. Navigate to website in local environment
+
+Go to http://localhost:3000
 
 ### Step 6. Login as admin with the following credentials
 - email: admin@admin.com
