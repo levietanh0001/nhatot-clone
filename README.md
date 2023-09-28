@@ -55,7 +55,7 @@ chmod +x ./bin/seed-dev.sh
 
 ```
 cd ./backend
-dotenv -p ../.env.dev && npm run seed
+dotenv -p ../.env.dev && npm run seed-dev
 ```
 
 ### Step 4. Start React App

@@ -1,3 +1,3 @@
 cd ./backend
 npm i --save-exact
-env $(cat ../.env.prod) npm run seed
+env $(cat ../.env.prod) npm run seed-prod

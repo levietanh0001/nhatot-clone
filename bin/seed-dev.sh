@@ -1,2 +1,2 @@
 cd ./backend
-env $(cat ../.env.dev) npm run seed
+env $(cat ../.env.dev) npm run seed-dev
