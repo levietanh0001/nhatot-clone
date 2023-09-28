@@ -15,7 +15,7 @@ export function useGetProductByIdAndSlug(productId, slug) {
     refetchOnMount: true, // if component is mounted, refetch
     refetchOnWindowFocus: false,
     // cacheTime: 10000, // by default 5 mins
-    staleTime: 5000,
+    staleTime: 0,
     select: (data) => {
       return data.data;
     },

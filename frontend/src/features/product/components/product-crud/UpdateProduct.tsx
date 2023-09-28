@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -20,19 +20,28 @@ import {
   setProductVideo,
 } from '@/features/product/product.slice';
 import { updateProduct } from '@/features/product/product.thunk';
-import { waitAsync } from '@/utils/function.util';
+import { wait, waitAsync } from '@/utils/function.util';
 import { axiosPrivate } from '@/utils/http.util';
 import { sanitizeBigIntString } from '@/utils/number.util';
 import postProductFormSchema from '../../schemas/post-product-form.schema';
+import { AuthContext } from '@/contexts/auth/Auth.context';
+import Snackbar from '@mui/material/Snackbar';
+import Alert, { AlertProps } from '@mui/material/Alert';
 
 const UpdateProduct = () => {
+
+  const authContext = useContext(AuthContext);
+  const userId = authContext?.user?.userId;
   const formId = useId();
   const product = useSelector((state: RootState) => state.product);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { productId, slug } = useParams();
   const [formValues, setFormValues] = useState<any | null>(null);
-  // const [hasProduct, setHasProduct] = useState<boolean>(false);
+  const [snackbar, setSnackbar] = useState<Pick<
+    AlertProps,
+    'children' | 'severity'
+  > | null>(null);
 
   const { data, error, isLoading, isError } = useQuery({
     queryKey: ['product', productId],
@@ -56,8 +65,23 @@ const UpdateProduct = () => {
   }, []);
 
   useEffect(() => {
-    console.log({ product });
-  }, [product]);
+    if (product.productUpdated) {
+      setSnackbar({ 
+        children: <div
+          onClick={() => navigate(`/product/${data?.id ?? ''}/${data?.slug ?? ''}.htm`)}
+          style={{ cursor: 'pointer' }}
+        >
+          <p>Lưu thay đổi sản phẩm thành công&nbsp;
+            <span
+              style={{ textDecoration: 'underline' }}
+            >Xem</span>
+          </p>
+        </div>,
+        severity: 'success'
+      });
+      
+    }
+  }, [product.productUpdated]);
 
   useEffect(() => {
     if (!isLoading) {
@@ -107,11 +131,11 @@ const UpdateProduct = () => {
 
     if (product.productUpdated) {
       console.log('product updated');
-      toast.success('Cập nhật thành công');
+      // toast.success('Cập nhật thành công');
 
-      timeoutId = setTimeout(() => {
-        navigate(`/product/${productId}/${slug}.htm`);
-      }, 2000);
+      // timeoutId = setTimeout(() => {
+      //   navigate(`/product/${productId}/${slug}.htm`);
+      // }, 2000);
     }
 
     if (product.inputError.image) {
@@ -171,8 +195,20 @@ const UpdateProduct = () => {
     }
   };
 
+  const handleCloseSnackbar = () => setSnackbar(null);
+
   return (
     <>
+      {snackbar && (
+        <Snackbar 
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          open
+          onClose={handleCloseSnackbar}
+          autoHideDuration={5000}
+        >
+          <Alert {...snackbar} onClose={handleCloseSnackbar} />
+        </Snackbar>
+      )}
       {data && (
         <ProductForm
           form={form}
