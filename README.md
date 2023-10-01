@@ -35,7 +35,7 @@ http://levietanh0001.site/
 
 ### Step 1. Setup
 
-Replace `NODEMAILER_PASS` in `backend/.env.dev` with your own Gmail app password at https://myaccount.google.com/u/1/apppasswords
+Replace `NODEMAILER_PASS` in `backend/env/.env.dev` with your own Gmail app password at https://myaccount.google.com/u/1/apppasswords
 
 ### Step 2. Run build script
 
