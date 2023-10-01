@@ -5,6 +5,26 @@ A clone of the existing https://www.nhatot.com/ website
 
 # Applied Technologies
 
+## Frontend
+
+- HTML, CSS, SASS (SCSS), Javascript, 
+- React, Redux (Toolkit), Typescript
+- MUI, Tanstack Query (React Query), React Hook Form, Yup
+
+## Backend
+
+- Node.js (Express), MySQL, Sequelize
+- JWT Authentication
+- socket.io, MongoDB, Mongoose
+- Docker, Compose
+
+# Features
+
+- Products CRUD
+- Favorite List
+- Fulltext Search
+- Chat App
+- Admin Dashboard
 
 # Demo 
 
