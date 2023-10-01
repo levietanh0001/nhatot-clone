@@ -3,6 +3,9 @@
 
 A clone of the existing https://www.nhatot.com/ website
 
+# Applied Technologies
+
+
 # Demo 
 
 http://levietanh0001.site/
@@ -10,7 +13,11 @@ http://levietanh0001.site/
 
 ## How To Run This Project With Docker and Compose
 
-### Step 1. Run build script
+### Step 1. Setup
+
+Replace `NODEMAILER_PASS` in `backend/.env.dev` with your own Gmail app password at https://myaccount.google.com/u/1/apppasswords
+
+### Step 2. Run build script
 
 **Notes** 
 - The frontend container might need some minutes to finish starting the development server.
@@ -31,7 +38,7 @@ npm install -g dotenv
 dotenv -p ./.env.dev && docker compose -f ./docker-compose.dev.yml up --build
 ```
 
-### Step 2. Start Express Server
+### Step 3. Start Express Server
 
 Open new terminal tab:
 
@@ -41,7 +48,7 @@ npm start
 ```
 
 
-### Step 3. Seeding
+### Step 4. Seeding
 
 Open new terminal tab:
 #### Linux
@@ -58,7 +65,7 @@ cd ./backend
 dotenv -p ../.env.dev && npm run seed-dev
 ```
 
-### Step 4. Start React App
+### Step 5. Start React App
 
 Open new terminal tab:
 ```
@@ -66,10 +73,10 @@ cd ./frontend
 npm start
 ```
 
-### Step 5. Navigate to website in local environment
+### Step 6. Navigate to website in local environment
 
 Go to http://localhost:3000
 
-### Step 6. Login as admin with the following credentials
+### Step 7. Login as admin with the following credentials
 - email: admin@admin.com
 - password: admin_password
