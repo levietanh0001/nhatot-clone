@@ -31,53 +31,65 @@ async function register(req, res, next) {
 
     const currentUser = await User.findOne({ where: { email: email } });
 
-    console.log({ isTrue: currentUser && !currentUser.dataValues.isVerified });
+    console.log({ currentUser });
 
-    if (currentUser && currentUser.dataValues.isVerified) {
-
+    if (currentUser && currentUser.isVerified) {
       return res.status(403).json({
         code: 'USER_ALREADY_EXISTS',
         message: 'User already exists, please log in'
       })
     }
 
-    const hashedPassword = await bcrypt.hash(password, 12);
-    const createdUser = await User.create({
-      username: userName,
-      email: email,
-      password: hashedPassword,
-      role: process.env.ADMIN_EMAILS?.includes(email) ? 'admin' : 'canhan'
-      // role: email === process.env.ADMIN_EMAIL ? 'admin' : 'canhan'
-    });
+    if(currentUser && !currentUser.dataValues.isVerified) {
 
-    
-    // // update userName in UserProfile
-    // const userProfile = await createdUser.createUser_profile();
-    // userProfile.username = userName;
-    // await userProfile.save();
+      res
+        .status(200)
+        .json({
+          code: 'SUCCESS',
+          message: `Đã gửi email xác nhận tới ${email}`
+        });
 
-    const createdUserEmail = createdUser['email'];
-    const createdUserId = createdUser['id'];
-    
-    await sequelize.query(`
-      INSERT INTO ${databaseName}.user_profile
-      SET userId=${createdUser.id}, createdAt=current_timestamp(), updatedAt=current_timestamp()
-    `);
-    
-    const token = await createAccessTokenAsync({ createdUserEmail });
+      await mailer.resendConfirmationEmail(res, email, currentUser.dataValues.id);
+    }
 
-    const verifyRegisterUrl = await constructUrlWithQueryParamsAsync(
-      '/auth/verify-register', { token, userId: createdUserId }
-    );
+    if(!currentUser) {
 
-    res
-      .status(200)
-      .json({
-        code: 'SUCCESS',
-        message: `Đã gửi email xác nhận tới ${createdUserEmail}`
+      const hashedPassword = await bcrypt.hash(password, 12);
+      const createdUser = await User.create({
+        username: userName,
+        email: email,
+        password: hashedPassword,
+        role: process.env.ADMIN_EMAILS?.includes(email) ? 'admin' : 'canhan'
       });
+  
+      const createdUserEmail = createdUser['email'];
+      const createdUserId = createdUser['id'];
+      
+      await sequelize.query(`
+        INSERT INTO ${databaseName}.user_profile
+        SET userId=${createdUser.id}, createdAt=current_timestamp(), updatedAt=current_timestamp()
+      `);
+      
+      const token = await createAccessTokenAsync({ createdUserEmail });
+  
+      const verifyRegisterUrl = constructUrlWithQueryParams(
+        '/auth/verify-register', 
+        { 
+          token, 
+          userId: createdUserId 
+        }
+      )
+  
+      res
+        .status(200)
+        .json({
+          code: 'SUCCESS',
+          message: `Đã gửi email xác nhận tới ${createdUserEmail}`
+        });
+  
+      return mailer.sendConfimationEmail(recipientEmail = createdUserEmail, confirmationUrl = verifyRegisterUrl);
+    }
 
-    return mailer.sendConfimationEmail(recipientEmail = createdUserEmail, confirmationUrl = verifyRegisterUrl);
 
   } catch (error) {
     

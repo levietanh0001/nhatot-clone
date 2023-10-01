@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 const { createAccessTokenAsync } = require('./cryptography.util');
-const { constructUrlWithQueryParamsAsync } = require('./url.util');
+const { constructUrlWithQueryParams } = require('./url.util');
 
 
 function sendConfimationEmail(recipientEmail, confirmationUrl, purpose='để xác nhận email của bạn') {
@@ -35,9 +35,13 @@ async function resendConfirmationEmail(res, email, userId) {
 
   const token = await createAccessTokenAsync({ email });
 
-  const verifyRegisterUrl = await constructUrlWithQueryParamsAsync(
+  const verifyRegisterUrl = constructUrlWithQueryParams(
     '/auth/verify-register', { token, userId }
   );
+
+  // const verifyRegisterUrl = await constructUrlWithQueryParamsAsync(
+  //   '/auth/verify-register', { token, userId }
+  // );
 
   res.status(401).json({
     code: 'USER_NOT_VERIFIED',

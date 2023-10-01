@@ -16,13 +16,20 @@ function constructUrlWithQueryParamsAsync(route, data) {
 function constructUrlWithQueryParams(route, data) {
 
   const url = new URL(
-    route,
-    baseUrl
+    route, 
+    process.env.SERVER_URL
   );
-
   url.search = new URLSearchParams(data);
+  return url.toString();
+
+  // const url = new URL(
+  //   route,
+  //   baseUrl
+  // );
+
+  // url.search = new URLSearchParams(data);
   
-  return url;
+  // return url;
 
   // url.searchParams.set('verify-token', token);
   // const verifyRegisterUrl = url.toString();
